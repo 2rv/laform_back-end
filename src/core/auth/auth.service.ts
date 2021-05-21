@@ -65,6 +65,7 @@ export class AuthService {
     const accountData: AccountDataDto = {
       id: user.id,
       login: user.login,
+      email: user.email,
     };
 
     return accountData;

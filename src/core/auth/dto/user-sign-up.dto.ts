@@ -4,6 +4,7 @@ import {
   MinLength,
   MaxLength,
   Matches,
+  IsEmail,
 } from 'class-validator';
 
 export class UserSignUpDto {
@@ -11,6 +12,11 @@ export class UserSignUpDto {
   @IsString()
   @Matches(/^[A-z0-9_]{3,16}$/)
   login: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @IsEmail()
+  email: string;
 
   @IsNotEmpty()
   @IsString()
