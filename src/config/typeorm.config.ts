@@ -1,10 +1,12 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as config from 'config';
+
 import { UserEntity } from '../core/user/user.entity';
+import { NotificationEntity } from '../core/notification/notification.entity';
 
 const DATABASE_CONFIG = config.get('DATABASE');
 
-export const ApiEntities = [UserEntity];
+export const ApiEntities = [UserEntity, NotificationEntity];
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
   type: DATABASE_CONFIG.TYPE,
