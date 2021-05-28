@@ -9,7 +9,7 @@ export class NotificationController {
   constructor(private notificationService: NotificationService) {}
 
   @Post('/subscribe')
-  async signUp(
+  async notificationSubscribe(
     @Body(ValidationPipe) notificationSubscribeDto: NotificationSubscribeDto,
   ): Promise<SubscriptionDto> {
     return this.notificationService.subscribe(notificationSubscribeDto);
