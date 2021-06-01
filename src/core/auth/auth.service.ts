@@ -35,10 +35,11 @@ export class AuthService {
   }
 
   async createJwt(user: UserEntity): Promise<string> {
-    const { id, role } = user;
+    const { id, login, role } = user;
 
     const payload: JwtPayload = {
       id,
+      login,
       role,
     };
 
@@ -65,6 +66,7 @@ export class AuthService {
     const accountData: AccountDataDto = {
       id: user.id,
       login: user.login,
+      email: user.email,
     };
 
     return accountData;
