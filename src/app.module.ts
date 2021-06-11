@@ -4,6 +4,7 @@ import { typeOrmConfig } from './config/typeorm.config';
 import { AuthModule } from './core/auth/auth.module';
 import { UserSettingsModule } from './core/user-settings/user-settings.module';
 import { NotificationModule } from './core/notification/notification.module';
+import { UserRecoveryModule } from './core/user-recovery/user-recovery.module';
 
 @Module({
   providers: [],
@@ -12,6 +13,7 @@ import { NotificationModule } from './core/notification/notification.module';
     AuthModule,
     UserSettingsModule,
     NotificationModule,
+    UserRecoveryModule,
   ],
 })
 export class AppModule {}
