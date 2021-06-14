@@ -45,4 +45,12 @@ export class UserRepository extends Repository<UserEntity> {
       throw new InternalServerErrorException();
     }
   }
+
+  async confirmEmailById(userId: number): Promise<void> {
+    try {
+      this.update(userId, { emailConfirmed: true });
+    } catch {
+      throw new BadRequestException();
+    }
+  }
 }
