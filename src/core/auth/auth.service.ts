@@ -1,24 +1,31 @@
-import { AuthRepository } from './auth.repository';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UserSignUpDto } from './dto/user-sign-up.dto';
-import { JwtService } from '@nestjs/jwt';
-import { JwtPayload } from './interface/jwt-payload.interface';
-import { UserLoginDto } from './dto/user-login.dto';
-import { UserEntity } from '../user/user.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { JwtService } from '@nestjs/jwt';
+
+import { UserEntity } from '../user/user.entity';
+import { UserRepository } from '../user/user.repository';
+
 import { AUTH_ERROR } from './enum/auth-error.enum';
+import { UserSignUpDto } from './dto/user-sign-up.dto';
+import { UserLoginDto } from './dto/user-login.dto';
 import { LoginInfoDto } from './dto/login-info.dto';
 import { AccountDataDto } from './dto/account-data.dto';
+import { JwtPayload } from './interface/jwt-payload.interface';
+import { AuthRepository } from './auth.repository';
+
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(AuthRepository)
-    private AuthRepository: AuthRepository,
+    private authRepository: AuthRepository,
+    private userRepository: UserRepository,
     private jwtService: JwtService,
   ) {}
 
   async signUp(userSignUpDto: UserSignUpDto): Promise<LoginInfoDto> {
-    const user: UserEntity = await this.AuthRepository.signUp(userSignUpDto);
+    const user: UserEntity = await this.userRepository.createUser(
+      userSignUpDto,
+    );
 
     const accessToken = await this.createJwt(user);
 
@@ -26,7 +33,7 @@ export class AuthService {
   }
 
   async login(userLoginDto: UserLoginDto): Promise<LoginInfoDto> {
-    const userData = await this.AuthRepository.login(userLoginDto);
+    const userData = await this.authRepository.login(userLoginDto);
 
     const accessToken = await this.createJwt(userData);
 
@@ -53,7 +60,7 @@ export class AuthService {
   }
 
   async getAccountById(id: number): Promise<UserEntity> {
-    const user = await this.AuthRepository.findOne({ id });
+    const user = await this.authRepository.findOne({ id });
 
     if (!user) {
       throw new NotFoundException(AUTH_ERROR.USER_WITH_THIS_ID_NOT_FOUND);

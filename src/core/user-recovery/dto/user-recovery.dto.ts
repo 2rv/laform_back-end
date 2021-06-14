@@ -6,12 +6,3 @@ export class UserRecoveryDto {
   @IsEmail()
   email: string;
 }
-
-export class UserRecoveryChangePasswordDto {
-  password: string;
-}
-
-export class PasswordRecoveryEmailDto {
-  email: string;
-  userId: number;
-}

@@ -1,32 +1,27 @@
 import { Controller, Post, Body, ValidationPipe, Query } from '@nestjs/common';
 
 import { UserRecoveryService } from './user-recovery.service';
-import {
-  UserRecoveryChangePasswordDto,
-  UserRecoveryDto,
-} from './dto/user-recovery.dto';
+import { UserRecoveryDto } from './dto/user-recovery.dto';
+import { UserRecoveryChangeCredentialsDto } from './dto/user-recovery-change-password.dto';
 
 @Controller('user-recovery')
 export class UserRecoveryController {
   constructor(private userRecoveryService: UserRecoveryService) {}
 
   @Post()
-  async recover(
-    @Body(ValidationPipe) userRecoveryDto: UserRecoveryDto,
+  async getRecoveryCode(
+    @Body(ValidationPipe) data: UserRecoveryDto,
   ): Promise<void> {
-    return this.userRecoveryService.sendEmailPasswordRecovery(userRecoveryDto);
+    return this.userRecoveryService.getRecoveryCode(data);
   }
 
-  @Post('change-password')
-  async changePassword(
+  @Post('change-credentials')
+  async changeCredentials(
     @Query('code')
     code: string,
     @Body(ValidationPipe)
-    userRecoveryChangePasswordDto: UserRecoveryChangePasswordDto,
+    data: UserRecoveryChangeCredentialsDto,
   ): Promise<void> {
-    return this.userRecoveryService.changePassword(
-      code,
-      userRecoveryChangePasswordDto,
-    );
+    return this.userRecoveryService.changeCredentials(code, data);
   }
 }

@@ -2,11 +2,7 @@ import { CacheModuleOptions } from '@nestjs/common';
 import * as redisStore from 'cache-manager-redis-store';
 import * as config from 'config';
 
-import { UserEntity } from '../core/user/user.entity';
-
 const CACHE_CONFIG = config.get('CACHE');
-
-export const ApiEntities = [UserEntity];
 
 export const CacheModuleConfig: CacheModuleOptions = {
   store: redisStore,

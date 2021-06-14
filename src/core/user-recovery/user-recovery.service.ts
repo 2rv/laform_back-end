@@ -3,34 +3,32 @@ import {
   CACHE_MANAGER,
   Inject,
   Injectable,
+  InternalServerErrorException,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { Cache } from 'cache-manager';
 
 import { randomUUID } from 'src/common/utils/hash';
-import { UserEntity } from '../user/user.entity';
+import { UserRepository } from '../user/user.repository';
+import { USER_ERROR } from '../user/enum/user-error.enum';
 
-import {
-  UserRecoveryChangePasswordDto,
-  UserRecoveryDto,
-  PasswordRecoveryEmailDto,
-} from './dto/user-recovery.dto';
+import { USER_RECOVERY_ERROR } from './enum/user-recovery-error.enum';
+import { UserRecoveryDto } from './dto/user-recovery.dto';
+import { UserRecoveryGetCodeDto } from './dto/user-recovery-get-code.dto';
+import { UserRecoveryChangeCredentialsDto } from './dto/user-recovery-change-password.dto';
 
 @Injectable()
 export class UserRecoveryService {
   constructor(
     @Inject(CACHE_MANAGER)
     private cacheManager: Cache,
-    @InjectRepository(UserEntity)
-    private userRepository: Repository<UserEntity>,
+    private userRepository: UserRepository,
   ) {}
 
-  async sendEmailPasswordRecovery({ email }: UserRecoveryDto): Promise<void> {
+  async getRecoveryCode({ email }: UserRecoveryDto): Promise<void> {
     const user = await this.userRepository.findOne({ email });
-    if (!user) return;
+    if (!user) throw new BadRequestException(USER_ERROR.USER_NOT_FOUND);
 
-    const payload: PasswordRecoveryEmailDto = {
+    const payload: UserRecoveryGetCodeDto = {
       email: user.email,
       userId: user.id,
     };
@@ -42,23 +40,28 @@ export class UserRecoveryService {
     console.log(`Generated recovery code: ${code}`);
   }
 
-  async changePassword(
+  async changeCredentials(
     code: string,
-    { password }: UserRecoveryChangePasswordDto,
+    { password }: UserRecoveryChangeCredentialsDto,
   ): Promise<void> {
-    const rawPayload: string = await this.cacheManager.get(code);
-    if (!rawPayload) {
-      throw new BadRequestException('(WIP) NO_TOKEN');
+    if (!code) {
+      throw new BadRequestException(USER_RECOVERY_ERROR.TOKEN_DOESNT_EXISTS);
     }
 
-    const payload: PasswordRecoveryEmailDto = JSON.parse(rawPayload);
+    const rawPayload: string = await this.cacheManager.get(code);
+    if (!rawPayload) {
+      throw new BadRequestException(USER_RECOVERY_ERROR.TOKEN_DOESNT_EXISTS);
+    }
 
-    const user = await this.userRepository.findOne({ id: payload.userId });
+    const { userId }: UserRecoveryGetCodeDto = JSON.parse(rawPayload);
 
     try {
-      user.password = await UserEntity.hashPassword(password);
-      await user.save();
-    } catch (err) {}
+      this.userRepository.changePassword({ id: userId, password });
+    } catch (err) {
+      throw new InternalServerErrorException(
+        USER_RECOVERY_ERROR.USER_UPDATE_CREDENTIALS_ERROR,
+      );
+    }
 
     this.cacheManager.del(code);
   }
