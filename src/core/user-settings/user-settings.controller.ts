@@ -5,19 +5,22 @@ import {
   Body,
   ValidationPipe,
 } from '@nestjs/common';
-import { UserSettingsService } from './user-settings.service';
 import { AuthGuard } from '@nestjs/passport';
+
 import { AccountGuard } from '../user/guard/account.guard';
 import { GetAccount } from '../user/decorator/get-account.decorator';
 import { UserEntity } from '../user/user.entity';
-import { UserSettingsUpdatePasswordDto } from './dto/user-settings-update-password.dto';
 
-@Controller('user-setting')
+import { UserSettingsUpdatePasswordDto } from './dto/user-settings-update-password.dto';
+import { PasswordGuard } from './guard/password.guard';
+import { UserSettingsService } from './user-settings.service';
+
+@Controller('user/settings')
 export class UserSettingsController {
   constructor(private userSettingsService: UserSettingsService) {}
 
-  @Patch('/password/:adminId')
-  @UseGuards(AuthGuard(), AccountGuard)
+  @Patch('/password')
+  @UseGuards(AuthGuard(), AccountGuard, PasswordGuard)
   updatePassword(
     @Body(ValidationPipe)
     userSettingsUpdatePasswordDto: UserSettingsUpdatePasswordDto,

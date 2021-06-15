@@ -5,5 +5,5 @@ export class UserSettingsUpdatePasswordDto {
   @IsString()
   @MinLength(8)
   @MaxLength(100)
-  password: string;
+  newPassword: string;
 }

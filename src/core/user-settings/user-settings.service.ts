@@ -1,17 +1,20 @@
 import { Injectable } from '@nestjs/common';
+
 import { UserEntity } from '../user/user.entity';
+import { UserRepository } from '../user/user.repository';
+
 import { UserSettingsUpdatePasswordDto } from './dto/user-settings-update-password.dto';
 
 @Injectable()
 export class UserSettingsService {
-  constructor() {}
+  constructor(private userRepository: UserRepository) {}
+
   async updatePassword(
     user: UserEntity,
-    userSettingsUpdatePasswordDto: UserSettingsUpdatePasswordDto,
+    data: UserSettingsUpdatePasswordDto,
   ): Promise<void> {
-    const { password } = userSettingsUpdatePasswordDto;
+    const { newPassword } = data;
 
-    user.password = await UserEntity.hashPassword(password);
-    await user.save();
+    this.userRepository.changePassword({ id: user.id, password: newPassword });
   }
 }
