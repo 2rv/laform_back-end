@@ -6,6 +6,7 @@ import { UserSettingsModule } from './core/user-settings/user-settings.module';
 import { NotificationModule } from './core/notification/notification.module';
 import { UserRecoveryModule } from './core/user-recovery/user-recovery.module';
 import { UserVerificationModule } from './core/user-verification/user-verification.module';
+import { UserDeliveryInfoModule } from './core/user-delivery-info/user-delivery-info.module';
 
 @Module({
   providers: [],
@@ -16,6 +17,7 @@ import { UserVerificationModule } from './core/user-verification/user-verificati
     NotificationModule,
     UserRecoveryModule,
     UserVerificationModule,
+    UserDeliveryInfoModule,
   ],
 })
 export class AppModule {}
