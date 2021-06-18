@@ -4,6 +4,7 @@ import {
   UseGuards,
   Body,
   ValidationPipe,
+  Get,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -12,6 +13,8 @@ import { GetAccount } from '../user/decorator/get-account.decorator';
 import { UserEntity } from '../user/user.entity';
 
 import { UserSettingsUpdatePasswordDto } from './dto/user-settings-update-password.dto';
+import { UserSettingsGetEmailDto } from './dto/user-settings-get-email.dto';
+import { UserSettingsUpdateEmailDto } from './dto/user-settings-update-email.dto';
 import { PasswordGuard } from './guard/password.guard';
 import { UserSettingsService } from './user-settings.service';
 
@@ -30,5 +33,22 @@ export class UserSettingsController {
       user,
       userSettingsUpdatePasswordDto,
     );
+  }
+
+  @Get('/email')
+  @UseGuards(AuthGuard(), AccountGuard)
+  async getAccountEmail(
+    @GetAccount() user: UserEntity,
+  ): Promise<UserSettingsGetEmailDto> {
+    return this.userSettingsService.getEmail(user);
+  }
+
+  @Patch('/email')
+  @UseGuards(AuthGuard(), AccountGuard)
+  async updateUserEmail(
+    @GetAccount() user: UserEntity,
+    @Body(ValidationPipe) data: UserSettingsUpdateEmailDto,
+  ): Promise<void> {
+    return this.userSettingsService.updateEmail(user, data);
   }
 }

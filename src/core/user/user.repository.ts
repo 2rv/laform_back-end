@@ -8,8 +8,8 @@ import {
 import { USER_ERROR } from './enum/user-error.enum';
 import { UserCreateDto } from './dto/user-create.dto';
 import { UserChangePasswordDto } from './dto/user-change-password.dto';
-import { UserEntity } from './user.entity';
 import { UserChangeEmailDto } from './dto/user-change-email.dto';
+import { UserEntity } from './user.entity';
 
 @EntityRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {
