@@ -42,7 +42,7 @@ export class UserRecoveryService {
 
   async changeCredentials(
     code: string,
-    { password }: UserRecoveryChangeCredentialsDto,
+    data: UserRecoveryChangeCredentialsDto,
   ): Promise<void> {
     if (!code) {
       throw new BadRequestException(USER_RECOVERY_ERROR.TOKEN_DOESNT_EXISTS);
@@ -54,9 +54,10 @@ export class UserRecoveryService {
     }
 
     const { userId }: UserRecoveryGetCodeDto = JSON.parse(rawPayload);
+    const user = await this.userRepository.findOne(userId);
 
     try {
-      this.userRepository.changePassword({ id: userId, password });
+      this.userRepository.changePassword(user, data);
     } catch (err) {
       throw new InternalServerErrorException(
         USER_RECOVERY_ERROR.USER_UPDATE_CREDENTIALS_ERROR,

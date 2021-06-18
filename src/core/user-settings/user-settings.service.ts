@@ -14,7 +14,8 @@ export class UserSettingsService {
     data: UserSettingsUpdatePasswordDto,
   ): Promise<void> {
     const { newPassword } = data;
+    const payload = { password: newPassword };
 
-    this.userRepository.changePassword({ id: user.id, password: newPassword });
+    this.userRepository.changePassword(user, payload);
   }
 }

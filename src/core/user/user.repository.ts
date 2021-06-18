@@ -32,13 +32,14 @@ export class UserRepository extends Repository<UserEntity> {
     }
   }
 
-  async changePassword(data: UserChangePasswordDto): Promise<void> {
-    const { id, password } = data;
-
-    const user = await this.findOne(id);
-    if (!user) throw new BadRequestException(USER_ERROR.USER_NOT_FOUND);
+  async changePassword(
+    user: UserEntity,
+    data: UserChangePasswordDto,
+  ): Promise<void> {
+    const { password } = data;
 
     user.password = await UserEntity.hashPassword(password);
+
     try {
       await user.save();
     } catch (err) {
