@@ -44,7 +44,7 @@ export class UserSettingsController {
   }
 
   @Patch('/email')
-  @UseGuards(AuthGuard(), AccountGuard)
+  @UseGuards(AuthGuard(), AccountGuard, PasswordGuard)
   async updateUserEmail(
     @GetAccount() user: UserEntity,
     @Body(ValidationPipe) data: UserSettingsUpdateEmailDto,
