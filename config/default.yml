@@ -8,3 +8,9 @@ DATABASE:
 JWT:
   EXPIRES_IN: '99999h'
   SECRET: 'FKdksk12l3ldlsfdlLlsdll123l05kgjgk04jdkgn6kk2d0fkgsdk32ldovyjkxg'
+
+CACHE:
+  HOST: '127.0.0.1'
+  PORT: 6379
+  PASSWORD: 'qwerty12+'
+  TTL: 6000000

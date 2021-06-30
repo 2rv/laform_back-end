@@ -35,6 +35,9 @@ export class UserEntity extends BaseEntity {
   })
   role: USER_ROLE;
 
+  @Column({ default: false })
+  emailConfirmed: boolean;
+
   @CreateDateColumn()
   createDate: string;
 
