@@ -10,7 +10,7 @@ JWT:
   SECRET: 'FKdksk12l3ldlsfdlLlsdll123l05kgjgk04jdkgn6kk2d0fkgsdk32ldovyjkxg'
 
 CACHE:
-  HOST: '127.0.0.1'
-  PORT: 6379
-  PASSWORD: 'qwerty12+'
+  HOST: 'ec2-34-236-43-44.compute-1.amazonaws.com'
+  PORT: 12189
+  PASSWORD: 'pdeb811685305cf8c1bb28d6541d08d8b84190ca075f7189558595b5848891508'
   TTL: 6000000
