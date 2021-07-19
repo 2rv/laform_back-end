@@ -1,7 +1,8 @@
 import { CategoryRepository } from './category.repository';
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { CategoryDto } from './dto/category.dto';
 import { CategoryEntity } from './category.entity';
+import { CATEGORY_ERROR } from './enum/category.enum';
 
 @Injectable()
 export class CategoryService {
@@ -13,9 +14,9 @@ export class CategoryService {
 
   async update(id: string, body: CategoryDto) {
     const result = await this.categoryRepository.update(id, body);
-    if (result) {
-      return await this.categoryRepository.findOne(id);
-    } else return null;
+    if (!result) {
+      throw new BadRequestException(CATEGORY_ERROR.CATEGORY_NOT_FOUND);
+    } else return await this.categoryRepository.findOne(id);
   }
 
   async getOne(id: string, query: string): Promise<CategoryEntity> {
@@ -34,13 +35,12 @@ export class CategoryService {
     if (query === 'en') {
       return await this.categoryRepository.findAllEn();
     }
-    return await this.categoryRepository.find();
   }
 
   async delete(id: string): Promise<void> {
     const result = this.categoryRepository.findOne(id);
-    if (result) {
-      await this.categoryRepository.delete(id);
-    }
+    if (!result) {
+      throw new BadRequestException(CATEGORY_ERROR.CATEGORY_NOT_FOUND);
+    } else await this.categoryRepository.delete(id);
   }
 }
