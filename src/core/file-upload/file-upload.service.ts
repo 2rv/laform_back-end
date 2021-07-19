@@ -1,6 +1,11 @@
+import { FILE_UPLOAD_ERROR } from './enum/file-upload-error.enum';
 import { Repository } from 'typeorm';
 import { FileUploadEntity } from './file-upload.entity';
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { FileUploadDto } from './dto/file-upload.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -17,14 +22,18 @@ export class FileUploadService {
 
   async update(id: string, body: any) {
     const result = await this.fileRepository.findOneOrFail(id);
-    if (result) {
-      await this.fileRepository.update(id, body);
-      return this.fileRepository.findOne(id);
-    }
+    if (!result) {
+      throw new BadRequestException(FILE_UPLOAD_ERROR.FILE_NOT_FOUND);
+    } else await this.fileRepository.update(id, body);
+    return this.fileRepository.findOne(id);
   }
 
   async getOne(id: string): Promise<FileUploadEntity> {
-    return await this.fileRepository.findOne(id);
+    try {
+      return await this.fileRepository.findOne(id);
+    } catch (error) {
+      throw new InternalServerErrorException(FILE_UPLOAD_ERROR.FILE_NOT_FOUND);
+    }
   }
 
   async getAll(): Promise<FileUploadEntity[]> {
@@ -33,8 +42,8 @@ export class FileUploadService {
 
   async delete(id: string): Promise<void> {
     const result = this.fileRepository.findOne(id);
-    if (result) {
-      await this.fileRepository.delete(id);
-    }
+    if (!result) {
+      throw new BadRequestException(FILE_UPLOAD_ERROR.FILE_NOT_FOUND);
+    } else await this.fileRepository.delete(id);
   }
 }
