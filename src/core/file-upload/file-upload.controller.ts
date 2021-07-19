@@ -10,13 +10,15 @@ import {
   Put,
   Delete,
   Request,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { FileUploadService } from './file-upload.service';
-import { upload } from '../../common/utils/upload-image';
 import { AuthGuard } from '@nestjs/passport';
 import { AccountGuard } from '../user/guard/account.guard';
 import { Roles } from '../user/decorator/role.decorator';
 import { USER_ROLE } from '../user/enum/user-role.enum';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('file')
 export class FileUploadController {
@@ -25,42 +27,19 @@ export class FileUploadController {
   @Post('/create')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async save(
-    @Body(new ValidationPipe()) body: any,
-    @Response() res,
-    @Request() req,
-  ) {
-    const singleUpload = upload.single('fileUrl');
-    await singleUpload(req, res, async (err) => {
-      if (err) {
-        return res.status(422).send({
-          errors: [{ title: 'File Upload Error', detail: err.message }],
-        });
-      }
-      body.fileUrl = req.file.location;
-      return await this.fileUploadService.create(body);
-    });
+  @UseInterceptors(FileInterceptor('file'))
+  async save(@UploadedFile() file, @Response() res): Promise<any> {
+    const result = await this.fileUploadService.create(file);
+    return res.send(result);
   }
 
   @Put('update/:id')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async updateImage(
-    @Param('id') id: string,
-    @Body() body: any,
-    @Response() res,
-    @Request() req,
-  ) {
-    const singleUpload = upload.single('fileUrl');
-    await singleUpload(req, res, async (err) => {
-      if (err) {
-        return res.status(422).send({
-          errors: [{ title: 'File Upload Error', detail: err.message }],
-        });
-      }
-      body.fileUrl = req.file.location;
-      return await this.fileUploadService.update(id, body);
-    });
+  @UseInterceptors(FileInterceptor('file'))
+  async update(@Param('id') id: string, @UploadedFile() file, @Response() res) {
+    const result = await this.fileUploadService.update(id, file);
+    return res.send(result);
   }
 
   @Get('get/:id')

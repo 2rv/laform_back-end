@@ -1,3 +1,4 @@
+import { uploadFile } from './../../common/utils/file-upload';
 import { FILE_UPLOAD_ERROR } from './enum/file-upload-error.enum';
 import { Repository } from 'typeorm';
 import { FileUploadEntity } from './file-upload.entity';
@@ -8,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { FileUploadDto } from './dto/file-upload.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-
 @Injectable()
 export class FileUploadService {
   constructor(
@@ -16,15 +16,17 @@ export class FileUploadService {
     private fileRepository: Repository<FileUploadEntity>,
   ) {}
 
-  async create(body: FileUploadDto): Promise<FileUploadEntity> {
-    return await this.fileRepository.save(body);
+  async create(file: FileUploadDto): Promise<FileUploadEntity> {
+    const fileUrl = await uploadFile(file);
+    return await this.fileRepository.save({ fileUrl: fileUrl });
   }
 
-  async update(id: string, body: any) {
+  async update(id: string, file: FileUploadDto) {
     const result = await this.fileRepository.findOneOrFail(id);
+    const fileUrl = await uploadFile(file);
     if (!result) {
       throw new BadRequestException(FILE_UPLOAD_ERROR.FILE_NOT_FOUND);
-    } else await this.fileRepository.update(id, body);
+    } else await this.fileRepository.update(id, { fileUrl: fileUrl });
     return this.fileRepository.findOne(id);
   }
 
