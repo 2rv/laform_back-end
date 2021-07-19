@@ -38,6 +38,9 @@ export class UserEntity extends BaseEntity {
   @Column({ default: false })
   emailConfirmed: boolean;
 
+  @Column({ default: true })
+  notificationEmail: boolean;
+
   @CreateDateColumn()
   createDate: string;
 
