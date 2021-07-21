@@ -10,6 +10,7 @@ import { UserVerificationModule } from './core/user-verification/user-verificati
 import { FileUploadModule } from './core/file-upload/file-upload.module';
 import { CategoryModule } from './core/category/category.module';
 import { PostModule } from './core/post/post.module';
+import { CommentModule } from './core/comment/comment.module';
 
 @Module({
   providers: [],
@@ -24,6 +25,7 @@ import { PostModule } from './core/post/post.module';
     CategoryModule,
     PostModule,
     LikeModule,
+    CommentModule,
   ],
 })
 export class AppModule {}

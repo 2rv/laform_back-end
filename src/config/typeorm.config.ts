@@ -7,6 +7,10 @@ import { NotificationEntity } from '../core/notification/notification.entity';
 import { FileUploadEntity } from 'src/core/file-upload/file-upload.entity';
 import { CategoryEntity } from 'src/core/category/category.entity';
 import { LikeEntity } from 'src/core/like/like.entity';
+import {
+  CommentEntity,
+  SubCommentEntity,
+} from 'src/core/comment/comment.entity';
 
 const DATABASE_CONFIG = config.get('DATABASE');
 
@@ -17,6 +21,8 @@ export const ApiEntities = [
   FileUploadEntity,
   PostEntity,
   LikeEntity,
+  CommentEntity,
+  SubCommentEntity,
 ];
 
 export const typeOrmConfig: TypeOrmModuleOptions = {

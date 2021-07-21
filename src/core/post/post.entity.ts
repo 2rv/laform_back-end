@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
 import { CategoryEntity } from '../category/category.entity';
+import { CommentEntity } from '../comment/comment.entity';
 
 @Entity({ name: 'post' })
 export class PostEntity {
@@ -74,4 +75,7 @@ export class PostEntity {
 
   @OneToMany(() => LikeEntity, (like: LikeEntity) => like.postId)
   like: LikeEntity[];
+
+  @OneToMany(() => CommentEntity, (comment: CommentEntity) => comment.postId)
+  comment: CommentEntity[];
 }

@@ -25,7 +25,7 @@ export class LikeController {
   @Roles(USER_ROLE.USER)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async save(@Body(new ValidationPipe()) body, @Request() req) {
-    body.userId = req.userAccount.id;
+    body.userId = req.user.id;
     return await this.likeService.create(body);
   }
 
@@ -36,7 +36,7 @@ export class LikeController {
     @Body(new ValidationPipe()) body: any,
     @Request() req,
   ): Promise<any> {
-    body.userId = req.userAccount.id;
+    body.userId = req.user.id;
     return await this.likeService.getPosts(body);
   }
 
@@ -44,7 +44,7 @@ export class LikeController {
   @Roles(USER_ROLE.USER)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async delete(@Body(new ValidationPipe()) body, @Request() req): Promise<any> {
-    body.userId = req.userAccount.id;
+    body.userId = req.user.id;
     return await this.likeService.delete(body);
   }
 }
