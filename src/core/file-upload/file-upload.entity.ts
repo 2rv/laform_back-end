@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { PostEntity } from './../post/post.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity({ name: 'files' })
 export class FileUploadEntity {
@@ -10,4 +11,7 @@ export class FileUploadEntity {
     name: 'file_url',
   })
   fileUrl!: string;
+
+  @OneToMany(() => PostEntity, (post: PostEntity) => post.imageUrl)
+  post: PostEntity[];
 }
