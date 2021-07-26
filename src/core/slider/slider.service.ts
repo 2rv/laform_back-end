@@ -14,10 +14,7 @@ export class SliderService {
   }
 
   async update(id: string, body: UpdateSliderDto) {
-    const result = await this.sliderRepository.update(id, body);
-    if (!result) {
-      throw new BadRequestException(SLIDER_ERROR.SLIDER_NOT_FOUND);
-    } else return await this.sliderRepository.getOne(id);
+    return await this.sliderRepository.update(id, body);
   }
 
   async getOne(id: string, query: string): Promise<SliderEntity> {
@@ -39,10 +36,7 @@ export class SliderService {
     return await this.sliderRepository.find();
   }
 
-  async delete(id: string): Promise<void> {
-    const result = this.sliderRepository.findOneOrFail(id);
-    if (!result) {
-      throw new BadRequestException(SLIDER_ERROR.SLIDER_NOT_FOUND);
-    } else await this.sliderRepository.delete(id);
+  async delete(id: string) {
+    return await this.sliderRepository.delete(id);
   }
 }

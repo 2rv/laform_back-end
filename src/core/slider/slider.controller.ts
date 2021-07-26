@@ -16,6 +16,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { AccountGuard } from '../user/guard/account.guard';
 import { Roles } from '../user/decorator/role.decorator';
 import { USER_ROLE } from '../user/enum/user-role.enum';
+import { LangValidationPipe } from './guard/lang.guard';
+import { SliderGuard } from './guard/slider.guard';
 
 @Controller('slider')
 export class SliderController {
@@ -28,27 +30,31 @@ export class SliderController {
     return await this.sliderService.create(body);
   }
 
-  @Get('get/:id')
-  async getOne(@Query('lang') query, @Param('id') id: string) {
+  @Get('get/:sliderId')
+  @UseGuards(SliderGuard)
+  async getOne(
+    @Query(new LangValidationPipe()) query: string,
+    @Param('sliderId') id: string,
+  ) {
     return await this.sliderService.getOne(id, query);
   }
 
   @Get('get/')
-  async getAll(@Query('lang') query: string) {
+  async getAll(@Query(new LangValidationPipe()) query: string) {
     return await this.sliderService.getAll(query);
   }
 
-  @Put('update/:id')
+  @Put('update/:sliderId')
   @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async update(@Param('id') id: string, @Body() body: any) {
+  @UseGuards(AuthGuard('jwt'), AccountGuard, SliderGuard)
+  async update(@Param('sliderId') id: string, @Body() body: any) {
     return await this.sliderService.update(id, body);
   }
 
-  @Delete('delete/:id')
+  @Delete('delete/:sliderId')
   @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async delete(@Param('id') id: string) {
+  @UseGuards(AuthGuard('jwt'), AccountGuard, SliderGuard)
+  async delete(@Param('sliderId') id: string) {
     return await this.sliderService.delete(id);
   }
 }

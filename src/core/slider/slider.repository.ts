@@ -8,14 +8,7 @@ export class SliderRepository extends Repository<SliderEntity> {
       .leftJoinAndSelect('slider.imageUrl', 'image_url')
       .leftJoinAndSelect('slider.categoryId', 'category_id')
       .where('slider.id = :id', { id })
-      .getOne()
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
-      .catch((err) => {
-        throw err;
-      });
+      .getOne();
   }
 
   async findOneRu(id: string): Promise<SliderEntity> {
@@ -31,14 +24,7 @@ export class SliderRepository extends Repository<SliderEntity> {
         'image_url',
         'category_id.textRu',
       ])
-      .getOne()
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
-      .catch((err) => {
-        throw err;
-      });
+      .getOne();
   }
 
   async findAllRu(): Promise<SliderEntity[]> {
@@ -53,14 +39,7 @@ export class SliderRepository extends Repository<SliderEntity> {
         'image_url',
         'category_id.textRu',
       ])
-      .getMany()
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
-      .catch((err) => {
-        throw err;
-      });
+      .getMany();
   }
 
   async findOneEn(id: string): Promise<SliderEntity> {
@@ -76,13 +55,7 @@ export class SliderRepository extends Repository<SliderEntity> {
         'image_url',
         'category_id.textEn',
       ])
-      .getOne()
-      .then((res) => {
-        return res;
-      })
-      .catch((err) => {
-        throw err;
-      });
+      .getOne();
   }
 
   async findAllEn(): Promise<SliderEntity[]> {
@@ -97,12 +70,6 @@ export class SliderRepository extends Repository<SliderEntity> {
         'image_url',
         'category_id.textEn',
       ])
-      .getMany()
-      .then((res) => {
-        return res;
-      })
-      .catch((err) => {
-        throw err;
-      });
+      .getMany();
   }
 }
