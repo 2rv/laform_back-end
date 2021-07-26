@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { MasterClassEntity } from '../master-class/master-class.entity';
 
 @Entity({ name: 'files' })
 export class FileUploadEntity {
@@ -10,4 +11,10 @@ export class FileUploadEntity {
     name: 'file_url',
   })
   fileUrl!: string;
+
+  @ManyToOne(
+    () => MasterClassEntity,
+    (masterClass: MasterClassEntity) => masterClass.imageUrls,
+  )
+  masterClass: MasterClassEntity;
 }
