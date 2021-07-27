@@ -5,7 +5,6 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { LangType } from '../enum/lang.enum';
-const LANG_ERROR_TID = 'UNCORRECT_LANG_TYPE';
 import { LANG_ERROR } from '../enum/lang.enum';
 @Injectable()
 export class LangValidationPipe implements PipeTransform {
