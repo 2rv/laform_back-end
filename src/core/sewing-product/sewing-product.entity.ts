@@ -39,7 +39,6 @@ export class SewingProductEntity {
   @Column({
     type: 'bool',
     name: 'pinned',
-    nullable: true,
     default: false,
   })
   pinned?: boolean;

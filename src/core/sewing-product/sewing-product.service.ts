@@ -77,10 +77,22 @@ export class SewingProductService {
 
   async getPinned(query: string): Promise<SewingProductEntity[]> {
     if (query === 'ru') {
-      return await this.sewingProductRepository.findPinnedRu();
+      const results = await this.sewingProductRepository.findPinnedRu();
+      for (let result of results) {
+        result.imageUrls = await this.fileUploadService.getAllSewingProducts(
+          result.id,
+        );
+      }
+      return results;
     }
     if (query === 'en') {
-      return await this.sewingProductRepository.findPinnedEn();
+      const results = await this.sewingProductRepository.findPinnedEn();
+      for (let result of results) {
+        result.imageUrls = await this.fileUploadService.getAllSewingProducts(
+          result.id,
+        );
+      }
+      return results;
     }
   }
 
