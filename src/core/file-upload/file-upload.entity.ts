@@ -1,4 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { SliderEntity } from './../slider/slider.entity';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToOne,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 
 @Entity({ name: 'files' })
 export class FileUploadEntity {
@@ -10,4 +19,7 @@ export class FileUploadEntity {
     name: 'file_url',
   })
   fileUrl!: string;
+
+  @OneToMany(() => SliderEntity, (slider: SliderEntity) => slider.imageUrl)
+  slider: SliderEntity[];
 }

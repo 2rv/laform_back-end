@@ -1,3 +1,4 @@
+import { SliderEntity } from './../core/slider/slider.entity';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as config from 'config';
 
@@ -8,7 +9,13 @@ import { CategoryEntity } from 'src/core/category/category.entity';
 
 const DATABASE_CONFIG = config.get('DATABASE');
 
-export const ApiEntities = [UserEntity, NotificationEntity, CategoryEntity, FileUploadEntity];
+export const ApiEntities = [
+  UserEntity,
+  NotificationEntity,
+  CategoryEntity,
+  FileUploadEntity,
+  SliderEntity,
+];
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
   type: DATABASE_CONFIG.TYPE,

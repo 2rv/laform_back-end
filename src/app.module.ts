@@ -1,3 +1,4 @@
+import { SliderModule } from './core/slider/slider.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/typeorm.config';
@@ -20,6 +21,7 @@ import { CategoryModule } from './core/category/category.module';
     UserVerificationModule,
     FileUploadModule,
     CategoryModule,
+    SliderModule,
   ],
 })
 export class AppModule {}
