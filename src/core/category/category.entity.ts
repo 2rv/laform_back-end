@@ -21,6 +21,7 @@ export class CategoryEntity {
 
   @OneToMany(() => PostEntity, (post: PostEntity) => post.categoryId)
   post: PostEntity[];
+
   @OneToMany(() => SliderEntity, (slider: SliderEntity) => slider.categoryId)
   slider: SliderEntity[];
 }

@@ -1,3 +1,4 @@
+import { MasterClassModule } from './core/master-class/master-class.module';
 import { LikeModule } from './core/like/like.module';
 import { SliderModule } from './core/slider/slider.module';
 import { Module } from '@nestjs/common';
@@ -26,6 +27,7 @@ import { PostModule } from './core/post/post.module';
     PostModule,
     LikeModule,
     SliderModule,
+    MasterClassModule,
   ],
 })
 export class AppModule {}

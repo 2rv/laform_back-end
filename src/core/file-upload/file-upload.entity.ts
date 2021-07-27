@@ -1,16 +1,14 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { SliderEntity } from './../slider/slider.entity';
-import { PostEntity } from './../post/post.entity';
+import { MasterClassEntity } from './../master-class/master-class.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  OneToOne,
+  OneToMany,
   JoinColumn,
   ManyToOne,
-  OneToMany,
 } from 'typeorm';
-
+import { SliderEntity } from './../slider/slider.entity';
+import { PostEntity } from './../post/post.entity';
 
 @Entity({ name: 'files' })
 export class FileUploadEntity {
@@ -25,6 +23,16 @@ export class FileUploadEntity {
 
   @OneToMany(() => PostEntity, (post: PostEntity) => post.imageUrl)
   post: PostEntity[];
+
   @OneToMany(() => SliderEntity, (slider: SliderEntity) => slider.imageUrl)
   slider: SliderEntity[];
+
+  @ManyToOne(
+    () => MasterClassEntity,
+    (masterClass: MasterClassEntity) => masterClass.imageUrls,
+  )
+  @JoinColumn({
+    name: 'master_class_id',
+  })
+  masterClassId: MasterClassEntity;
 }

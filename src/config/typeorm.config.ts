@@ -1,3 +1,4 @@
+import { MasterClassEntity } from './../core/master-class/master-class.entity';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as config from 'config';
 
@@ -19,10 +20,14 @@ export const ApiEntities = [
   PostEntity,
   LikeEntity,
   SliderEntity,
+  MasterClassEntity,
 ];
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
   type: DATABASE_CONFIG.TYPE,
   url: process.env.DATABASE_URL || DATABASE_CONFIG.URL,
   entities: ApiEntities,
+  ssl: { rejectUnauthorized: false },
+  logging: ['query', 'error'],
+  synchronize: process.env.TYPEORM_SYNC || DATABASE_CONFIG.SYNCHRONIZE,
 };

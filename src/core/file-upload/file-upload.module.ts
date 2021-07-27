@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FileUploadController } from './file-upload.controller';
 import { FileUploadService } from './file-upload.service';
-import { FileUploadEntity } from './file-upload.entity';
+import { FileUploadRepository } from './file-upload.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([FileUploadEntity])],
+  imports: [TypeOrmModule.forFeature([FileUploadRepository])],
   providers: [FileUploadService],
   exports: [FileUploadService],
   controllers: [FileUploadController],
