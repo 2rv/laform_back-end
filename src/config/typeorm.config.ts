@@ -1,4 +1,3 @@
-import { MasterClassEntity } from './../core/master-class/master-class.entity';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as config from 'config';
 
@@ -9,6 +8,8 @@ import { CategoryEntity } from 'src/core/category/category.entity';
 import { LikeEntity } from 'src/core/like/like.entity';
 import { PostEntity } from './../core/post/post.entity';
 import { SliderEntity } from './../core/slider/slider.entity';
+import { SewingProductEntity } from './../core/sewing-product/sewing-product.entity';
+import { MasterClassEntity } from './../core/master-class/master-class.entity';
 
 const DATABASE_CONFIG = config.get('DATABASE');
 
@@ -21,6 +22,7 @@ export const ApiEntities = [
   LikeEntity,
   SliderEntity,
   MasterClassEntity,
+  SewingProductEntity,
 ];
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
