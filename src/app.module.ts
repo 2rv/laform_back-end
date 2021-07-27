@@ -1,4 +1,5 @@
 import { LikeModule } from './core/like/like.module';
+import { SliderModule } from './core/slider/slider.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/typeorm.config';
@@ -24,6 +25,7 @@ import { PostModule } from './core/post/post.module';
     CategoryModule,
     PostModule,
     LikeModule,
+    SliderModule,
   ],
 })
 export class AppModule {}

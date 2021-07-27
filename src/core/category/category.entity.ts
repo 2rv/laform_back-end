@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { PostEntity } from '../post/post.entity';
+import { SliderEntity } from '../slider/slider.entity';
 
 @Entity({ name: 'category' })
 export class CategoryEntity {
@@ -20,4 +21,6 @@ export class CategoryEntity {
 
   @OneToMany(() => PostEntity, (post: PostEntity) => post.categoryId)
   post: PostEntity[];
+  @OneToMany(() => SliderEntity, (slider: SliderEntity) => slider.categoryId)
+  slider: SliderEntity[];
 }
