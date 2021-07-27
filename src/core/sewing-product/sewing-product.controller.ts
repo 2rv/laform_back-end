@@ -49,6 +49,11 @@ export class SewingProductController {
     return await this.sewingProductService.getAll(query, size, page);
   }
 
+  @Get('pinned/get/')
+  async getPinned(@Query(new LangValidationPipe()) query: string) {
+    return await this.sewingProductService.getPinned(query);
+  }
+
   @Put('update/:sewingProductId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)

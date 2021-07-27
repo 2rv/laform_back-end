@@ -75,6 +75,15 @@ export class SewingProductService {
     }
   }
 
+  async getPinned(query: string): Promise<SewingProductEntity[]> {
+    if (query === 'ru') {
+      return await this.sewingProductRepository.findPinnedRu();
+    }
+    if (query === 'en') {
+      return await this.sewingProductRepository.findPinnedEn();
+    }
+  }
+
   async delete(id: string) {
     const results = await this.fileUploadService.getAllSewingProducts(id);
     for (let result of results) {

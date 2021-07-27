@@ -36,6 +36,14 @@ export class SewingProductEntity {
   })
   price!: number;
 
+  @Column({
+    type: 'bool',
+    name: 'pinned',
+    nullable: true,
+    default: false,
+  })
+  pinned?: boolean;
+
   @OneToMany(
     () => FileUploadEntity,
     (file: FileUploadEntity) => file.sewingProductId,

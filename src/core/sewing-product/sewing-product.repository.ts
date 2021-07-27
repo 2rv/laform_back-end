@@ -30,6 +30,18 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .getMany();
   }
 
+  async findPinnedRu(): Promise<SewingProductEntity[]> {
+    return await this.createQueryBuilder('sewing_product')
+      .where('sewing_product.pinned = true')
+      .select([
+        'sewing_product.id',
+        'sewing_product.titleRu',
+        'sewing_product.descriptionRu',
+        'sewing_product.price',
+      ])
+      .getMany();
+  }
+
   async findOneEn(id: string): Promise<SewingProductEntity> {
     return await this.createQueryBuilder('sewing_product')
       .where('sewing_product.id = :id', { id })
@@ -54,6 +66,18 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       ])
       .limit(take)
       .offset(skip)
+      .getMany();
+  }
+
+  async findPinnedEn(): Promise<SewingProductEntity[]> {
+    return await this.createQueryBuilder('sewing_product')
+      .where('sewing_product.pinned = true')
+      .select([
+        'sewing_product.id',
+        'sewing_product.titleEn',
+        'sewing_product.descriptionEn',
+        'sewing_product.price',
+      ])
       .getMany();
   }
 }
