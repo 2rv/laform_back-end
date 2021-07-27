@@ -1,8 +1,7 @@
 import { PostEntity } from './post.entity';
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PostDto } from './dto/post.dto';
 import { PostRepository } from './post.repository';
-import { POST_ERROR } from './enum/post.enum';
 
 @Injectable()
 export class PostService {
@@ -13,10 +12,7 @@ export class PostService {
   }
 
   async update(id: any, body: any) {
-    const result = await this.postRepository.update(id, body);
-    if (!result) {
-      throw new BadRequestException(POST_ERROR.POST_NOT_FOUND);
-    } else return await this.postRepository.findOne(id);
+    return await this.postRepository.update(id, body);
   }
 
   async getOne(id: string, query: string): Promise<PostEntity> {
@@ -32,11 +28,11 @@ export class PostService {
     query: string,
     size: number,
     page: number,
-    sort: string,
-    by: string,
+    //sort: string,
+    //by: string,
   ): Promise<PostEntity[]> {
     if (query === 'ru') {
-      if (sort === 'title') {
+      /* if (sort === 'title') {
         sort = 'post.titleRu';
       }
       if (sort === 'category') {
@@ -47,11 +43,11 @@ export class PostService {
       }
       if (sort === 'like') {
         sort = 'post.likeCount';
-      } else sort === '';
-      return await this.postRepository.findAllRu(size, page, sort, by);
+      } else sort === ''; */
+      return await this.postRepository.findAllRu(size, page);
     }
     if (query === 'en') {
-      if (sort === 'title') {
+      /* if (sort === 'title') {
         sort = 'post.titleEn';
       }
       if (sort === 'category') {
@@ -62,8 +58,8 @@ export class PostService {
       }
       if (sort === 'like') {
         sort = 'post.likeCount';
-      } else sort === '';
-      return await this.postRepository.findAllEn(size, page, sort, by);
+      } else sort === ''; */
+      return await this.postRepository.findAllEn(size, page);
     }
   }
 
@@ -85,10 +81,7 @@ export class PostService {
     }
   }
 
-  async delete(id: string): Promise<void> {
-    const result = this.postRepository.findOneOrFail(id);
-    if (!result) {
-      throw new BadRequestException(POST_ERROR.POST_NOT_FOUND);
-    } else await this.postRepository.delete(id);
+  async delete(id: string) {
+    return await this.postRepository.delete(id);
   }
 }

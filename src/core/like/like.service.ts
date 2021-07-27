@@ -11,37 +11,39 @@ export class LikeService {
     private postService: PostService,
   ) {}
 
-  async create(body: LikeEntity) {
+  async create(body: LikeEntity, userId: any) {
     const result = await this.likeRepository.findOne({
       postId: body.postId,
-      userId: body.userId,
+      userId: userId,
     });
     if (result) {
       throw new BadRequestException(LIKE_ERROR.LIKE_ALREADY_EXISTS);
-    } else await this.likeRepository.save(body);
+    } else await this.likeRepository.save({ ...body, userId: userId });
     const count = await this.count(body);
-    return await this.postService.update(body.postId, { likeCount: count });
+    await this.postService.update(body.postId, { likeCount: count });
+    return { like: count };
   }
 
-  async getPosts(body: LikeEntity) {
+  async getPosts(userId: any) {
     return await this.likeRepository.find({
       where: {
-        userId: body.userId,
+        userId: userId,
       },
       relations: ['postId'],
     });
   }
 
-  async delete(body: LikeEntity): Promise<any> {
+  async delete(body: LikeEntity, userId: any) {
     const result = await this.likeRepository.findOne({
       postId: body.postId,
-      userId: body.userId,
+      userId: userId,
     });
     if (!result) {
       throw new BadRequestException(LIKE_ERROR.LIKE_NOT_EXISTS);
     } else await this.likeRepository.delete(result.id);
     const count = await this.count(body);
-    return this.postService.update(body.postId, { likeCount: count });
+    await this.postService.update(body.postId, { likeCount: count });
+    return { like: count };
   }
 
   async count(body: LikeEntity) {

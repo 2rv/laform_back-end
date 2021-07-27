@@ -1,13 +1,10 @@
+import { PostGuard } from './guard/post.guard';
 import { PostDto } from './dto/post.dto';
 import {
   Body,
   Controller,
-  HttpStatus,
-  Logger,
   Param,
-  ParseUUIDPipe,
   Post,
-  Response,
   UseGuards,
   ValidationPipe,
   Get,
@@ -21,6 +18,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { AccountGuard } from '../user/guard/account.guard';
 import { USER_ROLE } from '../user/enum/user-role.enum';
 import { Roles } from '../user/decorator/role.decorator';
+import { LangValidationPipe } from '../../common/guards/lang.guard';
 
 @Controller('post')
 export class PostController {
@@ -33,43 +31,47 @@ export class PostController {
     return await this.postRepository.create(body);
   }
 
-  @Get('get/:id')
-  async getOne(@Query('lang') query: string, @Param('id') id: string) {
+  @Get('get/:postId')
+  @UseGuards(PostGuard)
+  async getOne(
+    @Query(new LangValidationPipe()) query: string,
+    @Param('postId') id: string,
+  ) {
     return await this.postRepository.getOne(id, query);
   }
 
   @Get('get/')
   async getAll(
-    @Query('lang') query: string,
+    @Query(new LangValidationPipe()) query: string,
     @Query('size') size: number,
     @Query('page') page: number,
-    @Query('sort') sort: string,
-    @Query('by') by: string,
+    //@Query('sort') sort: string,
+    //@Query('by') by: string,
   ) {
-    return await this.postRepository.getAll(query, size, page, sort, by);
+    return await this.postRepository.getAll(query, size, page);
   }
 
   @Get('best/get/')
-  async getBest(@Query('lang') query: string) {
+  async getBest(@Query(new LangValidationPipe()) query: string) {
     return await this.postRepository.getBest(query);
   }
 
   @Get('pinned/get/')
-  async getPinned(@Query('lang') query: string) {
+  async getPinned(@Query(new LangValidationPipe()) query: string) {
     return await this.postRepository.getPinned(query);
   }
 
-  @Put('update/:id')
+  @Put('update/:postId')
   @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async update(@Param('id') id: string, @Body() body: any, @Response() res) {
+  @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard)
+  async update(@Param('postId') id: string, @Body() body: any) {
     return await this.postRepository.update(id, body);
   }
 
-  @Delete('delete/:id')
+  @Delete('delete/:postId')
   @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async delete(@Param('id') id: string) {
+  @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard)
+  async delete(@Param('postId') id: string) {
     return await this.postRepository.delete(id);
   }
 }

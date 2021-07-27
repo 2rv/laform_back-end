@@ -17,14 +17,7 @@ export class PostRepository extends Repository<PostEntity> {
         'image_url',
         'category_id.textRu',
       ])
-      .getOne()
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
-      .catch((err) => {
-        throw err;
-      });
+      .getOne();
   }
 
   async findBestRu(): Promise<PostEntity[]> {
@@ -42,14 +35,7 @@ export class PostRepository extends Repository<PostEntity> {
       ])
       .orderBy('RANDOM()')
       .limit(3)
-      .getMany()
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
-      .catch((err) => {
-        throw err;
-      });
+      .getMany();
   }
 
   async findPinnedRu(): Promise<PostEntity[]> {
@@ -66,21 +52,14 @@ export class PostRepository extends Repository<PostEntity> {
         'image_url',
         'category_id.textRu',
       ])
-      .getMany()
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
-      .catch((err) => {
-        throw err;
-      });
+      .getMany();
   }
 
   async findAllRu(
     size: number,
     page: number,
-    sort: string,
-    by: any,
+    // sort: string,
+    // by: any,
   ): Promise<PostEntity[]> {
     const take = size || 10;
     const skip = (page - 1) * size || 0;
@@ -96,17 +75,10 @@ export class PostRepository extends Repository<PostEntity> {
         'image_url',
         'category_id.textRu',
       ])
-      .orderBy(sort, by)
+      // .orderBy(sort, by)
       .limit(take)
       .offset(skip)
-      .getMany()
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
-      .catch((err) => {
-        throw err;
-      });
+      .getMany();
   }
 
   async findOneEn(id: string): Promise<PostEntity> {
@@ -123,14 +95,7 @@ export class PostRepository extends Repository<PostEntity> {
         'image_url',
         'category_id.textEn',
       ])
-      .getOne()
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
-      .catch((err) => {
-        throw err;
-      });
+      .getOne();
   }
 
   async findBestEn(): Promise<PostEntity[]> {
@@ -148,14 +113,7 @@ export class PostRepository extends Repository<PostEntity> {
       ])
       .orderBy('RANDOM()')
       .limit(3)
-      .getMany()
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
-      .catch((err) => {
-        throw err;
-      });
+      .getMany();
   }
 
   async findPinnedEn(): Promise<PostEntity[]> {
@@ -172,21 +130,14 @@ export class PostRepository extends Repository<PostEntity> {
         'image_url',
         'category_id.textEn',
       ])
-      .getMany()
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
-      .catch((err) => {
-        throw err;
-      });
+      .getMany();
   }
 
   async findAllEn(
     size: number,
     page: number,
-    sort: string,
-    by: any,
+    // sort: string,
+    // by: any,
   ): Promise<PostEntity[]> {
     const take = size || 10;
     const skip = (page - 1) * size || 0;
@@ -202,16 +153,9 @@ export class PostRepository extends Repository<PostEntity> {
         'image_url',
         'category_id.textEn',
       ])
-      .orderBy(sort, by)
+      //.orderBy(sort, by)
       .limit(take)
       .offset(skip)
-      .getMany()
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
-      .catch((err) => {
-        throw err;
-      });
+      .getMany();
   }
 }

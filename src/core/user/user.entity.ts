@@ -17,7 +17,7 @@ import { LikeEntity } from '../like/like.entity';
 @Entity({ name: 'user' })
 @Unique(['login', 'email'])
 export class UserEntity extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ unique: true })
