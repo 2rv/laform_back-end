@@ -73,6 +73,27 @@ export class MasterClassService {
     }
   }
 
+  async getPinned(query: string): Promise<MasterClassEntity[]> {
+    if (query === 'ru') {
+      const results = await this.masterClassRepository.findPinnedRu();
+      for (let result of results) {
+        result.imageUrls = await this.fileUploadService.getAllMasterClasses(
+          result.id,
+        );
+      }
+      return results;
+    }
+    if (query === 'en') {
+      const results = await this.masterClassRepository.findPinnedEn();
+      for (let result of results) {
+        result.imageUrls = await this.fileUploadService.getAllMasterClasses(
+          result.id,
+        );
+      }
+      return results;
+    }
+  }
+
   async delete(id: string) {
     const results = await this.fileUploadService.getAllMasterClasses(id);
     for (let result of results) {

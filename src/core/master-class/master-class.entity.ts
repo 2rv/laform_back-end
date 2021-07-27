@@ -43,6 +43,13 @@ export class MasterClassEntity {
   })
   price!: number;
 
+  @Column({
+    type: 'bool',
+    name: 'pinned',
+    default: false,
+  })
+  pinned?: boolean;
+
   @OneToMany(
     () => FileUploadEntity,
     (file: FileUploadEntity) => file.masterClassId,
