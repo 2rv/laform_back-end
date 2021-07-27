@@ -16,7 +16,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { AccountGuard } from '../user/guard/account.guard';
 import { Roles } from '../user/decorator/role.decorator';
 import { USER_ROLE } from '../user/enum/user-role.enum';
-import { LangValidationPipe } from './guard/lang.guard';
+import { LangValidationPipe } from '../../common/guards/lang.guard';
 import { SliderGuard } from './guard/slider.guard';
 
 @Controller('slider')
