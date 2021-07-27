@@ -1,3 +1,4 @@
+import { PatternProductEntity } from './../pattern-product/pattern-product.entity';
 import { MasterClassEntity } from './../master-class/master-class.entity';
 import {
   Entity,
@@ -35,4 +36,13 @@ export class FileUploadEntity {
     name: 'master_class_id',
   })
   masterClassId: MasterClassEntity;
+
+  @ManyToOne(
+    () => PatternProductEntity,
+    (patternProduct: PatternProductEntity) => patternProduct.imageUrls,
+  )
+  @JoinColumn({
+    name: 'pattern_product_id',
+  })
+  patternProductId: PatternProductEntity;
 }

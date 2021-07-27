@@ -9,6 +9,7 @@ import { CategoryEntity } from 'src/core/category/category.entity';
 import { LikeEntity } from 'src/core/like/like.entity';
 import { PostEntity } from './../core/post/post.entity';
 import { SliderEntity } from './../core/slider/slider.entity';
+import { PatternProductEntity } from 'src/core/pattern-product/pattern-product.entity';
 
 const DATABASE_CONFIG = config.get('DATABASE');
 
@@ -21,6 +22,7 @@ export const ApiEntities = [
   LikeEntity,
   SliderEntity,
   MasterClassEntity,
+  PatternProductEntity,
 ];
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
