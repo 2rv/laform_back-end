@@ -28,6 +28,9 @@ export class SewingProductGuard implements CanActivate {
         SEWING_PRODUCT_ERROR.SEWING_PRODUCT_NOT_FOUND,
       );
     }
+
+    request.sewingProductId = params.sewingProductId;
+
     return true;
   }
 }

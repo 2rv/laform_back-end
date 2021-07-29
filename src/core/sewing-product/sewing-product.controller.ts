@@ -9,6 +9,7 @@ import {
   Put,
   Query,
   Delete,
+  Request,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AccountGuard } from '../user/guard/account.guard';
@@ -33,11 +34,8 @@ export class SewingProductController {
 
   @Get('get/:sewingProductId')
   @UseGuards(SewingProductGuard)
-  async getOne(
-    @Query(new LangValidationPipe()) query,
-    @Param('sewingProductId') sewingProductId: string,
-  ) {
-    return await this.sewingProductService.getOne(sewingProductId, query);
+  async getOne(@Query(new LangValidationPipe()) query, @Request() req) {
+    return await this.sewingProductService.getOne(req.sewingProductId, query);
   }
 
   @Get('get/')
@@ -57,17 +55,14 @@ export class SewingProductController {
   @Put('update/:sewingProductId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
-  async update(
-    @Param('sewingProductId') sewingProductId: string,
-    @Body() body: UpdateSewingProductDto,
-  ) {
-    return await this.sewingProductService.update(sewingProductId, body);
+  async update(@Request() req, @Body() body: UpdateSewingProductDto) {
+    return await this.sewingProductService.update(req.sewingProductId, body);
   }
 
   @Delete('delete/:sewingProductId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
-  async delete(@Param('sewingProductId') sewingProductId: string) {
-    return await this.sewingProductService.delete(sewingProductId);
+  async delete(@Request() req) {
+    return await this.sewingProductService.delete(req.sewingProductId);
   }
 }
