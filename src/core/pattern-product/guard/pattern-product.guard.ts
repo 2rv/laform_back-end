@@ -28,6 +28,9 @@ export class PatternProductGuard implements CanActivate {
         PATTERN_PRODUCT_ERROR.PATTERN_PRODUCT_NOT_FOUND,
       );
     }
+
+    request.patternProductId = params.patternProductId;
+
     return true;
   }
 }

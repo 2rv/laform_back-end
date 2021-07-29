@@ -9,6 +9,7 @@ import {
   Put,
   Query,
   Delete,
+  Request,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AccountGuard } from '../user/guard/account.guard';
@@ -33,11 +34,8 @@ export class PatternProductController {
 
   @Get('get/:patternProductId')
   @UseGuards(PatternProductGuard)
-  async getOne(
-    @Query(new LangValidationPipe()) query,
-    @Param('patternProductId') patternProductId: string,
-  ) {
-    return await this.patternProductService.getOne(patternProductId, query);
+  async getOne(@Query(new LangValidationPipe()) query, @Request() req) {
+    return await this.patternProductService.getOne(req.patternProductId, query);
   }
 
   @Get('get/')
@@ -57,17 +55,14 @@ export class PatternProductController {
   @Put('update/:patternProductId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, PatternProductGuard)
-  async update(
-    @Param('patternProductId') patternProductId: string,
-    @Body() body: UpdatePatternProductDto,
-  ) {
-    return await this.patternProductService.update(patternProductId, body);
+  async update(@Request() req, @Body() body: UpdatePatternProductDto) {
+    return await this.patternProductService.update(req.patternProductId, body);
   }
 
   @Delete('delete/:patternProductId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, PatternProductGuard)
-  async delete(@Param('patternProductId') patternProductId: string) {
-    return await this.patternProductService.delete(patternProductId);
+  async delete(@Request() req) {
+    return await this.patternProductService.delete(req.patternProductId);
   }
 }
