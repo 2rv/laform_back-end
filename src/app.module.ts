@@ -14,6 +14,7 @@ import { CategoryModule } from './core/category/category.module';
 import { PostModule } from './core/post/post.module';
 import { PurchaseModule } from './core/purchase/purchase.module';
 import { PurchaseProductModule } from './core/purchase-product/purchase-product.module';
+import { MailModule } from './core/mail/mail.module';
 
 @Module({
   providers: [],
@@ -32,6 +33,7 @@ import { PurchaseProductModule } from './core/purchase-product/purchase-product.
     MasterClassModule,
     PurchaseModule,
     PurchaseProductModule,
+    MailModule,
   ],
 })
 export class AppModule {}

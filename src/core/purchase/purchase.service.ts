@@ -4,12 +4,13 @@ import { Injectable } from '@nestjs/common';
 import { PurchaseRepository } from './purchase.repository';
 import { CreatePurchaseDto } from './dto/create-purchase.dto';
 import { UserEntity } from '../user/user.entity';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class PurchaseService {
   constructor(
     private purchaseRepository: PurchaseRepository,
-    private purchaseProductService: PurchaseProductService,
+    private mailService: MailService,
   ) {}
 
   async create(body: any): Promise<any> {
@@ -19,9 +20,12 @@ export class PurchaseService {
   async save(body: CreatePurchaseDto): Promise<PurchaseEntity> {
     const purchase = await this.create(body.purchase);
     purchase.purchaseProducts = body.purchaseProducts;
-    return await this.purchaseRepository.save({
+    const result = await this.purchaseRepository.save({
       ...purchase,
     });
+
+    await this.mailService.sendPurchaseInformation(result);
+    return result;
   }
 
   async getAll(size: number, page: number): Promise<PurchaseEntity[]> {
