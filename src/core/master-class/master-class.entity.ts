@@ -7,6 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
+import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
 
 @Entity({ name: 'master_class' })
 export class MasterClassEntity {
@@ -55,4 +56,10 @@ export class MasterClassEntity {
     (file: FileUploadEntity) => file.masterClassId,
   )
   imageUrls: FileUploadEntity[];
+
+  @OneToMany(
+    () => PurchaseProductEntity,
+    (purchaseProduct: PurchaseProductEntity) => purchaseProduct.masterClassId,
+  )
+  purchaseProduct: PurchaseProductEntity[];
 }

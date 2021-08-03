@@ -1,3 +1,4 @@
+import { PurchaseEntity } from './../purchase/purchase.entity';
 import {
   Entity,
   Unique,
@@ -56,4 +57,10 @@ export class UserEntity extends BaseEntity {
 
   @OneToMany(() => LikeEntity, (like: LikeEntity) => like.postId)
   like: LikeEntity[];
+
+  @OneToMany(
+    () => PurchaseEntity,
+    (purchase: PurchaseEntity) => purchase.userId,
+  )
+  purchase: PurchaseEntity[];
 }
