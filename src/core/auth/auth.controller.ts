@@ -3,19 +3,24 @@ import {
   Post,
   Body,
   ValidationPipe,
+  HttpStatus,
+  UnauthorizedException,
   UseGuards,
+  HttpCode,
+  Request,
   Get,
 } from '@nestjs/common';
-import { UserSignUpDto } from './dto/user-sign-up.dto';
-import { UserLoginDto } from './dto/user-login.dto';
-import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
+
+import { UserSignUpDto } from './dto/user-sign-up.dto';
+import { AuthService } from './auth.service';
 import { GetAccount } from '../user/decorator/get-account.decorator';
 import { UserEntity } from '../user/user.entity';
 import { AccountGuard } from '../user/guard/account.guard';
 import { LoginInfoDto } from './dto/login-info.dto';
 import { AccountDataDto } from './dto/account-data.dto';
-
+import { JwtPayloadDto, RefreshTokenDto } from './dto';
+import { LocalAuthGuard } from './guard';
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -27,16 +32,29 @@ export class AuthController {
     return this.authService.signUp(userSignUpDto);
   }
 
+  @UseGuards(LocalAuthGuard)
   @Post('/login')
-  logIn(
-    @Body(ValidationPipe) userLoginDto: UserLoginDto,
-  ): Promise<LoginInfoDto> {
-    return this.authService.login(userLoginDto);
+  @HttpCode(HttpStatus.CREATED)
+  async logIn(@Request() { user }: { user: JwtPayloadDto }) {
+    return {
+      user,
+      ...(await this.authService.login(user, false)),
+    };
   }
 
-  @Get('/token')
-  @UseGuards(AuthGuard())
-  checkToken(): void {}
+  @Post('/refresh')
+  @HttpCode(HttpStatus.CREATED)
+  async refreshToken(@Body() data: RefreshTokenDto) {
+    const user = await this.authService.verifyRefreshToken(data.refreshToken);
+
+    if (!user) {
+      throw new UnauthorizedException(
+        'Your session is over. You need to login to the application again',
+      );
+    }
+
+    return this.authService.login(user, true);
+  }
 
   @Get('/account-data')
   @UseGuards(AuthGuard(), AccountGuard)

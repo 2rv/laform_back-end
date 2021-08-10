@@ -1,26 +1,41 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
+import { MoreThanOrEqual } from 'typeorm';
+import { getUnixTime, addMonths } from 'date-fns';
+import { v4 as uuidv4 } from 'uuid';
+
+import { JwtConfig } from 'src/config/jwt.config';
 
 import { UserEntity } from '../user/user.entity';
 import { UserRepository } from '../user/user.repository';
 
 import { AUTH_ERROR } from './enum/auth-error.enum';
 import { UserSignUpDto } from './dto/user-sign-up.dto';
-import { UserLoginDto } from './dto/user-login.dto';
 import { LoginInfoDto } from './dto/login-info.dto';
 import { AccountDataDto } from './dto/account-data.dto';
 import { JwtPayload } from './interface/jwt-payload.interface';
 import { AuthRepository } from './auth.repository';
+import { JwtPayloadDto } from './dto';
+import { IUpdateProps } from './interface';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(AuthRepository)
-    private authRepository: AuthRepository,
-    private userRepository: UserRepository,
-    private jwtService: JwtService,
+    private readonly authRepository: AuthRepository,
+    private readonly userRepository: UserRepository,
+    private readonly jwtService: JwtService,
   ) {}
+
+  private _getRefreshData() {
+    const refreshToken = uuidv4();
+    const refreshTokenExpires = getUnixTime(
+      addMonths(new Date(), JwtConfig.refreshTokenTime),
+    );
+
+    return { refreshToken, refreshTokenExpires };
+  }
 
   async signUp(userSignUpDto: UserSignUpDto): Promise<LoginInfoDto> {
     const user: UserEntity = await this.userRepository.createUser(
@@ -32,13 +47,24 @@ export class AuthService {
     return { accessToken };
   }
 
-  async login(userLoginDto: UserLoginDto): Promise<LoginInfoDto> {
-    const userData = await this.authRepository.login(userLoginDto);
+  public async login(user: JwtPayloadDto, isRefresh: boolean) {
+    const updateData = { ...this._getRefreshData() } as IUpdateProps;
 
-    const accessToken = await this.createJwt(userData);
+    if (!isRefresh) {
+      updateData.loginTime = new Date().toISOString();
+    }
 
-    const loginInfo: LoginInfoDto = { accessToken };
-    return loginInfo;
+    await this.userRepository.update(user.id, updateData);
+
+    return {
+      accessToken: this.jwtService.sign(
+        { ...user },
+        {
+          expiresIn: JwtConfig.accessTokenTime,
+        },
+      ),
+      refreshToken: updateData.refreshToken,
+    };
   }
 
   async createJwt(user: UserEntity): Promise<string> {
@@ -78,5 +104,22 @@ export class AuthService {
     };
 
     return accountData;
+  }
+
+  public async verifyRefreshToken(
+    token: string,
+  ): Promise<JwtPayloadDto | null> {
+    const currentTimestamp = getUnixTime(new Date());
+
+    try {
+      const user = await this.userRepository.relationedFindOne({
+        refreshToken: token,
+        refreshTokenExpires: MoreThanOrEqual(currentTimestamp),
+      });
+
+      return user ? new JwtPayloadDto(user) : null;
+    } catch (err) {
+      return null;
+    }
   }
 }

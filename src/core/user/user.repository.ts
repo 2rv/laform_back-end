@@ -33,6 +33,13 @@ export class UserRepository extends Repository<UserEntity> {
     }
   }
 
+  async relationedFindOne(query = {}): Promise<UserEntity> {
+    return UserEntity.findOne({
+      where: { ...query },
+      relations: ['like'],
+    });
+  }
+
   async changePassword(
     user: UserEntity,
     data: UserChangePasswordDto,

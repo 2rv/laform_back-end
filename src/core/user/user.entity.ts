@@ -37,11 +37,20 @@ export class UserEntity extends BaseEntity {
   })
   role: USER_ROLE;
 
+  @Column({ nullable: true, type: 'timestamp' })
+  loginTime: string;
+
   @Column({ default: false })
   emailConfirmed: boolean;
 
   @CreateDateColumn()
   createDate: string;
+
+  @Column({ nullable: true })
+  refreshTokenExpires: number;
+
+  @Column({ nullable: true })
+  refreshToken: string;
 
   static async hashPassword(password: string): Promise<string> {
     const salt = await generatePasswordSalt(password);

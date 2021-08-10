@@ -11,10 +11,8 @@ import { UserEntity } from '../../user/user.entity';
 export class PasswordGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const {
-      body,
-      user,
-    }: { body: { password: string }; user: UserEntity } = request;
+    const { body, user }: { body: { password: string }; user: UserEntity } =
+      request;
 
     if (!body || !user) {
       return false;
