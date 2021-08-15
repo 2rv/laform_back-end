@@ -5,12 +5,14 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  OneToMany,
 } from 'typeorm';
 import {
   generatePasswordSalt,
   generateBcryptHash,
 } from '../../common/utils/hash';
 import { USER_ROLE } from './enum/user-role.enum';
+import { LikeEntity } from '../like/like.entity';
 
 @Entity({ name: 'user' })
 @Unique(['login', 'email'])
@@ -51,4 +53,7 @@ export class UserEntity extends BaseEntity {
     const hashPassword = generateBcryptHash(password, salt);
     return this.password === hashPassword;
   }
+
+  @OneToMany(() => LikeEntity, (like: LikeEntity) => like.postId)
+  like: LikeEntity[];
 }

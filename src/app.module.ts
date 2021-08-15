@@ -1,3 +1,6 @@
+import { MasterClassModule } from './core/master-class/master-class.module';
+import { LikeModule } from './core/like/like.module';
+import { SliderModule } from './core/slider/slider.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/typeorm.config';
@@ -7,6 +10,9 @@ import { NotificationModule } from './core/notification/notification.module';
 import { UserRecoveryModule } from './core/user-recovery/user-recovery.module';
 import { UserVerificationModule } from './core/user-verification/user-verification.module';
 import { UserDeliveryInfoModule } from './core/user-delivery-info/user-delivery-info.module';
+import { FileUploadModule } from './core/file-upload/file-upload.module';
+import { CategoryModule } from './core/category/category.module';
+import { PostModule } from './core/post/post.module';
 
 @Module({
   providers: [],
@@ -18,6 +24,12 @@ import { UserDeliveryInfoModule } from './core/user-delivery-info/user-delivery-
     UserRecoveryModule,
     UserVerificationModule,
     UserDeliveryInfoModule,
+    FileUploadModule,
+    CategoryModule,
+    PostModule,
+    LikeModule,
+    SliderModule,
+    MasterClassModule,
   ],
 })
 export class AppModule {}
