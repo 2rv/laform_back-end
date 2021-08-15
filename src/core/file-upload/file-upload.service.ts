@@ -31,6 +31,13 @@ export class FileUploadService {
     });
   }
 
+  async getAllPatternProducts(id): Promise<FileUploadEntity[]> {
+    return await this.fileRepository.find({
+      where: {
+        patternProductId: id,
+      },
+    });
+  }
   async getOne(id: string): Promise<FileUploadEntity> {
     try {
       return await this.fileRepository.findOne(id);

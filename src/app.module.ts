@@ -12,6 +12,7 @@ import { UserVerificationModule } from './core/user-verification/user-verificati
 import { FileUploadModule } from './core/file-upload/file-upload.module';
 import { CategoryModule } from './core/category/category.module';
 import { PostModule } from './core/post/post.module';
+import { PatternProductModule } from './core/pattern-product/pattern-product.module';
 
 @Module({
   providers: [],
@@ -28,6 +29,7 @@ import { PostModule } from './core/post/post.module';
     LikeModule,
     SliderModule,
     MasterClassModule,
+    PatternProductModule,
   ],
 })
 export class AppModule {}
