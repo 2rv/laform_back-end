@@ -23,10 +23,18 @@ export class FileUploadService {
     return await this.fileRepository.update(id, body);
   }
 
-  async getAllMasterClasses(id): Promise<FileUploadEntity[]> {
+  async getAllMasterClasses(id: string): Promise<FileUploadEntity[]> {
     return await this.fileRepository.find({
       where: {
         masterClassId: id,
+      },
+    });
+  }
+
+  async getAllSewingProducts(id: string): Promise<FileUploadEntity[]> {
+    return await this.fileRepository.find({
+      where: {
+        sewingProductId: id,
       },
     });
   }
@@ -38,6 +46,7 @@ export class FileUploadService {
       },
     });
   }
+  
   async getOne(id: string): Promise<FileUploadEntity> {
     try {
       return await this.fileRepository.findOne(id);
