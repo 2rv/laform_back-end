@@ -46,6 +46,8 @@ export class FileUploadEntity {
     name: 'sewing_product_id',
   })
   sewingProductId: SewingProductEntity;
+
+  @ManyToOne(
     () => PatternProductEntity,
     (patternProduct: PatternProductEntity) => patternProduct.imageUrls,
   )
