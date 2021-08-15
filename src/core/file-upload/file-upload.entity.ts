@@ -1,3 +1,5 @@
+import { SewingProductEntity } from './../sewing-product/sewing-product.entity';
+import { PatternProductEntity } from './../pattern-product/pattern-product.entity';
 import { MasterClassEntity } from './../master-class/master-class.entity';
 import {
   Entity,
@@ -35,4 +37,22 @@ export class FileUploadEntity {
     name: 'master_class_id',
   })
   masterClassId: MasterClassEntity;
+
+  @ManyToOne(
+    () => SewingProductEntity,
+    (sewingProduct: SewingProductEntity) => sewingProduct.imageUrls,
+  )
+  @JoinColumn({
+    name: 'sewing_product_id',
+  })
+  sewingProductId: SewingProductEntity;
+
+  @ManyToOne(
+    () => PatternProductEntity,
+    (patternProduct: PatternProductEntity) => patternProduct.imageUrls,
+  )
+  @JoinColumn({
+    name: 'pattern_product_id',
+  })
+  patternProductId: PatternProductEntity;
 }
