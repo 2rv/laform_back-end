@@ -49,6 +49,11 @@ export class MasterClassController {
     return await this.masterClassService.getAll(query, size, page);
   }
 
+  @Get('pinned/get/')
+  async getPinned(@Query(new LangValidationPipe()) query: string) {
+    return await this.masterClassService.getPinned(query);
+  }
+
   @Put('update/:masterClassId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, MasterClassGuard)

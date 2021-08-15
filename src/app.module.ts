@@ -13,6 +13,7 @@ import { FileUploadModule } from './core/file-upload/file-upload.module';
 import { CategoryModule } from './core/category/category.module';
 import { PostModule } from './core/post/post.module';
 import { SewingProductModule } from './core/sewing-product/sewing-product.module';
+import { PatternProductModule } from './core/pattern-product/pattern-product.module';
 
 @Module({
   providers: [],
@@ -30,6 +31,7 @@ import { SewingProductModule } from './core/sewing-product/sewing-product.module
     SliderModule,
     MasterClassModule,
     SewingProductModule,
+    PatternProductModule,
   ],
 })
 export class AppModule {}

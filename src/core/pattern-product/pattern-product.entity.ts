@@ -8,8 +8,8 @@ import {
 } from 'typeorm';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
 
-@Entity({ name: 'master_class' })
-export class MasterClassEntity {
+@Entity({ name: 'pattern_product' })
+export class PatternProductEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -52,7 +52,7 @@ export class MasterClassEntity {
 
   @OneToMany(
     () => FileUploadEntity,
-    (file: FileUploadEntity) => file.masterClassId,
+    (file: FileUploadEntity) => file.patternProductId,
   )
   imageUrls: FileUploadEntity[];
 }
