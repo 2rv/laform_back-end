@@ -11,6 +11,8 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { AuthRepository } from './auth.repository';
 import { JwtStrategy } from './jwt.strategy';
+import { FacebookStrategy } from './facebook.strategy';
+import { GoogleStrategy } from './google.strategy';
 
 @Module({
   imports: [
@@ -19,7 +21,7 @@ import { JwtStrategy } from './jwt.strategy';
     TypeOrmModule.forFeature([UserEntity, UserRepository, AuthRepository]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, FacebookStrategy, GoogleStrategy],
   exports: [JwtStrategy, PassportModule, AuthService],
 })
 export class AuthModule {}

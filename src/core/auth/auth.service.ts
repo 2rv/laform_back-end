@@ -32,6 +32,26 @@ export class AuthService {
     return { accessToken };
   }
 
+  async signUpWithGoogle(body: any): Promise<LoginInfoDto> {
+    const user = await this.userRepository.createUserWithGoogle({
+      email: body.email,
+      googleId: body.id,
+    });
+    const accessToken = await this.createJwt(user);
+
+    return { accessToken };
+  }
+
+  async signUpWithFacebook(body: any): Promise<LoginInfoDto> {
+    const user = await this.userRepository.createUserWithFacebook({
+      email: body.email,
+      facebookId: body.id,
+    });
+    const accessToken = await this.createJwt(user);
+
+    return { accessToken };
+  }
+
   async login(userLoginDto: UserLoginDto): Promise<LoginInfoDto> {
     const userData = await this.authRepository.login(userLoginDto);
 

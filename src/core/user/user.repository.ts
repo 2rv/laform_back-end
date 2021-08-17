@@ -33,6 +33,44 @@ export class UserRepository extends Repository<UserEntity> {
     }
   }
 
+  async createUserWithGoogle(data: any): Promise<any> {
+    const { email, googleId } = data;
+
+    const user: UserEntity = new UserEntity();
+    user.googleId = googleId;
+    user.email = email;
+    user.emailConfirmed = true;
+
+    try {
+      const findUser = await this.findOne({ googleId: googleId });
+      if (findUser) {
+        return findUser;
+      } else await user.save();
+      return user;
+    } catch (err) {
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async createUserWithFacebook(data: any): Promise<any> {
+    const { email, facebookId } = data;
+
+    const user: UserEntity = new UserEntity();
+    user.facebookId = facebookId;
+    user.email = email;
+    user.emailConfirmed = true;
+
+    try {
+      const findUser = await this.findOne({ facebookId: facebookId });
+      if (findUser) {
+        return findUser;
+      } else await user.save();
+      return user;
+    } catch (err) {
+      throw new InternalServerErrorException();
+    }
+  }
+
   async changePassword(
     user: UserEntity,
     data: UserChangePasswordDto,
