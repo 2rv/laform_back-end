@@ -95,4 +95,39 @@ export class PurchaseEntity {
     name: 'user_id',
   })
   userId: UserEntity;
+
+  @Column({
+    type: 'varchar',
+    name: 'order_status',
+    nullable: true,
+  })
+  orderStatus: string;
+
+  @Column({
+    type: 'varchar',
+    name: 'delivery_price',
+    nullable: true,
+  })
+  deliveryPrice: string;
+
+  @Column({
+    type: 'varchar',
+    name: 'total_price',
+    nullable: true,
+  })
+  totalPrice: string;
+
+  @Column({
+    type: 'varchar',
+    name: 'order_number',
+    nullable: true,
+  })
+  orderNumber: string;
+
+  @Column({
+    type: 'varchar',
+    name: 'discount_price',
+    nullable: true,
+  })
+  discountPrice: string;
 }
