@@ -15,6 +15,7 @@ import { CategoryModule } from './core/category/category.module';
 import { PostModule } from './core/post/post.module';
 import { SewingProductModule } from './core/sewing-product/sewing-product.module';
 import { PatternProductModule } from './core/pattern-product/pattern-product.module';
+import { PromoCodeModule } from './core/promo-code/promo-code.module';
 
 @Module({
   providers: [],
@@ -34,6 +35,7 @@ import { PatternProductModule } from './core/pattern-product/pattern-product.mod
     MasterClassModule,
     SewingProductModule,
     PatternProductModule,
+    PromoCodeModule,
   ],
 })
 export class AppModule {}
