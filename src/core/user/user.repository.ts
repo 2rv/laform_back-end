@@ -9,6 +9,7 @@ import { USER_ERROR } from './enum/user-error.enum';
 import { UserCreateDto } from './dto/user-create.dto';
 import { UserChangePasswordDto } from './dto/user-change-password.dto';
 import { UserChangeEmailDto } from './dto/user-change-email.dto';
+import { UserChangeSubscribeDto } from './dto/user-change-subscribe.dto';
 import { UserEntity } from './user.entity';
 
 @EntityRepository(UserEntity)
@@ -52,6 +53,19 @@ export class UserRepository extends Repository<UserEntity> {
     const { email } = data;
 
     user.email = email;
+    try {
+      await user.save();
+    } catch (err) {
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async changeSubscribe(
+    user: UserEntity,
+    data: UserChangeSubscribeDto,
+  ): Promise<void> {
+    const { notificationEmail } = data;
+    user.notificationEmail = notificationEmail;
     try {
       await user.save();
     } catch (err) {

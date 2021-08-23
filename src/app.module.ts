@@ -9,6 +9,7 @@ import { UserSettingsModule } from './core/user-settings/user-settings.module';
 import { NotificationModule } from './core/notification/notification.module';
 import { UserRecoveryModule } from './core/user-recovery/user-recovery.module';
 import { UserVerificationModule } from './core/user-verification/user-verification.module';
+import { UserModule } from './core/user/user.module';
 import { UserDeliveryInfoModule } from './core/user-delivery-info/user-delivery-info.module';
 import { FileUploadModule } from './core/file-upload/file-upload.module';
 import { CategoryModule } from './core/category/category.module';
@@ -28,6 +29,7 @@ import { PromoCodeModule } from './core/promo-code/promo-code.module';
     NotificationModule,
     UserRecoveryModule,
     UserVerificationModule,
+    UserModule,
     UserDeliveryInfoModule,
     FileUploadModule,
     CategoryModule,
