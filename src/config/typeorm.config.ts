@@ -12,6 +12,7 @@ import { SliderEntity } from './../core/slider/slider.entity';
 import { SewingProductEntity } from './../core/sewing-product/sewing-product.entity';
 import { MasterClassEntity } from './../core/master-class/master-class.entity';
 import { PatternProductEntity } from 'src/core/pattern-product/pattern-product.entity';
+import { PromoCodeEntity } from '../core/promo-code/promo-code.entity';
 
 const DATABASE_CONFIG = config.get('DATABASE');
 
@@ -28,6 +29,7 @@ export const ApiEntities = [
   MasterClassEntity,
   SewingProductEntity,
   PatternProductEntity,
+  PromoCodeEntity,
 ];
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
