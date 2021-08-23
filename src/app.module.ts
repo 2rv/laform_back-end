@@ -13,6 +13,8 @@ import { UserDeliveryInfoModule } from './core/user-delivery-info/user-delivery-
 import { FileUploadModule } from './core/file-upload/file-upload.module';
 import { CategoryModule } from './core/category/category.module';
 import { PostModule } from './core/post/post.module';
+import { PurchaseModule } from './core/purchase/purchase.module';
+import { PurchaseProductModule } from './core/purchase-product/purchase-product.module';
 import { SewingProductModule } from './core/sewing-product/sewing-product.module';
 import { PatternProductModule } from './core/pattern-product/pattern-product.module';
 import { PromoCodeModule } from './core/promo-code/promo-code.module';
@@ -33,6 +35,8 @@ import { PromoCodeModule } from './core/promo-code/promo-code.module';
     LikeModule,
     SliderModule,
     MasterClassModule,
+    PurchaseModule,
+    PurchaseProductModule,
     SewingProductModule,
     PatternProductModule,
     PromoCodeModule,
