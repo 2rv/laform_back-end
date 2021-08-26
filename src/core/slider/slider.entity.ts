@@ -61,4 +61,28 @@ export class SliderEntity {
     name: 'category_id',
   })
   categoryId: CategoryEntity;
+
+  @Column({
+    type: 'varchar',
+    name: 'title_text_color',
+  })
+  titleTextColor!: string;
+
+  @Column({
+    type: 'varchar',
+    name: 'button_color',
+  })
+  buttonColor!: string;
+
+  @Column({
+    type: 'varchar',
+    name: 'button_text_color',
+  })
+  buttonTextColor!: string;
+
+  @Column({
+    type: 'varchar',
+    name: 'is_have_button',
+  })
+  isHaveButton!: boolean;
 }
