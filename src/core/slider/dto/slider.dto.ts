@@ -1,23 +1,23 @@
-import { IsString, IsOptional, IsBoolean, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsString, IsOptional, IsBoolean } from 'class-validator';
 
 export class SliderDto {
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   headingTextRu: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   headingTextEn: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   buttonTextRu: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   buttonTextEn: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   buttonUrl: string;
 
