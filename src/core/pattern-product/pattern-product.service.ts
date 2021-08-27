@@ -4,16 +4,28 @@ import { UpdatePatternProductDto } from './dto/update-pattern-product.dto';
 import { PatternProductEntity } from './pattern-product.entity';
 import { Injectable } from '@nestjs/common';
 import { PatternProductDto } from './dto/pattern-product.dto';
+import { SizesService } from '../sizes/sizes.service';
 
 @Injectable()
 export class PatternProductService {
   constructor(
     private patternProductRepository: PatternProductRepository,
     private fileUploadService: FileUploadService,
+    private sizesService: SizesService,
   ) {}
 
   async create(body: PatternProductDto): Promise<PatternProductEntity> {
     const result = await this.patternProductRepository.save(body);
+    if (body.type.id === 2) {
+      const sizes = await this.sizesService.create(body.sizes);
+      if (sizes) {
+        for (let key in sizes) {
+          await this.sizesService.update(sizes[key], {
+            patternProductId: result.id,
+          });
+        }
+      }
+    }
     if (body.imageUrls) {
       for (let file of body.imageUrls) {
         await this.fileUploadService.update(file, {
@@ -21,6 +33,7 @@ export class PatternProductService {
         });
       }
     }
+
     return result;
   }
 
@@ -61,6 +74,7 @@ export class PatternProductService {
         result.imageUrls = await this.fileUploadService.getAllPatternProducts(
           result.id,
         );
+        result.sizes = await this.sizesService.getAllPatternProducts(result.id);
       }
       return results;
     }

@@ -4,16 +4,37 @@ import { UpdateSewingProductDto } from './dto/update-sewing-product.dto';
 import { SewingProductEntity } from './sewing-product.entity';
 import { Injectable } from '@nestjs/common';
 import { SewingProductDto } from './dto/sewing-product.dto';
+import { SizesService } from '../sizes/sizes.service';
+import { ColorsService } from '../colors/colors.service';
 
 @Injectable()
 export class SewingProductService {
   constructor(
     private sewingProductRepository: SewingProductRepository,
     private fileUploadService: FileUploadService,
+    private sizesService: SizesService,
+    private colorsService: ColorsService,
   ) {}
 
   async create(body: SewingProductDto): Promise<SewingProductEntity> {
     const result = await this.sewingProductRepository.save(body);
+
+    const sizes = await this.sizesService.create(body.sizes);
+    if (sizes) {
+      for (let key in sizes) {
+        await this.sizesService.update(sizes[key], {
+          sewingProductId: result.id,
+        });
+      }
+    }
+    const colors = await this.colorsService.create(body.colors);
+    if (colors) {
+      for (let key in colors) {
+        await this.colorsService.update(colors[key], {
+          sewingProductId: result.id,
+        });
+      }
+    }
     if (body.imageUrls) {
       for (let file of body.imageUrls) {
         await this.fileUploadService.update(file, {
@@ -59,6 +80,10 @@ export class SewingProductService {
       const results = await this.sewingProductRepository.findAllRu(size, page);
       for (let result of results) {
         result.imageUrls = await this.fileUploadService.getAllSewingProducts(
+          result.id,
+        );
+        result.sizes = await this.sizesService.getAllSewingProducts(result.id);
+        result.colors = await this.colorsService.getAllSewingProducts(
           result.id,
         );
       }

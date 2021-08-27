@@ -4,10 +4,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { SewingProductController } from './sewing-product.controller';
 import { SewingProductService } from './sewing-product.service';
 import { SewingProductRepository } from './sewing-product.repository';
+import { SizesModule } from '../sizes/sizes.module';
+import { ColorsModule } from '../colors/colors.module';
 
 @Module({
   imports: [
     FileUploadModule,
+    SizesModule,
+    ColorsModule,
     TypeOrmModule.forFeature([SewingProductRepository]),
   ],
   providers: [SewingProductService],

@@ -8,7 +8,7 @@ import {
   BadRequestException,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { FileUploadDto } from './dto/file-upload.dto';
+import { FileUploadDto, FilesUploadDto } from './dto/file-upload.dto';
 
 @Injectable()
 export class FileUploadService {
@@ -19,8 +19,19 @@ export class FileUploadService {
     return await this.fileRepository.save({ fileUrl: fileUrl });
   }
 
+  async createMany(files: FilesUploadDto[]): Promise<FileUploadEntity> {
+    const uploadedFiles = [];
+    for (let file of files) {
+      const fileUrl = await uploadFile(file);
+      uploadedFiles.push({ fileUrl: fileUrl });
+    }
+    const result = await this.fileRepository.insert(uploadedFiles);
+    return result.raw;
+  }
+
   async update(id: string, body) {
-    return await this.fileRepository.update(id, body);
+    const result = await this.fileRepository.update(id, body);
+    return result;
   }
 
   async getAllMasterClasses(id: string): Promise<FileUploadEntity[]> {
@@ -46,7 +57,7 @@ export class FileUploadService {
       },
     });
   }
-  
+
   async getOne(id: string): Promise<FileUploadEntity> {
     try {
       return await this.fileRepository.findOne(id);

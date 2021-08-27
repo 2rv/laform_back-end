@@ -4,10 +4,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { MasterClassController } from './master-class.controller';
 import { MasterClassService } from './master-class.service';
 import { MasterClassRepository } from './master-class.repository';
+import { ProgramModule } from '../program/program.module';
 
 @Module({
   imports: [
     FileUploadModule,
+    ProgramModule,
     TypeOrmModule.forFeature([MasterClassRepository]),
   ],
   providers: [MasterClassService],

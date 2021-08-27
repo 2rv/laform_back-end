@@ -4,30 +4,48 @@ import {
   IsOptional,
   IsArray,
   IsNumber,
+  IsObject,
 } from 'class-validator';
+import { CreateProgramDto } from 'src/core/program/dto/create-program.dto';
 
 export class MasterClassDto {
   @IsNotEmpty()
-  @IsString()
-  titleRu: string;
-
-  @IsNotEmpty()
-  @IsString()
-  titleEn: string;
+  @IsArray()
+  categories: [];
 
   @IsNotEmpty()
   @IsString()
   descriptionRu: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   descriptionEn: string;
 
   @IsNotEmpty()
   @IsNumber()
-  price: number;
+  discount: number;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsArray()
   imageUrls: [];
+
+  @IsOptional()
+  @IsString()
+  modifier: string;
+
+  @IsNotEmpty()
+  @IsString()
+  titleRu: string;
+
+  @IsOptional()
+  @IsString()
+  titleEn: string;
+
+  @IsNotEmpty()
+  @IsArray()
+  programs: [CreateProgramDto];
+
+  @IsNotEmpty()
+  @IsObject()
+  type: object;
 }

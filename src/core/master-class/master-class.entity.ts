@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
 import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
+import { ProgramEntity } from '../program/program-entity';
 
 @Entity({ name: 'master_class' })
 export class MasterClassEntity {
@@ -15,34 +16,66 @@ export class MasterClassEntity {
   id: string;
 
   @Column({
-    type: 'varchar',
-    name: 'title_ru',
+    type: 'json',
+    name: 'categories',
   })
-  titleRu!: string;
+  categories!: [];
 
   @Column({
     type: 'varchar',
-    name: 'title_en',
-  })
-  titleEn!: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'description_ru',
+    name: 'descriptionRu',
   })
   descriptionRu!: string;
 
   @Column({
     type: 'varchar',
-    name: 'description_en',
+    name: 'descriptionEn',
+    nullable: true,
   })
-  descriptionEn!: string;
+  descriptionEn: string;
 
   @Column({
-    type: 'int',
-    name: 'price',
+    type: 'integer',
+    name: 'discount',
   })
-  price!: number;
+  discount!: number;
+
+  @OneToMany(
+    () => FileUploadEntity,
+    (file: FileUploadEntity) => file.masterClassId,
+  )
+  imageUrls: FileUploadEntity[];
+
+  @OneToMany(
+    () => ProgramEntity,
+    (program: ProgramEntity) => program.masterClassId,
+  )
+  programs: ProgramEntity[];
+
+  @Column({
+    type: 'varchar',
+    name: 'modifier',
+  })
+  modifier!: string;
+
+  @Column({
+    type: 'varchar',
+    name: 'titleRu',
+  })
+  titleRu!: string;
+
+  @Column({
+    type: 'varchar',
+    name: 'titleEn',
+    nullable: true,
+  })
+  titleEn: string;
+
+  @Column({
+    type: 'json',
+    name: 'type',
+  })
+  type!: object;
 
   @Column({
     type: 'bool',
@@ -50,12 +83,6 @@ export class MasterClassEntity {
     default: false,
   })
   pinned?: boolean;
-
-  @OneToMany(
-    () => FileUploadEntity,
-    (file: FileUploadEntity) => file.masterClassId,
-  )
-  imageUrls: FileUploadEntity[];
 
   @OneToMany(
     () => PurchaseProductEntity,

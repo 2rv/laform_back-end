@@ -4,19 +4,30 @@ import { UpdateMasterClassDto } from './dto/update-master-class.dto';
 import { MasterClassEntity } from './master-class.entity';
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { MasterClassDto } from './dto/master-class.dto';
+import { ProgramService } from '../program/program.service';
 
 @Injectable()
 export class MasterClassService {
   constructor(
     private masterClassRepository: MasterClassRepository,
     private fileUploadService: FileUploadService,
+    private programService: ProgramService,
   ) {}
 
   async create(body: MasterClassDto): Promise<MasterClassEntity> {
     const result = await this.masterClassRepository.save(body);
+    const programs = await this.programService.create(body.programs);
+
     if (body.imageUrls) {
       for (let file of body.imageUrls) {
         await this.fileUploadService.update(file, { masterClassId: result.id });
+      }
+    }
+    if (programs) {
+      for (let key in programs) {
+        await this.programService.update(programs[key], {
+          masterClassId: result.id,
+        });
       }
     }
     return result;
@@ -57,6 +68,9 @@ export class MasterClassService {
       const results = await this.masterClassRepository.findAllRu(size, page);
       for (let result of results) {
         result.imageUrls = await this.fileUploadService.getAllMasterClasses(
+          result.id,
+        );
+        result.programs = await this.programService.getAllMasterClasses(
           result.id,
         );
       }
