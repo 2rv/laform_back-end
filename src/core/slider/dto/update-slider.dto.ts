@@ -1,23 +1,39 @@
-import { IsNotEmpty, IsString, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsString, IsOptional, IsBoolean } from 'class-validator';
 
 export class UpdateSliderDto {
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   headingTextRu: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   headingTextEn: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   buttonTextRu: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   buttonTextEn: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   buttonUrl: string;
+
+  @IsOptional()
+  @IsString()
+  titleTextColor: string;
+
+  @IsOptional()
+  @IsString()
+  buttonColor: string;
+
+  @IsOptional()
+  @IsString()
+  buttonTextColor: string;
+
+  @IsOptional()
+  @IsBoolean()
+  isHaveButton: boolean;
 }

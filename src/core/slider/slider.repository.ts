@@ -21,6 +21,10 @@ export class SliderRepository extends Repository<SliderEntity> {
         'slider.headingTextRu',
         'slider.buttonTextRu',
         'slider.buttonUrl',
+        'slider.titleTextColor',
+        'slider.buttonColor',
+        'slider.buttonTextColor',
+        'slider.isHaveButton',
         'image_url',
         'category_id.textRu',
       ])
@@ -36,6 +40,10 @@ export class SliderRepository extends Repository<SliderEntity> {
         'slider.headingTextRu',
         'slider.buttonTextRu',
         'slider.buttonUrl',
+        'slider.titleTextColor',
+        'slider.buttonColor',
+        'slider.buttonTextColor',
+        'slider.isHaveButton',
         'image_url',
         'category_id.textRu',
       ])
@@ -52,6 +60,10 @@ export class SliderRepository extends Repository<SliderEntity> {
         'slider.headingTextEn',
         'slider.buttonTextEn',
         'slider.buttonUrl',
+        'slider.titleTextColor',
+        'slider.buttonColor',
+        'slider.buttonTextColor',
+        'slider.isHaveButton',
         'image_url',
         'category_id.textEn',
       ])
@@ -67,6 +79,10 @@ export class SliderRepository extends Repository<SliderEntity> {
         'slider.headingTextEn',
         'slider.buttonTextEn',
         'slider.buttonUrl',
+        'slider.titleTextColor',
+        'slider.buttonColor',
+        'slider.buttonTextColor',
+        'slider.isHaveButton',
         'image_url',
         'category_id.textEn',
       ])
