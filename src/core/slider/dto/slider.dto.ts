@@ -9,15 +9,15 @@ export class SliderDto {
   @IsString()
   headingTextEn: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   buttonTextRu: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   buttonTextEn: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   buttonUrl: string;
 
