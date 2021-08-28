@@ -19,12 +19,18 @@ import { PurchaseProductModule } from './core/purchase-product/purchase-product.
 import { SewingProductModule } from './core/sewing-product/sewing-product.module';
 import { PatternProductModule } from './core/pattern-product/pattern-product.module';
 import { PromoCodeModule } from './core/promo-code/promo-code.module';
+import { ColorsModule } from './core/colors/colors.module';
+import { SizesModule } from './core/sizes/sizes.module';
+import { ProgramsModule } from './core/programs/programs.module';
 
 @Module({
   providers: [],
   imports: [
     TypeOrmModule.forRoot(typeOrmConfig),
     AuthModule,
+    ColorsModule,
+    SizesModule,
+    ProgramsModule,
     UserSettingsModule,
     NotificationModule,
     UserRecoveryModule,

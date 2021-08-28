@@ -21,11 +21,10 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
     return await this.createQueryBuilder('master_class')
       .select([
         'master_class.id',
-        'master_class.categories',
         'master_class.titleRu',
         'master_class.descriptionRu',
-        'master_class.discount',
         'master_class.modifier',
+        'master_class.discount',
         'master_class.type',
       ])
       .limit(take)
@@ -40,7 +39,6 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'master_class.id',
         'master_class.titleRu',
         'master_class.descriptionRu',
-        'master_class.price',
       ])
       .getMany();
   }
@@ -52,7 +50,6 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'master_class.id',
         'master_class.titleEn',
         'master_class.descriptionEn',
-        'master_class.price',
       ])
       .getOne();
   }
@@ -65,7 +62,6 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'master_class.id',
         'master_class.titleEn',
         'master_class.descriptionEn',
-        'master_class.price',
       ])
       .limit(take)
       .offset(skip)
@@ -79,7 +75,6 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'master_class.id',
         'master_class.titleEn',
         'master_class.descriptionEn',
-        'master_class.price',
       ])
       .getMany();
   }

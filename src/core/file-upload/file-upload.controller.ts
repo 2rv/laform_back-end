@@ -20,10 +20,11 @@ import { AccountGuard } from '../user/guard/account.guard';
 import { Roles } from '../user/decorator/role.decorator';
 import { USER_ROLE } from '../user/enum/user-role.enum';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { DeleteManyFilesDto } from './dto/delete-many-files';
 
 @Controller('file')
 export class FileUploadController {
-  constructor(private readonly fileUploadService: FileUploadService) {}
+  constructor(private fileUploadService: FileUploadService) {}
 
   @Post('/create')
   @Roles(USER_ROLE.ADMIN)
@@ -69,5 +70,12 @@ export class FileUploadController {
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async delete(@Param('id') id: string) {
     return await this.fileUploadService.delete(id);
+  }
+
+  @Delete('delete-many')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async deleteMany(@Body(new ValidationPipe()) body: DeleteManyFilesDto) {
+    return await this.fileUploadService.deleteMany(body);
   }
 }

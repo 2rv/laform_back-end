@@ -8,68 +8,75 @@ import {
 } from 'typeorm';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
 import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
-import { ProgramEntity } from '../program/program-entity';
+import { ProgramsEntity } from '../programs/programs.entity';
+import { CategoryEntity } from '../category/category.entity';
 
 @Entity({ name: 'master_class' })
 export class MasterClassEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({
-    type: 'json',
-    name: 'categories',
-  })
-  categories!: [];
-
-  @Column({
-    type: 'varchar',
-    name: 'descriptionRu',
-  })
-  descriptionRu!: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'descriptionEn',
-    nullable: true,
-  })
-  descriptionEn: string;
-
-  @Column({
-    type: 'integer',
-    name: 'discount',
-  })
-  discount!: number;
+  @OneToMany(
+    () => CategoryEntity,
+    (category: CategoryEntity) => category.masterClassId,
+  )
+  categories: CategoryEntity[];
 
   @OneToMany(
     () => FileUploadEntity,
     (file: FileUploadEntity) => file.masterClassId,
   )
-  imageUrls: FileUploadEntity[];
+  images: FileUploadEntity[];
 
   @OneToMany(
-    () => ProgramEntity,
-    (program: ProgramEntity) => program.masterClassId,
+    () => ProgramsEntity,
+    (programNameRu: ProgramsEntity) => programNameRu.masterClassId,
   )
-  programs: ProgramEntity[];
+  programs: ProgramsEntity[];
+
+  @OneToMany(
+    () => PurchaseProductEntity,
+    (purchaseProduct: PurchaseProductEntity) => purchaseProduct.masterClassId,
+  )
+  purchaseProduct: PurchaseProductEntity[];
+
+  @Column({
+    type: 'varchar',
+    name: 'title_ru',
+  })
+  titleRu!: string;
+
+  @Column({
+    type: 'varchar',
+    name: 'title_en',
+    nullable: true,
+  })
+  titleEn: string;
+
+  @Column({
+    type: 'varchar',
+    name: 'description_ru',
+  })
+  descriptionRu!: string;
+
+  @Column({
+    type: 'varchar',
+    name: 'description_en',
+    nullable: true,
+  })
+  descriptionEn: string;
+
+  @Column({
+    type: 'int',
+    name: 'discount',
+  })
+  discount!: number;
 
   @Column({
     type: 'varchar',
     name: 'modifier',
   })
   modifier!: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'titleRu',
-  })
-  titleRu!: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'titleEn',
-    nullable: true,
-  })
-  titleEn: string;
 
   @Column({
     type: 'json',
@@ -83,10 +90,4 @@ export class MasterClassEntity {
     default: false,
   })
   pinned?: boolean;
-
-  @OneToMany(
-    () => PurchaseProductEntity,
-    (purchaseProduct: PurchaseProductEntity) => purchaseProduct.masterClassId,
-  )
-  purchaseProduct: PurchaseProductEntity[];
 }

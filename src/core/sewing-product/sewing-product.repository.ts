@@ -21,13 +21,12 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
     return await this.createQueryBuilder('sewing_product')
       .select([
         'sewing_product.id',
-        'sewing_product.categories',
         'sewing_product.titleRu',
         'sewing_product.descriptionRu',
         'sewing_product.discount',
-        'sewing_product.count',
         'sewing_product.modifier',
         'sewing_product.type',
+        'sewing_product.count',
       ])
       .limit(take)
       .offset(skip)
@@ -41,7 +40,6 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sewing_product.id',
         'sewing_product.titleRu',
         'sewing_product.descriptionRu',
-        'sewing_product.price',
       ])
       .getMany();
   }
@@ -53,7 +51,6 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sewing_product.id',
         'sewing_product.titleEn',
         'sewing_product.descriptionEn',
-        'sewing_product.price',
       ])
       .getOne();
   }
@@ -66,7 +63,6 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sewing_product.id',
         'sewing_product.titleEn',
         'sewing_product.descriptionEn',
-        'sewing_product.price',
       ])
       .limit(take)
       .offset(skip)
@@ -80,7 +76,6 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sewing_product.id',
         'sewing_product.titleEn',
         'sewing_product.descriptionEn',
-        'sewing_product.price',
       ])
       .getMany();
   }

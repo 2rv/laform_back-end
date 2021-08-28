@@ -6,6 +6,7 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
+import { CategoryEntity } from '../category/category.entity';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
 import { SizesEntity } from '../sizes/sizes.entity';
 
@@ -14,29 +15,20 @@ export class PatternProductEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({
-    type: 'json',
-    name: 'categories',
-  })
-  categories!: [];
+  @OneToMany(
+    () => CategoryEntity,
+    (category: CategoryEntity) => category.patternProductId,
+  )
+  categories: CategoryEntity[];
 
-  @Column({
-    type: 'integer',
-    name: 'discount',
-  })
-  discount!: number;
+  @OneToMany(
+    () => FileUploadEntity,
+    (file: FileUploadEntity) => file.patternProductId,
+  )
+  images: FileUploadEntity[];
 
-  @Column({
-    type: 'varchar',
-    name: 'modifier',
-  })
-  modifier!: string;
-
-  @Column({
-    type: 'json',
-    name: 'type',
-  })
-  type!: object;
+  @OneToMany(() => SizesEntity, (sizes: SizesEntity) => sizes.patternProductId)
+  sizes: SizesEntity[];
 
   @Column({
     type: 'varchar',
@@ -59,10 +51,35 @@ export class PatternProductEntity {
 
   @Column({
     type: 'varchar',
+    name: ' material_ru',
+    nullable: true,
+  })
+  materialRu!: string;
+
+  @Column({
+    type: 'varchar',
     name: 'description_en',
     nullable: true,
   })
   descriptionEn!: string;
+
+  @Column({
+    type: 'int',
+    name: 'discount',
+  })
+  discount!: number;
+
+  @Column({
+    type: 'varchar',
+    name: 'modifier',
+  })
+  modifier!: string;
+
+  @Column({
+    type: 'json',
+    name: 'type',
+  })
+  type!: object;
 
   @Column({
     type: 'int',
@@ -76,15 +93,6 @@ export class PatternProductEntity {
     name: 'complexity',
   })
   complexity!: number;
-
-  @OneToMany(
-    () => FileUploadEntity,
-    (file: FileUploadEntity) => file.patternProductId,
-  )
-  imageUrls: FileUploadEntity[];
-
-  @OneToMany(() => SizesEntity, (sizes: SizesEntity) => sizes.patternProductId)
-  sizes: SizesEntity[];
 
   @Column({
     type: 'bool',

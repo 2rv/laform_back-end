@@ -9,15 +9,15 @@ import {
 import { MasterClassEntity } from '../master-class/master-class.entity';
 
 @Entity({ name: 'programs' })
-export class ProgramEntity {
+export class ProgramsEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({
     type: 'varchar',
-    name: 'name',
+    name: 'program_name_ru',
   })
-  name!: string;
+  programNameRu!: string;
 
   @Column({
     type: 'integer',

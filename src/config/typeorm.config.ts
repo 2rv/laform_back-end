@@ -15,7 +15,7 @@ import { SewingProductEntity } from './../core/sewing-product/sewing-product.ent
 import { MasterClassEntity } from './../core/master-class/master-class.entity';
 import { PatternProductEntity } from 'src/core/pattern-product/pattern-product.entity';
 import { PromoCodeEntity } from '../core/promo-code/promo-code.entity';
-import { ProgramEntity } from 'src/core/program/program-entity';
+import { ProgramsEntity } from 'src/core/programs/programs.entity';
 import { ColorsEntity } from 'src/core/colors/colors.entity';
 import { SizesEntity } from 'src/core/sizes/sizes.entity';
 
@@ -37,7 +37,7 @@ export const ApiEntities = [
   SewingProductEntity,
   PatternProductEntity,
   PromoCodeEntity,
-  ProgramEntity,
+  ProgramsEntity,
   ColorsEntity,
   SizesEntity,
 ];

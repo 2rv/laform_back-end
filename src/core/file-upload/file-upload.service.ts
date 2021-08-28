@@ -9,6 +9,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { FileUploadDto, FilesUploadDto } from './dto/file-upload.dto';
+import { DeleteManyFilesDto } from './dto/delete-many-files';
 
 @Injectable()
 export class FileUploadService {
@@ -75,5 +76,15 @@ export class FileUploadService {
     if (!result) {
       throw new BadRequestException(FILE_UPLOAD_ERROR.FILE_NOT_FOUND);
     } else await this.fileRepository.delete(id);
+  }
+
+  async deleteMany(body: DeleteManyFilesDto) {
+    const files = await this.fileRepository.findByIds(body.files);
+    const result = files.map(({ id }) => id);
+    if (result.length === 0) {
+      throw new BadRequestException('FILES_ERROR.FILES_NOT_FOUND');
+    } else {
+      return await this.fileRepository.delete(result);
+    }
   }
 }

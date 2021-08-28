@@ -10,7 +10,7 @@ import {
 export class CreateProgramDto {
   @IsNotEmpty()
   @IsString()
-  name: string;
+  programNameRu: string;
 
   @IsNotEmpty()
   @IsNumber()

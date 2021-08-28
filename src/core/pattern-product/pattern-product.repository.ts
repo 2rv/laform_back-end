@@ -26,14 +26,14 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
     return await this.createQueryBuilder('pattern_product')
       .select([
         'pattern_product.id',
-        'pattern_product.categories',
         'pattern_product.titleRu',
         'pattern_product.descriptionRu',
-        'pattern_product.discount',
-        'pattern_product.modifier',
         'pattern_product.type',
-        'pattern_product.price',
+        'pattern_product.modifier',
+        'pattern_product.materialRu',
         'pattern_product.complexity',
+        'pattern_product.price',
+        'pattern_product.discount',
       ])
       .limit(take)
       .offset(skip)

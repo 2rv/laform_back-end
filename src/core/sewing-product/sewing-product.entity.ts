@@ -1,4 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { CategoryEntity } from '../category/category.entity';
 import { ColorsEntity } from '../colors/colors.entity';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
 import { SizesEntity } from '../sizes/sizes.entity';
@@ -8,35 +9,26 @@ export class SewingProductEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({
-    type: 'json',
-    name: 'categories',
-  })
-  categories!: [];
+  @OneToMany(
+    () => CategoryEntity,
+    (category: CategoryEntity) => category.sewingProductId,
+  )
+  categories: CategoryEntity[];
 
-  @Column({
-    type: 'int',
-    name: 'discount',
-  })
-  discount!: number;
+  @OneToMany(() => SizesEntity, (sizes: SizesEntity) => sizes.sewingProductId)
+  sizes: SizesEntity[];
 
-  @Column({
-    type: 'int',
-    name: 'count',
-  })
-  count!: number;
+  @OneToMany(
+    () => ColorsEntity,
+    (colors: ColorsEntity) => colors.sewingProductId,
+  )
+  colors: ColorsEntity[];
 
-  @Column({
-    type: 'varchar',
-    name: 'modifier',
-  })
-  modifier!: string;
-
-  @Column({
-    type: 'json',
-    name: 'type',
-  })
-  type!: object;
+  @OneToMany(
+    () => FileUploadEntity,
+    (file: FileUploadEntity) => file.sewingProductId,
+  )
+  images: FileUploadEntity[];
 
   @Column({
     type: 'varchar',
@@ -64,14 +56,29 @@ export class SewingProductEntity {
   })
   descriptionEn!: string;
 
-  @OneToMany(() => SizesEntity, (sizes: SizesEntity) => sizes.sewingProductId)
-  sizes: SizesEntity[];
+  @Column({
+    type: 'varchar',
+    name: 'modifier',
+  })
+  modifier!: string;
 
-  @OneToMany(
-    () => ColorsEntity,
-    (colors: ColorsEntity) => colors.sewingProductId,
-  )
-  colors: ColorsEntity[];
+  @Column({
+    type: 'json',
+    name: 'type',
+  })
+  type!: object;
+
+  @Column({
+    type: 'int',
+    name: 'discount',
+  })
+  discount!: number;
+
+  @Column({
+    type: 'int',
+    name: 'count',
+  })
+  count!: number;
 
   @Column({
     type: 'bool',
@@ -79,10 +86,4 @@ export class SewingProductEntity {
     default: false,
   })
   pinned?: boolean;
-
-  @OneToMany(
-    () => FileUploadEntity,
-    (file: FileUploadEntity) => file.sewingProductId,
-  )
-  imageUrls: FileUploadEntity[];
 }

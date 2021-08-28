@@ -6,36 +6,13 @@ import {
   IsNumber,
   IsObject,
 } from 'class-validator';
+import { CategoryDto } from 'src/core/category/dto/category.dto';
 import { CreateSizeDto } from 'src/core/sizes/dto/create-size.dto';
 
 export class PatternProductDto {
   @IsNotEmpty()
-  @IsArray()
-  categories: [];
-
-  @IsNotEmpty()
-  @IsNumber()
-  discount: number;
-
-  @IsNotEmpty()
-  @IsArray()
-  imageUrls: [];
-
-  @IsOptional()
-  @IsString()
-  modifier: string;
-
-  @IsNotEmpty()
   @IsString()
   titleRu: string;
-
-  @IsOptional()
-  @IsString()
-  titleEn: string;
-
-  @IsNotEmpty()
-  @IsObject()
-  type: { id: number; tid: string };
 
   @IsNotEmpty()
   @IsString()
@@ -43,7 +20,35 @@ export class PatternProductDto {
 
   @IsOptional()
   @IsString()
+  titleEn: string;
+
+  @IsOptional()
+  @IsString()
   descriptionEn: string;
+
+  @IsNotEmpty()
+  @IsArray()
+  categories: [CategoryDto];
+
+  @IsOptional()
+  @IsArray()
+  sizes: [CreateSizeDto];
+
+  @IsNotEmpty()
+  @IsArray()
+  images: [];
+
+  @IsNotEmpty()
+  @IsNumber()
+  discount: number;
+
+  @IsOptional()
+  @IsString()
+  modifier: string;
+
+  @IsNotEmpty()
+  @IsObject()
+  type: { id: number; tid: string };
 
   @IsNotEmpty()
   @IsNumber()
@@ -51,13 +56,9 @@ export class PatternProductDto {
 
   @IsNotEmpty()
   @IsString()
-  material: string;
+  materialRu: string;
 
   @IsOptional()
   @IsNumber()
   price: number;
-
-  @IsOptional()
-  @IsArray()
-  sizes: [CreateSizeDto];
 }
