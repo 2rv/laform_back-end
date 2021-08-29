@@ -15,6 +15,9 @@ import { SewingProductEntity } from './../core/sewing-product/sewing-product.ent
 import { MasterClassEntity } from './../core/master-class/master-class.entity';
 import { PatternProductEntity } from 'src/core/pattern-product/pattern-product.entity';
 import { PromoCodeEntity } from '../core/promo-code/promo-code.entity';
+import { ProgramsEntity } from 'src/core/programs/programs.entity';
+import { ColorsEntity } from 'src/core/colors/colors.entity';
+import { SizesEntity } from 'src/core/sizes/sizes.entity';
 
 const DATABASE_CONFIG = config.get('DATABASE');
 
@@ -34,6 +37,9 @@ export const ApiEntities = [
   SewingProductEntity,
   PatternProductEntity,
   PromoCodeEntity,
+  ProgramsEntity,
+  ColorsEntity,
+  SizesEntity,
 ];
 
 export const typeOrmConfig: TypeOrmModuleOptions = {

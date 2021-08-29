@@ -9,5 +9,5 @@ export class UpdateSewingProductDto {
 
   @IsOptional()
   @IsArray()
-  imageUrls: [];
+  images: [];
 }

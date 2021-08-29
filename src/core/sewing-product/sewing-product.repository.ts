@@ -16,14 +16,17 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
   }
 
   async findAllRu(size: number, page: number): Promise<SewingProductEntity[]> {
-    const take = size || 10;
+    const take = size || 100;
     const skip = (page - 1) * size || 0;
     return await this.createQueryBuilder('sewing_product')
       .select([
         'sewing_product.id',
         'sewing_product.titleRu',
         'sewing_product.descriptionRu',
-        'sewing_product.price',
+        'sewing_product.discount',
+        'sewing_product.modifier',
+        'sewing_product.type',
+        'sewing_product.count',
       ])
       .limit(take)
       .offset(skip)
@@ -37,7 +40,6 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sewing_product.id',
         'sewing_product.titleRu',
         'sewing_product.descriptionRu',
-        'sewing_product.price',
       ])
       .getMany();
   }
@@ -49,7 +51,6 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sewing_product.id',
         'sewing_product.titleEn',
         'sewing_product.descriptionEn',
-        'sewing_product.price',
       ])
       .getOne();
   }
@@ -62,7 +63,6 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sewing_product.id',
         'sewing_product.titleEn',
         'sewing_product.descriptionEn',
-        'sewing_product.price',
       ])
       .limit(take)
       .offset(skip)
@@ -76,7 +76,6 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sewing_product.id',
         'sewing_product.titleEn',
         'sewing_product.descriptionEn',
-        'sewing_product.price',
       ])
       .getMany();
   }

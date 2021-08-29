@@ -30,6 +30,7 @@ export class SliderEntity {
   @Column({
     type: 'varchar',
     name: 'button_text_ru',
+    nullable: true,
   })
   buttonTextRu!: string;
 
@@ -61,4 +62,32 @@ export class SliderEntity {
     name: 'category_id',
   })
   categoryId: CategoryEntity;
+
+  @Column({
+    type: 'varchar',
+    name: 'title_text_color',
+    nullable: true,
+  })
+  titleTextColor!: string;
+
+  @Column({
+    type: 'varchar',
+    name: 'button_color',
+    nullable: true,
+  })
+  buttonColor!: string;
+
+  @Column({
+    type: 'varchar',
+    name: 'button_text_color',
+    nullable: true,
+  })
+  buttonTextColor!: string;
+
+  @Column({
+    type: 'varchar',
+    name: 'is_have_button',
+    nullable: true,
+  })
+  isHaveButton!: boolean;
 }
