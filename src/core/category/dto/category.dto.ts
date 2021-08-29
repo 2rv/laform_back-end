@@ -5,7 +5,7 @@ export class CategoryDto {
   @IsString()
   textRu: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   textEn: string;
 }

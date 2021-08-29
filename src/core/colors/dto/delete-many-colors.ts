@@ -1,9 +1,7 @@
 import { IsNotEmpty, IsString, IsOptional, IsArray } from 'class-validator';
 
-export class FileUploadDto {}
-
-export class FilesUploadDto {
+export class DeleteManyColorsDto {
   @IsNotEmpty()
   @IsArray()
-  files: [];
+  colors: [];
 }
