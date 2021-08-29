@@ -11,12 +11,12 @@
 		</a>
 	</div>
 	<div style="line-height: 1.5; font-size: 14px; font-family: 'Roboto', sans-serif; background-color: #F0F0F0; border-radius: 10px; padding: 15px; color: #5F5B5D;">
-		<div>Здравствуйте, <span style="font-weight: 500; font-size: 16px;">Павел</span></div>
+		<div>Здравствуйте, <span style="font-weight: 500; font-size: 16px;">#{email}</span></div>
 		<div>Благодирим вас за регистрацию в интернет магазине LaForme</div>
 		<div> Ссылка для подтверждения регистрации:
-			<a href="http://localhost:3000/auth/verificate-email/confirm?code=123"> Ссылка </a>
+			<a href="http://localhost:3000/auth/verificate-email/confirm?code=#{code}"> Ссылка </a>
 		</div>
-		<a style="margin: 0px 20px; font-size: 16px; color: white; text-decoration: none;" href="http://localhost:3000/auth/verificate-email/confirm?code=123">
+		<a style="margin: 0px 20px; font-size: 16px; color: white; text-decoration: none;" href="http://localhost:3000/auth/verificate-email/confirm?code=#{code}">
 			<div style="text-align:center; padding: 15px; ; border-radius: 10px;  text-decoration: none; background-color: #FF005A; width: fit-content;"> Нажмите что бы подтвердить аккаунт </div>
 		</a>
 		<div> Для связи с нами: testLaformEmail@mail.ru </div>

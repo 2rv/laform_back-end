@@ -7,6 +7,7 @@ import {
 import { Cache } from 'cache-manager';
 
 import { randomUUID } from 'src/common/utils/hash';
+import { MailService } from '../mail/mail.service';
 import { UserEntity } from '../user/user.entity';
 import { UserRepository } from '../user/user.repository';
 
@@ -18,6 +19,7 @@ export class UserVerificationService {
   constructor(
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private userRepository: UserRepository,
+    private mailService: MailService,
   ) {}
 
   async getEmailVerificationCode(user: UserEntity): Promise<void> {
@@ -37,6 +39,11 @@ export class UserVerificationService {
     await this.cacheManager.set(code, JSON.stringify(data));
 
     console.log(code);
+    const messageDate = await this.mailService.sendMessage(
+      { toMail: user.email },
+      code,
+    );
+    console.log(messageDate);
   }
 
   async confirmUserVerificationEmail(code: string): Promise<void> {
