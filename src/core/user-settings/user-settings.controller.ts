@@ -52,13 +52,4 @@ export class UserSettingsController {
   ): Promise<void> {
     return this.userSettingsService.updateEmail(user, data);
   }
-
-  @Patch('/subscribe')
-  @UseGuards(AuthGuard(), AccountGuard, PasswordGuard)
-  async updateUserSubscription(
-    @GetAccount() user: UserEntity,
-    @Body(ValidationPipe) data: UserSettingsUpdateSubscribeDto,
-  ): Promise<void> {
-    return this.userSettingsService.updateSubscribe(user, data);
-  }
 }
