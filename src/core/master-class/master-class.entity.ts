@@ -8,11 +8,37 @@ import {
 } from 'typeorm';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
 import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
+import { ProgramsEntity } from '../programs/programs.entity';
+import { CategoryEntity } from '../category/category.entity';
 
 @Entity({ name: 'master_class' })
 export class MasterClassEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @OneToMany(
+    () => CategoryEntity,
+    (category: CategoryEntity) => category.masterClassId,
+  )
+  categories: CategoryEntity[];
+
+  @OneToMany(
+    () => FileUploadEntity,
+    (file: FileUploadEntity) => file.masterClassId,
+  )
+  images: FileUploadEntity[];
+
+  @OneToMany(
+    () => ProgramsEntity,
+    (programNameRu: ProgramsEntity) => programNameRu.masterClassId,
+  )
+  programs: ProgramsEntity[];
+
+  @OneToMany(
+    () => PurchaseProductEntity,
+    (purchaseProduct: PurchaseProductEntity) => purchaseProduct.masterClassId,
+  )
+  purchaseProduct: PurchaseProductEntity[];
 
   @Column({
     type: 'varchar',
@@ -23,8 +49,9 @@ export class MasterClassEntity {
   @Column({
     type: 'varchar',
     name: 'title_en',
+    nullable: true,
   })
-  titleEn!: string;
+  titleEn: string;
 
   @Column({
     type: 'varchar',
@@ -35,14 +62,27 @@ export class MasterClassEntity {
   @Column({
     type: 'varchar',
     name: 'description_en',
+    nullable: true,
   })
-  descriptionEn!: string;
+  descriptionEn: string;
 
   @Column({
     type: 'int',
-    name: 'price',
+    name: 'discount',
   })
-  price!: number;
+  discount!: number;
+
+  @Column({
+    type: 'varchar',
+    name: 'modifier',
+  })
+  modifier!: string;
+
+  @Column({
+    type: 'json',
+    name: 'type',
+  })
+  type!: object;
 
   @Column({
     type: 'bool',
@@ -50,16 +90,4 @@ export class MasterClassEntity {
     default: false,
   })
   pinned?: boolean;
-
-  @OneToMany(
-    () => FileUploadEntity,
-    (file: FileUploadEntity) => file.masterClassId,
-  )
-  imageUrls: FileUploadEntity[];
-
-  @OneToMany(
-    () => PurchaseProductEntity,
-    (purchaseProduct: PurchaseProductEntity) => purchaseProduct.masterClassId,
-  )
-  purchaseProduct: PurchaseProductEntity[];
 }

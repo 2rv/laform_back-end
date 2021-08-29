@@ -9,5 +9,5 @@ export class UpdatePatternProductDto {
 
   @IsOptional()
   @IsArray()
-  imageUrls: [];
+  images: [];
 }

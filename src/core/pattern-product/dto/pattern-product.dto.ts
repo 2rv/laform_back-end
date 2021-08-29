@@ -4,7 +4,10 @@ import {
   IsOptional,
   IsArray,
   IsNumber,
+  IsObject,
 } from 'class-validator';
+import { CategoryDto } from 'src/core/category/dto/category.dto';
+import { CreateSizeDto } from 'src/core/sizes/dto/create-size.dto';
 
 export class PatternProductDto {
   @IsNotEmpty()
@@ -13,21 +16,49 @@ export class PatternProductDto {
 
   @IsNotEmpty()
   @IsString()
-  titleEn: string;
-
-  @IsNotEmpty()
-  @IsString()
   descriptionRu: string;
 
-  @IsNotEmpty()
+  @IsOptional()
+  @IsString()
+  titleEn: string;
+
+  @IsOptional()
   @IsString()
   descriptionEn: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  price: number;
+  @IsArray()
+  categories: [CategoryDto];
 
   @IsOptional()
   @IsArray()
-  imageUrls: [];
+  sizes: [CreateSizeDto];
+
+  @IsNotEmpty()
+  @IsArray()
+  images: [];
+
+  @IsNotEmpty()
+  @IsNumber()
+  discount: number;
+
+  @IsOptional()
+  @IsString()
+  modifier: string;
+
+  @IsNotEmpty()
+  @IsObject()
+  type: { id: number; tid: string };
+
+  @IsNotEmpty()
+  @IsNumber()
+  complexity: number;
+
+  @IsNotEmpty()
+  @IsString()
+  materialRu: string;
+
+  @IsOptional()
+  @IsNumber()
+  price: number;
 }
