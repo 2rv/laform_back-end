@@ -19,6 +19,7 @@ import { PurchaseProductModule } from './core/purchase-product/purchase-product.
 import { SewingProductModule } from './core/sewing-product/sewing-product.module';
 import { PatternProductModule } from './core/pattern-product/pattern-product.module';
 import { PromoCodeModule } from './core/promo-code/promo-code.module';
+import { MailModule } from './core/mail/mail.module';
 
 @Module({
   providers: [],
@@ -42,6 +43,7 @@ import { PromoCodeModule } from './core/promo-code/promo-code.module';
     SewingProductModule,
     PatternProductModule,
     PromoCodeModule,
+    MailModule,
   ],
 })
 export class AppModule {}
