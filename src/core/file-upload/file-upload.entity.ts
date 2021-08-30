@@ -31,7 +31,7 @@ export class FileUploadEntity {
 
   @ManyToOne(
     () => MasterClassEntity,
-    (masterClass: MasterClassEntity) => masterClass.imageUrls,
+    (masterClass: MasterClassEntity) => masterClass.images,
   )
   @JoinColumn({
     name: 'master_class_id',
@@ -40,7 +40,7 @@ export class FileUploadEntity {
 
   @ManyToOne(
     () => SewingProductEntity,
-    (sewingProduct: SewingProductEntity) => sewingProduct.imageUrls,
+    (sewingProduct: SewingProductEntity) => sewingProduct.images,
   )
   @JoinColumn({
     name: 'sewing_product_id',
@@ -49,7 +49,7 @@ export class FileUploadEntity {
 
   @ManyToOne(
     () => PatternProductEntity,
-    (patternProduct: PatternProductEntity) => patternProduct.imageUrls,
+    (patternProduct: PatternProductEntity) => patternProduct.images,
   )
   @JoinColumn({
     name: 'pattern_product_id',

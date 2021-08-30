@@ -1,7 +1,9 @@
-import { IsNotEmpty, IsString, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsString, IsOptional, IsArray } from 'class-validator';
 
-export class FileUploadDto {
+export class FileUploadDto {}
+
+export class FilesUploadDto {
   @IsNotEmpty()
-  @IsString()
-  masterClassId: string;
+  @IsArray()
+  files: [];
 }

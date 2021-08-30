@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsString, IsOptional, IsBoolean } from 'class-validator';
 
 export class PostDto {
   @IsNotEmpty()
@@ -16,4 +16,8 @@ export class PostDto {
   @IsNotEmpty()
   @IsString()
   titleEn: string;
+
+  @IsOptional()
+  @IsBoolean()
+  pinned: boolean;
 }

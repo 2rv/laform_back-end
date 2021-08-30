@@ -8,22 +8,32 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .where('pattern_product.id = :id', { id })
       .select([
         'pattern_product.id',
+        'pattern_product.categories',
         'pattern_product.titleRu',
         'pattern_product.descriptionRu',
+        'pattern_product.discount',
+        'pattern_product.modifier',
+        'pattern_product.type',
         'pattern_product.price',
+        'pattern_product.complexity',
       ])
       .getOne();
   }
 
   async findAllRu(size: number, page: number): Promise<PatternProductEntity[]> {
-    const take = size || 10;
+    const take = size || 100;
     const skip = (page - 1) * size || 0;
     return await this.createQueryBuilder('pattern_product')
       .select([
         'pattern_product.id',
         'pattern_product.titleRu',
         'pattern_product.descriptionRu',
+        'pattern_product.type',
+        'pattern_product.modifier',
+        'pattern_product.materialRu',
+        'pattern_product.complexity',
         'pattern_product.price',
+        'pattern_product.discount',
       ])
       .limit(take)
       .offset(skip)

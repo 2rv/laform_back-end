@@ -72,6 +72,7 @@ export class PostRepository extends Repository<PostEntity> {
         'post.textRu',
         'post.createdDate',
         'post.likeCount',
+        'post.pinned',
         'image_url',
         'category_id.textRu',
       ])
@@ -150,6 +151,7 @@ export class PostRepository extends Repository<PostEntity> {
         'post.textEn',
         'post.createdDate',
         'post.likeCount',
+        'post.pinned',
         'image_url',
         'category_id.textEn',
       ])
