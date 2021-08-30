@@ -60,19 +60,6 @@ export class UserRepository extends Repository<UserEntity> {
     }
   }
 
-  async changeSubscribe(
-    user: UserEntity,
-    data: UserChangeSubscribeDto,
-  ): Promise<void> {
-    const { notificationEmail } = data;
-    user.notificationEmail = notificationEmail;
-    try {
-      await user.save();
-    } catch (err) {
-      throw new InternalServerErrorException();
-    }
-  }
-
   async confirmEmailById(userId: number): Promise<void> {
     try {
       this.update(userId, { emailConfirmed: true });

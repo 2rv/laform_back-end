@@ -6,7 +6,6 @@ import { UserRepository } from '../user/user.repository';
 import { UserSettingsUpdatePasswordDto } from './dto/user-settings-update-password.dto';
 import { UserSettingsUpdateEmailDto } from './dto/user-settings-update-email.dto';
 import { UserSettingsGetEmailDto } from './dto/user-settings-get-email.dto';
-import { UserSettingsUpdateSubscribeDto } from './dto/user-settings-update-subscribe.dto';
 
 @Injectable()
 export class UserSettingsService {
@@ -31,12 +30,5 @@ export class UserSettingsService {
     data: UserSettingsUpdateEmailDto,
   ): Promise<void> {
     this.userRepository.changeEmail(user, data);
-  }
-
-  async updateSubscribe(
-    user: UserEntity,
-    data: UserSettingsUpdateSubscribeDto,
-  ): Promise<void> {
-    this.userRepository.changeSubscribe(user, data);
   }
 }
