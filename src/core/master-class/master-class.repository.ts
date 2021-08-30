@@ -26,6 +26,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'master_class.modifier',
         'master_class.discount',
         'master_class.type',
+        'master_class.pinned',
       ])
       .limit(take)
       .offset(skip)
@@ -62,6 +63,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'master_class.id',
         'master_class.titleEn',
         'master_class.descriptionEn',
+        'master_class.pinned',
       ])
       .limit(take)
       .offset(skip)

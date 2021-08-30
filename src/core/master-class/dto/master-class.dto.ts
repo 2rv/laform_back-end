@@ -5,6 +5,7 @@ import {
   IsArray,
   IsNumber,
   IsObject,
+  IsBoolean,
 } from 'class-validator';
 import { CategoryDto } from 'src/core/category/dto/category.dto';
 import { CreateProgramDto } from 'src/core/programs/dto/create-program.dto';
@@ -49,4 +50,8 @@ export class MasterClassDto {
   @IsNotEmpty()
   @IsObject()
   type: { id: number; tid: string };
+
+  @IsOptional()
+  @IsBoolean()
+  pinned: boolean;
 }

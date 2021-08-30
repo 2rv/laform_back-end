@@ -27,6 +27,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sewing_product.modifier',
         'sewing_product.type',
         'sewing_product.count',
+        'sewing_product.pinned',
       ])
       .limit(take)
       .offset(skip)
@@ -63,6 +64,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sewing_product.id',
         'sewing_product.titleEn',
         'sewing_product.descriptionEn',
+        'sewing_product.pinned',
       ])
       .limit(take)
       .offset(skip)
