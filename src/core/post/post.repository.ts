@@ -7,6 +7,10 @@ export class PostRepository extends Repository<PostEntity> {
     return await this.createQueryBuilder('post')
       .leftJoin('post.imageUrl', 'image_url')
       .leftJoin('post.categoryId', 'category_id')
+      .leftJoin('post.comment', 'comment')
+      .leftJoin('comment.userId', 'userId')
+      .leftJoin('comment.subComment', 'subComment')
+      .leftJoin('subComment.userId', 'user')
       .where('post.id = :id', { id })
       .select([
         'post.id',
@@ -16,6 +20,10 @@ export class PostRepository extends Repository<PostEntity> {
         'post.likeCount',
         'image_url',
         'category_id.textRu',
+        'comment',
+        'userId.login',
+        'subComment',
+        'user.login',
       ])
       .getOne();
   }
@@ -66,6 +74,10 @@ export class PostRepository extends Repository<PostEntity> {
     return await this.createQueryBuilder('post')
       .leftJoin('post.imageUrl', 'image_url')
       .leftJoin('post.categoryId', 'category_id')
+      .leftJoin('post.comment', 'comment')
+      .leftJoin('comment.userId', 'userId')
+      .leftJoin('comment.subComment', 'subComment')
+      .leftJoin('subComment.userId', 'user')
       .select([
         'post.id',
         'post.titleRu',
@@ -75,6 +87,10 @@ export class PostRepository extends Repository<PostEntity> {
         'post.pinned',
         'image_url',
         'category_id.textRu',
+        'comment',
+        'userId.login',
+        'subComment',
+        'user.login',
       ])
       // .orderBy(sort, by)
       .limit(take)
@@ -86,6 +102,10 @@ export class PostRepository extends Repository<PostEntity> {
     return await this.createQueryBuilder('post')
       .leftJoin('post.imageUrl', 'image_url')
       .leftJoin('post.categoryId', 'category_id')
+      .leftJoin('post.comment', 'comment')
+      .leftJoin('comment.userId', 'userId')
+      .leftJoin('comment.subComment', 'subComment')
+      .leftJoin('subComment.userId', 'user')
       .where('post.id = :id', { id })
       .select([
         'post.id',
@@ -95,6 +115,10 @@ export class PostRepository extends Repository<PostEntity> {
         'post.likeCount',
         'image_url',
         'category_id.textEn',
+        'comment',
+        'userId.login',
+        'subComment',
+        'user.login',
       ])
       .getOne();
   }
@@ -103,6 +127,10 @@ export class PostRepository extends Repository<PostEntity> {
     return await this.createQueryBuilder('post')
       .leftJoin('post.imageUrl', 'image_url')
       .leftJoin('post.categoryId', 'category_id')
+      .leftJoin('post.comment', 'comment')
+      .leftJoin('comment.userId', 'userId')
+      .leftJoin('comment.subComment', 'subComment')
+      .leftJoin('subComment.userId', 'user')
       .select([
         'post.id',
         'post.titleEn',
@@ -111,6 +139,10 @@ export class PostRepository extends Repository<PostEntity> {
         'post.likeCount',
         'image_url',
         'category_id.textEn',
+        'comment',
+        'userId.login',
+        'subComment',
+        'user.login',
       ])
       .orderBy('RANDOM()')
       .limit(3)
@@ -121,6 +153,10 @@ export class PostRepository extends Repository<PostEntity> {
     return await this.createQueryBuilder('post')
       .leftJoin('post.imageUrl', 'image_url')
       .leftJoin('post.categoryId', 'category_id')
+      .leftJoin('post.comment', 'comment')
+      .leftJoin('comment.userId', 'userId')
+      .leftJoin('comment.subComment', 'subComment')
+      .leftJoin('subComment.userId', 'user')
       .where('post.pinned = true')
       .select([
         'post.id',
@@ -130,6 +166,10 @@ export class PostRepository extends Repository<PostEntity> {
         'post.likeCount',
         'image_url',
         'category_id.textEn',
+        'comment',
+        'userId.login',
+        'subComment',
+        'user.login',
       ])
       .getMany();
   }
@@ -145,6 +185,10 @@ export class PostRepository extends Repository<PostEntity> {
     return await this.createQueryBuilder('post')
       .leftJoin('post.imageUrl', 'image_url')
       .leftJoin('post.categoryId', 'category_id')
+      .leftJoin('post.comment', 'comment')
+      .leftJoin('comment.userId', 'userId')
+      .leftJoin('comment.subComment', 'subComment')
+      .leftJoin('subComment.userId', 'user')
       .select([
         'post.id',
         'post.titleEn',
@@ -154,6 +198,10 @@ export class PostRepository extends Repository<PostEntity> {
         'post.pinned',
         'image_url',
         'category_id.textEn',
+        'comment',
+        'userId.login',
+        'subComment',
+        'user.login',
       ])
       //.orderBy(sort, by)
       .limit(take)

@@ -18,6 +18,10 @@ import { PromoCodeEntity } from '../core/promo-code/promo-code.entity';
 import { ProgramsEntity } from 'src/core/programs/programs.entity';
 import { ColorsEntity } from 'src/core/colors/colors.entity';
 import { SizesEntity } from 'src/core/sizes/sizes.entity';
+import {
+  CommentEntity,
+  SubCommentEntity,
+} from 'src/core/comment/comment.entity';
 
 const DATABASE_CONFIG = config.get('DATABASE');
 
@@ -40,6 +44,8 @@ export const ApiEntities = [
   ProgramsEntity,
   ColorsEntity,
   SizesEntity,
+  CommentEntity,
+  SubCommentEntity,
 ];
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
