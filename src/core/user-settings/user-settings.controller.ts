@@ -36,11 +36,9 @@ export class UserSettingsController {
   }
 
   @Get('/email')
-  @UseGuards(AuthGuard(), AccountGuard)
-  async getAccountEmail(
-    @GetAccount() user: UserEntity,
-  ): Promise<UserSettingsGetEmailDto> {
-    return this.userSettingsService.getEmail(user);
+  // @UseGuards(AuthGuard(), AccountGuard)
+  async getAccountEmail(@GetAccount() user: UserEntity): Promise<any> {
+    return 'hello';
   }
 
   @Patch('/email')
