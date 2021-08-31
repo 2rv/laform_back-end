@@ -9,6 +9,7 @@ import {
 import { CategoryEntity } from '../category/category.entity';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
 import { SizesEntity } from '../sizes/sizes.entity';
+import { LikeEntity } from '../like/like.entity';
 
 @Entity({ name: 'pattern_product' })
 export class PatternProductEntity {
@@ -29,6 +30,9 @@ export class PatternProductEntity {
 
   @OneToMany(() => SizesEntity, (sizes: SizesEntity) => sizes.patternProductId)
   sizes: SizesEntity[];
+
+  @OneToMany(() => LikeEntity, (like: LikeEntity) => like.patternProductId)
+  like: LikeEntity[];
 
   @Column({
     type: 'varchar',
@@ -100,4 +104,11 @@ export class PatternProductEntity {
     default: false,
   })
   pinned?: boolean;
+
+  @Column({
+    type: 'int',
+    name: 'like_count',
+    nullable: true,
+  })
+  likeCount?: number;
 }

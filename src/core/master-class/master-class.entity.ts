@@ -10,6 +10,7 @@ import { FileUploadEntity } from '../file-upload/file-upload.entity';
 import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
 import { ProgramsEntity } from '../programs/programs.entity';
 import { CategoryEntity } from '../category/category.entity';
+import { LikeEntity } from '../like/like.entity';
 
 @Entity({ name: 'master_class' })
 export class MasterClassEntity {
@@ -39,6 +40,9 @@ export class MasterClassEntity {
     (purchaseProduct: PurchaseProductEntity) => purchaseProduct.masterClassId,
   )
   purchaseProduct: PurchaseProductEntity[];
+
+  @OneToMany(() => LikeEntity, (like: LikeEntity) => like.masterClassId)
+  like: LikeEntity[];
 
   @Column({
     type: 'varchar',
@@ -90,4 +94,11 @@ export class MasterClassEntity {
     default: false,
   })
   pinned?: boolean;
+
+  @Column({
+    type: 'int',
+    name: 'like_count',
+    nullable: true,
+  })
+  likeCount?: number;
 }

@@ -3,6 +3,7 @@ import { CategoryEntity } from '../category/category.entity';
 import { ColorsEntity } from '../colors/colors.entity';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
 import { SizesEntity } from '../sizes/sizes.entity';
+import { LikeEntity } from '../like/like.entity';
 
 @Entity({ name: 'sewing_product' })
 export class SewingProductEntity {
@@ -29,6 +30,9 @@ export class SewingProductEntity {
     (file: FileUploadEntity) => file.sewingProductId,
   )
   images: FileUploadEntity[];
+
+  @OneToMany(() => LikeEntity, (like: LikeEntity) => like.sewingProductId)
+  like: LikeEntity[];
 
   @Column({
     type: 'varchar',
@@ -86,4 +90,11 @@ export class SewingProductEntity {
     default: false,
   })
   pinned?: boolean;
+
+  @Column({
+    type: 'int',
+    name: 'like_count',
+    nullable: true,
+  })
+  likeCount?: number;
 }
