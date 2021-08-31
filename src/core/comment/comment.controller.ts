@@ -71,7 +71,6 @@ export class CommentController {
   @Roles(USER_ROLE.USER)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async delete(@GetUser() user: UserEntity, @Param('id') id: string) {
-    console.log(user.id);
     return await this.commentService.delete(id, user.id);
   }
 
