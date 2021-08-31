@@ -23,6 +23,7 @@ import { MailModule } from './core/mail/mail.module';
 import { ColorsModule } from './core/colors/colors.module';
 import { SizesModule } from './core/sizes/sizes.module';
 import { ProgramsModule } from './core/programs/programs.module';
+import { CommentModule } from './core/comment/comment.module';
 
 @Module({
   providers: [],
@@ -50,6 +51,7 @@ import { ProgramsModule } from './core/programs/programs.module';
     PatternProductModule,
     PromoCodeModule,
     MailModule,
+    CommentModule,
   ],
 })
 export class AppModule {}
