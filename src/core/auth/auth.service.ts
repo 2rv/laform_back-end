@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 
 import { UserEntity } from '../user/user.entity';
 import { UserRepository } from '../user/user.repository';
+import { UserDeliveryInfoService } from '../user-delivery-info/user-delivery-info.service';
 
 import { AUTH_ERROR } from './enum/auth-error.enum';
 import { UserSignUpDto } from './dto/user-sign-up.dto';
@@ -20,12 +21,15 @@ export class AuthService {
     private authRepository: AuthRepository,
     private userRepository: UserRepository,
     private jwtService: JwtService,
+    private userDeliveryInfoService: UserDeliveryInfoService,
   ) {}
 
   async signUp(userSignUpDto: UserSignUpDto): Promise<LoginInfoDto> {
     const user: UserEntity = await this.userRepository.createUser(
       userSignUpDto,
     );
+
+    await this.userDeliveryInfoService.createDeliveryInfo(user);
 
     const accessToken = await this.createJwt(user);
 
