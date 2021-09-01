@@ -10,6 +10,7 @@ import { FileUploadEntity } from '../file-upload/file-upload.entity';
 import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
 import { ProgramsEntity } from '../programs/programs.entity';
 import { CategoryEntity } from '../category/category.entity';
+import { CommentEntity } from '../comment/comment.entity';
 
 @Entity({ name: 'master_class' })
 export class MasterClassEntity {
@@ -39,6 +40,12 @@ export class MasterClassEntity {
     (purchaseProduct: PurchaseProductEntity) => purchaseProduct.masterClassId,
   )
   purchaseProduct: PurchaseProductEntity[];
+
+  @OneToMany(
+    () => CommentEntity,
+    (comment: CommentEntity) => comment.masterClassId,
+  )
+  comment: CommentEntity[];
 
   @Column({
     type: 'varchar',

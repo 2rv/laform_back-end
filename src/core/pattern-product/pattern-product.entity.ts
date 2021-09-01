@@ -9,6 +9,7 @@ import {
 import { CategoryEntity } from '../category/category.entity';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
 import { SizesEntity } from '../sizes/sizes.entity';
+import { CommentEntity } from '../comment/comment.entity';
 
 @Entity({ name: 'pattern_product' })
 export class PatternProductEntity {
@@ -29,6 +30,12 @@ export class PatternProductEntity {
 
   @OneToMany(() => SizesEntity, (sizes: SizesEntity) => sizes.patternProductId)
   sizes: SizesEntity[];
+
+  @OneToMany(
+    () => CommentEntity,
+    (comment: CommentEntity) => comment.patternProductId,
+  )
+  comment: CommentEntity[];
 
   @Column({
     type: 'varchar',
