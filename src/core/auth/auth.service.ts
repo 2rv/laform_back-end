@@ -4,7 +4,6 @@ import { JwtService } from '@nestjs/jwt';
 
 import { UserEntity } from '../user/user.entity';
 import { UserRepository } from '../user/user.repository';
-import { UserDeliveryInfoService } from '../user-delivery-info/user-delivery-info.service';
 
 import { AUTH_ERROR } from './enum/auth-error.enum';
 import { UserSignUpDto } from './dto/user-sign-up.dto';
@@ -13,6 +12,7 @@ import { LoginInfoDto } from './dto/login-info.dto';
 import { AccountDataDto } from './dto/account-data.dto';
 import { JwtPayload } from './interface/jwt-payload.interface';
 import { AuthRepository } from './auth.repository';
+import { UserInfoService } from '../user-info/user-info.service';
 
 @Injectable()
 export class AuthService {
@@ -21,16 +21,14 @@ export class AuthService {
     private authRepository: AuthRepository,
     private userRepository: UserRepository,
     private jwtService: JwtService,
-    private userDeliveryInfoService: UserDeliveryInfoService,
+    private userInfoService: UserInfoService,
   ) {}
 
-  async signUp(userSignUpDto: UserSignUpDto): Promise<LoginInfoDto> {
+  async signUp(userSignUpDto: UserSignUpDto): Promise<any> {
     const user: UserEntity = await this.userRepository.createUser(
       userSignUpDto,
     );
-
-    await this.userDeliveryInfoService.createDeliveryInfo(user);
-
+    await this.userInfoService.create(user);
     const accessToken = await this.createJwt(user);
 
     return { accessToken };
@@ -75,12 +73,16 @@ export class AuthService {
   }
 
   async getAccountInfo(user: UserEntity): Promise<AccountDataDto> {
-    const accountData: AccountDataDto = {
+    const result = await this.userRepository.findOne(user.id, {
+      relations: ['userSettingId'],
+    });
+    const accountData = {
       id: user.id,
       login: user.login,
       email: user.email,
       emailConfirmed: user.emailConfirmed,
       createDate: user.createDate,
+      userInfo: result.userSettingId,
     };
 
     return accountData;

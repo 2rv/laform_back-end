@@ -10,7 +10,7 @@ import { NotificationModule } from './core/notification/notification.module';
 import { UserRecoveryModule } from './core/user-recovery/user-recovery.module';
 import { UserVerificationModule } from './core/user-verification/user-verification.module';
 import { UserModule } from './core/user/user.module';
-import { UserDeliveryInfoModule } from './core/user-delivery-info/user-delivery-info.module';
+import { UserInfoModule } from './core/user-info/user-info.module';
 import { FileUploadModule } from './core/file-upload/file-upload.module';
 import { CategoryModule } from './core/category/category.module';
 import { PostModule } from './core/post/post.module';
@@ -38,7 +38,7 @@ import { CommentModule } from './core/comment/comment.module';
     UserRecoveryModule,
     UserVerificationModule,
     UserModule,
-    UserDeliveryInfoModule,
+    UserInfoModule,
     FileUploadModule,
     CategoryModule,
     PostModule,
