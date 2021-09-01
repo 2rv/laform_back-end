@@ -1,6 +1,10 @@
 import { UserEntity } from './../user/user.entity';
 import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+
 import { PostEntity } from '../post/post.entity';
+import { MasterClassEntity } from '../master-class/master-class.entity';
+import { SewingProductEntity } from 'src/core/sewing-product/sewing-product.entity';
+import { PatternProductEntity } from './../pattern-product/pattern-product.entity';
 
 @Entity({ name: 'like' })
 export class LikeEntity {
@@ -12,6 +16,33 @@ export class LikeEntity {
     name: 'post_id',
   })
   postId: PostEntity;
+
+  @ManyToOne(
+    () => MasterClassEntity,
+    (masterClass: MasterClassEntity) => masterClass.like,
+  )
+  @JoinColumn({
+    name: 'master_class_id',
+  })
+  masterClassId: MasterClassEntity;
+
+  @ManyToOne(
+    () => SewingProductEntity,
+    (sewingProduct: SewingProductEntity) => sewingProduct.like,
+  )
+  @JoinColumn({
+    name: 'sewing_product_id',
+  })
+  sewingProductId: SewingProductEntity;
+
+  @ManyToOne(
+    () => PatternProductEntity,
+    (patternProduct: PatternProductEntity) => patternProduct.like,
+  )
+  @JoinColumn({
+    name: 'pattern_product_id',
+  })
+  patternProductId: PatternProductEntity;
 
   @ManyToOne(() => UserEntity, (user: UserEntity) => user.like)
   @JoinColumn({
