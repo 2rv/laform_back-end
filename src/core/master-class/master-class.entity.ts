@@ -11,6 +11,7 @@ import { PurchaseProductEntity } from '../purchase-product/purchase-product.enti
 import { ProgramsEntity } from '../programs/programs.entity';
 import { CategoryEntity } from '../category/category.entity';
 import { LikeEntity } from '../like/like.entity';
+import { CommentEntity } from '../comment/comment.entity';
 
 @Entity({ name: 'master_class' })
 export class MasterClassEntity {
@@ -43,6 +44,12 @@ export class MasterClassEntity {
 
   @OneToMany(() => LikeEntity, (like: LikeEntity) => like.masterClassId)
   like: LikeEntity[];
+  
+  @OneToMany(
+    () => CommentEntity,
+    (comment: CommentEntity) => comment.masterClassId,
+  )
+  comment: CommentEntity[];
 
   @Column({
     type: 'varchar',

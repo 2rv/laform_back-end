@@ -79,6 +79,8 @@ export class AuthService {
       id: user.id,
       login: user.login,
       email: user.email,
+      emailConfirmed: user.emailConfirmed,
+      createDate: user.createDate,
     };
 
     return accountData;

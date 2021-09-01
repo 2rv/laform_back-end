@@ -10,6 +10,7 @@ import { CategoryEntity } from '../category/category.entity';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
 import { SizesEntity } from '../sizes/sizes.entity';
 import { LikeEntity } from '../like/like.entity';
+import { CommentEntity } from '../comment/comment.entity';
 
 @Entity({ name: 'pattern_product' })
 export class PatternProductEntity {
@@ -33,6 +34,12 @@ export class PatternProductEntity {
 
   @OneToMany(() => LikeEntity, (like: LikeEntity) => like.patternProductId)
   like: LikeEntity[];
+
+  @OneToMany(
+    () => CommentEntity,
+    (comment: CommentEntity) => comment.patternProductId,
+  )
+  comment: CommentEntity[];
 
   @Column({
     type: 'varchar',

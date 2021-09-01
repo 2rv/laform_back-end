@@ -14,6 +14,7 @@ import {
 } from '../../common/utils/hash';
 import { USER_ROLE } from './enum/user-role.enum';
 import { LikeEntity } from '../like/like.entity';
+import { CommentEntity } from '../comment/comment.entity';
 
 @Entity({ name: 'user' })
 @Unique(['login', 'email'])
@@ -66,4 +67,7 @@ export class UserEntity extends BaseEntity {
     (purchase: PurchaseEntity) => purchase.userId,
   )
   purchase: PurchaseEntity[];
+
+  @OneToMany(() => CommentEntity, (comment: CommentEntity) => comment.userId)
+  comment: CommentEntity[];
 }
