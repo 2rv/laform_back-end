@@ -58,9 +58,13 @@ export class LikeService {
       },
       relations: [
         'postId',
+        'postId.imageUrl',
         'masterClassId',
+        'masterClassId.images',
         'sewingProductId',
+        'sewingProductId.images',
         'patternProductId',
+        'patternProductId.images',
       ],
     });
   }

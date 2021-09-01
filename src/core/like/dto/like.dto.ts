@@ -21,8 +21,4 @@ export class LikeDto {
   @IsOptional()
   @IsString()
   patternProductId: PatternProductEntity;
-
-  @IsNotEmpty()
-  @IsString()
-  userId: string;
 }
