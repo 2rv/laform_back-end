@@ -15,7 +15,7 @@ import { FileUploadModule } from './core/file-upload/file-upload.module';
 import { CategoryModule } from './core/category/category.module';
 import { PostModule } from './core/post/post.module';
 // import { PurchaseModule } from './core/purchase/purchase.module';
-// import { PurchaseProductModule } from './core/purchase-product/purchase-product.module';
+import { PurchaseProductModule } from './core/purchase-product/purchase-product.module';
 import { SewingProductModule } from './core/sewing-product/sewing-product.module';
 import { PatternProductModule } from './core/pattern-product/pattern-product.module';
 import { PromoCodeModule } from './core/promo-code/promo-code.module';
@@ -24,6 +24,7 @@ import { ColorsModule } from './core/colors/colors.module';
 import { SizesModule } from './core/sizes/sizes.module';
 import { ProgramsModule } from './core/programs/programs.module';
 import { CommentModule } from './core/comment/comment.module';
+import { BasketModule } from './core/basket/basket.module';
 
 @Module({
   providers: [],
@@ -46,12 +47,13 @@ import { CommentModule } from './core/comment/comment.module';
     SliderModule,
     MasterClassModule,
     // PurchaseModule,
-    // PurchaseProductModule,
+    PurchaseProductModule,
     SewingProductModule,
     PatternProductModule,
     PromoCodeModule,
     MailModule,
     CommentModule,
+    BasketModule,
   ],
 })
 export class AppModule {}

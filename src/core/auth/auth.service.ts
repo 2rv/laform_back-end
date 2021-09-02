@@ -13,6 +13,7 @@ import { AccountDataDto } from './dto/account-data.dto';
 import { JwtPayload } from './interface/jwt-payload.interface';
 import { AuthRepository } from './auth.repository';
 import { UserInfoService } from '../user-info/user-info.service';
+import { BasketService } from './../basket/basket.service';
 
 @Injectable()
 export class AuthService {
@@ -22,6 +23,7 @@ export class AuthService {
     private userRepository: UserRepository,
     private jwtService: JwtService,
     private userInfoService: UserInfoService,
+    private basketService: BasketService,
   ) {}
 
   async signUp(userSignUpDto: UserSignUpDto): Promise<any> {
@@ -29,6 +31,7 @@ export class AuthService {
       userSignUpDto,
     );
     await this.userInfoService.create(user);
+    await this.basketService.create(user);
     const accessToken = await this.createJwt(user);
 
     return { accessToken };

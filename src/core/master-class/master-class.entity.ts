@@ -44,7 +44,7 @@ export class MasterClassEntity {
 
   @OneToMany(() => LikeEntity, (like: LikeEntity) => like.masterClassId)
   like: LikeEntity[];
-  
+
   @OneToMany(
     () => CommentEntity,
     (comment: CommentEntity) => comment.masterClassId,

@@ -10,6 +10,9 @@ import {
 } from 'typeorm';
 import { CategoryEntity } from '../category/category.entity';
 import { PurchaseEntity } from '../purchase/purchase.entity';
+import { BasketEntity } from '../basket/basket.entity';
+import { PatternProductEntity } from '../pattern-product/pattern-product.entity';
+import { SewingProductEntity } from '../sewing-product/sewing-product.entity';
 
 @Entity({ name: 'purchase_product' })
 export class PurchaseProductEntity {
@@ -34,19 +37,32 @@ export class PurchaseProductEntity {
   })
   masterClassId: MasterClassEntity;
 
-  @Column({
-    type: 'varchar',
+  @ManyToOne(
+    () => PatternProductEntity,
+    (patternProduct: PatternProductEntity) => patternProduct.purchaseProduct,
+  )
+  @JoinColumn({
     name: 'pattern_product_id',
-    nullable: true,
   })
-  patternProductId?: string;
+  patternProductId: PatternProductEntity;
 
-  @Column({
-    type: 'varchar',
+  @ManyToOne(
+    () => SewingProductEntity,
+    (sewingProduct: SewingProductEntity) => sewingProduct.purchaseProduct,
+  )
+  @JoinColumn({
     name: 'sewing_product_id',
-    nullable: true,
   })
-  sewingProductId?: string;
+  sewingProductId: SewingProductEntity;
+
+  @ManyToOne(
+    () => BasketEntity,
+    (basket: BasketEntity) => basket.purchaseProducts,
+  )
+  @JoinColumn({
+    name: 'basket_id',
+  })
+  basketId: BasketEntity;
 
   @Column({
     type: 'varchar',
