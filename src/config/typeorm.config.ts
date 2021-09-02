@@ -18,7 +18,7 @@ import { PromoCodeEntity } from '../core/promo-code/promo-code.entity';
 import { ProgramsEntity } from 'src/core/programs/programs.entity';
 import { ColorsEntity } from 'src/core/colors/colors.entity';
 import { SizesEntity } from 'src/core/sizes/sizes.entity';
-
+import { BasketEntity } from 'src/core/basket/basket.entity';
 import {
   CommentEntity,
   SubCommentEntity,
@@ -47,6 +47,7 @@ export const ApiEntities = [
   SizesEntity,
   CommentEntity,
   SubCommentEntity,
+  BasketEntity,
 ];
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
