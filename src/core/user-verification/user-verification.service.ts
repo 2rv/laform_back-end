@@ -27,6 +27,7 @@ export class UserVerificationService {
       throw new BadRequestException(
         USER_VERIFICATION_ERROR.USER_VERIFICATION_EMAIL_ALREADY_CONFIRMED,
       );
+      return;
     }
 
     const data: UserVerificationEmailPayload = {
@@ -46,7 +47,7 @@ export class UserVerificationService {
     console.log(messageDate);
   }
 
-  async confirmUserVerificationEmail(code: string): Promise<void> {
+  async confirmUserVerificationEmail(code: string): Promise<any> {
     const rawPayload: string = await this.cacheManager.get(code);
     if (!rawPayload) {
       throw new BadRequestException(
@@ -59,5 +60,6 @@ export class UserVerificationService {
     await this.userRepository.confirmEmailById(payload.userId);
 
     this.cacheManager.del(code);
+    return true;
   }
 }
