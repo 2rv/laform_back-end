@@ -3,7 +3,7 @@ import * as config from 'config';
 
 import { UserEntity } from '../core/user/user.entity';
 import { NotificationEntity } from '../core/notification/notification.entity';
-import { UserDeliveryInfoEntity } from '../core/user-delivery-info/user-delivery-info.entity';
+import { UserInfoEntity } from '../core/user-info/user-info.entity';
 import { FileUploadEntity } from 'src/core/file-upload/file-upload.entity';
 import { CategoryEntity } from 'src/core/category/category.entity';
 import { LikeEntity } from 'src/core/like/like.entity';
@@ -18,7 +18,7 @@ import { PromoCodeEntity } from '../core/promo-code/promo-code.entity';
 import { ProgramsEntity } from 'src/core/programs/programs.entity';
 import { ColorsEntity } from 'src/core/colors/colors.entity';
 import { SizesEntity } from 'src/core/sizes/sizes.entity';
-
+import { BasketEntity } from 'src/core/basket/basket.entity';
 import {
   CommentEntity,
   SubCommentEntity,
@@ -28,7 +28,7 @@ const DATABASE_CONFIG = config.get('DATABASE');
 
 export const ApiEntities = [
   UserEntity,
-  UserDeliveryInfoEntity,
+  UserInfoEntity,
   NotificationEntity,
   NotificationEntity,
   CategoryEntity,
@@ -47,6 +47,7 @@ export const ApiEntities = [
   SizesEntity,
   CommentEntity,
   SubCommentEntity,
+  BasketEntity,
 ];
 
 export const typeOrmConfig: TypeOrmModuleOptions = {

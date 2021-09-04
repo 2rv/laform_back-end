@@ -1,15 +1,15 @@
-import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsOptional, IsString, IsNumber } from 'class-validator';
 
 import { DELIVERY_TYPE } from '../enum/delivery-type.enum';
 
-export class UserDeliveryInfoUpdateDto {
+export class UserInfoUpdateDto {
   @IsOptional()
   @IsString()
-  fullname: string;
+  fullName: string;
 
   @IsOptional()
-  @IsString()
-  phone: string;
+  @IsNumber()
+  phone: number;
 
   @IsOptional()
   @IsString()

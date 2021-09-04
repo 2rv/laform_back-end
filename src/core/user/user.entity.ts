@@ -7,6 +7,7 @@ import {
   Column,
   CreateDateColumn,
   OneToMany,
+  OneToOne,
 } from 'typeorm';
 import {
   generatePasswordSalt,
@@ -15,6 +16,8 @@ import {
 import { USER_ROLE } from './enum/user-role.enum';
 import { LikeEntity } from '../like/like.entity';
 import { CommentEntity } from '../comment/comment.entity';
+import { UserInfoEntity } from '../user-info/user-info.entity';
+import { BasketEntity } from '../basket/basket.entity';
 
 @Entity({ name: 'user' })
 @Unique(['login', 'email'])
@@ -68,6 +71,15 @@ export class UserEntity extends BaseEntity {
   )
   purchase: PurchaseEntity[];
 
+  @OneToOne(() => BasketEntity, (basket: BasketEntity) => basket.userId)
+  basket: BasketEntity;
+
   @OneToMany(() => CommentEntity, (comment: CommentEntity) => comment.userId)
   comment: CommentEntity[];
+
+  @OneToOne(
+    () => UserInfoEntity,
+    (userSettingsInfo: UserInfoEntity) => userSettingsInfo.userId,
+  )
+  userSettingId: UserInfoEntity;
 }

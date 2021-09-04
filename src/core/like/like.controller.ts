@@ -6,6 +6,7 @@ import {
   UseGuards,
   ValidationPipe,
   Get,
+  Delete,
 } from '@nestjs/common';
 import { LikeService } from './like.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -13,6 +14,7 @@ import { AccountGuard } from '../user/guard/account.guard';
 import { Roles } from '../user/decorator/role.decorator';
 import { USER_ROLE } from '../user/enum/user-role.enum';
 import { GetUser } from '../user/decorator/get-account.decorator';
+import { LikeDto } from './dto/like.dto';
 
 @Controller('like')
 export class LikeController {
@@ -21,7 +23,10 @@ export class LikeController {
   @Post('/create')
   @Roles(USER_ROLE.USER)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async save(@GetUser() user: UserEntity, @Body(new ValidationPipe()) body) {
+  async save(
+    @GetUser() user: UserEntity,
+    @Body(new ValidationPipe()) body: LikeDto,
+  ) {
     return await this.likeService.create(body, user.id);
   }
 
@@ -29,17 +34,16 @@ export class LikeController {
   @Roles(USER_ROLE.USER)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getPosts(@GetUser() user: UserEntity): Promise<any> {
-    return await this.likeService.getPosts(user.id);
+    return await this.likeService.getUserLikes(user.id);
   }
 
-  @Post('/delete')
+  @Delete('/delete')
   @Roles(USER_ROLE.USER)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async delete(
     @GetUser() user: UserEntity,
-    @Body(new ValidationPipe()) body,
+    @Body(new ValidationPipe()) body: LikeDto,
   ): Promise<any> {
-    console.log(user.id);
     return await this.likeService.delete(body, user.id);
   }
 }

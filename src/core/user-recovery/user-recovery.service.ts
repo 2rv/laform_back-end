@@ -15,6 +15,7 @@ import { USER_RECOVERY_ERROR } from './enum/user-recovery-error.enum';
 import { UserRecoveryDto } from './dto/user-recovery.dto';
 import { UserRecoveryGetCodeDto } from './dto/user-recovery-get-code.dto';
 import { UserRecoveryChangeCredentialsDto } from './dto/user-recovery-change-password.dto';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class UserRecoveryService {
@@ -22,6 +23,7 @@ export class UserRecoveryService {
     @Inject(CACHE_MANAGER)
     private cacheManager: Cache,
     private userRepository: UserRepository,
+    private mailService: MailService,
   ) {}
 
   async getRecoveryCode({ email }: UserRecoveryDto): Promise<void> {
@@ -38,6 +40,11 @@ export class UserRecoveryService {
     await this.cacheManager.set(code, JSON.stringify(payload));
 
     console.log(`Generated recovery code: ${code}`);
+    const messageDate = await this.mailService.sendRecoveryMessage(
+      { toMail: user.email },
+      code,
+    );
+    console.log(messageDate);
   }
 
   async changeCredentials(
