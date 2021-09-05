@@ -80,20 +80,39 @@ export class MasterClassEntity {
   @Column({
     type: 'int',
     name: 'discount',
+    nullable: true,
+    default: 0,
   })
   discount!: number;
 
   @Column({
     type: 'varchar',
     name: 'modifier',
+    nullable: true,
   })
   modifier!: string;
 
   @Column({
-    type: 'json',
+    type: 'int',
     name: 'type',
+    nullable: true,
+    default: 0,
   })
-  type!: object;
+  type: number;
+
+  @Column({
+    type: 'json',
+    name: 'recomendations',
+    nullable: true,
+  })
+  recomendations: [];
+
+  @Column({
+    type: 'json',
+    name: 'master_class_article',
+    nullable: true,
+  })
+  masterClassArticle: object;
 
   @Column({
     type: 'bool',

@@ -20,7 +20,7 @@ export class PatternProductService {
     const result = await this.patternProductRepository.save(body);
     const categories = await this.categoriesService.createMany(body.categories);
 
-    if (body.type.id === 2) {
+    if (body.type === 2) {
       const sizes = await this.sizesService.createMany(body.sizes);
       if (sizes) {
         for (let key in sizes) {
@@ -32,8 +32,8 @@ export class PatternProductService {
     }
 
     if (body.images) {
-      for (let file of body.images) {
-        await this.fileUploadService.update(file, {
+      for (const image of body.images) {
+        await this.fileUploadService.update(image.id, {
           patternProductId: result.id,
         });
       }

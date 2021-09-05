@@ -37,7 +37,7 @@ export class MasterClassDto {
 
   @IsNotEmpty()
   @IsArray()
-  images: [];
+  images: [{ id: string }];
 
   @IsNotEmpty()
   @IsNumber()
@@ -48,8 +48,20 @@ export class MasterClassDto {
   modifier: string;
 
   @IsNotEmpty()
+  @IsNumber()
+  type: number;
+
+  @IsOptional()
+  @IsArray()
+  recomendations: [];
+
+  @IsNotEmpty()
   @IsObject()
-  type: { id: number; tid: string };
+  masterClassArticle: {
+    blocks: [];
+    time: number;
+    version: string;
+  };
 
   @IsOptional()
   @IsBoolean()

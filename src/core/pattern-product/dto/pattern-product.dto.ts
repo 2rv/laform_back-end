@@ -36,7 +36,7 @@ export class PatternProductDto {
 
   @IsNotEmpty()
   @IsArray()
-  images: [];
+  images: [{ id: string }];
 
   @IsNotEmpty()
   @IsNumber()
@@ -47,18 +47,26 @@ export class PatternProductDto {
   modifier: string;
 
   @IsNotEmpty()
-  @IsObject()
-  type: { id: number; tid: string };
+  @IsNumber()
+  type: number;
 
   @IsNotEmpty()
   @IsNumber()
   complexity: number;
 
   @IsNotEmpty()
-  @IsString()
-  materialRu: string;
+  @IsObject()
+  materialRu: {
+    blocks: [];
+    time: number;
+    version: string;
+  };
 
   @IsOptional()
   @IsNumber()
   price: number;
+
+  @IsOptional()
+  @IsArray()
+  recomendations: [];
 }

@@ -69,11 +69,11 @@ export class PatternProductEntity {
   descriptionRu!: string;
 
   @Column({
-    type: 'varchar',
+    type: 'json',
     name: ' material_ru',
     nullable: true,
   })
-  materialRu!: string;
+  materialRu: object;
 
   @Column({
     type: 'varchar',
@@ -95,10 +95,10 @@ export class PatternProductEntity {
   modifier!: string;
 
   @Column({
-    type: 'json',
+    type: 'int',
     name: 'type',
   })
-  type!: object;
+  type!: number;
 
   @Column({
     type: 'int',

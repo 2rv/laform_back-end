@@ -23,7 +23,9 @@ export class MasterClassService {
 
     if (body.images) {
       for (const file of body.images) {
-        await this.fileUploadService.update(file, { masterClassId: result.id });
+        await this.fileUploadService.update(file.id, {
+          masterClassId: result.id,
+        });
       }
     }
 
