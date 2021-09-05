@@ -18,8 +18,8 @@ export class UserVerificationController {
   }
 
   @Post('/email/:code')
-  @UseGuards(AuthGuard(), AccountGuard)
-  confirmEmailVerification(@Param('code') code: string): Promise<void> {
+  //   @UseGuards(AuthGuard(), AccountGuard)
+  async confirmEmailVerification(@Param('code') code: string): Promise<any> {
     return this.userVerificationService.confirmUserVerificationEmail(code);
   }
 }

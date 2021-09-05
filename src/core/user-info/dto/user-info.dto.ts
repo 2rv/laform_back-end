@@ -1,8 +1,8 @@
 import { DELIVERY_TYPE } from '../enum/delivery-type.enum';
 
-export interface UserDeliveryInfoDto {
-  fullname: string;
-  phone: string;
+export interface UserInfoDto {
+  fullName: string;
+  phone: number;
   location: string;
   deliveryType: DELIVERY_TYPE;
 }
