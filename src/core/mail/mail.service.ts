@@ -31,6 +31,7 @@ export class MailService {
         console.log(e);
       });
   }
+
   async sendRecoveryMessage(body: any, code: string) {
     return await this.mailerService
       .sendMail({
@@ -55,7 +56,10 @@ export class MailService {
       .sendMail({
         to: mails,
         subject: body.subject,
-        html: '<p>HTML version of the message</p>',
+        template: path.join(path.resolve(), 'src/templates/notification.pug'),
+        context: {
+          html: body.html,
+        },
       })
       .catch((e) => console.log(e));
   }

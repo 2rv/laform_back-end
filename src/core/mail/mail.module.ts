@@ -11,15 +11,6 @@ import * as path from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { NotificationEntity } from '../notification/notification.entity';
 
-const miniConfig = {
-  mailLogin: 'leitank@mail.ru',
-  mailPassword: '1Oo_aTFpiiO3',
-  mailConfig: {
-    host: 'smtp.mail.ru',
-    port: 465,
-  },
-};
-
 @Module({
   imports: [
     MailerModule.forRoot({
@@ -31,16 +22,16 @@ const miniConfig = {
           pass: MailConfig.password,
         },
       },
-      // defaults: {
-      //   from: `LaForm <${miniConfig.mailLogin}>`,
-      // },
-      // template: {
-      //   dir: path.join(path.resolve(), 'src/templates/'),
-      //   adapter: new PugAdapter(),
-      //   options: {
-      //     strict: true,
-      //   },
-      // },
+      defaults: {
+        from: `LaForm <${MailConfig.email}>`,
+      },
+      template: {
+        dir: path.join(path.resolve(), 'src/templates/'),
+        adapter: new PugAdapter(),
+        options: {
+          strict: true,
+        },
+      },
     }),
     TypeOrmModule.forFeature([NotificationEntity]),
   ],
