@@ -1,9 +1,15 @@
 import { MailerModule } from '@nestjs-modules/mailer';
-import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
+
 import { Module } from '@nestjs/common';
-import * as path from 'path';
 import { MailController } from './mail.controller';
 import { MailService } from './mail.service';
+import { MailConfig } from '../../config/mail.config';
+
+import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
+import * as path from 'path';
+
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { NotificationEntity } from '../notification/notification.entity';
 
 const miniConfig = {
   mailLogin: 'leitank@mail.ru',
@@ -13,31 +19,30 @@ const miniConfig = {
     port: 465,
   },
 };
+
 @Module({
   imports: [
     MailerModule.forRoot({
       transport: {
-        service: 'Mail.ru',
-        // host: miniConfig.mailConfig.host,
-        // port: miniConfig.mailConfig.port,
-        // ignoreTLS: true,
-        // secure: true,
+        host: MailConfig.host,
+        secure: false,
         auth: {
-          user: miniConfig.mailLogin,
-          pass: miniConfig.mailPassword,
+          user: MailConfig.email,
+          pass: MailConfig.password,
         },
       },
-      defaults: {
-        from: `LaForm <${miniConfig.mailLogin}>`,
-      },
-      template: {
-        dir: path.join(path.resolve(), 'src/templates/'),
-        adapter: new PugAdapter(),
-        options: {
-          strict: true,
-        },
-      },
+      // defaults: {
+      //   from: `LaForm <${miniConfig.mailLogin}>`,
+      // },
+      // template: {
+      //   dir: path.join(path.resolve(), 'src/templates/'),
+      //   adapter: new PugAdapter(),
+      //   options: {
+      //     strict: true,
+      //   },
+      // },
     }),
+    TypeOrmModule.forFeature([NotificationEntity]),
   ],
   providers: [MailService],
   controllers: [MailController],
