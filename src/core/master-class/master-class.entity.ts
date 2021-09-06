@@ -5,6 +5,8 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
 import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
@@ -12,7 +14,6 @@ import { ProgramsEntity } from '../programs/programs.entity';
 import { CategoryEntity } from '../category/category.entity';
 import { LikeEntity } from '../like/like.entity';
 import { CommentEntity } from '../comment/comment.entity';
-
 @Entity({ name: 'master_class' })
 export class MasterClassEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -80,7 +81,6 @@ export class MasterClassEntity {
   @Column({
     type: 'int',
     name: 'discount',
-    nullable: true,
     default: 0,
   })
   discount!: number;
@@ -95,17 +95,9 @@ export class MasterClassEntity {
   @Column({
     type: 'int',
     name: 'type',
-    nullable: true,
     default: 0,
   })
   type: number;
-
-  @Column({
-    type: 'json',
-    name: 'recomendations',
-    nullable: true,
-  })
-  recomendations: [];
 
   @Column({
     type: 'json',

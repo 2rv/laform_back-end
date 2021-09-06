@@ -13,9 +13,12 @@ export class ColorsService {
     return result.raw;
   }
 
+  async deleteSewingGoods(id) {
+    await this.colorsRepository.delete({ sewingProductId: id });
+  }
+
   async update(id: string, body) {
-    const result = await this.colorsRepository.update(id, body);
-    return result;
+    return await this.colorsRepository.update(id, body);
   }
 
   async getAllSewingProducts(id: string): Promise<ColorsEntity[]> {
