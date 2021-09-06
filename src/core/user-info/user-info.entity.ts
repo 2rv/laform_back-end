@@ -32,12 +32,12 @@ export class UserInfoEntity extends BaseEntity {
   fullName: string;
 
   @Column({
-    type: 'int',
+    type: 'varchar',
     name: 'phone',
     nullable: true,
     default: null,
   })
-  phone: number;
+  phone: string;
 
   @Column({
     type: 'varchar',

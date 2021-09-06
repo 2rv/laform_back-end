@@ -8,8 +8,8 @@ export class UserInfoUpdateDto {
   fullName: string;
 
   @IsOptional()
-  @IsNumber()
-  phone: number;
+  @IsString()
+  phone: string;
 
   @IsOptional()
   @IsString()
