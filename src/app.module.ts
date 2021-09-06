@@ -14,7 +14,7 @@ import { UserInfoModule } from './core/user-info/user-info.module';
 import { FileUploadModule } from './core/file-upload/file-upload.module';
 import { CategoryModule } from './core/category/category.module';
 import { PostModule } from './core/post/post.module';
-// import { PurchaseModule } from './core/purchase/purchase.module';
+import { PurchaseModule } from './core/purchase/purchase.module';
 import { PurchaseProductModule } from './core/purchase-product/purchase-product.module';
 import { SewingProductModule } from './core/sewing-product/sewing-product.module';
 import { PatternProductModule } from './core/pattern-product/pattern-product.module';
@@ -46,7 +46,7 @@ import { BasketModule } from './core/basket/basket.module';
     LikeModule,
     SliderModule,
     MasterClassModule,
-    // PurchaseModule,
+    PurchaseModule,
     PurchaseProductModule,
     SewingProductModule,
     PatternProductModule,

@@ -1,13 +1,4 @@
-import {
-  IsNotEmpty,
-  IsNumber,
-  IsBoolean,
-  ValidateNested,
-  IsString,
-  IsOptional,
-} from 'class-validator';
-import { Type } from 'class-transformer';
-import { PurchaseProductDto } from './purchase-product.dto';
+import { IsNotEmpty, IsNumber, IsString, IsOptional } from 'class-validator';
 
 export class PurchaseDto {
   @IsNotEmpty()
