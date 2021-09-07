@@ -56,14 +56,14 @@ export class PurchaseController {
   }
 
   @Get('/get/')
-  @Roles(USER_ROLE.ADMIN)
+  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getAll(@Query('size') size: number, @Query('page') page: number) {
     return await this.purchaseService.getAll(size, page);
   }
 
   @Get('/user/get/')
-  @Roles(USER_ROLE.USER)
+  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getAllForUsers(
     @GetUser() user: UserEntity,
