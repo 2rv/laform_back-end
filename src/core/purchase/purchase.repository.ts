@@ -24,6 +24,12 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
 
     return await this.createQueryBuilder('purchase')
       .leftJoinAndSelect('purchase.purchaseProducts', 'purchase_products')
+      .leftJoinAndSelect('purchase_products.masterClassId', 'ppms')
+      .leftJoinAndSelect('ppms.images', 'ppmsi')
+      .leftJoinAndSelect('purchase_products.sewingProductId', 'ppsp')
+      .leftJoinAndSelect('ppsp.images', 'ppspi')
+      .leftJoinAndSelect('purchase_products.patternProductId', 'pppp')
+      .leftJoinAndSelect('pppp.images', 'ppppi')
       .where('purchase.userId = :userId', { userId })
       .limit(take)
       .offset(skip)
