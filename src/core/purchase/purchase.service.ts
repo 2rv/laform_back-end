@@ -12,14 +12,38 @@ export class PurchaseService {
     private purchaseProductService: PurchaseProductService,
   ) {}
 
-  async create(body: any): Promise<any> {
+  async create(body, email: string, userId: number): Promise<any> {
+    return this.purchaseRepository.create({ ...body, email, userId });
+  }
+
+  async createForNotRegUser(body): Promise<any> {
     return this.purchaseRepository.create(body);
   }
 
-  async save(body: CreatePurchaseDto): Promise<PurchaseEntity> {
-    const purchase = await this.create(body.purchase);
+  async save(
+    body: CreatePurchaseDto,
+    email: string,
+    userId: number,
+  ): Promise<PurchaseEntity> {
+    const purchase = await this.create(body.purchase, email, userId);
     purchase.purchaseProducts = body.purchaseProducts;
-    return await this.purchaseRepository.save({
+    const result = await this.purchaseRepository.save({
+      ...purchase,
+    });
+    if (result) {
+      for (let purchaseProduct of purchase.purchaseProducts) {
+        await this.purchaseProductService.update(purchaseProduct.id, {
+          basketId: null,
+        });
+      }
+    }
+    return result;
+  }
+
+  async saveForNotRegUser(body: CreatePurchaseDto): Promise<PurchaseEntity> {
+    const purchase = await this.createForNotRegUser(body.purchase);
+    purchase.purchaseProducts = body.purchaseProducts;
+    return await await this.purchaseRepository.save({
       ...purchase,
     });
   }

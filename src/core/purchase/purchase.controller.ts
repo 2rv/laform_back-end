@@ -28,7 +28,7 @@ export class PurchaseController {
 
   @Post('/create')
   async save(@Body(new ValidationPipe()) body: CreatePurchaseDto) {
-    return await this.purchaseService.save(body);
+    return await this.purchaseService.saveForNotRegUser(body);
   }
 
   @Post('/user/create')
@@ -38,9 +38,7 @@ export class PurchaseController {
     @GetUser() user: UserEntity,
     @Body(new ValidationPipe()) body: CreatePurchaseDto,
   ) {
-    body.purchase.email = user.email;
-    body.purchase.userId = user.id;
-    return await this.purchaseService.save(body);
+    return await this.purchaseService.save(body, user.email, user.id);
   }
 
   @Get('get/:purchaseId')
