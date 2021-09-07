@@ -58,8 +58,12 @@ export class PurchaseController {
   @Get('/get/')
   @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async getAll(@Query('size') size: number, @Query('page') page: number) {
-    return await this.purchaseService.getAll(size, page);
+  async getAll(
+    @Query('size') size: number,
+    @Query('page') page: number,
+    @Query('filter') orderNumber: string,
+  ) {
+    return await this.purchaseService.getAll(size, page, orderNumber);
   }
 
   @Get('/user/get/')
