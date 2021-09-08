@@ -23,7 +23,13 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
     const skip = (page - 1) * size || 0;
 
     return await this.createQueryBuilder('purchase')
-      .leftJoinAndSelect('purchase.purchaseProducts', 'purchase_products')
+      .leftJoinAndSelect('purchase.purchaseProducts', 'purchaseProducts')
+      .leftJoinAndSelect('purchaseProducts.masterClassId', 'masterClassId')
+      .leftJoinAndSelect(
+        'purchaseProducts.patternProductId',
+        'patternProductId',
+      )
+      .leftJoinAndSelect('purchaseProducts.sewingProductId', 'sewingProductId')
       .where('purchase.userId = :userId', { userId })
       .limit(take)
       .offset(skip)
@@ -32,7 +38,13 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
 
   async getOneForUser(id: string, userId): Promise<PurchaseEntity> {
     return await this.createQueryBuilder('purchase')
-      .leftJoinAndSelect('purchase.purchaseProducts', 'purchase_products')
+      .leftJoinAndSelect('purchase.purchaseProducts', 'purchaseProducts')
+      .leftJoinAndSelect('purchaseProducts.masterClassId', 'masterClassId')
+      .leftJoinAndSelect(
+        'purchaseProducts.patternProductId',
+        'patternProductId',
+      )
+      .leftJoinAndSelect('purchaseProducts.sewingProductId', 'sewingProductId')
       .where('purchase.id = :id', { id })
       .andWhere('purchase.userId = :userId', { userId })
       .getOne();
@@ -40,7 +52,13 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
 
   async getOne(id: string): Promise<PurchaseEntity> {
     return await this.createQueryBuilder('purchase')
-      .leftJoinAndSelect('purchase.purchaseProducts', 'purchase_products')
+      .leftJoinAndSelect('purchase.purchaseProducts', 'purchaseProducts')
+      .leftJoinAndSelect('purchaseProducts.masterClassId', 'masterClassId')
+      .leftJoinAndSelect(
+        'purchaseProducts.patternProductId',
+        'patternProductId',
+      )
+      .leftJoinAndSelect('purchaseProducts.sewingProductId', 'sewingProductId')
       .where('purchase.id = :id', { id })
       .getOne();
   }
