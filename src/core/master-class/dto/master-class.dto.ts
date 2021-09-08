@@ -12,6 +12,7 @@ import {
   ArrayMaxSize,
 } from 'class-validator';
 import { CategoryDto } from 'src/core/category/dto/category.dto';
+import { FileDto } from 'src/core/file-upload/dto/file-dto';
 import { CreateProgramDto } from 'src/core/programs/dto/create-program.dto';
 
 export class MasterClassDto {
@@ -45,7 +46,7 @@ export class MasterClassDto {
   @IsArray()
   @ArrayMinSize(1)
   @ArrayMaxSize(6)
-  images: [{ id: string }];
+  images: [FileDto];
 
   @IsOptional()
   @IsNumber()
