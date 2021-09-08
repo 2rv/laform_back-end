@@ -54,6 +54,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'categories',
         'programs',
       ])
+      .where('master_class.deleted = false')
       .limit(take)
       .offset(skip)
       .getMany();
@@ -133,6 +134,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'programs',
         'categories',
       ])
+      .where('master_class.deleted = false')
       .limit(take)
       .offset(skip)
       .getMany();

@@ -10,6 +10,7 @@ import {
   ArrayNotEmpty,
   ArrayMinSize,
   ArrayMaxSize,
+  IsBoolean,
 } from 'class-validator';
 import { CategoryDto } from 'src/core/category/dto/category.dto';
 import { CreateSizeDto } from 'src/core/sizes/dto/create-size.dto';
@@ -83,4 +84,8 @@ export class PatternProductDto {
   @IsOptional()
   @IsArray()
   recomendations: [];
+
+  @IsOptional()
+  @IsBoolean()
+  deleted: boolean;
 }

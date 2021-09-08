@@ -56,6 +56,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'sizes',
         'categories',
       ])
+      .where('pattern_product.deleted = false')
       .limit(take)
       .offset(skip)
       .getMany();
@@ -140,6 +141,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'sizes',
         'categories',
       ])
+      .where('pattern_product.deleted = false')
       .limit(take)
       .offset(skip)
       .getMany();

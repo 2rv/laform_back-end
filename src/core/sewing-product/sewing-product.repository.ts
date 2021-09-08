@@ -59,6 +59,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'colors',
         'categories',
       ])
+      .where('sewing_product.deleted = false')
       .limit(take)
       .offset(skip)
       .getMany();
@@ -142,6 +143,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'colors',
         'categories',
       ])
+      .where('sewing_product.deleted = false')
       .limit(take)
       .offset(skip)
       .getMany();
