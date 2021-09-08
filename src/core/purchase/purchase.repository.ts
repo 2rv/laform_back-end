@@ -42,6 +42,19 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
     const take = size || 10;
     const skip = (page - 1) * size || 0;
 
+//     return await this.createQueryBuilder('purchase')
+//       .leftJoinAndSelect('purchase.purchaseProducts', 'purchaseProducts')
+//       .leftJoinAndSelect('purchaseProducts.masterClassId', 'masterClassId')
+//       .leftJoinAndSelect(
+//         'purchaseProducts.patternProductId',
+//         'patternProductId',
+//       )
+//       .leftJoinAndSelect('purchaseProducts.sewingProductId', 'sewingProductId')
+//       .where('purchase.userId = :userId', { userId })
+//       .limit(take)
+//       .offset(skip)
+//       .getMany();
+
     const [purchases, total] = await this.findAndCount({
       where: { userId },
       relations: [
@@ -65,7 +78,13 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
 
   async getOneForUser(id: string, userId): Promise<PurchaseEntity> {
     return await this.createQueryBuilder('purchase')
-      .leftJoinAndSelect('purchase.purchaseProducts', 'purchase_products')
+      .leftJoinAndSelect('purchase.purchaseProducts', 'purchaseProducts')
+      .leftJoinAndSelect('purchaseProducts.masterClassId', 'masterClassId')
+      .leftJoinAndSelect(
+        'purchaseProducts.patternProductId',
+        'patternProductId',
+      )
+      .leftJoinAndSelect('purchaseProducts.sewingProductId', 'sewingProductId')
       .where('purchase.id = :id', { id })
       .andWhere('purchase.userId = :userId', { userId })
       .getOne();
@@ -80,6 +99,7 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
       .leftJoinAndSelect('ppsp.images', 'ppspi')
       .leftJoinAndSelect('purchase_products.patternProductId', 'pppp')
       .leftJoinAndSelect('pppp.images', 'ppppi')
+
       .where('purchase.id = :id', { id })
       .getOne();
   }
