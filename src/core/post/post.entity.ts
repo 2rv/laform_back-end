@@ -4,9 +4,8 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  ManyToOne,
-  JoinColumn,
   OneToMany,
+  OneToOne,
 } from 'typeorm';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
 import { CategoryEntity } from '../category/category.entity';
@@ -25,7 +24,15 @@ export class PostEntity {
 
   @Column({
     type: 'varchar',
+    name: 'modifier',
+    nullable: true,
+  })
+  modifier!: string;
+
+  @Column({
+    type: 'varchar',
     name: 'title_en',
+    nullable: true,
   })
   titleEn!: string;
 
@@ -36,28 +43,19 @@ export class PostEntity {
   createdDate: Date;
 
   @Column({
-    type: 'varchar',
-    name: 'text_ru',
+    type: 'json',
+    name: 'article_ru',
   })
-  textRu!: string;
+  postArticle: object;
 
-  @Column({
-    type: 'varchar',
-    name: 'text_en',
-  })
-  textEn!: string;
+  @OneToOne(() => FileUploadEntity, (res: FileUploadEntity) => res.postId)
+  image: FileUploadEntity;
 
-  @ManyToOne(() => FileUploadEntity, (file: FileUploadEntity) => file.post)
-  @JoinColumn({
-    name: 'image_url',
-  })
-  imageUrl: FileUploadEntity;
-
-  @ManyToOne(() => CategoryEntity, (category: CategoryEntity) => category.post)
-  @JoinColumn({
-    name: 'category_id',
-  })
-  categoryId: CategoryEntity;
+  @OneToMany(
+    () => CategoryEntity,
+    (category: CategoryEntity) => category.postId,
+  )
+  categories: CategoryEntity[];
 
   @Column({
     type: 'int',
@@ -70,6 +68,7 @@ export class PostEntity {
     type: 'bool',
     name: 'pinned',
     nullable: true,
+    default: false,
   })
   pinned?: boolean;
 
@@ -78,4 +77,11 @@ export class PostEntity {
 
   @OneToMany(() => CommentEntity, (comment: CommentEntity) => comment.postId)
   comment: CommentEntity[];
+
+  @Column({
+    type: 'int',
+    name: 'type',
+    default: 4,
+  })
+  type: number;
 }

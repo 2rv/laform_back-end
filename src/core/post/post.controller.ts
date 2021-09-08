@@ -11,7 +11,6 @@ import {
   Put,
   Query,
   Delete,
-  Request,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -22,13 +21,13 @@ import { LangValidationPipe } from '../../common/guards/lang.guard';
 
 @Controller('post')
 export class PostController {
-  constructor(private readonly postRepository: PostService) {}
+  constructor(private postService: PostService) {}
 
   @Post('/create')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async save(@Body(new ValidationPipe()) body: PostDto) {
-    return await this.postRepository.create(body);
+    return await this.postService.create(body);
   }
 
   @Get('get/:postId')
@@ -37,7 +36,7 @@ export class PostController {
     @Query(new LangValidationPipe()) query: string,
     @Param('postId') id: string,
   ) {
-    return await this.postRepository.getOne(id, query);
+    return await this.postService.getOne(id, query);
   }
 
   @Get('get/')
@@ -48,30 +47,30 @@ export class PostController {
     //@Query('sort') sort: string,
     //@Query('by') by: string,
   ) {
-    return await this.postRepository.getAll(query, size, page);
+    return await this.postService.getAll(query, size, page);
   }
 
   @Get('best/get/')
   async getBest(@Query(new LangValidationPipe()) query: string) {
-    return await this.postRepository.getBest(query);
+    return await this.postService.getBest(query);
   }
 
   @Get('pinned/get/')
   async getPinned(@Query(new LangValidationPipe()) query: string) {
-    return await this.postRepository.getPinned(query);
+    return await this.postService.getPinned(query);
   }
 
   @Put('update/:postId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard)
   async update(@Param('postId') id: string, @Body() body: any) {
-    return await this.postRepository.update(id, body);
+    return await this.postService.update(id, body);
   }
 
   @Delete('delete/:postId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard)
   async delete(@Param('postId') id: string) {
-    return await this.postRepository.delete(id);
+    return await this.postService.delete(id);
   }
 }

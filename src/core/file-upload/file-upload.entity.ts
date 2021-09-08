@@ -8,6 +8,7 @@ import {
   OneToMany,
   JoinColumn,
   ManyToOne,
+  OneToOne,
 } from 'typeorm';
 import { SliderEntity } from './../slider/slider.entity';
 import { PostEntity } from './../post/post.entity';
@@ -23,11 +24,14 @@ export class FileUploadEntity {
   })
   fileUrl!: string;
 
-  @OneToMany(() => PostEntity, (post: PostEntity) => post.imageUrl)
-  post: PostEntity[];
-
   @OneToMany(() => SliderEntity, (slider: SliderEntity) => slider.imageUrl)
   slider: SliderEntity[];
+
+  @OneToOne(() => PostEntity, (res: PostEntity) => res.image)
+  @JoinColumn({
+    name: 'post_id',
+  })
+  postId: PostEntity;
 
   @ManyToOne(
     () => MasterClassEntity,

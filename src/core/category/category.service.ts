@@ -94,4 +94,7 @@ export class CategoryService {
   async deleteSewingGoods(id) {
     await this.categoryRepository.delete({ sewingProductId: id });
   }
+  async deletePost(id) {
+    await this.categoryRepository.delete({ postId: id });
+  }
 }

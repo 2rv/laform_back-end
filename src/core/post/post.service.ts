@@ -2,12 +2,19 @@ import { PostEntity } from './post.entity';
 import { Injectable } from '@nestjs/common';
 import { PostDto } from './dto/post.dto';
 import { PostRepository } from './post.repository';
+import { FileUploadService } from '../file-upload/file-upload.service';
+import { CategoryService } from '../category/category.service';
 
 @Injectable()
 export class PostService {
-  constructor(private postRepository: PostRepository) {}
+  constructor(
+    private postRepository: PostRepository,
+    private fileUploadService: FileUploadService,
+    private categoriesService: CategoryService,
+  ) {}
 
   async create(body: PostDto): Promise<PostEntity> {
+    await this.categoriesService.createMany(body.categories);
     return await this.postRepository.save(body);
   }
 
@@ -82,6 +89,9 @@ export class PostService {
   }
 
   async delete(id: string) {
-    return await this.postRepository.delete(id);
+    const post = await this.postRepository.findOneOrFail(id);
+    await this.fileUploadService.deletePost(post.id);
+    await this.categoriesService.deletePost(post.id);
+    return await this.postRepository.delete(post.id);
   }
 }

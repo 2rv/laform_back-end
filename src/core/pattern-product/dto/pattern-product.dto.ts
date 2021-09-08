@@ -12,6 +12,7 @@ import {
   ArrayMaxSize,
 } from 'class-validator';
 import { CategoryDto } from 'src/core/category/dto/category.dto';
+import { FileDto } from 'src/core/file-upload/dto/file-dto';
 import { CreateSizeDto } from 'src/core/sizes/dto/create-size.dto';
 
 export class PatternProductDto {
@@ -43,7 +44,7 @@ export class PatternProductDto {
 
   @ArrayNotEmpty()
   @IsArray()
-  images: [{ id: string }];
+  images: [FileDto];
 
   @IsOptional()
   @IsNumber()

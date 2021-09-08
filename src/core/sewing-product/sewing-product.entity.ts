@@ -77,6 +77,7 @@ export class SewingProductEntity {
   @Column({
     type: 'varchar',
     name: 'modifier',
+    nullable: true,
   })
   modifier!: string;
 

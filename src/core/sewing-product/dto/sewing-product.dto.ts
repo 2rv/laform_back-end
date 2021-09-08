@@ -12,6 +12,7 @@ import {
 } from 'class-validator';
 import { CategoryDto } from 'src/core/category/dto/category.dto';
 import { CreateColorDto } from 'src/core/colors/dto/create-color.dto';
+import { FileDto } from 'src/core/file-upload/dto/file-dto';
 import { CreateSizeDto } from 'src/core/sizes/dto/create-size.dto';
 
 export class SewingProductDto {
@@ -49,7 +50,7 @@ export class SewingProductDto {
   @IsArray()
   @ArrayMinSize(1)
   @ArrayMaxSize(6)
-  images: [];
+  images: [FileDto];
 
   @IsOptional()
   @IsNumber()
