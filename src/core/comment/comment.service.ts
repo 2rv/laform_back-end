@@ -64,6 +64,10 @@ export class CommentService {
     return await this.subCommentRepository.findAll(postId, commentId);
   }
 
+  async getAllUserComments(userId): Promise<CommentEntity[]> {
+    return await this.commentRepository.findAllUserComments(userId);
+  }
+
   async getOne(id: string) {
     const result = await this.commentRepository.findOneComment(id);
     const sub = await this.subCommentRepository.findAllToOneComment(id);

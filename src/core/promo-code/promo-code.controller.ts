@@ -5,6 +5,7 @@ import {
   UseGuards,
   ValidationPipe,
   Get,
+  Delete,
 } from '@nestjs/common';
 import { PromoCodeEntity } from './promo-code.entity';
 import { PromoCodeService } from './promo-code.service';
@@ -44,7 +45,7 @@ export class PromoCodeController {
     return await this.promoCodeService.check(checkPromoCodeDto);
   }
 
-  @Post('/delete')
+  @Delete('/delete')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async delete(@Body(ValidationPipe) body: { id: string }): Promise<void> {

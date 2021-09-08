@@ -24,14 +24,14 @@ export class UserInfoController {
   constructor(private userInfoService: UserInfoService) {}
 
   @Get('/get')
-  @Roles(USER_ROLE.USER)
+  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async get(@GetUser() user: UserEntity): Promise<UserInfoEntity> {
     return this.userInfoService.findOne(user);
   }
 
   @Patch('/update')
-  @Roles(USER_ROLE.USER)
+  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async updateUserDeliveryInfo(
     @GetUser() user: UserEntity,

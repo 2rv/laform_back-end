@@ -25,6 +25,16 @@ export class CommentRepository extends Repository<CommentEntity> {
       });
   }
 
+  async findAllUserComments(userId): Promise<CommentEntity[]> {
+    return await this.createQueryBuilder('comment')
+      .leftJoinAndSelect('comment.postId', 'post_id')
+      .leftJoinAndSelect('comment.masterClassId', 'master_class_id')
+      .leftJoinAndSelect('comment.sewingProductId', 'sewing_product_id')
+      .leftJoinAndSelect('comment.patternProductId', 'pattern_product_id')
+      .where('comment.userId = :userId', { userId })
+      .getMany();
+  }
+
   async findOneComment(id: string): Promise<CommentEntity> {
     return await this.createQueryBuilder('comment')
       .leftJoin('comment.userId', 'user_id')

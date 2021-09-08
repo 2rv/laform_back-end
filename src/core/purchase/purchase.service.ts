@@ -48,15 +48,19 @@ export class PurchaseService {
     });
   }
 
-  async getAll(size: number, page: number): Promise<PurchaseEntity[]> {
-    return await this.purchaseRepository.getAll(size, page);
+  async getAll(
+    size: number,
+    page: number,
+    orderNumber: string,
+  ): Promise<{ purchases: PurchaseEntity[]; total: number; }> {
+    return await this.purchaseRepository.getAll(size, page, orderNumber);
   }
 
   async getAllForUser(
     size: number,
     page: number,
     userId,
-  ): Promise<PurchaseEntity[]> {
+  ): Promise<{ purchases: PurchaseEntity[]; total: number }> {
     return await this.purchaseRepository.getAllForUser(size, page, userId);
   }
 
