@@ -97,4 +97,7 @@ export class FileUploadService {
   async deleteSewingGoods(id) {
     await this.fileRepository.delete({ sewingProductId: id });
   }
+  async deletePost(id) {
+    await this.fileRepository.delete({ postId: id });
+  }
 }
