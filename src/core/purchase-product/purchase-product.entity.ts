@@ -66,13 +66,6 @@ export class PurchaseProductEntity {
 
   @Column({
     type: 'varchar',
-    name: 'purchase_product_name',
-    nullable: true,
-  })
-  purchaseProductName: string;
-
-  @Column({
-    type: 'varchar',
     name: 'quantity',
     nullable: true,
   })
