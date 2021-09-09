@@ -77,18 +77,21 @@ export class SewingProductEntity {
   @Column({
     type: 'varchar',
     name: 'modifier',
+    nullable: true,
   })
   modifier!: string;
 
   @Column({
-    type: 'json',
+    type: 'int',
     name: 'type',
+    default: 3,
   })
-  type!: object;
+  type!: number;
 
   @Column({
     type: 'int',
     name: 'discount',
+    default: 0,
   })
   discount!: number;
 

@@ -62,6 +62,13 @@ export class CommentController {
     return await this.commentService.updateSub(id, body);
   }
 
+  @Get('get')
+  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getAll(@GetUser() user: UserEntity): Promise<CommentEntity[]> {
+    return await this.commentService.getAllUserComments(user.id);
+  }
+
   @Get('get/:id')
   async getOne(@Param('id') id: string): Promise<CommentEntity> {
     return await this.commentService.getOne(id);

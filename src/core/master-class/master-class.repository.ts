@@ -34,6 +34,9 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
       .leftJoin('comment.userId', 'userId')
       .leftJoin('comment.subComment', 'subComment')
       .leftJoin('subComment.userId', 'user')
+      .leftJoin('master_class.images', 'images')
+      .leftJoin('master_class.programs', 'programs')
+      .leftJoin('master_class.categories', 'categories')
       .select([
         'master_class.id',
         'master_class.titleRu',
@@ -42,10 +45,14 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'master_class.discount',
         'master_class.type',
         'master_class.pinned',
+        'master_class.masterClassArticle',
         'comment',
         'userId.login',
         'subComment',
         'user.login',
+        'images',
+        'categories',
+        'programs',
       ])
       .limit(take)
       .offset(skip)
@@ -106,6 +113,9 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
       .leftJoin('comment.userId', 'userId')
       .leftJoin('comment.subComment', 'subComment')
       .leftJoin('subComment.userId', 'user')
+      .leftJoin('master_class.images', 'images')
+      .leftJoin('master_class.programs', 'programs')
+      .leftJoin('master_class.categories', 'categories')
       .select([
         'master_class.id',
         'master_class.titleEn',
@@ -114,10 +124,14 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'master_class.discount',
         'master_class.type',
         'master_class.pinned',
+        'master_class.masterClassArticle',
         'comment',
         'userId.login',
         'subComment',
         'user.login',
+        'images',
+        'programs',
+        'categories',
       ])
       .limit(take)
       .offset(skip)

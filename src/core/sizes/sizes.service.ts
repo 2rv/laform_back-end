@@ -45,6 +45,12 @@ export class SizesService {
     } else await this.sizesRepository.delete(id);
   }
 
+  async deletePatternProduct(id) {
+    await this.sizesRepository.delete({ patternProductId: id });
+  }
+  async deleteSewingGoods(id) {
+    await this.sizesRepository.delete({ sewingProductId: id });
+  }
   async deleteMany(body: DeleteManySizesDto) {
     const sizes = await this.sizesRepository.findByIds(body.sizes);
     const result = sizes.map(({ id }) => id);

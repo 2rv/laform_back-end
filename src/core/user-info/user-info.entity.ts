@@ -5,12 +5,12 @@ import {
   Column,
   OneToOne,
   JoinColumn,
-  ManyToOne,
 } from 'typeorm';
 
 import { UserEntity } from '../user/user.entity';
 
 import { DELIVERY_TYPE } from './enum/delivery-type.enum';
+import { PAYMENT_TYPE } from './enum/payment-type.enum';
 
 @Entity({ name: 'user_info' })
 export class UserInfoEntity extends BaseEntity {
@@ -54,4 +54,12 @@ export class UserInfoEntity extends BaseEntity {
     nullable: false,
   })
   deliveryType: DELIVERY_TYPE;
+
+  @Column({
+    type: 'enum',
+    enum: PAYMENT_TYPE,
+    default: PAYMENT_TYPE.ONLINE,
+    nullable: false,
+  })
+  paymentType: PAYMENT_TYPE;
 }

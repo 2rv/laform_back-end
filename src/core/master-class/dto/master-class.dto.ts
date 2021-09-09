@@ -6,8 +6,13 @@ import {
   IsNumber,
   IsObject,
   IsBoolean,
+  Min,
+  Max,
+  ArrayMinSize,
+  ArrayMaxSize,
 } from 'class-validator';
 import { CategoryDto } from 'src/core/category/dto/category.dto';
+import { FileDto } from 'src/core/file-upload/dto/file-dto';
 import { CreateProgramDto } from 'src/core/programs/dto/create-program.dto';
 
 export class MasterClassDto {
@@ -29,6 +34,8 @@ export class MasterClassDto {
 
   @IsNotEmpty()
   @IsArray()
+  @ArrayMinSize(1)
+  @ArrayMaxSize(5)
   categories: [CategoryDto];
 
   @IsNotEmpty()
@@ -37,10 +44,14 @@ export class MasterClassDto {
 
   @IsNotEmpty()
   @IsArray()
-  images: [];
+  @ArrayMinSize(1)
+  @ArrayMaxSize(6)
+  images: [FileDto];
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
+  @Min(0)
+  @Max(100)
   discount: number;
 
   @IsOptional()
@@ -48,8 +59,22 @@ export class MasterClassDto {
   modifier: string;
 
   @IsNotEmpty()
+  @IsNumber()
+  @Min(0)
+  @Max(0)
+  type: number;
+
+  @IsOptional()
+  @IsArray()
+  recommendations: [];
+
+  @IsNotEmpty()
   @IsObject()
-  type: { id: number; tid: string };
+  masterClassArticle: {
+    blocks: [];
+    time: number;
+    version: string;
+  };
 
   @IsOptional()
   @IsBoolean()

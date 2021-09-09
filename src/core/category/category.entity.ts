@@ -39,6 +39,12 @@ export class CategoryEntity {
   })
   masterClassId: MasterClassEntity;
 
+  @ManyToOne(() => PostEntity, (res: PostEntity) => res.categories)
+  @JoinColumn({
+    name: 'postId',
+  })
+  postId: PostEntity;
+
   @ManyToOne(
     () => PatternProductEntity,
     (pattern: PatternProductEntity) => pattern.categories,
@@ -56,9 +62,6 @@ export class CategoryEntity {
     name: 'sewingProductId',
   })
   sewingProductId: SewingProductEntity;
-
-  @OneToMany(() => PostEntity, (post: PostEntity) => post.categoryId)
-  post: PostEntity[];
 
   @OneToMany(() => SliderEntity, (slider: SliderEntity) => slider.categoryId)
   slider: SliderEntity[];

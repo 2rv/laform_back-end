@@ -9,6 +9,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .leftJoin('comment.userId', 'userId')
       .leftJoin('comment.subComment', 'subComment')
       .leftJoin('subComment.userId', 'user')
+      .leftJoin('sewing_product.images', 'images')
       .select([
         'sewing_product.id',
         'sewing_product.titleRu',
@@ -22,6 +23,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'userId.login',
         'subComment',
         'user.login',
+        'images',
       ])
       .where('sewing_product.id = :id', { id })
       .getOne();
@@ -35,6 +37,10 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .leftJoin('comment.userId', 'userId')
       .leftJoin('comment.subComment', 'subComment')
       .leftJoin('subComment.userId', 'user')
+      .leftJoin('sewing_product.images', 'images')
+      .leftJoin('sewing_product.sizes', 'sizes')
+      .leftJoin('sewing_product.colors', 'colors')
+      .leftJoin('sewing_product.categories', 'categories')
       .select([
         'sewing_product.id',
         'sewing_product.titleRu',
@@ -48,6 +54,10 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'userId.login',
         'subComment',
         'user.login',
+        'images',
+        'sizes',
+        'colors',
+        'categories',
       ])
       .limit(take)
       .offset(skip)
@@ -110,6 +120,10 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .leftJoin('comment.userId', 'userId')
       .leftJoin('comment.subComment', 'subComment')
       .leftJoin('subComment.userId', 'user')
+      .leftJoin('sewing_product.images', 'images')
+      .leftJoin('sewing_product.sizes', 'sizes')
+      .leftJoin('sewing_product.colors', 'colors')
+      .leftJoin('sewing_product.categories', 'categories')
       .select([
         'sewing_product.id',
         'sewing_product.titleEn',
@@ -123,6 +137,10 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'userId.login',
         'subComment',
         'user.login',
+        'images',
+        'sizes',
+        'colors',
+        'categories',
       ])
       .limit(take)
       .offset(skip)

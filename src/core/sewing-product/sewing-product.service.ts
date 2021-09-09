@@ -19,44 +19,19 @@ export class SewingProductService {
   ) {}
 
   async create(body: SewingProductDto): Promise<SewingProductEntity> {
-    const result = await this.sewingProductRepository.save(body);
-    const categories = await this.categoriesService.createMany(body.categories);
+    await this.categoriesService.createMany(body.categories);
+    await this.sizesService.createMany(body.sizes);
+    await this.colorsService.createMany(body.colors);
+    return await this.sewingProductRepository.save(body);
+  }
 
-    const sizes = await this.sizesService.createMany(body.sizes);
-    if (sizes) {
-      for (let key in sizes) {
-        await this.sizesService.update(sizes[key], {
-          sewingProductId: result.id,
-        });
-      }
-    }
-    const colors = await this.colorsService.createMany(body.colors);
-
-    if (colors) {
-      for (let key in colors) {
-        await this.colorsService.update(colors[key], {
-          sewingProductId: result.id,
-        });
-      }
-    }
-
-    if (body.images) {
-      for (let file of body.images) {
-        await this.fileUploadService.update(file, {
-          sewingProductId: result.id,
-        });
-      }
-    }
-
-    if (categories) {
-      for (const key in categories) {
-        await this.categoriesService.update(categories[key], {
-          sewingProductId: result.id,
-        });
-      }
-    }
-
-    return result;
+  async delete(id: string) {
+    const sewingProduct = await this.sewingProductRepository.findOneOrFail(id);
+    await this.categoriesService.deleteSewingGoods(sewingProduct.id);
+    await this.fileUploadService.deleteSewingGoods(sewingProduct.id);
+    await this.colorsService.deleteSewingGoods(sewingProduct.id);
+    await this.sizesService.deleteSewingGoods(sewingProduct.id);
+    return await this.sewingProductRepository.delete(sewingProduct.id);
   }
 
   async update(id: string, body: UpdateSewingProductDto) {
@@ -90,34 +65,10 @@ export class SewingProductService {
     size: number,
     page: number,
   ): Promise<SewingProductEntity[]> {
-    if (query === 'ru') {
-      const results = await this.sewingProductRepository.findAllRu(size, page);
-      for (let result of results) {
-        result.images = await this.fileUploadService.getAllSewingProducts(
-          result.id,
-        );
-
-        result.sizes = await this.sizesService.getAllSewingProducts(result.id);
-
-        result.colors = await this.colorsService.getAllSewingProducts(
-          result.id,
-        );
-
-        result.categories = await this.categoriesService.getAllSewingProducts(
-          result.id,
-        );
-      }
-      return results;
-    }
-    if (query === 'en') {
-      const results = await this.sewingProductRepository.findAllEn(size, page);
-      for (let result of results) {
-        result.images = await this.fileUploadService.getAllSewingProducts(
-          result.id,
-        );
-      }
-      return results;
-    }
+    if (query === 'ru')
+      return await this.sewingProductRepository.findAllRu(size, page);
+    if (query === 'en')
+      return await this.sewingProductRepository.findAllEn(size, page);
   }
 
   async getPinned(query: string): Promise<SewingProductEntity[]> {
@@ -149,23 +100,5 @@ export class SewingProductService {
       }
       return results;
     }
-  }
-
-  async delete(id: string) {
-    const images = await this.fileUploadService.getAllSewingProducts(id);
-    const colors = await this.colorsService.getAllSewingProducts(id);
-    const sizes = await this.sizesService.getAllSewingProducts(id);
-
-    for (let image of images) {
-      await this.fileUploadService.update(image.id, { sewingProductId: null });
-    }
-    for (let color of colors) {
-      await this.colorsService.update(color.id, { sewingProductId: null });
-    }
-    for (let size of sizes) {
-      await this.sizesService.update(size.id, { sewingProductId: null });
-    }
-
-    return await this.sewingProductRepository.delete(id);
   }
 }

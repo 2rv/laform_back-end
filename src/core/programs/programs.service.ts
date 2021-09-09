@@ -18,8 +18,7 @@ export class ProgramsService {
   }
 
   async update(id: string, body) {
-    const result = await this.programsRepository.update(id, body);
-    return result;
+    return await this.programsRepository.update(id, body);
   }
 
   async getAllMasterClasses(id: string): Promise<ProgramsEntity[]> {
@@ -49,5 +48,9 @@ export class ProgramsService {
     } else {
       return await this.programsRepository.delete(result);
     }
+  }
+
+  async deleteMasterClass(id) {
+    await this.programsRepository.delete({ masterClassId: id });
   }
 }

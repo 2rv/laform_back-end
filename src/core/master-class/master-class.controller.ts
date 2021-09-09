@@ -1,4 +1,3 @@
-import { MasterClassDto } from './dto/master-class.dto';
 import {
   Body,
   Controller,
@@ -18,6 +17,7 @@ import { USER_ROLE } from '../user/enum/user-role.enum';
 import { MasterClassService } from './master-class.service';
 import { MasterClassGuard } from './guard/master-class.guard';
 import { LangValidationPipe } from 'src/common/guards/lang.guard';
+import { MasterClassDto } from './dto/master-class.dto';
 import { UpdateMasterClassDto } from './dto/update-master-class.dto';
 
 @Controller('master-class')
