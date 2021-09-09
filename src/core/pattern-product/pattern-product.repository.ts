@@ -9,6 +9,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .leftJoin('comment.userId', 'userId')
       .leftJoin('comment.subComment', 'subComment')
       .leftJoin('subComment.userId', 'user')
+      .leftJoin('pattern_product.filePdf', 'fildePdf')
       .where('pattern_product.id = :id', { id })
       .select([
         'pattern_product.id',
@@ -23,6 +24,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'userId.login',
         'subComment',
         'user.login',
+        'fildePdf'
       ])
       .getOne();
   }
@@ -94,6 +96,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .leftJoin('comment.userId', 'userId')
       .leftJoin('comment.subComment', 'subComment')
       .leftJoin('subComment.userId', 'user')
+      .leftJoin('pattern_product.filePdf', 'fildePdf')
       .where('pattern_product.id = :id', { id })
       .select([
         'pattern_product.id',
@@ -109,6 +112,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'userId.login',
         'subComment',
         'user.login',
+        'filePdf',
       ])
       .getOne();
   }
@@ -124,6 +128,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .leftJoin('pattern_product.images', 'images')
       .leftJoin('pattern_product.sizes', 'sizes')
       .leftJoin('pattern_product.categories', 'categories')
+      .leftJoin('pattern_product.filePdf', 'fildePdf')
       .select([
         'pattern_product.id',
         'pattern_product.titleRu',
@@ -141,6 +146,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'images',
         'sizes',
         'categories',
+        'filePdf',
       ])
       .limit(take)
       .offset(skip)
