@@ -45,11 +45,7 @@ export class SewingProductService {
 
   async getOne(id: string, query: string): Promise<SewingProductEntity> {
     if (query === 'ru') {
-      const result = await this.sewingProductRepository.findOneRu(id);
-      result.images = await this.fileUploadService.getAllSewingProducts(
-        result.id,
-      );
-      return result;
+      return await this.sewingProductRepository.findOneRu(id);
     }
     if (query === 'en') {
       const result = await this.sewingProductRepository.findOneEn(id);

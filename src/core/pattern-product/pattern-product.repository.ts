@@ -5,24 +5,31 @@ import { EntityRepository, Repository } from 'typeorm';
 export class PatternProductRepository extends Repository<PatternProductEntity> {
   async findOneRu(id: string): Promise<PatternProductEntity> {
     return await this.createQueryBuilder('pattern_product')
+      .where('pattern_product.id = :id', { id })
       .leftJoin('pattern_product.comment', 'comment')
       .leftJoin('comment.userId', 'userId')
       .leftJoin('comment.subComment', 'subComment')
       .leftJoin('subComment.userId', 'user')
-      .where('pattern_product.id = :id', { id })
+      .leftJoin('pattern_product.images', 'images')
+      .leftJoin('pattern_product.sizes', 'sizes')
+      .leftJoin('pattern_product.categories', 'categories')
       .select([
         'pattern_product.id',
         'pattern_product.titleRu',
         'pattern_product.descriptionRu',
-        'pattern_product.discount',
-        'pattern_product.modifier',
         'pattern_product.type',
-        'pattern_product.price',
+        'pattern_product.modifier',
+        'pattern_product.materialRu',
         'pattern_product.complexity',
+        'pattern_product.price',
+        'pattern_product.discount',
         'comment',
         'userId.login',
         'subComment',
         'user.login',
+        'images',
+        'sizes',
+        'categories',
       ])
       .getOne();
   }

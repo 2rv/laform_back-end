@@ -26,8 +26,8 @@ import { UserEntity } from '../user/user.entity';
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
-  @Post('/create') // работает правильно
-  //   @Roles(USER_ROLE.USER) - админы тоже люди
+  @Post('/create')
+  @Roles(USER_ROLE.USER, USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async save(
     @GetUser() user: UserEntity,
@@ -37,14 +37,14 @@ export class CommentController {
   }
 
   @Delete('delete/:id')
-  //   @Roles(USER_ROLE.USER) - админы тоже люди
+  @Roles(USER_ROLE.USER, USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async delete(@GetUser() user: UserEntity, @Param('id') id: string) {
     return await this.commentService.delete(id, user.id);
   }
 
-  @Post('sub/create/') // работает правильно
-  //   @Roles(USER_ROLE.USER) - админы тоже люди
+  @Post('sub/create/')
+  @Roles(USER_ROLE.USER, USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async saveSub(
     @GetUser() user: UserEntity,
@@ -54,22 +54,36 @@ export class CommentController {
   }
 
   @Delete('sub/delete/:id')
-  //   @Roles(USER_ROLE.USER) - админы тоже люди
+  @Roles(USER_ROLE.USER, USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async deleteSub(@GetUser() user: UserEntity, @Param('id') id: string) {
     return await this.commentService.deleteSub(id, user.id);
   }
 
-  //------------------------------------------------------
-
-  @Get('get/master-class/:id') // работает правильно
+  @Get('get/master-class/:id')
   async getMasterClassComment(
     @Param('id') id: string,
   ): Promise<CommentEntity[]> {
     return await this.commentService.getMasterClassComment(id);
   }
 
-  //------------------------------------------------------
+  @Get('get/pattern-product/:id')
+  async getPatternProductComment(
+    @Param('id') id: string,
+  ): Promise<CommentEntity[]> {
+    return await this.commentService.getPatternProductComment(id);
+  }
+
+  @Get('get/post/:id')
+  async getPostComment(@Param('id') id: string): Promise<CommentEntity[]> {
+    return await this.commentService.getPostComment(id);
+  }
+  @Get('get/sewing-product/:id')
+  async getSewingProductComment(
+    @Param('id') id: string,
+  ): Promise<CommentEntity[]> {
+    return await this.commentService.getSewingProductComment(id);
+  }
 
   @Patch('update/:id')
   @Roles(USER_ROLE.USER)

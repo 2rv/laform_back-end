@@ -5,6 +5,7 @@ import { EntityRepository, Repository } from 'typeorm';
 export class MasterClassRepository extends Repository<MasterClassEntity> {
   async findOneRu(id: string): Promise<MasterClassEntity> {
     return await this.createQueryBuilder('master_class')
+      .where('master_class.id = :id', { id })
       .leftJoin('master_class.comment', 'comment')
       .leftJoin('comment.userId', 'userId')
       .leftJoin('comment.subComment', 'subComment')
@@ -12,7 +13,6 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.programs', 'programs')
       .leftJoin('master_class.categories', 'categories')
-      .where('master_class.id = :id', { id })
       .select([
         'master_class.id',
         'master_class.titleRu',

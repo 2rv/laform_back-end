@@ -35,7 +35,8 @@ export class CommentService {
   }
 
   async createSub(body: SubCommentDto, userId): Promise<SubCommentEntity> {
-    return await this.subCommentRepository.save({ ...body, userId });
+    const result = await this.subCommentRepository.save({ ...body, userId });
+    return await this.subCommentRepository.findOneSubComment(result.id);
   }
 
   async deleteSub(id: string, userId: any) {
@@ -50,24 +51,19 @@ export class CommentService {
     } else return await this.subCommentRepository.delete(id);
   }
 
-  //------------------------------------------------------
-
-  async getPostComment(postId: string) {
-    const results = await this.commentRepository.findPostComment(postId);
-    for (let result of results) {
-      const sub = await this.getAllSubs(postId, result.id);
-      result.subComment = sub;
-    }
-    return results;
-  }
-
   async getMasterClassComment(id: string) {
-    const results = await this.commentRepository.findMasterClassComment(id);
-    // for (const result of results) {
-    //   const sub = await this.getAllSubs(id, result.id);
-    //   result.subComment = sub;
-    // }
-    return results;
+    return await this.commentRepository.findMasterClassComment(id);
+  }
+  async getPatternProductComment(id: string) {
+    return await this.commentRepository.findPatternProductComment(id);
+  }
+  async getPostComment(postId: string) {
+    return await this.commentRepository.findPostComment(postId);
+  }
+  async getSewingProductComment(sewingProductId: string) {
+    return await this.commentRepository.findSewingProductComment(
+      sewingProductId,
+    );
   }
 
   async update(id: string, body: UpdateCommentDto) {
