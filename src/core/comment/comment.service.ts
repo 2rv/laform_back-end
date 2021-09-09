@@ -18,11 +18,56 @@ export class CommentService {
   ) {}
 
   async create(body: CommentDto, userId): Promise<CommentEntity> {
-    return await this.commentRepository.save({ ...body, userId });
+    const result = await this.commentRepository.save({ ...body, userId });
+    return await this.commentRepository.findOneComment(result.id);
+  }
+
+  async delete(id: string, userId: number) {
+    const result = await this.commentRepository.findOne({
+      where: {
+        id: id,
+        userId: userId,
+      },
+    });
+    if (!result) {
+      throw new BadRequestException(COMMENT_ERROR.COMMENT_NOT_FOUND);
+    } else return await this.commentRepository.delete(id);
   }
 
   async createSub(body: SubCommentDto, userId): Promise<SubCommentEntity> {
     return await this.subCommentRepository.save({ ...body, userId });
+  }
+
+  async deleteSub(id: string, userId: any) {
+    const result = await this.subCommentRepository.findOne({
+      where: {
+        id: id,
+        userId: userId,
+      },
+    });
+    if (!result) {
+      throw new BadRequestException(COMMENT_ERROR.COMMENT_NOT_FOUND);
+    } else return await this.subCommentRepository.delete(id);
+  }
+
+  //------------------------------------------------------
+
+  async getPostComment(postId: string) {
+    const results = await this.commentRepository.findPostComment(postId);
+    for (let result of results) {
+      const sub = await this.getAllSubs(postId, result.id);
+      result.subComment = sub;
+    }
+    return results;
+  }
+
+  async getMasterClassComment(id: string) {
+    const results = await this.commentRepository.findMasterClassComment(id);
+    // for (const result of results) {
+    //   const sub = await this.getAllSubs(id, result.id);
+    //   result.subComment = sub;
+    // }
+    return results;
   }
 
   async update(id: string, body: UpdateCommentDto) {
@@ -51,15 +96,6 @@ export class CommentService {
     return await this.subCommentRepository.findOne(id);
   }
 
-  async getAll(postId: string) {
-    const results = await this.commentRepository.findAll(postId);
-    for (let result of results) {
-      const sub = await this.getAllSubs(postId, result.id);
-      result.subComment = sub;
-    }
-    return results;
-  }
-
   async getAllSubs(postId: string, commentId: string) {
     return await this.subCommentRepository.findAll(postId, commentId);
   }
@@ -75,29 +111,5 @@ export class CommentService {
     if (!result) {
       throw new BadRequestException(COMMENT_ERROR.COMMENT_NOT_FOUND);
     } else return result;
-  }
-
-  async delete(id: string, userId: number): Promise<void> {
-    const result = await this.commentRepository.findOne({
-      where: {
-        id: id,
-        userId: userId,
-      },
-    });
-    if (!result) {
-      throw new BadRequestException(COMMENT_ERROR.COMMENT_NOT_FOUND);
-    } else await this.commentRepository.delete(id);
-  }
-
-  async deleteSub(id: string, body: any): Promise<void> {
-    const result = await this.subCommentRepository.findOne({
-      where: {
-        id: id,
-        userId: body.userId,
-      },
-    });
-    if (!result) {
-      throw new BadRequestException(COMMENT_ERROR.COMMENT_NOT_FOUND);
-    } else await this.subCommentRepository.delete(id);
   }
 }

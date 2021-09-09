@@ -9,6 +9,9 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
       .leftJoin('comment.userId', 'userId')
       .leftJoin('comment.subComment', 'subComment')
       .leftJoin('subComment.userId', 'user')
+      .leftJoin('master_class.images', 'images')
+      .leftJoin('master_class.programs', 'programs')
+      .leftJoin('master_class.categories', 'categories')
       .where('master_class.id = :id', { id })
       .select([
         'master_class.id',
@@ -18,10 +21,14 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'master_class.discount',
         'master_class.type',
         'master_class.pinned',
+        'master_class.masterClassArticle',
         'comment',
         'userId.login',
         'subComment',
         'user.login',
+        'images',
+        'categories',
+        'programs',
       ])
       .getOne();
   }

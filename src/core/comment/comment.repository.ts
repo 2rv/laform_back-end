@@ -3,10 +3,35 @@ import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(CommentEntity)
 export class CommentRepository extends Repository<CommentEntity> {
-  async findAll(postId: string): Promise<CommentEntity[]> {
+  async findPostComment(postId: string): Promise<CommentEntity[]> {
+    return await this.createQueryBuilder('comment')
+      .leftJoin('comment.userId', 'user')
+      .where('comment.postId = :postId', { postId })
+      .select([
+        'comment.id',
+        'comment.text',
+        'comment.createDate',
+        'comment.postId',
+        'user.login',
+        'user.id',
+      ])
+      .getMany()
+      .then((res) => {
+        console.log(res);
+        return res;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  }
+
+  async findMasterClassComment(
+    masterClassId: string,
+  ): Promise<CommentEntity[]> {
     return await this.createQueryBuilder('comment')
       .leftJoin('comment.userId', 'user_id')
-      .where('comment.postId = :postId', { postId })
+      .leftJoin('comment.subComment', 'subComment')
+      .where('comment.masterClassId = :masterClassId', { masterClassId })
       .select([
         'comment.id',
         'comment.text',
@@ -14,6 +39,7 @@ export class CommentRepository extends Repository<CommentEntity> {
         'comment.postId',
         'user_id.login',
         'user_id.id',
+        'subComment',
       ])
       .getMany()
       .then((res) => {

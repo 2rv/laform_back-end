@@ -26,8 +26,8 @@ import { UserEntity } from '../user/user.entity';
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
-  @Post('/create')
-  @Roles(USER_ROLE.USER)
+  @Post('/create') // работает правильно
+  //   @Roles(USER_ROLE.USER) - админы тоже люди
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async save(
     @GetUser() user: UserEntity,
@@ -36,8 +36,15 @@ export class CommentController {
     return await this.commentService.create(body, user.id);
   }
 
-  @Post('sub/create/')
-  @Roles(USER_ROLE.USER)
+  @Delete('delete/:id')
+  //   @Roles(USER_ROLE.USER) - админы тоже люди
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async delete(@GetUser() user: UserEntity, @Param('id') id: string) {
+    return await this.commentService.delete(id, user.id);
+  }
+
+  @Post('sub/create/') // работает правильно
+  //   @Roles(USER_ROLE.USER) - админы тоже люди
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async saveSub(
     @GetUser() user: UserEntity,
@@ -45,6 +52,24 @@ export class CommentController {
   ) {
     return await this.commentService.createSub(body, user.id);
   }
+
+  @Delete('sub/delete/:id')
+  //   @Roles(USER_ROLE.USER) - админы тоже люди
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async deleteSub(@GetUser() user: UserEntity, @Param('id') id: string) {
+    return await this.commentService.deleteSub(id, user.id);
+  }
+
+  //------------------------------------------------------
+
+  @Get('get/master-class/:id') // работает правильно
+  async getMasterClassComment(
+    @Param('id') id: string,
+  ): Promise<CommentEntity[]> {
+    return await this.commentService.getMasterClassComment(id);
+  }
+
+  //------------------------------------------------------
 
   @Patch('update/:id')
   @Roles(USER_ROLE.USER)
@@ -72,20 +97,5 @@ export class CommentController {
   @Get('get/:id')
   async getOne(@Param('id') id: string): Promise<CommentEntity> {
     return await this.commentService.getOne(id);
-  }
-
-  @Delete('delete/:id')
-  @Roles(USER_ROLE.USER)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async delete(@GetUser() user: UserEntity, @Param('id') id: string) {
-    return await this.commentService.delete(id, user.id);
-  }
-
-  @Delete('sub/delete/:id')
-  @Roles(USER_ROLE.USER)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async deleteSub(@Param('id') id: string, @Body() body, @Request() req) {
-    body.userId = req.user.id;
-    return await this.commentService.deleteSub(id, body);
   }
 }
