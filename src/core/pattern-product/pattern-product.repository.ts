@@ -38,6 +38,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .leftJoin('pattern_product.images', 'images')
       .leftJoin('pattern_product.sizes', 'sizes')
       .leftJoin('pattern_product.categories', 'categories')
+      .leftJoin('pattern_product.filePdf', 'filePdf')
       .select([
         'pattern_product.id',
         'pattern_product.titleRu',
@@ -55,6 +56,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'images',
         'sizes',
         'categories',
+        'filePdf',
       ])
       .limit(take)
       .offset(skip)

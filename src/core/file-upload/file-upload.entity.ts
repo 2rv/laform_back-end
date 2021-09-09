@@ -27,6 +27,15 @@ export class FileUploadEntity {
   @OneToMany(() => SliderEntity, (slider: SliderEntity) => slider.imageUrl)
   slider: SliderEntity[];
 
+  @OneToOne(
+    () => PatternProductEntity,
+    (res: PatternProductEntity) => res.filePdf,
+  )
+  @JoinColumn({
+    name: 'file_pdf_pattern_product_id',
+  })
+  filePdfPatternProductId: PatternProductEntity;
+
   @OneToOne(() => PostEntity, (res: PostEntity) => res.image)
   @JoinColumn({
     name: 'post_id',

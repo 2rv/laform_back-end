@@ -46,6 +46,8 @@ export class PatternProductDto {
   @IsArray()
   images: [FileDto];
 
+  filePdf: FileDto;
+
   @IsOptional()
   @IsNumber()
   @Min(0)

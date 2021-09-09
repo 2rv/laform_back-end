@@ -5,6 +5,7 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
 } from 'typeorm';
 import { CategoryEntity } from '../category/category.entity';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
@@ -48,6 +49,12 @@ export class PatternProductEntity {
       purchaseProduct.patternProductId,
   )
   purchaseProduct: PurchaseProductEntity[];
+
+  @OneToOne(
+    () => FileUploadEntity,
+    (res: FileUploadEntity) => res.filePdfPatternProductId,
+  )
+  filePdf: FileUploadEntity;
 
   @Column({
     type: 'varchar',
