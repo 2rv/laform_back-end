@@ -109,6 +109,13 @@ export class SewingProductEntity {
   pinned?: boolean;
 
   @Column({
+    type: 'bool',
+    name: 'deleted',
+    default: false,
+  })
+  deleted?: boolean;
+
+  @Column({
     type: 'int',
     name: 'like_count',
     nullable: true,

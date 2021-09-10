@@ -9,6 +9,7 @@ import {
   ArrayNotEmpty,
   ArrayMinSize,
   ArrayMaxSize,
+  IsBoolean,
 } from 'class-validator';
 import { CategoryDto } from 'src/core/category/dto/category.dto';
 import { CreateColorDto } from 'src/core/colors/dto/create-color.dto';
@@ -72,4 +73,8 @@ export class SewingProductDto {
   @IsNumber()
   @Min(0)
   count: number;
+
+  @IsOptional()
+  @IsBoolean()
+  deleted: boolean;
 }
