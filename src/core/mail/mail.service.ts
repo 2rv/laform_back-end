@@ -1,10 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
+
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { NotificationEntity } from '../notification/notification.entity';
+
 import * as path from 'path';
 
 @Injectable()
 export class MailService {
-  constructor(private readonly mailerService: MailerService) {}
+  constructor(
+    @InjectRepository(NotificationEntity)
+    private notificationRepository: Repository<NotificationEntity>,
+    private readonly mailerService: MailerService,
+  ) {}
 
   async sendMessage(body: any, code: string) {
     return await this.mailerService
@@ -22,6 +31,7 @@ export class MailService {
         console.log(e);
       });
   }
+
   async sendRecoveryMessage(body: any, code: string) {
     return await this.mailerService
       .sendMail({
@@ -37,5 +47,20 @@ export class MailService {
       .catch((e) => {
         console.log(e);
       });
+  }
+
+  async sendNotification(body: { subject: string; html: string }) {
+    const recipients = await this.notificationRepository.find();
+    const mails = recipients.map((e) => e.email);
+    return await this.mailerService
+      .sendMail({
+        to: mails,
+        subject: body.subject,
+        template: path.join(path.resolve(), 'src/templates/notification.pug'),
+        context: {
+          html: body.html,
+        },
+      })
+      .catch((e) => console.log(e));
   }
 }
