@@ -41,11 +41,7 @@ export class MasterClassService {
 
   async getOne(id: string, query: string): Promise<MasterClassEntity> {
     if (query === 'ru') {
-      const result = await this.masterClassRepository.findOneRu(id);
-      result.images = await this.fileUploadService.getAllMasterClasses(
-        result.id,
-      );
-      return result;
+      return await this.masterClassRepository.findOneRu(id);
     }
     if (query === 'en') {
       const result = await this.masterClassRepository.findOneEn(id);

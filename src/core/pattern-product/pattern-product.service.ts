@@ -43,11 +43,7 @@ export class PatternProductService {
 
   async getOne(id: string, query: string): Promise<PatternProductEntity> {
     if (query === 'ru') {
-      const result = await this.patternProductRepository.findOneRu(id);
-      result.images = await this.fileUploadService.getAllPatternProducts(
-        result.id,
-      );
-      return result;
+      return await this.patternProductRepository.findOneRu(id);
     }
     if (query === 'en') {
       const result = await this.patternProductRepository.findOneEn(id);
