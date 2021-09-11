@@ -1,7 +1,6 @@
 import { PurchaseProductEntity } from './../purchase-product/purchase-product.entity';
 import { Injectable } from '@nestjs/common';
 
-import { BasketEntity } from './basket.entity';
 import { BasketRepository } from './basket.repository';
 import { PurchaseProductRepository } from './../purchase-product/purchase-product.repository';
 import { PurchaseProductDto } from '../purchase/dto/purchase-product.dto';

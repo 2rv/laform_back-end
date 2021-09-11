@@ -12,6 +12,10 @@ export class BasketRepository extends Repository<BasketEntity> {
         'patternProductId',
       )
       .leftJoinAndSelect('purchaseProducts.sewingProductId', 'sewingProductId')
+      .leftJoinAndSelect('sewingProductId.categories', 'categories')
+      .leftJoinAndSelect('sewingProductId.sizes', 'sizes')
+      .leftJoinAndSelect('sewingProductId.colors', 'colors')
+      .leftJoinAndSelect('sewingProductId.images', 'images')
       .where('basket.userId = :userId', { userId })
       .getOne();
   }
