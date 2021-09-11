@@ -39,6 +39,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .leftJoin('pattern_product.sizes', 'sizes')
       .leftJoin('pattern_product.categories', 'categories')
       .leftJoin('pattern_product.filePdf', 'filePdf')
+      .leftJoin('pattern_product.like', 'like')
       .select([
         'pattern_product.id',
         'pattern_product.titleRu',
@@ -52,6 +53,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'comment',
         'userId.login',
         'subComment',
+        'like',
         'user.login',
         'images',
         'sizes',

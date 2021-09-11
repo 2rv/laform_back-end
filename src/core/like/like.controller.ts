@@ -21,7 +21,7 @@ export class LikeController {
   constructor(private readonly likeService: LikeService) {}
 
   @Post('/create')
-  @Roles(USER_ROLE.USER)
+  @Roles(USER_ROLE.USER, USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async save(
     @GetUser() user: UserEntity,
@@ -31,14 +31,14 @@ export class LikeController {
   }
 
   @Get('/get/')
-  @Roles(USER_ROLE.USER)
+  @Roles(USER_ROLE.USER, USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getPosts(@GetUser() user: UserEntity): Promise<any> {
     return await this.likeService.getUserLikes(user.id);
   }
 
   @Delete('/delete')
-  @Roles(USER_ROLE.USER)
+  @Roles(USER_ROLE.USER, USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async delete(
     @GetUser() user: UserEntity,
