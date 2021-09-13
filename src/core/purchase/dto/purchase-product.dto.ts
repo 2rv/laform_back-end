@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsOptional } from 'class-validator';
+import { IsNumber, IsString, IsOptional } from 'class-validator';
 
 import { PatternProductEntity } from 'src/core/pattern-product/pattern-product.entity';
 import { SewingProductEntity } from 'src/core/sewing-product/sewing-product.entity';
@@ -41,4 +41,8 @@ export class PurchaseProductDto {
   @IsOptional()
   @IsString()
   program: string;
+
+  @IsOptional()
+  @IsNumber()
+  quantity: number;
 }

@@ -10,6 +10,7 @@ import {
   ArrayNotEmpty,
   ArrayMinSize,
   ArrayMaxSize,
+  IsBoolean,
 } from 'class-validator';
 import { CategoryDto } from 'src/core/category/dto/category.dto';
 import { FileDto } from 'src/core/file-upload/dto/file-dto';
@@ -86,4 +87,8 @@ export class PatternProductDto {
   @IsOptional()
   @IsArray()
   recomendations: [];
+
+  @IsOptional()
+  @IsBoolean()
+  deleted: boolean;
 }

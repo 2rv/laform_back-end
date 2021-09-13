@@ -65,11 +65,11 @@ export class PurchaseProductEntity {
   basketId: BasketEntity;
 
   @Column({
-    type: 'varchar',
     name: 'quantity',
     nullable: true,
+    default: 1,
   })
-  quantity?: string;
+  quantity?: number;
 
   @Column({
     type: 'varchar',

@@ -79,4 +79,8 @@ export class MasterClassDto {
   @IsOptional()
   @IsBoolean()
   pinned: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  deleted: boolean;
 }

@@ -5,11 +5,15 @@ import { EntityRepository, Repository } from 'typeorm';
 export class SewingProductRepository extends Repository<SewingProductEntity> {
   async findOneRu(id: string): Promise<SewingProductEntity> {
     return await this.createQueryBuilder('sewing_product')
+      .where('sewing_product.id = :id', { id })
       .leftJoin('sewing_product.comment', 'comment')
       .leftJoin('comment.userId', 'userId')
       .leftJoin('comment.subComment', 'subComment')
       .leftJoin('subComment.userId', 'user')
       .leftJoin('sewing_product.images', 'images')
+      .leftJoin('sewing_product.sizes', 'sizes')
+      .leftJoin('sewing_product.colors', 'colors')
+      .leftJoin('sewing_product.categories', 'categories')
       .select([
         'sewing_product.id',
         'sewing_product.titleRu',
@@ -24,8 +28,10 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'subComment',
         'user.login',
         'images',
+        'sizes',
+        'colors',
+        'categories',
       ])
-      .where('sewing_product.id = :id', { id })
       .getOne();
   }
 
@@ -59,6 +65,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'colors',
         'categories',
       ])
+      .where('sewing_product.deleted = false')
       .limit(take)
       .offset(skip)
       .getMany();
@@ -142,6 +149,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'colors',
         'categories',
       ])
+      .where('sewing_product.deleted = false')
       .limit(take)
       .offset(skip)
       .getMany();

@@ -21,3 +21,8 @@ AWS:
   REGION: 'us-east-2'
   BUCKET_NAME: 'testdownloadimagesbucket'
   ACL: 'public-read'
+
+MAIL:
+  EMAIL: 'laformecompany@gmail.com'
+  PASSWORD: 'laformecompany12'
+  HOST: 'smtp.gmail.com'
