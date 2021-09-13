@@ -52,21 +52,7 @@ export class LikeService {
   }
 
   async getUserLikes(userId) {
-    return await this.likeRepository.find({
-      where: {
-        userId: userId,
-      },
-      relations: [
-        'postId',
-        'postId.imageUrl',
-        'masterClassId',
-        'masterClassId.images',
-        'sewingProductId',
-        'sewingProductId.images',
-        'patternProductId',
-        'patternProductId.images',
-      ],
-    });
+    return await this.likeRepository.findUserLikes(userId);
   }
 
   async delete(body: LikeDto, userId) {
