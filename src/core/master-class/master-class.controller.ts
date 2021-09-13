@@ -19,6 +19,8 @@ import { MasterClassGuard } from './guard/master-class.guard';
 import { LangValidationPipe } from 'src/common/guards/lang.guard';
 import { MasterClassDto } from './dto/master-class.dto';
 import { UpdateMasterClassDto } from './dto/update-master-class.dto';
+import { GetUser } from '../user/decorator/get-account.decorator';
+import { UserEntity } from '../user/user.entity';
 
 @Controller('master-class')
 export class MasterClassController {
@@ -47,6 +49,18 @@ export class MasterClassController {
     @Query('page') page: number,
   ) {
     return await this.masterClassService.getAll(query, size, page);
+  }
+
+  @Get('auth/get/')
+  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getAllAuth(
+    @GetUser() user: UserEntity,
+    @Query(new LangValidationPipe()) query: string,
+    @Query('size') size: number,
+    @Query('page') page: number,
+  ) {
+    return await this.masterClassService.getAllAuth(query, size, page, user.id);
   }
 
   @Get('pinned/get/')

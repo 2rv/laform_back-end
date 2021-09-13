@@ -63,6 +63,18 @@ export class MasterClassService {
       return await this.masterClassRepository.findAllEn(size, page);
   }
 
+  async getAllAuth(
+    query: string,
+    size: number,
+    page: number,
+    userId: number,
+  ): Promise<MasterClassEntity[]> {
+    if (query === 'ru')
+      return await this.masterClassRepository.findAllRuAuth(size, page, userId);
+    if (query === 'en')
+      return await this.masterClassRepository.findAllEnAuth(size, page, userId);
+  }
+
   async getPinned(query: string): Promise<MasterClassEntity[]> {
     if (query === 'ru') {
       const results = await this.masterClassRepository.findPinnedRu();

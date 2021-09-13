@@ -67,6 +67,36 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
       .getMany();
   }
 
+  async findAllRuAuth(
+    size: number,
+    page: number,
+    userId: number,
+  ): Promise<MasterClassEntity[]> {
+    const take = size || 100;
+    const skip = (page - 1) * size || 0;
+    return await this.createQueryBuilder('master_class')
+      .leftJoin('master_class.images', 'images')
+      .leftJoin('master_class.programs', 'programs')
+      .leftJoin('master_class.categories', 'categories')
+      .leftJoin('master_class.like', 'like')
+      .where('like.userId = :userId', { userId })
+      .select([
+        'master_class.id',
+        'master_class.titleRu',
+        'master_class.modifier',
+        'master_class.discount',
+        'master_class.type',
+        'images',
+        'categories',
+        'programs',
+        'like',
+      ])
+      .where('master_class.deleted = false')
+      .limit(take)
+      .offset(skip)
+      .getMany();
+  }
+
   async findPinnedRu(): Promise<MasterClassEntity[]> {
     return await this.createQueryBuilder('master_class')
       .leftJoin('master_class.comment', 'comment')
@@ -140,6 +170,37 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'images',
         'programs',
         'categories',
+      ])
+      .where('master_class.deleted = false')
+      .limit(take)
+      .offset(skip)
+      .getMany();
+  }
+
+  async findAllEnAuth(
+    size: number,
+    page: number,
+    userId: number,
+  ): Promise<MasterClassEntity[]> {
+    const take = size || 100;
+    const skip = (page - 1) * size || 0;
+    return await this.createQueryBuilder('master_class')
+      .leftJoin('master_class.images', 'images')
+      .leftJoin('master_class.programs', 'programs')
+      .leftJoin('master_class.categories', 'categories')
+      .leftJoin('master_class.like', 'like')
+      .where('like.userId = :userId', { userId })
+      .select([
+        'master_class.id',
+        'master_class.titleEn',
+        'master_class.descriptionEn',
+        'master_class.modifier',
+        'master_class.discount',
+        'master_class.type',
+        'images',
+        'categories',
+        'programs',
+        'like',
       ])
       .where('master_class.deleted = false')
       .limit(take)
