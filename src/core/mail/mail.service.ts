@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { NotificationEntity } from '../notification/notification.entity';
 
 import * as path from 'path';
+import { UserEntity } from '../user/user.entity';
 
 @Injectable()
 export class MailService {
@@ -62,5 +63,24 @@ export class MailService {
         },
       })
       .catch((e) => console.log(e));
+  }
+
+  async sendPdf(user: UserEntity, body: any) {
+    return await this.mailerService
+      .sendMail({
+        to: user.email,
+        subject: `Laforme, скачивание pdf товара`,
+        html: `<p style="font-size: 20px;">PDF версия товара - <b>${body.productName}</b></p>`,
+        attachments: [
+          {
+            filename: `${body.productName}.pdf`,
+            path: body.productPdfUrl,
+            contentType: 'application/pdf',
+          },
+        ]
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }
 }
