@@ -53,6 +53,7 @@ export class UserRepository extends Repository<UserEntity> {
     const { email } = data;
 
     user.email = email;
+    user.emailConfirmed = false;
     try {
       await user.save();
     } catch (err) {

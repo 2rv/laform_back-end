@@ -43,4 +43,10 @@ export class AuthController {
   getAccountData(@GetAccount() user: UserEntity): Promise<AccountDataDto> {
     return this.authService.getAccountInfo(user);
   }
+
+  @Get('/update-login')
+  @UseGuards(AuthGuard(), AccountGuard)
+  checkUserConfirmed(@GetAccount() user: UserEntity): Promise<LoginInfoDto> {
+    return this.authService.updateLogin(user);
+  }
 }
