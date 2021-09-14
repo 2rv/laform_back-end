@@ -86,7 +86,7 @@ export class CommentController {
   }
 
   @Patch('update/:id')
-  @Roles(USER_ROLE.USER)
+  @Roles(USER_ROLE.USER, USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async update(@Param('id') id: string, @Body() body, @Request() req) {
     body.userId = req.user.id;
@@ -94,7 +94,7 @@ export class CommentController {
   }
 
   @Patch('sub/update/:id')
-  @Roles(USER_ROLE.USER)
+  @Roles(USER_ROLE.USER, USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async updateSub(@Param('id') id: string, @Body() body, @Request() req) {
     body.userId = req.user.id;

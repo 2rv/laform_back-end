@@ -89,7 +89,9 @@ export class CommentService {
     if (!result) {
       throw new BadRequestException(COMMENT_ERROR.COMMENT_NOT_FOUND);
     } else await this.subCommentRepository.update(id, body);
-    return await this.subCommentRepository.findOne(id);
+    return await this.subCommentRepository.findOne(id, {
+      relations: ['commentId'],
+    });
   }
 
   async getAllSubs(postId: string, commentId: string) {
