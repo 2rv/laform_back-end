@@ -39,7 +39,7 @@ export class UserVerificationService {
 
     await this.cacheManager.set(code, JSON.stringify(data));
 
-    console.log(code);
+    console.log(`VERIFICATION CODE: ${code}`);
     const messageDate = await this.mailService.sendMessage(
       { toMail: user.email },
       code,

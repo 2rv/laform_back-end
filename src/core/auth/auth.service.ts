@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 
@@ -61,9 +65,12 @@ export class AuthService {
   }
 
   async updateLogin(user: UserEntity): Promise<LoginInfoDto> {
-    const accessToken = await this.createJwt(user);
-
-    return { accessToken };
+    if (user.emailConfirmed) {
+      const accessToken = await this.createJwt(user);
+      return { accessToken };
+    } else {
+      throw new BadRequestException(AUTH_ERROR.USER_NOT_CONFIRMED);
+    }
   }
 
   async getAccountById(id: number): Promise<UserEntity> {

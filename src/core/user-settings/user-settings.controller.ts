@@ -35,12 +35,6 @@ export class UserSettingsController {
     );
   }
 
-  @Get('/email')
-  // @UseGuards(AuthGuard(), AccountGuard)
-  async getAccountEmail(@GetAccount() user: UserEntity): Promise<any> {
-    return 'hello';
-  }
-
   @Patch('/email')
   @UseGuards(AuthGuard(), AccountGuard, PasswordGuard)
   async updateUserEmail(
