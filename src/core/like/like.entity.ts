@@ -11,7 +11,15 @@ export class LikeEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => PostEntity, (post: PostEntity) => post.like)
+  @ManyToOne(() => UserEntity, (user: UserEntity) => user.like)
+  @JoinColumn({
+    name: 'user_id',
+  })
+  userId: UserEntity;
+
+  @ManyToOne(() => PostEntity, (post: PostEntity) => post.like, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({
     name: 'post_id',
   })
@@ -30,6 +38,7 @@ export class LikeEntity {
   @ManyToOne(
     () => SewingProductEntity,
     (sewingProduct: SewingProductEntity) => sewingProduct.like,
+    { onDelete: 'CASCADE' },
   )
   @JoinColumn({
     name: 'sewing_product_id',
@@ -39,15 +48,10 @@ export class LikeEntity {
   @ManyToOne(
     () => PatternProductEntity,
     (patternProduct: PatternProductEntity) => patternProduct.like,
+    { onDelete: 'CASCADE' },
   )
   @JoinColumn({
     name: 'pattern_product_id',
   })
   patternProductId: PatternProductEntity;
-
-  @ManyToOne(() => UserEntity, (user: UserEntity) => user.like)
-  @JoinColumn({
-    name: 'user_id',
-  })
-  userId: UserEntity;
 }

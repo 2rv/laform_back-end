@@ -18,7 +18,6 @@ export class ProgramsEntity {
     type: 'varchar',
     name: 'vendor_code',
     unique: true,
-    nullable: true,
   })
   vendorCode: string;
 

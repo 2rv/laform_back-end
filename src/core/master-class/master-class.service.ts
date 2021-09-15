@@ -23,6 +23,7 @@ export class MasterClassService {
   }
 
   async delete(id: string) {
+    // this.fileUploadService.delete(file, { masterClassId: id });
     return await this.masterClassRepository.delete(id);
   }
 

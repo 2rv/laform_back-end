@@ -14,11 +14,11 @@ export class ProgramsService {
   }
 
   async createMany(programs: CreateProgramDto[]): Promise<ProgramsEntity> {
-    programs.map((item) => {
+    const programsWithVendorCode = programs.map((item) => {
       item.vendorCode = ProgramsEntity.getVendorCode();
       return item;
     });
-    const result = await this.programsRepository.insert(programs);
+    const result = await this.programsRepository.insert(programsWithVendorCode);
     return result.raw;
   }
 

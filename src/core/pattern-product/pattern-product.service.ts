@@ -17,7 +17,12 @@ export class PatternProductService {
   ) {}
 
   async create(body: PatternProductDto): Promise<PatternProductEntity> {
-    if (body.sizes?.length > 0) await this.sizesService.createMany(body.sizes);
+    if (body.sizes?.length > 0) {
+      await this.sizesService.createMany(body.sizes);
+    }
+    if (body.type === 1) {
+      body.vendorCode = PatternProductEntity.getVendorCode();
+    }
     await this.categoriesService.createMany(body.categories);
     return await this.patternProductRepository.save(body);
   }
@@ -27,8 +32,6 @@ export class PatternProductService {
       id,
     );
     await this.fileUploadService.deletePatternProduct(patternProduct.id);
-    await this.sizesService.deletePatternProduct(patternProduct.id);
-    await this.categoriesService.deletePatternProduct(patternProduct.id);
     return await this.patternProductRepository.delete(patternProduct.id);
   }
 
@@ -42,16 +45,10 @@ export class PatternProductService {
   }
 
   async getOne(id: string, query: string): Promise<PatternProductEntity> {
-    if (query === 'ru') {
+    if (query === 'ru')
       return await this.patternProductRepository.findOneRu(id);
-    }
-    if (query === 'en') {
-      const result = await this.patternProductRepository.findOneEn(id);
-      result.images = await this.fileUploadService.getAllPatternProducts(
-        result.id,
-      );
-      return result;
-    }
+    if (query === 'en')
+      return await this.patternProductRepository.findOneEn(id);
   }
 
   async getAll(
@@ -66,29 +63,9 @@ export class PatternProductService {
   }
 
   async getPinned(query: string): Promise<PatternProductEntity[]> {
-    if (query === 'ru') {
-      const results = await this.patternProductRepository.findPinnedRu();
-      for (let result of results) {
-        result.images = await this.fileUploadService.getAllPatternProducts(
-          result.id,
-        );
-
-        result.sizes = await this.sizesService.getAllPatternProducts(result.id);
-
-        result.categories = await this.categoriesService.getAllPatternProducts(
-          result.id,
-        );
-      }
-      return results;
-    }
-    if (query === 'en') {
-      const results = await this.patternProductRepository.findPinnedEn();
-      for (let result of results) {
-        result.images = await this.fileUploadService.getAllPatternProducts(
-          result.id,
-        );
-      }
-      return results;
-    }
+    if (query === 'ru')
+      return await this.patternProductRepository.findPinnedRu();
+    if (query === 'en')
+      return await this.patternProductRepository.findPinnedEn();
   }
 }

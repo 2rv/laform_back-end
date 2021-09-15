@@ -21,6 +21,8 @@ export class PatternProductDto {
   @IsString()
   titleRu: string;
 
+  vendorCode: string;
+
   @IsNotEmpty()
   @IsString()
   descriptionRu: string;

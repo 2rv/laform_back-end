@@ -49,7 +49,6 @@ export class PostService {
   async delete(id: string) {
     const post = await this.postRepository.findOneOrFail(id);
     await this.fileUploadService.deletePost(post.id);
-    await this.categoriesService.deletePost(post.id);
     return await this.postRepository.delete(post.id);
   }
 }
