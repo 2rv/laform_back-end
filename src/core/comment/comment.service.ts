@@ -18,11 +18,52 @@ export class CommentService {
   ) {}
 
   async create(body: CommentDto, userId): Promise<CommentEntity> {
-    return await this.commentRepository.save({ ...body, userId });
+    const result = await this.commentRepository.save({ ...body, userId });
+    return await this.commentRepository.findOneComment(result.id);
+  }
+
+  async delete(id: string, userId: number) {
+    const result = await this.commentRepository.findOne({
+      where: {
+        id: id,
+        userId: userId,
+      },
+    });
+    if (!result) {
+      throw new BadRequestException(COMMENT_ERROR.COMMENT_NOT_FOUND);
+    } else return await this.commentRepository.delete(id);
   }
 
   async createSub(body: SubCommentDto, userId): Promise<SubCommentEntity> {
-    return await this.subCommentRepository.save({ ...body, userId });
+    const result = await this.subCommentRepository.save({ ...body, userId });
+    return await this.subCommentRepository.findOneSubComment(result.id);
+  }
+
+  async deleteSub(id: string, userId: any) {
+    const result = await this.subCommentRepository.findOne({
+      where: {
+        id: id,
+        userId: userId,
+      },
+    });
+    if (!result) {
+      throw new BadRequestException(COMMENT_ERROR.COMMENT_NOT_FOUND);
+    } else return await this.subCommentRepository.delete(id);
+  }
+
+  async getMasterClassComment(id: string) {
+    return await this.commentRepository.findMasterClassComment(id);
+  }
+  async getPatternProductComment(id: string) {
+    return await this.commentRepository.findPatternProductComment(id);
+  }
+  async getPostComment(postId: string) {
+    return await this.commentRepository.findPostComment(postId);
+  }
+  async getSewingProductComment(sewingProductId: string) {
+    return await this.commentRepository.findSewingProductComment(
+      sewingProductId,
+    );
   }
 
   async update(id: string, body: UpdateCommentDto) {
@@ -48,20 +89,17 @@ export class CommentService {
     if (!result) {
       throw new BadRequestException(COMMENT_ERROR.COMMENT_NOT_FOUND);
     } else await this.subCommentRepository.update(id, body);
-    return await this.subCommentRepository.findOne(id);
-  }
-
-  async getAll(postId: string) {
-    const results = await this.commentRepository.findAll(postId);
-    for (let result of results) {
-      const sub = await this.getAllSubs(postId, result.id);
-      result.subComment = sub;
-    }
-    return results;
+    return await this.subCommentRepository.findOne(id, {
+      relations: ['commentId'],
+    });
   }
 
   async getAllSubs(postId: string, commentId: string) {
     return await this.subCommentRepository.findAll(postId, commentId);
+  }
+
+  async getAllUserComments(userId): Promise<CommentEntity[]> {
+    return await this.commentRepository.findAllUserComments(userId);
   }
 
   async getOne(id: string) {
@@ -71,29 +109,5 @@ export class CommentService {
     if (!result) {
       throw new BadRequestException(COMMENT_ERROR.COMMENT_NOT_FOUND);
     } else return result;
-  }
-
-  async delete(id: string, userId: number): Promise<void> {
-    const result = await this.commentRepository.findOne({
-      where: {
-        id: id,
-        userId: userId,
-      },
-    });
-    if (!result) {
-      throw new BadRequestException(COMMENT_ERROR.COMMENT_NOT_FOUND);
-    } else await this.commentRepository.delete(id);
-  }
-
-  async deleteSub(id: string, body: any): Promise<void> {
-    const result = await this.subCommentRepository.findOne({
-      where: {
-        id: id,
-        userId: body.userId,
-      },
-    });
-    if (!result) {
-      throw new BadRequestException(COMMENT_ERROR.COMMENT_NOT_FOUND);
-    } else await this.subCommentRepository.delete(id);
   }
 }

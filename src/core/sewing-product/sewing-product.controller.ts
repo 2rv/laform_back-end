@@ -34,8 +34,11 @@ export class SewingProductController {
 
   @Get('get/:sewingProductId')
   @UseGuards(SewingProductGuard)
-  async getOne(@Query(new LangValidationPipe()) query, @Request() req) {
-    return await this.sewingProductService.getOne(req.sewingProductId, query);
+  async getOne(
+    @Query(new LangValidationPipe()) query,
+    @Param('sewingProductId') sewingProductId: string,
+  ) {
+    return await this.sewingProductService.getOne(sewingProductId, query);
   }
 
   @Get('get/')

@@ -5,6 +5,7 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
 } from 'typeorm';
 import { CategoryEntity } from '../category/category.entity';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
@@ -49,6 +50,12 @@ export class PatternProductEntity {
   )
   purchaseProduct: PurchaseProductEntity[];
 
+  @OneToOne(
+    () => FileUploadEntity,
+    (res: FileUploadEntity) => res.filePdfPatternProductId,
+  )
+  filePdf: FileUploadEntity;
+
   @Column({
     type: 'varchar',
     name: 'title_ru',
@@ -69,11 +76,11 @@ export class PatternProductEntity {
   descriptionRu!: string;
 
   @Column({
-    type: 'varchar',
+    type: 'json',
     name: ' material_ru',
     nullable: true,
   })
-  materialRu!: string;
+  materialRu: object;
 
   @Column({
     type: 'varchar',
@@ -91,14 +98,15 @@ export class PatternProductEntity {
   @Column({
     type: 'varchar',
     name: 'modifier',
+    nullable: true,
   })
   modifier!: string;
 
   @Column({
-    type: 'json',
+    type: 'int',
     name: 'type',
   })
-  type!: object;
+  type!: number;
 
   @Column({
     type: 'int',
@@ -119,6 +127,13 @@ export class PatternProductEntity {
     default: false,
   })
   pinned?: boolean;
+
+  @Column({
+    type: 'bool',
+    name: 'deleted',
+    default: false,
+  })
+  deleted?: boolean;
 
   @Column({
     type: 'int',

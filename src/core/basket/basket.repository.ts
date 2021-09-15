@@ -6,6 +6,16 @@ export class BasketRepository extends Repository<BasketEntity> {
   async getOne(userId: number): Promise<BasketEntity> {
     return await this.createQueryBuilder('basket')
       .leftJoinAndSelect('basket.purchaseProducts', 'purchaseProducts')
+      .leftJoinAndSelect('purchaseProducts.masterClassId', 'masterClassId')
+      .leftJoinAndSelect(
+        'purchaseProducts.patternProductId',
+        'patternProductId',
+      )
+      .leftJoinAndSelect('purchaseProducts.sewingProductId', 'sewingProductId')
+      .leftJoinAndSelect('sewingProductId.categories', 'categories')
+      .leftJoinAndSelect('sewingProductId.sizes', 'sizes')
+      .leftJoinAndSelect('sewingProductId.colors', 'colors')
+      .leftJoinAndSelect('sewingProductId.images', 'images')
       .where('basket.userId = :userId', { userId })
       .getOne();
   }

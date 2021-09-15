@@ -87,4 +87,17 @@ export class FileUploadService {
       return await this.fileRepository.delete(result);
     }
   }
+
+  async deleteMasterClass(id) {
+    await this.fileRepository.delete({ masterClassId: id });
+  }
+  async deletePatternProduct(id) {
+    await this.fileRepository.delete({ patternProductId: id });
+  }
+  async deleteSewingGoods(id) {
+    await this.fileRepository.delete({ sewingProductId: id });
+  }
+  async deletePost(id) {
+    await this.fileRepository.delete({ postId: id });
+  }
 }

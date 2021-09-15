@@ -58,7 +58,7 @@ export class LikeService {
       },
       relations: [
         'postId',
-        'postId.imageUrl',
+        'postId.image',
         'masterClassId',
         'masterClassId.images',
         'sewingProductId',

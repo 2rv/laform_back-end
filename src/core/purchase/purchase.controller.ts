@@ -19,7 +19,6 @@ import { AuthGuard } from '@nestjs/passport';
 import { AccountGuard } from '../user/guard/account.guard';
 import { USER_ROLE } from '../user/enum/user-role.enum';
 import { Roles } from '../user/decorator/role.decorator';
-import { LangValidationPipe } from '../../common/guards/lang.guard';
 import { UserEntity } from '../user/user.entity';
 
 @Controller('purchase')
@@ -28,7 +27,7 @@ export class PurchaseController {
 
   @Post('/create')
   async save(@Body(new ValidationPipe()) body: CreatePurchaseDto) {
-    return await this.purchaseService.save(body);
+    return await this.purchaseService.saveForNotRegUser(body);
   }
 
   @Post('/user/create')
@@ -38,9 +37,7 @@ export class PurchaseController {
     @GetUser() user: UserEntity,
     @Body(new ValidationPipe()) body: CreatePurchaseDto,
   ) {
-    body.purchase.email = user.email;
-    body.purchase.userId = user.id;
-    return await this.purchaseService.save(body);
+    return await this.purchaseService.save(body, user.email, user.id);
   }
 
   @Get('get/:purchaseId')
@@ -60,8 +57,12 @@ export class PurchaseController {
   @Get('/get/')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async getAll(@Query('size') size: number, @Query('page') page: number) {
-    return await this.purchaseService.getAll(size, page);
+  async getAll(
+    @Query('size') size: number,
+    @Query('page') page: number,
+    @Query('filter') orderNumber: string,
+  ) {
+    return await this.purchaseService.getAll(size, page, orderNumber);
   }
 
   @Get('/user/get/')

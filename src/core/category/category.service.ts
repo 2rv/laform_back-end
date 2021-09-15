@@ -84,4 +84,17 @@ export class CategoryService {
       return await this.categoryRepository.delete(result);
     }
   }
+
+  async deleteMasterClass(id) {
+    await this.categoryRepository.delete({ masterClassId: id });
+  }
+  async deletePatternProduct(id) {
+    await this.categoryRepository.delete({ patternProductId: id });
+  }
+  async deleteSewingGoods(id) {
+    await this.categoryRepository.delete({ sewingProductId: id });
+  }
+  async deletePost(id) {
+    await this.categoryRepository.delete({ postId: id });
+  }
 }

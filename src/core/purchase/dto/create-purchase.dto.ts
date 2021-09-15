@@ -1,14 +1,8 @@
-import {
-  IsNotEmpty,
-  IsNumber,
-  IsBoolean,
-  ValidateNested,
-  IsString,
-  IsOptional,
-} from 'class-validator';
+import { IsNotEmpty, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
-import { PurchaseProductDto } from './purchase-product.dto';
 import { PurchaseDto } from './purchase.dto';
+
+import { PurchaseProductEntity } from 'src/core/purchase-product/purchase-product.entity';
 
 export class CreatePurchaseDto {
   @IsNotEmpty()
@@ -17,7 +11,5 @@ export class CreatePurchaseDto {
   purchase: PurchaseDto;
 
   @IsNotEmpty()
-  @ValidateNested()
-  @Type(() => PurchaseProductDto)
-  purchaseProducts: PurchaseProductDto[];
+  purchaseProducts: PurchaseProductEntity[];
 }

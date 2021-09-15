@@ -17,61 +17,19 @@ export class PatternProductService {
   ) {}
 
   async create(body: PatternProductDto): Promise<PatternProductEntity> {
-    const result = await this.patternProductRepository.save(body);
-    const categories = await this.categoriesService.createMany(body.categories);
-
-    if (body.type.id === 2) {
-      const sizes = await this.sizesService.createMany(body.sizes);
-      if (sizes) {
-        for (let key in sizes) {
-          await this.sizesService.update(sizes[key], {
-            patternProductId: result.id,
-          });
-        }
-      }
-    }
-
-    if (body.images) {
-      for (let file of body.images) {
-        await this.fileUploadService.update(file, {
-          patternProductId: result.id,
-        });
-      }
-    }
-
-    if (categories) {
-      for (const key in categories) {
-        await this.categoriesService.update(categories[key], {
-          patternProductId: result.id,
-        });
-      }
-    }
-
-    return result;
+    if (body?.sizes?.length > 0) await this.sizesService.createMany(body.sizes);
+    await this.categoriesService.createMany(body.categories);
+    return await this.patternProductRepository.save(body);
   }
 
   async delete(id: string) {
-    const images = await this.fileUploadService.getAllPatternProducts(id);
-    const sizes = await this.sizesService.getAllPatternProducts(id);
-    const categories = await this.categoriesService.getAllPatternProducts(id);
-
-    for (const image of images) {
-      await this.fileUploadService.update(image.id, {
-        patternProductId: null,
-      });
-    }
-    for (const size of sizes) {
-      await this.sizesService.update(size.id, {
-        patternProductId: null,
-      });
-    }
-    for (const category of categories) {
-      await this.categoriesService.update(category.id, {
-        patternProductId: null,
-      });
-    }
-
-    return await this.patternProductRepository.delete(id);
+    const patternProduct = await this.patternProductRepository.findOneOrFail(
+      id,
+    );
+    await this.fileUploadService.deletePatternProduct(patternProduct.id);
+    await this.sizesService.deletePatternProduct(patternProduct.id);
+    await this.categoriesService.deletePatternProduct(patternProduct.id);
+    return await this.patternProductRepository.delete(patternProduct.id);
   }
 
   async update(id: string, body: UpdatePatternProductDto) {
@@ -85,11 +43,7 @@ export class PatternProductService {
 
   async getOne(id: string, query: string): Promise<PatternProductEntity> {
     if (query === 'ru') {
-      const result = await this.patternProductRepository.findOneRu(id);
-      result.images = await this.fileUploadService.getAllPatternProducts(
-        result.id,
-      );
-      return result;
+      return await this.patternProductRepository.findOneRu(id);
     }
     if (query === 'en') {
       const result = await this.patternProductRepository.findOneEn(id);
@@ -105,30 +59,10 @@ export class PatternProductService {
     size: number,
     page: number,
   ): Promise<PatternProductEntity[]> {
-    if (query === 'ru') {
-      const results = await this.patternProductRepository.findAllRu(size, page);
-      for (let result of results) {
-        result.images = await this.fileUploadService.getAllPatternProducts(
-          result.id,
-        );
-
-        result.sizes = await this.sizesService.getAllPatternProducts(result.id);
-
-        result.categories = await this.categoriesService.getAllPatternProducts(
-          result.id,
-        );
-      }
-      return results;
-    }
-    if (query === 'en') {
-      const results = await this.patternProductRepository.findAllEn(size, page);
-      for (let result of results) {
-        result.images = await this.fileUploadService.getAllPatternProducts(
-          result.id,
-        );
-      }
-      return results;
-    }
+    if (query === 'ru')
+      return await this.patternProductRepository.findAllRu(size, page);
+    if (query === 'en')
+      return await this.patternProductRepository.findAllEn(size, page);
   }
 
   async getPinned(query: string): Promise<PatternProductEntity[]> {

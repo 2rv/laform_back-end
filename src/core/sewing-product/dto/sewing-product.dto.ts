@@ -4,10 +4,16 @@ import {
   IsOptional,
   IsArray,
   IsNumber,
-  IsObject,
+  Min,
+  Max,
+  ArrayNotEmpty,
+  ArrayMinSize,
+  ArrayMaxSize,
+  IsBoolean,
 } from 'class-validator';
 import { CategoryDto } from 'src/core/category/dto/category.dto';
 import { CreateColorDto } from 'src/core/colors/dto/create-color.dto';
+import { FileDto } from 'src/core/file-upload/dto/file-dto';
 import { CreateSizeDto } from 'src/core/sizes/dto/create-size.dto';
 
 export class SewingProductDto {
@@ -27,24 +33,30 @@ export class SewingProductDto {
   @IsString()
   descriptionEn: string;
 
-  @IsNotEmpty()
+  @ArrayNotEmpty()
   @IsArray()
+  @ArrayMinSize(1)
+  @ArrayMaxSize(5)
   categories: [CategoryDto];
 
-  @IsNotEmpty()
+  @ArrayNotEmpty()
   @IsArray()
   sizes: [CreateSizeDto];
 
-  @IsNotEmpty()
+  @ArrayNotEmpty()
   @IsArray()
   colors: [CreateColorDto];
 
-  @IsNotEmpty()
+  @ArrayNotEmpty()
   @IsArray()
-  images: [];
+  @ArrayMinSize(1)
+  @ArrayMaxSize(6)
+  images: [FileDto];
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
+  @Min(0)
+  @Max(100)
   discount: number;
 
   @IsOptional()
@@ -52,10 +64,17 @@ export class SewingProductDto {
   modifier: string;
 
   @IsNotEmpty()
-  @IsObject()
-  type: { id: number; tid: string };
+  @IsNumber()
+  @Min(3)
+  @Max(3)
+  type: number;
 
   @IsNotEmpty()
   @IsNumber()
+  @Min(0)
   count: number;
+
+  @IsOptional()
+  @IsBoolean()
+  deleted: boolean;
 }

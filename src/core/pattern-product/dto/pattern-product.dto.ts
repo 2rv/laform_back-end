@@ -5,8 +5,15 @@ import {
   IsArray,
   IsNumber,
   IsObject,
+  Min,
+  Max,
+  ArrayNotEmpty,
+  ArrayMinSize,
+  ArrayMaxSize,
+  IsBoolean,
 } from 'class-validator';
 import { CategoryDto } from 'src/core/category/dto/category.dto';
+import { FileDto } from 'src/core/file-upload/dto/file-dto';
 import { CreateSizeDto } from 'src/core/sizes/dto/create-size.dto';
 
 export class PatternProductDto {
@@ -26,20 +33,26 @@ export class PatternProductDto {
   @IsString()
   descriptionEn: string;
 
-  @IsNotEmpty()
+  @ArrayNotEmpty()
   @IsArray()
+  @ArrayMinSize(0)
+  @ArrayMaxSize(5)
   categories: [CategoryDto];
 
   @IsOptional()
   @IsArray()
   sizes: [CreateSizeDto];
 
-  @IsNotEmpty()
+  @ArrayNotEmpty()
   @IsArray()
-  images: [];
+  images: [FileDto];
 
-  @IsNotEmpty()
+  filePdf: FileDto;
+
+  @IsOptional()
   @IsNumber()
+  @Min(0)
+  @Max(100)
   discount: number;
 
   @IsOptional()
@@ -47,18 +60,35 @@ export class PatternProductDto {
   modifier: string;
 
   @IsNotEmpty()
-  @IsObject()
-  type: { id: number; tid: string };
+  @IsNumber()
+  @Min(1)
+  @Max(2)
+  type: number;
 
   @IsNotEmpty()
   @IsNumber()
+  @Min(1)
+  @Max(5)
   complexity: number;
 
   @IsNotEmpty()
-  @IsString()
-  materialRu: string;
+  @IsObject()
+  materialRu: {
+    blocks: [];
+    time: number;
+    version: string;
+  };
 
   @IsOptional()
   @IsNumber()
+  @Min(0)
   price: number;
+
+  @IsOptional()
+  @IsArray()
+  recomendations: [];
+
+  @IsOptional()
+  @IsBoolean()
+  deleted: boolean;
 }

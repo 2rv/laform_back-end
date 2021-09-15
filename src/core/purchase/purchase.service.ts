@@ -12,27 +12,55 @@ export class PurchaseService {
     private purchaseProductService: PurchaseProductService,
   ) {}
 
-  async create(body: any): Promise<any> {
+  async create(body, email: string, userId: number): Promise<any> {
+    return this.purchaseRepository.create({ ...body, email, userId });
+  }
+
+  async createForNotRegUser(body): Promise<any> {
     return this.purchaseRepository.create(body);
   }
 
-  async save(body: CreatePurchaseDto): Promise<PurchaseEntity> {
-    const purchase = await this.create(body.purchase);
+  async save(
+    body: CreatePurchaseDto,
+    email: string,
+    userId: number,
+  ): Promise<PurchaseEntity> {
+    const purchase = await this.create(body.purchase, email, userId);
     purchase.purchaseProducts = body.purchaseProducts;
-    return await this.purchaseRepository.save({
+    const result = await this.purchaseRepository.save({
+      ...purchase,
+    });
+    if (result) {
+      for (let purchaseProduct of purchase.purchaseProducts) {
+        await this.purchaseProductService.update(purchaseProduct.id, {
+          basketId: null,
+        });
+      }
+    }
+    return result;
+  }
+
+  async saveForNotRegUser(body: CreatePurchaseDto): Promise<PurchaseEntity> {
+    const purchase = await this.createForNotRegUser(body.purchase);
+    purchase.purchaseProducts = body.purchaseProducts;
+    return await await this.purchaseRepository.save({
       ...purchase,
     });
   }
 
-  async getAll(size: number, page: number): Promise<PurchaseEntity[]> {
-    return await this.purchaseRepository.getAll(size, page);
+  async getAll(
+    size: number,
+    page: number,
+    orderNumber: string,
+  ): Promise<{ purchases: PurchaseEntity[]; total: number; }> {
+    return await this.purchaseRepository.getAll(size, page, orderNumber);
   }
 
   async getAllForUser(
     size: number,
     page: number,
     userId,
-  ): Promise<PurchaseEntity[]> {
+  ): Promise<{ purchases: PurchaseEntity[]; total: number }> {
     return await this.purchaseRepository.getAllForUser(size, page, userId);
   }
 
