@@ -33,13 +33,16 @@ export class CategoryEntity {
   @ManyToOne(
     () => MasterClassEntity,
     (masterClass: MasterClassEntity) => masterClass.categories,
+    { onDelete: 'CASCADE' },
   )
   @JoinColumn({
     name: 'master_class_id',
   })
   masterClassId: MasterClassEntity;
 
-  @ManyToOne(() => PostEntity, (res: PostEntity) => res.categories)
+  @ManyToOne(() => PostEntity, (res: PostEntity) => res.categories, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({
     name: 'postId',
   })
@@ -48,6 +51,9 @@ export class CategoryEntity {
   @ManyToOne(
     () => PatternProductEntity,
     (pattern: PatternProductEntity) => pattern.categories,
+    {
+      onDelete: 'CASCADE',
+    },
   )
   @JoinColumn({
     name: 'patternProductId',
@@ -57,6 +63,9 @@ export class CategoryEntity {
   @ManyToOne(
     () => SewingProductEntity,
     (sewing: SewingProductEntity) => sewing.categories,
+    {
+      onDelete: 'CASCADE',
+    },
   )
   @JoinColumn({
     name: 'sewingProductId',

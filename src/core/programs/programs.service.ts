@@ -9,10 +9,15 @@ export class ProgramsService {
   constructor(private programsRepository: ProgramsRepository) {}
 
   async create(body: CreateProgramDto): Promise<ProgramsEntity> {
+    body.vendorCode = ProgramsEntity.getVendorCode();
     return await this.programsRepository.save(body);
   }
 
   async createMany(programs: CreateProgramDto[]): Promise<ProgramsEntity> {
+    programs.map((item) => {
+      item.vendorCode = ProgramsEntity.getVendorCode();
+      return item;
+    });
     const result = await this.programsRepository.insert(programs);
     return result.raw;
   }

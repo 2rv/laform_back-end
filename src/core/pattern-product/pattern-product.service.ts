@@ -17,7 +17,7 @@ export class PatternProductService {
   ) {}
 
   async create(body: PatternProductDto): Promise<PatternProductEntity> {
-    if (body?.sizes?.length > 0) await this.sizesService.createMany(body.sizes);
+    if (body.sizes?.length > 0) await this.sizesService.createMany(body.sizes);
     await this.categoriesService.createMany(body.categories);
     return await this.patternProductRepository.save(body);
   }

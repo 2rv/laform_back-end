@@ -85,10 +85,6 @@ export class PatternProductDto {
   price: number;
 
   @IsOptional()
-  @IsArray()
-  recomendations: [];
-
-  @IsOptional()
   @IsBoolean()
   deleted: boolean;
 }

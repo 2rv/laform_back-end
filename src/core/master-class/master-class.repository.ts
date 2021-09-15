@@ -21,14 +21,14 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'master_class.discount',
         'master_class.type',
         'master_class.pinned',
-        'master_class.masterClassArticle',
         'comment',
         'userId.login',
         'subComment',
         'user.login',
         'images',
+        'programs.programNameRu',
+        'programs.vendorCode',
         'categories',
-        'programs',
       ])
       .getOne();
   }
@@ -37,10 +37,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
     const take = size || 100;
     const skip = (page - 1) * size || 0;
     return await this.createQueryBuilder('master_class')
-      .leftJoin('master_class.comment', 'comment')
-      .leftJoin('comment.userId', 'userId')
-      .leftJoin('comment.subComment', 'subComment')
-      .leftJoin('subComment.userId', 'user')
+      .where('master_class.deleted = false')
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.programs', 'programs')
       .leftJoin('master_class.categories', 'categories')
@@ -51,17 +48,10 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'master_class.modifier',
         'master_class.discount',
         'master_class.type',
-        'master_class.pinned',
-        'master_class.masterClassArticle',
-        'comment',
-        'userId.login',
-        'subComment',
-        'user.login',
         'images',
         'categories',
         'programs',
       ])
-      .where('master_class.deleted = false')
       .limit(take)
       .offset(skip)
       .getMany();
@@ -69,11 +59,10 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
 
   async findPinnedRu(): Promise<MasterClassEntity[]> {
     return await this.createQueryBuilder('master_class')
-      .leftJoin('master_class.comment', 'comment')
-      .leftJoin('comment.userId', 'userId')
-      .leftJoin('comment.subComment', 'subComment')
-      .leftJoin('subComment.userId', 'user')
       .where('master_class.pinned = true')
+      .leftJoin('master_class.images', 'images')
+      .leftJoin('master_class.programs', 'programs')
+      .leftJoin('master_class.categories', 'categories')
       .select([
         'master_class.id',
         'master_class.titleRu',
@@ -81,22 +70,24 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'master_class.modifier',
         'master_class.discount',
         'master_class.type',
+        'images',
+        'categories',
+        'programs',
         'master_class.pinned',
-        'comment',
-        'userId.login',
-        'subComment',
-        'user.login',
       ])
       .getMany();
   }
 
   async findOneEn(id: string): Promise<MasterClassEntity> {
     return await this.createQueryBuilder('master_class')
+      .where('master_class.id = :id', { id })
       .leftJoin('master_class.comment', 'comment')
       .leftJoin('comment.userId', 'userId')
       .leftJoin('comment.subComment', 'subComment')
       .leftJoin('subComment.userId', 'user')
-      .where('master_class.id = :id', { id })
+      .leftJoin('master_class.images', 'images')
+      .leftJoin('master_class.programs', 'programs')
+      .leftJoin('master_class.categories', 'categories')
       .select([
         'master_class.id',
         'master_class.titleEn',
@@ -109,6 +100,10 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'userId.login',
         'subComment',
         'user.login',
+        'images',
+        'programs.programNameEn',
+        'programs.vendorCode',
+        'categories',
       ])
       .getOne();
   }
@@ -117,10 +112,6 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
     const take = size || 10;
     const skip = (page - 1) * size || 0;
     return await this.createQueryBuilder('master_class')
-      .leftJoin('master_class.comment', 'comment')
-      .leftJoin('comment.userId', 'userId')
-      .leftJoin('comment.subComment', 'subComment')
-      .leftJoin('subComment.userId', 'user')
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.programs', 'programs')
       .leftJoin('master_class.categories', 'categories')
@@ -132,11 +123,6 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'master_class.discount',
         'master_class.type',
         'master_class.pinned',
-        'master_class.masterClassArticle',
-        'comment',
-        'userId.login',
-        'subComment',
-        'user.login',
         'images',
         'programs',
         'categories',
@@ -149,11 +135,10 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
 
   async findPinnedEn(): Promise<MasterClassEntity[]> {
     return await this.createQueryBuilder('master_class')
-      .leftJoin('master_class.comment', 'comment')
-      .leftJoin('comment.userId', 'userId')
-      .leftJoin('comment.subComment', 'subComment')
-      .leftJoin('subComment.userId', 'user')
       .where('master_class.pinned = true')
+      .leftJoin('master_class.images', 'images')
+      .leftJoin('master_class.programs', 'programs')
+      .leftJoin('master_class.categories', 'categories')
       .select([
         'master_class.id',
         'master_class.titleEn',
@@ -161,11 +146,10 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'master_class.modifier',
         'master_class.discount',
         'master_class.type',
+        'images',
+        'categories',
+        'programs',
         'master_class.pinned',
-        'comment',
-        'userId.login',
-        'subComment',
-        'user.login',
       ])
       .getMany();
   }
