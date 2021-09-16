@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsNumber, Min } from 'class-validator';
+import { IsNotEmpty, IsString, IsNumber, Min, IsObject } from 'class-validator';
 
 export class CreateProgramDto {
   @IsNotEmpty()
@@ -6,7 +6,21 @@ export class CreateProgramDto {
   programNameRu: string;
 
   @IsNotEmpty()
+  @IsString()
+  programNameEn: string;
+
+  @IsNotEmpty()
   @IsNumber()
   @Min(0)
   price: number;
+
+  @IsNotEmpty()
+  @IsObject()
+  articleText: {
+    blocks: [];
+    time: number;
+    version: string;
+  };
+
+  vendorCode: string;
 }

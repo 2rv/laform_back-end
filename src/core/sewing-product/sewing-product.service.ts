@@ -27,10 +27,7 @@ export class SewingProductService {
 
   async delete(id: string) {
     const sewingProduct = await this.sewingProductRepository.findOneOrFail(id);
-    await this.categoriesService.deleteSewingGoods(sewingProduct.id);
     await this.fileUploadService.deleteSewingGoods(sewingProduct.id);
-    await this.colorsService.deleteSewingGoods(sewingProduct.id);
-    await this.sizesService.deleteSewingGoods(sewingProduct.id);
     return await this.sewingProductRepository.delete(sewingProduct.id);
   }
 
@@ -44,16 +41,8 @@ export class SewingProductService {
   }
 
   async getOne(id: string, query: string): Promise<SewingProductEntity> {
-    if (query === 'ru') {
-      return await this.sewingProductRepository.findOneRu(id);
-    }
-    if (query === 'en') {
-      const result = await this.sewingProductRepository.findOneEn(id);
-      result.images = await this.fileUploadService.getAllSewingProducts(
-        result.id,
-      );
-      return result;
-    }
+    if (query === 'ru') return await this.sewingProductRepository.findOneRu(id);
+    if (query === 'en') return await this.sewingProductRepository.findOneEn(id);
   }
 
   async getAll(
@@ -68,33 +57,9 @@ export class SewingProductService {
   }
 
   async getPinned(query: string): Promise<SewingProductEntity[]> {
-    if (query === 'ru') {
-      const results = await this.sewingProductRepository.findPinnedRu();
-      for (let result of results) {
-        result.images = await this.fileUploadService.getAllSewingProducts(
-          result.id,
-        );
-
-        result.sizes = await this.sizesService.getAllSewingProducts(result.id);
-
-        result.colors = await this.colorsService.getAllSewingProducts(
-          result.id,
-        );
-
-        result.categories = await this.categoriesService.getAllSewingProducts(
-          result.id,
-        );
-      }
-      return results;
-    }
-    if (query === 'en') {
-      const results = await this.sewingProductRepository.findPinnedEn();
-      for (let result of results) {
-        result.images = await this.fileUploadService.getAllSewingProducts(
-          result.id,
-        );
-      }
-      return results;
-    }
+    if (query === 'ru')
+      return await this.sewingProductRepository.findPinnedRu();
+    if (query === 'en')
+      return await this.sewingProductRepository.findPinnedEn();
   }
 }

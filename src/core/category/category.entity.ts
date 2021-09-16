@@ -2,7 +2,6 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  OneToMany,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
@@ -10,7 +9,6 @@ import { MasterClassEntity } from '../master-class/master-class.entity';
 import { PatternProductEntity } from '../pattern-product/pattern-product.entity';
 import { PostEntity } from '../post/post.entity';
 import { SewingProductEntity } from '../sewing-product/sewing-product.entity';
-import { SliderEntity } from '../slider/slider.entity';
 
 @Entity({ name: 'category' })
 export class CategoryEntity {
@@ -33,13 +31,16 @@ export class CategoryEntity {
   @ManyToOne(
     () => MasterClassEntity,
     (masterClass: MasterClassEntity) => masterClass.categories,
+    { onDelete: 'CASCADE' },
   )
   @JoinColumn({
     name: 'master_class_id',
   })
   masterClassId: MasterClassEntity;
 
-  @ManyToOne(() => PostEntity, (res: PostEntity) => res.categories)
+  @ManyToOne(() => PostEntity, (res: PostEntity) => res.categories, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({
     name: 'postId',
   })
@@ -48,6 +49,9 @@ export class CategoryEntity {
   @ManyToOne(
     () => PatternProductEntity,
     (pattern: PatternProductEntity) => pattern.categories,
+    {
+      onDelete: 'CASCADE',
+    },
   )
   @JoinColumn({
     name: 'patternProductId',
@@ -57,12 +61,12 @@ export class CategoryEntity {
   @ManyToOne(
     () => SewingProductEntity,
     (sewing: SewingProductEntity) => sewing.categories,
+    {
+      onDelete: 'CASCADE',
+    },
   )
   @JoinColumn({
     name: 'sewingProductId',
   })
   sewingProductId: SewingProductEntity;
-
-  @OneToMany(() => SliderEntity, (slider: SliderEntity) => slider.categoryId)
-  slider: SliderEntity[];
 }

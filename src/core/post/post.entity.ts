@@ -1,4 +1,3 @@
-import { LikeEntity } from './../like/like.entity';
 import {
   Entity,
   Column,
@@ -7,6 +6,7 @@ import {
   OneToMany,
   OneToOne,
 } from 'typeorm';
+import { LikeEntity } from './../like/like.entity';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
 import { CategoryEntity } from '../category/category.entity';
 import { CommentEntity } from './../comment/comment.entity';
@@ -46,7 +46,11 @@ export class PostEntity {
     type: 'json',
     name: 'article_ru',
   })
-  postArticle: object;
+  articleText: {
+    blocks: [];
+    time: number;
+    version: string;
+  };
 
   @OneToOne(() => FileUploadEntity, (res: FileUploadEntity) => res.postId)
   image: FileUploadEntity;

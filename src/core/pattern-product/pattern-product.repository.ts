@@ -16,6 +16,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .leftJoin('pattern_product.filePdf', 'fildePdf')
       .select([
         'pattern_product.id',
+        'pattern_product.vendorCode',
         'pattern_product.titleRu',
         'pattern_product.descriptionRu',
         'pattern_product.type',
@@ -51,6 +52,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .leftJoin('pattern_product.like', 'like')
       .select([
         'pattern_product.id',
+        'pattern_product.vendorCode',
         'pattern_product.titleRu',
         'pattern_product.descriptionRu',
         'pattern_product.type',

@@ -39,7 +39,7 @@ export class PostDto {
 
   @IsNotEmpty()
   @IsObject()
-  postArticle: {
+  articleText: {
     blocks: [];
     time: number;
     version: string;
@@ -50,12 +50,12 @@ export class PostDto {
   pinned: boolean;
 
   @IsOptional()
-  @IsArray()
-  recommendations: [];
-
-  @IsOptional()
   @IsNumber()
   @Min(4)
   @Max(4)
   type: number;
+
+  @IsOptional()
+  @IsArray()
+  recommendations: [];
 }

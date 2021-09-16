@@ -2,13 +2,10 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  OneToOne,
   JoinColumn,
-  OneToMany,
   ManyToOne,
 } from 'typeorm';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
-import { CategoryEntity } from '../category/category.entity';
 
 @Entity({ name: 'slider' })
 export class SliderEntity {
@@ -53,15 +50,6 @@ export class SliderEntity {
     name: 'image_url',
   })
   imageUrl: FileUploadEntity;
-
-  @ManyToOne(
-    () => CategoryEntity,
-    (category: CategoryEntity) => category.slider,
-  )
-  @JoinColumn({
-    name: 'category_id',
-  })
-  categoryId: CategoryEntity;
 
   @Column({
     type: 'varchar',

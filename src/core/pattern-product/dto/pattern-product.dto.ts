@@ -21,6 +21,8 @@ export class PatternProductDto {
   @IsString()
   titleRu: string;
 
+  vendorCode: string;
+
   @IsNotEmpty()
   @IsString()
   descriptionRu: string;
@@ -83,10 +85,6 @@ export class PatternProductDto {
   @IsNumber()
   @Min(0)
   price: number;
-
-  @IsOptional()
-  @IsArray()
-  recomendations: [];
 
   @IsOptional()
   @IsBoolean()
