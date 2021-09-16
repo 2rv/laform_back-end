@@ -3,7 +3,6 @@ import { IsNumber, IsString, IsOptional } from 'class-validator';
 import { PatternProductEntity } from 'src/core/pattern-product/pattern-product.entity';
 import { SewingProductEntity } from 'src/core/sewing-product/sewing-product.entity';
 import { MasterClassEntity } from 'src/core/master-class/master-class.entity';
-import { BasketEntity } from './../../basket/basket.entity';
 
 export class PurchaseProductDto {
   @IsOptional()
@@ -14,9 +13,6 @@ export class PurchaseProductDto {
 
   @IsOptional()
   sewingProductId: SewingProductEntity;
-
-  @IsOptional()
-  basketId: BasketEntity;
 
   @IsOptional()
   @IsString()

@@ -1,3 +1,0 @@
-export enum BASKET_ERROR {
-  BASKET_NOT_FOUND = 'BASKET_NOT_FOUND',
-}
