@@ -6,7 +6,6 @@ import {
   CreateDateColumn,
   ManyToOne,
   JoinColumn,
-  OneToMany,
 } from 'typeorm';
 
 import { PurchaseEntity } from '../purchase/purchase.entity';
@@ -102,12 +101,6 @@ export class PurchaseProductEntity {
     nullable: true,
   })
   program?: string;
-
-  /* @ManyToOne(() => CategoryEntity, (category: CategoryEntity) => category.post)
-  @JoinColumn({
-    name: 'category_id',
-  })
-  categoryId?: CategoryEntity; */
 
   @CreateDateColumn({
     name: 'created_date',
