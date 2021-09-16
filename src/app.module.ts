@@ -24,7 +24,6 @@ import { ColorsModule } from './core/colors/colors.module';
 import { SizesModule } from './core/sizes/sizes.module';
 import { ProgramsModule } from './core/programs/programs.module';
 import { CommentModule } from './core/comment/comment.module';
-import { BasketModule } from './core/basket/basket.module';
 
 @Module({
   providers: [],
@@ -53,7 +52,6 @@ import { BasketModule } from './core/basket/basket.module';
     PromoCodeModule,
     MailModule,
     CommentModule,
-    BasketModule,
   ],
 })
 export class AppModule {}

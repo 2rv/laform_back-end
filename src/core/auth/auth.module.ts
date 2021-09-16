@@ -12,7 +12,6 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { AuthRepository } from './auth.repository';
 import { JwtStrategy } from './jwt.strategy';
-import { BasketModule } from '../basket/basket.module';
 
 @Module({
   imports: [
@@ -20,7 +19,6 @@ import { BasketModule } from '../basket/basket.module';
     JwtModule.register(JwtConfig),
     TypeOrmModule.forFeature([UserEntity, UserRepository, AuthRepository]),
     UserInfoModule,
-    BasketModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
