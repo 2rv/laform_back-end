@@ -26,8 +26,10 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'subComment',
         'user.login',
         'images',
-        'programs.programNameRu',
+        'programs.id',
         'programs.vendorCode',
+        'programs.price',
+        'programs.programNameRu',
         'categories',
       ])
       .getOne();
@@ -50,7 +52,10 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'master_class.type',
         'images',
         'categories',
-        'programs',
+        'programs.id',
+        'programs.vendorCode',
+        'programs.price',
+        'programs.programNameRu',
       ])
       .limit(take)
       .offset(skip)
@@ -72,8 +77,11 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'master_class.type',
         'images',
         'categories',
-        'programs',
         'master_class.pinned',
+        'programs.id',
+        'programs.vendorCode',
+        'programs.price',
+        'programs.programNameRu',
       ])
       .getMany();
   }
@@ -101,8 +109,10 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'subComment',
         'user.login',
         'images',
-        'programs.programNameEn',
+        'programs.id',
         'programs.vendorCode',
+        'programs.price',
+        'programs.programNameRu',
         'categories',
       ])
       .getOne();
@@ -124,7 +134,10 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'master_class.type',
         'master_class.pinned',
         'images',
-        'programs',
+        'programs.id',
+        'programs.vendorCode',
+        'programs.price',
+        'programs.programNameRu',
         'categories',
       ])
       .where('master_class.deleted = false')
@@ -148,7 +161,10 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'master_class.type',
         'images',
         'categories',
-        'programs',
+        'programs.id',
+        'programs.vendorCode',
+        'programs.price',
+        'programs.programNameRu',
         'master_class.pinned',
       ])
       .getMany();
