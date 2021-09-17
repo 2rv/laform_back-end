@@ -272,9 +272,9 @@ export class PostRepository extends Repository<PostEntity> {
     return await this.createQueryBuilder('post')
       .leftJoin('post.image', 'image')
       .leftJoin('post.categories', 'categories')
-      .where('post.pinned = true')
       .leftJoin('post.like', 'like')
       .where('like.userId = :userId', { userId })
+      .where('post.pinned = true')
       .select([
         'post.id',
         'post.titleRu',
