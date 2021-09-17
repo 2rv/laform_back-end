@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Param,
   Post,
   UseGuards,
   ValidationPipe,
@@ -20,6 +19,8 @@ import { PatternProductGuard } from './guard/pattern-product.guard';
 import { LangValidationPipe } from 'src/common/guards/lang.guard';
 import { UpdatePatternProductDto } from './dto/update-pattern-product.dto';
 import { PatternProductDto } from './dto/pattern-product.dto';
+import { GetAccount } from '../user/decorator/get-account.decorator';
+import { UserEntity } from '../user/user.entity';
 
 @Controller('pattern-product')
 export class PatternProductController {
@@ -38,6 +39,20 @@ export class PatternProductController {
     return await this.patternProductService.getOne(req.patternProductId, query);
   }
 
+  @Get('get/auth/:patternProductId')
+  @UseGuards(AuthGuard('jwt'), AccountGuard, PatternProductGuard)
+  async getOneAuth(
+    @Query(new LangValidationPipe()) query,
+    @Request() req,
+    @GetAccount() user: UserEntity,
+  ) {
+    return await this.patternProductService.getOneAuth(
+      req.patternProductId,
+      query,
+      user.id,
+    );
+  }
+
   @Get('get/')
   async getAll(
     @Query(new LangValidationPipe()) query: string,
@@ -47,9 +62,34 @@ export class PatternProductController {
     return await this.patternProductService.getAll(query, size, page);
   }
 
+  @Get('get/auth')
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getAllAuth(
+    @Query(new LangValidationPipe()) query: string,
+    @Query('size') size: number,
+    @Query('page') page: number,
+    @GetAccount() user: UserEntity,
+  ) {
+    return await this.patternProductService.getAllAuth(
+      query,
+      size,
+      page,
+      user.id,
+    );
+  }
+
   @Get('pinned/get/')
   async getPinned(@Query(new LangValidationPipe()) query: string) {
     return await this.patternProductService.getPinned(query);
+  }
+
+  @Get('pinned/get/auth')
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getPinnedAuth(
+    @Query(new LangValidationPipe()) query: string,
+    @GetAccount() user: UserEntity,
+  ) {
+    return await this.patternProductService.getPinnedAuth(query, user.id);
   }
 
   @Put('update/:patternProductId')

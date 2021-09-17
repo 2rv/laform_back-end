@@ -19,6 +19,8 @@ import { MasterClassGuard } from './guard/master-class.guard';
 import { LangValidationPipe } from 'src/common/guards/lang.guard';
 import { MasterClassDto } from './dto/master-class.dto';
 import { UpdateMasterClassDto } from './dto/update-master-class.dto';
+import { GetAccount } from '../user/decorator/get-account.decorator';
+import { UserEntity } from '../user/user.entity';
 
 @Controller('master-class')
 export class MasterClassController {
@@ -40,6 +42,20 @@ export class MasterClassController {
     return await this.masterClassService.getOne(masterClassId, query);
   }
 
+  @Get('get/auth/:masterClassId')
+  @UseGuards(AuthGuard('jwt'), AccountGuard, MasterClassGuard)
+  async getOneAuth(
+    @Query(new LangValidationPipe()) query,
+    @Param('masterClassId') masterClassId: string,
+    @GetAccount() user: UserEntity,
+  ) {
+    return await this.masterClassService.getOneAuth(
+      masterClassId,
+      query,
+      user.id,
+    );
+  }
+
   @Get('get/')
   async getAll(
     @Query(new LangValidationPipe()) query: string,
@@ -49,9 +65,29 @@ export class MasterClassController {
     return await this.masterClassService.getAll(query, size, page);
   }
 
+  @Get('get/auth')
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getAllAuth(
+    @Query(new LangValidationPipe()) query: string,
+    @Query('size') size: number,
+    @Query('page') page: number,
+    @GetAccount() user: UserEntity,
+  ) {
+    return await this.masterClassService.getAllAuth(query, size, page, user.id);
+  }
+
   @Get('pinned/get/')
   async getPinned(@Query(new LangValidationPipe()) query: string) {
     return await this.masterClassService.getPinned(query);
+  }
+
+  @Get('pinned/get/auth')
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getPinnedAuth(
+    @Query(new LangValidationPipe()) query: string,
+    @GetAccount() user: UserEntity,
+  ) {
+    return await this.masterClassService.getPinnedAuth(query, user.id);
   }
 
   @Put('update/:masterClassId')

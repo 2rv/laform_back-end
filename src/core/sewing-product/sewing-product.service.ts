@@ -97,4 +97,82 @@ export class SewingProductService {
       return results;
     }
   }
+
+  async getOneAuth(
+    id: string,
+    query: string,
+    userId: number,
+  ): Promise<SewingProductEntity> {
+    if (query === 'ru') {
+      return await this.sewingProductRepository.findOneRuAuth(id, userId);
+    }
+    if (query === 'en') {
+      const result = await this.sewingProductRepository.findOneEnAuth(
+        id,
+        userId,
+      );
+      result.images = await this.fileUploadService.getAllSewingProducts(
+        result.id,
+      );
+      return result;
+    }
+  }
+
+  async getAllAuth(
+    query: string,
+    size: number,
+    page: number,
+    userId: number,
+  ): Promise<SewingProductEntity[]> {
+    if (query === 'ru')
+      return await this.sewingProductRepository.findAllRuAuth(
+        size,
+        page,
+        userId,
+      );
+    if (query === 'en')
+      return await this.sewingProductRepository.findAllEnAuth(
+        size,
+        page,
+        userId,
+      );
+  }
+
+  async getPinnedAuth(
+    query: string,
+    userId: number,
+  ): Promise<SewingProductEntity[]> {
+    if (query === 'ru') {
+      const results = await this.sewingProductRepository.findPinnedRuAuth(
+        userId,
+      );
+      for (const result of results) {
+        result.images = await this.fileUploadService.getAllSewingProducts(
+          result.id,
+        );
+
+        result.sizes = await this.sizesService.getAllSewingProducts(result.id);
+
+        result.colors = await this.colorsService.getAllSewingProducts(
+          result.id,
+        );
+
+        result.categories = await this.categoriesService.getAllSewingProducts(
+          result.id,
+        );
+      }
+      return results;
+    }
+    if (query === 'en') {
+      const results = await this.sewingProductRepository.findPinnedEnAuth(
+        userId,
+      );
+      for (const result of results) {
+        result.images = await this.fileUploadService.getAllSewingProducts(
+          result.id,
+        );
+      }
+      return results;
+    }
+  }
 }

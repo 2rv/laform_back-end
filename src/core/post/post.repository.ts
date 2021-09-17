@@ -214,4 +214,243 @@ export class PostRepository extends Repository<PostEntity> {
       .offset(skip)
       .getMany();
   }
+
+  //AUTHTORIZED
+  async findOneRuAuth(id: string, userId: number): Promise<PostEntity> {
+    return await this.createQueryBuilder('post')
+      .where('post.id = :id', { id })
+      .leftJoin('post.comment', 'comment')
+      .leftJoin('post.like', 'like')
+      .where('like.userId = :userId', { userId })
+      .leftJoin('comment.userId', 'userId')
+      .leftJoin('comment.subComment', 'subComment')
+      .leftJoin('subComment.userId', 'user')
+      .leftJoin('post.image', 'image')
+      .leftJoin('post.categories', 'categories')
+      .select([
+        'post.id',
+        'post.titleRu',
+        'post.createdDate',
+        'post.postArticle',
+        'post.likeCount',
+        'post.pinned',
+        'post.modifier',
+        'post.type',
+        'comment',
+        'like',
+        'userId.login',
+        'subComment',
+        'user.login',
+        'image',
+        'categories',
+      ])
+      .getOne();
+  }
+
+  async findBestRuAuth(userId: number): Promise<PostEntity[]> {
+    return await this.createQueryBuilder('post')
+      .leftJoin('post.like', 'like')
+      .where('like.userId = :userId', { userId })
+      .leftJoin('post.imageUrl', 'image_url')
+      .leftJoin('post.categoryId', 'category_id')
+      .select([
+        'post.id',
+        'post.titleRu',
+        'post.textRu',
+        'post.likeCount',
+        'post.createdDate',
+        'image_url',
+        'category_id.textRu',
+        'like',
+      ])
+      .orderBy('RANDOM()')
+      .limit(3)
+      .getMany();
+  }
+
+  async findPinnedRuAuth(userId: number): Promise<PostEntity[]> {
+    return await this.createQueryBuilder('post')
+      .leftJoin('post.image', 'image')
+      .leftJoin('post.categories', 'categories')
+      .where('post.pinned = true')
+      .leftJoin('post.like', 'like')
+      .where('like.userId = :userId', { userId })
+      .select([
+        'post.id',
+        'post.titleRu',
+        'post.likeCount',
+        'post.pinned',
+        'post.modifier',
+        'post.type',
+        'image',
+        'categories',
+        'like',
+      ])
+      .getMany();
+  }
+
+  async findAllRuAuth(
+    size: number,
+    page: number,
+    userId: number,
+    // sort: string,
+    // by: any,
+  ): Promise<PostEntity[]> {
+    const take = size || 10;
+    const skip = (page - 1) * size || 0;
+    return await this.createQueryBuilder('post')
+      .leftJoin('post.comment', 'comment')
+      .leftJoin('post.like', 'like')
+      .where('like.userId = :userId', { userId })
+      .leftJoin('comment.userId', 'userId')
+      .leftJoin('comment.subComment', 'subComment')
+      .leftJoin('subComment.userId', 'user')
+      .leftJoin('post.image', 'image')
+      .leftJoin('post.categories', 'categories')
+      .select([
+        'post.id',
+        'post.titleRu',
+        'post.createdDate',
+        'post.postArticle',
+        'post.likeCount',
+        'post.pinned',
+        'post.modifier',
+        'post.type',
+        'comment',
+        'userId.login',
+        'subComment',
+        'user.login',
+        'image',
+        'categories',
+        'like',
+      ])
+      // .orderBy(sort, by)
+      .limit(take)
+      .offset(skip)
+      .getMany();
+  }
+
+  async findOneEnAuth(id: string, userId: number): Promise<PostEntity> {
+    return await this.createQueryBuilder('post')
+      .leftJoin('post.imageUrl', 'image_url')
+      .leftJoin('post.categoryId', 'category_id')
+      .leftJoin('post.comment', 'comment')
+      .leftJoin('pattern_product.like', 'like')
+      .where('like.userId = :userId', { userId })
+      .leftJoin('comment.userId', 'userId')
+      .leftJoin('comment.subComment', 'subComment')
+      .leftJoin('subComment.userId', 'user')
+      .where('post.id = :id', { id })
+      .select([
+        'post.id',
+        'post.titleEn',
+        'post.textEn',
+        'post.createdDate',
+        'post.likeCount',
+        'image_url',
+        'category_id.textEn',
+        'comment',
+        'userId.login',
+        'subComment',
+        'user.login',
+        'like',
+      ])
+      .getOne();
+  }
+
+  async findBestEnAuth(userId: number): Promise<PostEntity[]> {
+    return await this.createQueryBuilder('post')
+      .leftJoin('post.imageUrl', 'image_url')
+      .leftJoin('post.categoryId', 'category_id')
+      .leftJoin('post.comment', 'comment')
+      .leftJoin('post.like', 'like')
+      .where('like.userId = :userId', { userId })
+      .leftJoin('comment.userId', 'userId')
+      .leftJoin('comment.subComment', 'subComment')
+      .leftJoin('subComment.userId', 'user')
+      .select([
+        'post.id',
+        'post.titleEn',
+        'post.textEn',
+        'post.createdDate',
+        'post.likeCount',
+        'image_url',
+        'category_id.textEn',
+        'comment',
+        'userId.login',
+        'subComment',
+        'user.login',
+        'like',
+      ])
+      .orderBy('RANDOM()')
+      .limit(3)
+      .getMany();
+  }
+
+  async findPinnedEnAuth(userId: number): Promise<PostEntity[]> {
+    return await this.createQueryBuilder('post')
+      .leftJoin('post.imageUrl', 'image_url')
+      .leftJoin('post.categoryId', 'category_id')
+      .leftJoin('post.comment', 'comment')
+      .leftJoin('post.like', 'like')
+      .where('like.userId = :userId', { userId })
+      .leftJoin('comment.userId', 'userId')
+      .leftJoin('comment.subComment', 'subComment')
+      .leftJoin('subComment.userId', 'user')
+      .where('post.pinned = true')
+      .select([
+        'post.id',
+        'post.titleEn',
+        'post.textEn',
+        'post.createdDate',
+        'post.likeCount',
+        'image_url',
+        'category_id.textEn',
+        'comment',
+        'userId.login',
+        'subComment',
+        'user.login',
+        'like',
+      ])
+      .getMany();
+  }
+
+  async findAllEnAuth(
+    size: number,
+    page: number,
+    userId: number,
+    // sort: string,
+    // by: any,
+  ): Promise<PostEntity[]> {
+    const take = size || 10;
+    const skip = (page - 1) * size || 0;
+    return await this.createQueryBuilder('post')
+      .leftJoin('post.comment', 'comment')
+      .leftJoin('post.like', 'like')
+      .where('like.userId = :userId', { userId })
+      .leftJoin('comment.userId', 'userId')
+      .leftJoin('comment.subComment', 'subComment')
+      .leftJoin('subComment.userId', 'user')
+      .leftJoin('post.image', 'image')
+      .leftJoin('post.categories', 'categories')
+      .select([
+        'post.id',
+        'post.titleEn',
+        'post.createdDate',
+        'post.postArticle',
+        'post.likeCount',
+        'post.pinned',
+        'comment',
+        'userId.login',
+        'subComment',
+        'user.login',
+        'image',
+        'categories',
+        'like',
+      ])
+      //.orderBy(sort, by)
+      .limit(take)
+      .offset(skip)
+      .getMany();
+  }
 }

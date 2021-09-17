@@ -52,6 +52,23 @@ export class MasterClassService {
     }
   }
 
+  async getOneAuth(
+    id: string,
+    query: string,
+    userId: number,
+  ): Promise<MasterClassEntity> {
+    if (query === 'ru') {
+      return await this.masterClassRepository.findOneRuAuth(id, userId);
+    }
+    if (query === 'en') {
+      const result = await this.masterClassRepository.findOneEnAuth(id, userId);
+      result.images = await this.fileUploadService.getAllMasterClasses(
+        result.id,
+      );
+      return result;
+    }
+  }
+
   async getAll(
     query: string,
     size: number,
@@ -61,6 +78,18 @@ export class MasterClassService {
       return await this.masterClassRepository.findAllRu(size, page);
     if (query === 'en')
       return await this.masterClassRepository.findAllEn(size, page);
+  }
+
+  async getAllAuth(
+    query: string,
+    size: number,
+    page: number,
+    userId: number,
+  ): Promise<MasterClassEntity[]> {
+    if (query === 'ru')
+      return await this.masterClassRepository.findAllRuAuth(size, page, userId);
+    if (query === 'en')
+      return await this.masterClassRepository.findAllEnAuth(size, page, userId);
   }
 
   async getPinned(query: string): Promise<MasterClassEntity[]> {
@@ -82,6 +111,36 @@ export class MasterClassService {
     if (query === 'en') {
       const results = await this.masterClassRepository.findPinnedEn();
       for (let result of results) {
+        result.images = await this.fileUploadService.getAllMasterClasses(
+          result.id,
+        );
+      }
+      return results;
+    }
+  }
+
+  async getPinnedAuth(
+    query: string,
+    userId: number,
+  ): Promise<MasterClassEntity[]> {
+    if (query === 'ru') {
+      const results = await this.masterClassRepository.findPinnedRuAuth(userId);
+      for (const result of results) {
+        result.images = await this.fileUploadService.getAllMasterClasses(
+          result.id,
+        );
+        result.programs = await this.programsService.getAllMasterClasses(
+          result.id,
+        );
+        result.categories = await this.categoriesService.getAllMasterClasses(
+          result.id,
+        );
+      }
+      return results;
+    }
+    if (query === 'en') {
+      const results = await this.masterClassRepository.findPinnedEnAuth(userId);
+      for (const result of results) {
         result.images = await this.fileUploadService.getAllMasterClasses(
           result.id,
         );

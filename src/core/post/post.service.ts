@@ -31,6 +31,19 @@ export class PostService {
     }
   }
 
+  async getOneAuth(
+    id: string,
+    query: string,
+    userId: number,
+  ): Promise<PostEntity> {
+    if (query === 'ru') {
+      return await this.postRepository.findOneRuAuth(id, userId);
+    }
+    if (query === 'en') {
+      return await this.postRepository.findOneEnAuth(id, userId);
+    }
+  }
+
   async getAll(
     query: string,
     size: number,
@@ -70,6 +83,46 @@ export class PostService {
     }
   }
 
+  async getAllAuth(
+    query: string,
+    size: number,
+    page: number,
+    userId: number,
+    //sort: string,
+    //by: string,
+  ): Promise<PostEntity[]> {
+    if (query === 'ru') {
+      /* if (sort === 'title') {
+        sort = 'post.titleRu';
+      }
+      if (sort === 'category') {
+        sort = 'category_id.textRu';
+      }
+      if (sort === 'date') {
+        sort = 'post.createdDate';
+      }
+      if (sort === 'like') {
+        sort = 'post.likeCount';
+      } else sort === ''; */
+      return await this.postRepository.findAllRuAuth(size, page, userId);
+    }
+    if (query === 'en') {
+      /* if (sort === 'title') {
+        sort = 'post.titleEn';
+      }
+      if (sort === 'category') {
+        sort = 'category_id.textEn';
+      }
+      if (sort === 'date') {
+        sort = 'post.createdDate';
+      }
+      if (sort === 'like') {
+        sort = 'post.likeCount';
+      } else sort === ''; */
+      return await this.postRepository.findAllEnAuth(size, page, userId);
+    }
+  }
+
   async getBest(query: string): Promise<PostEntity[]> {
     if (query === 'ru') {
       return await this.postRepository.findBestRu();
@@ -79,12 +132,30 @@ export class PostService {
     }
   }
 
+  async getBestAuth(query: string, userId: number): Promise<PostEntity[]> {
+    if (query === 'ru') {
+      return await this.postRepository.findBestRuAuth(userId);
+    }
+    if (query === 'en') {
+      return await this.postRepository.findBestEnAuth(userId);
+    }
+  }
+
   async getPinned(query: string): Promise<PostEntity[]> {
     if (query === 'ru') {
       return await this.postRepository.findPinnedRu();
     }
     if (query === 'en') {
       return await this.postRepository.findPinnedEn();
+    }
+  }
+
+  async getPinnedAuth(query: string, userId: number): Promise<PostEntity[]> {
+    if (query === 'ru') {
+      return await this.postRepository.findPinnedRuAuth(userId);
+    }
+    if (query === 'en') {
+      return await this.postRepository.findPinnedEnAuth(userId);
     }
   }
 

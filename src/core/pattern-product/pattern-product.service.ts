@@ -54,6 +54,26 @@ export class PatternProductService {
     }
   }
 
+  async getOneAuth(
+    id: string,
+    query: string,
+    userId: number,
+  ): Promise<PatternProductEntity> {
+    if (query === 'ru') {
+      return await this.patternProductRepository.findOneRuAuth(id, userId);
+    }
+    if (query === 'en') {
+      const result = await this.patternProductRepository.findOneEnAuth(
+        id,
+        userId,
+      );
+      result.images = await this.fileUploadService.getAllPatternProducts(
+        result.id,
+      );
+      return result;
+    }
+  }
+
   async getAll(
     query: string,
     size: number,
@@ -63,6 +83,26 @@ export class PatternProductService {
       return await this.patternProductRepository.findAllRu(size, page);
     if (query === 'en')
       return await this.patternProductRepository.findAllEn(size, page);
+  }
+
+  async getAllAuth(
+    query: string,
+    size: number,
+    page: number,
+    userId: number,
+  ): Promise<PatternProductEntity[]> {
+    if (query === 'ru')
+      return await this.patternProductRepository.findAllRuAuth(
+        size,
+        page,
+        userId,
+      );
+    if (query === 'en')
+      return await this.patternProductRepository.findAllEnAuth(
+        size,
+        page,
+        userId,
+      );
   }
 
   async getPinned(query: string): Promise<PatternProductEntity[]> {
@@ -84,6 +124,40 @@ export class PatternProductService {
     if (query === 'en') {
       const results = await this.patternProductRepository.findPinnedEn();
       for (let result of results) {
+        result.images = await this.fileUploadService.getAllPatternProducts(
+          result.id,
+        );
+      }
+      return results;
+    }
+  }
+
+  async getPinnedAuth(
+    query: string,
+    userId: number,
+  ): Promise<PatternProductEntity[]> {
+    if (query === 'ru') {
+      const results = await this.patternProductRepository.findPinnedRuAuth(
+        userId,
+      );
+      for (const result of results) {
+        result.images = await this.fileUploadService.getAllPatternProducts(
+          result.id,
+        );
+
+        result.sizes = await this.sizesService.getAllPatternProducts(result.id);
+
+        result.categories = await this.categoriesService.getAllPatternProducts(
+          result.id,
+        );
+      }
+      return results;
+    }
+    if (query === 'en') {
+      const results = await this.patternProductRepository.findPinnedEnAuth(
+        userId,
+      );
+      for (const result of results) {
         result.images = await this.fileUploadService.getAllPatternProducts(
           result.id,
         );
