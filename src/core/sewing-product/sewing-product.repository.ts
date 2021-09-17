@@ -35,13 +35,9 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
   }
 
   async findAllRu(size: number, page: number): Promise<SewingProductEntity[]> {
-    const take = size || 100;
+    const take = size || 200;
     const skip = (page - 1) * size || 0;
     return await this.createQueryBuilder('sewing_product')
-      .leftJoin('sewing_product.comment', 'comment')
-      .leftJoin('comment.userId', 'userId')
-      .leftJoin('comment.subComment', 'subComment')
-      .leftJoin('subComment.userId', 'user')
       .leftJoin('sewing_product.images', 'images')
       .leftJoin('sewing_product.sizes', 'sizes')
       .leftJoin('sewing_product.colors', 'colors')
@@ -54,10 +50,6 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sewing_product.modifier',
         'sewing_product.type',
         'sewing_product.pinned',
-        'comment',
-        'userId.login',
-        'subComment',
-        'user.login',
         'images',
         'sizes',
         'colors',

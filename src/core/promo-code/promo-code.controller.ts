@@ -39,9 +39,7 @@ export class PromoCodeController {
 
   @Post('/check')
   @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async check(
-    @Body(ValidationPipe) checkPromoCodeDto: CheckPromoCodeDto,
-  ): Promise<{ discount: number }> {
+  async check(@Body(ValidationPipe) checkPromoCodeDto: CheckPromoCodeDto) {
     return await this.promoCodeService.check(checkPromoCodeDto);
   }
 

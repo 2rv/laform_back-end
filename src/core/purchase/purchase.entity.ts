@@ -6,9 +6,7 @@ import {
   ManyToOne,
   JoinColumn,
   OneToMany,
-  OneToOne,
 } from 'typeorm';
-import { CategoryEntity } from '../category/category.entity';
 import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
 import { UserEntity } from '../user/user.entity';
 import { IsEmail } from 'class-validator';

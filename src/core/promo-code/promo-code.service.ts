@@ -39,6 +39,6 @@ export class PromoCodeService {
     if (!result) {
       throw new BadRequestException(PROMO_CODE_ERROR.PROMO_CODE_NOT_EXISTS);
     }
-    return { discount: result.discount };
+    return { discount: result.discount, promocode: body.text };
   }
 }
