@@ -46,37 +46,29 @@ export class PurchaseService {
     const verifyPurchaseProducts: PurchaseProductDto[] =
       body.purchaseProducts.map((item: PurchaseProductDto) => {
         if (item.type === 0) {
-          //@ts-ignore я хз как мне переделать Promise<number> в number
           item.totalDiscount = this.masterClassService.getDiscount(
             item.masterClassId,
           );
-          //@ts-ignore я хз как мне переделать Promise<number> в number
           item.totalPrice = this.programsService.getProgramPrice(item.program);
         }
         if (item.type === 1) {
-          //@ts-ignore я хз как мне переделать Promise<number> в number
           item.totalDiscount = this.patternProductService.getDiscount(
             item.patternProductId,
           );
-          //@ts-ignore я хз как мне переделать Promise<number> в number
           item.totalPrice = this.patternProductService.getPrice(
             item.patternProductId,
           );
         }
         if (item.type === 2) {
-          //@ts-ignore я хз как мне переделать Promise<number> в number
           item.totalDiscount = this.patternProductService.getDiscount(
             item.patternProductId,
           );
-          //@ts-ignore я хз как мне переделать Promise<number> в number
           item.totalPrice = this.sizesService.getSizePrice(item.size);
         }
         if (item.type === 3) {
-          //@ts-ignore я хз как мне переделать Promise<number> в number
           item.totalDiscount = this.sewingProductService.getDiscount(
             item.sewingProductId,
           );
-          //@ts-ignore я хз как мне переделать Promise<number> в number
           item.totalPrice = this.sizesService.getSizePrice(item.size);
         }
 
