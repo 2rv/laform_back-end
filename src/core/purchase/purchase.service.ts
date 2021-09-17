@@ -3,22 +3,91 @@ import { Injectable } from '@nestjs/common';
 import { PurchaseEntity } from './purchase.entity';
 import { PurchaseRepository } from './purchase.repository';
 import { CreatePurchaseDto } from './dto/create-purchase.dto';
+import { PurchaseDto } from './dto/purchase.dto';
+import { ProgramsService } from '../programs/programs.service';
+import { SizesService } from '../sizes/sizes.service';
+import { PurchaseProductDto } from './dto/purchase-product.dto';
+import { PatternProductService } from '../pattern-product/pattern-product.service';
+import { SewingProductService } from '../sewing-product/sewing-product.service';
+import { MasterClassService } from '../master-class/master-class.service';
+import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
 
 @Injectable()
 export class PurchaseService {
-  constructor(private purchaseRepository: PurchaseRepository) {}
+  constructor(
+    private purchaseRepository: PurchaseRepository,
+    private programsService: ProgramsService,
+    private sizesService: SizesService,
+    private patternProductService: PatternProductService,
+    private sewingProductService: SewingProductService,
+    private masterClassService: MasterClassService,
+  ) {}
 
-  async create(body: any, userId, email): Promise<any> {
-    return this.purchaseRepository.create({ ...body, userId, email });
+  async create(
+    body: PurchaseDto,
+    purchaseProducts: PurchaseProductDto[],
+    userId,
+    email: string,
+  ): Promise<PurchaseEntity> {
+    console.log(purchaseProducts);
+    return this.purchaseRepository.create({
+      ...body,
+      purchaseProducts,
+      userId,
+      email,
+    });
   }
 
   async save(
     body: CreatePurchaseDto,
-    userId: number,
+    userId: number = null,
     email: string,
   ): Promise<PurchaseEntity> {
-    const purchase = await this.create(body.purchase, userId, email);
-    purchase.purchaseProducts = body.purchaseProducts;
+    const verifyPurchaseProducts: PurchaseProductDto[] =
+      body.purchaseProducts.map((item: PurchaseProductDto) => {
+        if (item.type === 0) {
+          //@ts-ignore я хз как мне переделать Promise<number> в number
+          item.totalDiscount = this.masterClassService.getDiscount(
+            item.masterClassId,
+          );
+          //@ts-ignore я хз как мне переделать Promise<number> в number
+          item.totalPrice = this.programsService.getProgramPrice(item.program);
+        }
+        if (item.type === 1) {
+          //@ts-ignore я хз как мне переделать Promise<number> в number
+          item.totalDiscount = this.patternProductService.getDiscount(
+            item.patternProductId,
+          );
+          //@ts-ignore я хз как мне переделать Promise<number> в number
+          item.totalPrice = this.patternProductService.getPrice(
+            item.patternProductId,
+          );
+        }
+        if (item.type === 2) {
+          //@ts-ignore я хз как мне переделать Promise<number> в number
+          item.totalDiscount = this.patternProductService.getDiscount(
+            item.patternProductId,
+          );
+          //@ts-ignore я хз как мне переделать Promise<number> в number
+          item.totalPrice = this.sizesService.getSizePrice(item.size);
+        }
+        if (item.type === 3) {
+          //@ts-ignore я хз как мне переделать Promise<number> в number
+          item.totalDiscount = this.sewingProductService.getDiscount(
+            item.sewingProductId,
+          );
+          //@ts-ignore я хз как мне переделать Promise<number> в number
+          item.totalPrice = this.sizesService.getSizePrice(item.size);
+        }
+
+        return item;
+      });
+    const purchase = await this.create(
+      body.purchase,
+      verifyPurchaseProducts,
+      userId,
+      email,
+    );
     return await this.purchaseRepository.save({
       ...purchase,
     });
@@ -27,7 +96,6 @@ export class PurchaseService {
   async getAll(size: number, page: number): Promise<PurchaseEntity[]> {
     return await this.purchaseRepository.getAll(size, page);
   }
-
   async getAllForUser(
     size: number,
     page: number,
@@ -35,7 +103,6 @@ export class PurchaseService {
   ): Promise<PurchaseEntity[]> {
     return await this.purchaseRepository.getAllForUser(size, page, userId);
   }
-
   async getOne(id: string): Promise<PurchaseEntity> {
     return await this.purchaseRepository.getOne(id);
   }

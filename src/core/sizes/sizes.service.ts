@@ -17,6 +17,13 @@ export class SizesService {
     return result.raw;
   }
 
+  async getSizePrice(id: SizesEntity): Promise<number> {
+    const result = await this.sizesRepository.findOne(id);
+    if (!result) {
+      throw new BadRequestException('SIZES_ERROR.SIZE_NOT_FOUND');
+    } else return result.price;
+  }
+
   async update(id: string, body) {
     const result = await this.sizesRepository.update(id, body);
     return result;

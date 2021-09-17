@@ -51,6 +51,18 @@ export class PatternProductService {
       return await this.patternProductRepository.findOneEn(id);
   }
 
+  async getDiscount(id): Promise<number> {
+    return await (
+      await this.patternProductRepository.findOne(id)
+    ).discount;
+  }
+
+  async getPrice(id): Promise<number> {
+    return await (
+      await this.patternProductRepository.findOne(id)
+    ).price;
+  }
+
   async getAll(
     query: string,
     size: number,

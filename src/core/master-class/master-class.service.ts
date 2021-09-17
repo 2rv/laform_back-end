@@ -38,6 +38,12 @@ export class MasterClassService {
     if (query === 'en') return await this.masterClassRepository.findOneEn(id);
   }
 
+  async getDiscount(id): Promise<number> {
+    return await (
+      await this.masterClassRepository.findOne(id)
+    ).discount;
+  }
+
   async getAll(
     query: string,
     size: number,

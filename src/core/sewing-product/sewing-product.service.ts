@@ -31,6 +31,12 @@ export class SewingProductService {
     return await this.sewingProductRepository.delete(sewingProduct.id);
   }
 
+  async getDiscount(id): Promise<number> {
+    return await (
+      await this.sewingProductRepository.findOne(id)
+    ).discount;
+  }
+
   async update(id: string, body: UpdateSewingProductDto) {
     if (body.images) {
       for (let file of body.images) {

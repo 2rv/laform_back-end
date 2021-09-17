@@ -16,18 +16,31 @@ export class PurchaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({
-    type: 'varchar',
-    name: 'price',
+  @CreateDateColumn({
+    name: 'created_date',
+    readonly: true,
   })
-  price!: string;
+  createdDate: Date;
 
-  @Column({
-    type: 'varchar',
-    name: 'discount',
-    nullable: true,
+  //   @Column({                               зачем оно????????????
+  //     type: 'varchar',
+  //     name: 'order_number',
+  //     nullable: true,
+  //   })
+  //   orderNumber: string;
+
+  //   @Column({                              надо бы это обсудить
+  //     type: 'varchar',
+  //     name: 'order_status',
+  //     nullable: true,
+  //   })
+  //   orderStatus: string;
+
+  @ManyToOne(() => UserEntity, (user: UserEntity) => user.purchase)
+  @JoinColumn({
+    name: 'user_id',
   })
-  discount?: string;
+  userId: UserEntity;
 
   @Column({
     type: 'varchar',
@@ -44,27 +57,27 @@ export class PurchaseEntity {
 
   @Column({
     type: 'varchar',
-    name: 'type_of_delivery',
-  })
-  typeOfDelivery!: string;
-
-  @Column({
-    type: 'varchar',
     name: 'city',
   })
   city!: string;
 
   @Column({
-    type: 'int',
+    type: 'varchar',
     name: 'phone_number',
   })
-  phoneNumber!: number;
+  phoneNumber!: string;
 
-  @Column({
-    type: 'varchar',
-    name: 'type_of_payment',
-  })
-  typeOfPayment!: string;
+  //   @Column({                                    надо бы это обсудить
+  //     type: 'varchar',
+  //     name: 'type_of_payment',
+  //   })
+  //   typeOfPayment!: string;
+
+  //   @Column({
+  //     type: 'varchar',
+  //     name: 'type_of_delivery',
+  //   })
+  //   typeOfDelivery!: string;
 
   @Column({
     type: 'varchar',
@@ -72,12 +85,6 @@ export class PurchaseEntity {
     nullable: true,
   })
   comment?: string;
-
-  @CreateDateColumn({
-    name: 'created_date',
-    readonly: true,
-  })
-  createdDate: Date;
 
   @OneToMany(
     () => PurchaseProductEntity,
@@ -88,44 +95,24 @@ export class PurchaseEntity {
   )
   purchaseProducts: PurchaseProductEntity[];
 
-  @ManyToOne(() => UserEntity, (user: UserEntity) => user.purchase)
-  @JoinColumn({
-    name: 'user_id',
-  })
-  userId: UserEntity;
+  //   @Column({                               надо бы это обсудить
+  //     type: 'int',
+  //     name: 'delivery_price',
+  //     nullable: true,
+  //   })
+  //   deliveryPrice: number;
 
   @Column({
-    type: 'varchar',
-    name: 'order_status',
-    nullable: true,
+    type: 'numeric',
+    name: 'price',
   })
-  orderStatus: string;
+  price!: number;
 
   @Column({
-    type: 'varchar',
-    name: 'delivery_price',
+    type: 'int',
+    name: 'promo_code_discount',
+    default: 0,
     nullable: true,
   })
-  deliveryPrice: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'total_price',
-    nullable: true,
-  })
-  totalPrice: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'order_number',
-    nullable: true,
-  })
-  orderNumber: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'discount_price',
-    nullable: true,
-  })
-  discountPrice: string;
+  promoCodeDiscount?: number;
 }

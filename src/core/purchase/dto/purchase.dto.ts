@@ -1,21 +1,13 @@
 import { IsNotEmpty, IsNumber, IsString, IsOptional } from 'class-validator';
 
 export class PurchaseDto {
-  @IsNotEmpty()
-  @IsNumber()
-  price: number;
-
   @IsOptional()
   @IsNumber()
   userId: number;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   email: string;
-
-  @IsOptional()
-  @IsString()
-  discount: number;
 
   @IsNotEmpty()
   @IsString()
@@ -23,21 +15,29 @@ export class PurchaseDto {
 
   @IsNotEmpty()
   @IsString()
-  typeOfDelivery: string;
-
-  @IsNotEmpty()
-  @IsString()
   city: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  phoneNumber: number;
-
-  @IsNotEmpty()
   @IsString()
-  typeOfPayment: string;
+  phoneNumber: string;
+
+  //   @IsNotEmpty()
+  //   @IsString()
+  //   typeOfPayment: string;
+
+  //   @IsNotEmpty()
+  //   @IsString()
+  //   typeOfDelivery: string;
 
   @IsOptional()
   @IsString()
   comment: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  price: number;
+
+  @IsOptional()
+  @IsNumber()
+  promoCodeDiscount: number;
 }
