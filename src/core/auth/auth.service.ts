@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 
@@ -13,7 +17,6 @@ import { AccountDataDto } from './dto/account-data.dto';
 import { JwtPayload } from './interface/jwt-payload.interface';
 import { AuthRepository } from './auth.repository';
 import { UserInfoService } from '../user-info/user-info.service';
-import { BasketService } from './../basket/basket.service';
 
 @Injectable()
 export class AuthService {
@@ -23,7 +26,6 @@ export class AuthService {
     private userRepository: UserRepository,
     private jwtService: JwtService,
     private userInfoService: UserInfoService,
-    private basketService: BasketService,
   ) {}
 
   async signUp(userSignUpDto: UserSignUpDto): Promise<any> {
@@ -31,7 +33,6 @@ export class AuthService {
       userSignUpDto,
     );
     await this.userInfoService.create(user);
-    await this.basketService.create(user);
     const accessToken = await this.createJwt(user);
 
     return { accessToken };
@@ -61,9 +62,12 @@ export class AuthService {
   }
 
   async updateLogin(user: UserEntity): Promise<LoginInfoDto> {
-    const accessToken = await this.createJwt(user);
-
-    return { accessToken };
+    if (user.emailConfirmed) {
+      const accessToken = await this.createJwt(user);
+      return { accessToken };
+    } else {
+      throw new BadRequestException(AUTH_ERROR.USER_NOT_CONFIRMED);
+    }
   }
 
   async getAccountById(id: number): Promise<UserEntity> {

@@ -2,8 +2,6 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  JoinColumn,
-  ManyToOne,
   OneToMany,
   OneToOne,
 } from 'typeorm';
@@ -13,11 +11,24 @@ import { SizesEntity } from '../sizes/sizes.entity';
 import { LikeEntity } from '../like/like.entity';
 import { CommentEntity } from '../comment/comment.entity';
 import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
+import { generateVendorCode } from '../../common/utils/vendor-coder';
 
 @Entity({ name: 'pattern_product' })
 export class PatternProductEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column({
+    type: 'varchar',
+    name: 'vendor_code',
+    unique: true,
+    nullable: true,
+  })
+  vendorCode: string;
+
+  static getVendorCode() {
+    return generateVendorCode();
+  }
 
   @OneToMany(
     () => CategoryEntity,

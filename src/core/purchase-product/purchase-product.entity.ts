@@ -6,11 +6,9 @@ import {
   CreateDateColumn,
   ManyToOne,
   JoinColumn,
-  OneToMany,
 } from 'typeorm';
-import { CategoryEntity } from '../category/category.entity';
+
 import { PurchaseEntity } from '../purchase/purchase.entity';
-import { BasketEntity } from '../basket/basket.entity';
 import { PatternProductEntity } from '../pattern-product/pattern-product.entity';
 import { SewingProductEntity } from '../sewing-product/sewing-product.entity';
 
@@ -54,15 +52,6 @@ export class PurchaseProductEntity {
     name: 'sewing_product_id',
   })
   sewingProductId: SewingProductEntity;
-
-  @ManyToOne(
-    () => BasketEntity,
-    (basket: BasketEntity) => basket.purchaseProducts,
-  )
-  @JoinColumn({
-    name: 'basket_id',
-  })
-  basketId: BasketEntity;
 
   @Column({
     name: 'quantity',
@@ -112,12 +101,6 @@ export class PurchaseProductEntity {
     nullable: true,
   })
   program?: string;
-
-  /* @ManyToOne(() => CategoryEntity, (category: CategoryEntity) => category.post)
-  @JoinColumn({
-    name: 'category_id',
-  })
-  categoryId?: CategoryEntity; */
 
   @CreateDateColumn({
     name: 'created_date',

@@ -26,18 +26,14 @@ export class PurchaseController {
   constructor(private readonly purchaseService: PurchaseService) {}
 
   @Post('/create')
-  async save(@Body(new ValidationPipe()) body: CreatePurchaseDto) {
-    return await this.purchaseService.saveForNotRegUser(body);
-  }
-
-  @Post('/user/create')
   @Roles(USER_ROLE.USER)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async saveForUser(
     @GetUser() user: UserEntity,
     @Body(new ValidationPipe()) body: CreatePurchaseDto,
   ) {
-    return await this.purchaseService.save(body, user.email, user.id);
+    body.purchase.userId = user.id;
+    return await this.purchaseService.save(body, user.id, user.email);
   }
 
   @Get('get/:purchaseId')
@@ -57,12 +53,8 @@ export class PurchaseController {
   @Get('/get/')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async getAll(
-    @Query('size') size: number,
-    @Query('page') page: number,
-    @Query('filter') orderNumber: string,
-  ) {
-    return await this.purchaseService.getAll(size, page, orderNumber);
+  async getAll(@Query('size') size: number, @Query('page') page: number) {
+    return await this.purchaseService.getAll(size, page);
   }
 
   @Get('/user/get/')

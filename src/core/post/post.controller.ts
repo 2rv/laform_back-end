@@ -56,8 +56,6 @@ export class PostController {
     @Query(new LangValidationPipe()) query: string,
     @Query('size') size: number,
     @Query('page') page: number,
-    //@Query('sort') sort: string,
-    //@Query('by') by: string,
   ) {
     return await this.postService.getAll(query, size, page);
   }

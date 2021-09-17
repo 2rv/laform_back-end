@@ -69,11 +69,6 @@ export class SewingProductDto {
   @Max(3)
   type: number;
 
-  @IsNotEmpty()
-  @IsNumber()
-  @Min(0)
-  count: number;
-
   @IsOptional()
   @IsBoolean()
   deleted: boolean;

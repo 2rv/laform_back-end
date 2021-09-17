@@ -4,7 +4,6 @@ import {
   IsOptional,
   IsArray,
   IsNumber,
-  IsObject,
   IsBoolean,
   Min,
   Max,
@@ -48,6 +47,12 @@ export class MasterClassDto {
   @ArrayMaxSize(6)
   images: [FileDto];
 
+  @IsNotEmpty()
+  @IsNumber()
+  @Min(0)
+  @Max(0)
+  type: number;
+
   @IsOptional()
   @IsNumber()
   @Min(0)
@@ -57,24 +62,6 @@ export class MasterClassDto {
   @IsOptional()
   @IsString()
   modifier: string;
-
-  @IsNotEmpty()
-  @IsNumber()
-  @Min(0)
-  @Max(0)
-  type: number;
-
-  @IsOptional()
-  @IsArray()
-  recommendations: [];
-
-  @IsNotEmpty()
-  @IsObject()
-  masterClassArticle: {
-    blocks: [];
-    time: number;
-    version: string;
-  };
 
   @IsOptional()
   @IsBoolean()

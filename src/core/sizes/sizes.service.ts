@@ -8,8 +8,12 @@ import { DeleteManySizesDto } from './dto/delete-many-sizes.dto';
 export class SizesService {
   constructor(private sizesRepository: SizesRepository) {}
 
-  async createMany(Sizes: CreateSizeDto[]): Promise<SizesEntity> {
-    const result = await this.sizesRepository.insert(Sizes);
+  async createMany(sizes: CreateSizeDto[]): Promise<SizesEntity> {
+    const sizesWithVendorCode = sizes.map((item) => {
+      item.vendorCode = SizesEntity.getVendorCode();
+      return item;
+    });
+    const result = await this.sizesRepository.insert(sizesWithVendorCode);
     return result.raw;
   }
 

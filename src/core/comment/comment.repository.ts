@@ -9,6 +9,10 @@ export class CommentRepository extends Repository<CommentEntity> {
       .leftJoin('comment.userId', 'user')
       .leftJoin('comment.subComment', 'sub_comment')
       .leftJoin('sub_comment.userId', 'sub_user_id')
+      .orderBy({
+        'comment.createDate': 'ASC',
+        'sub_comment.createDate': 'ASC',
+      })
       .select([
         'comment.id',
         'comment.text',
@@ -21,10 +25,6 @@ export class CommentRepository extends Repository<CommentEntity> {
         'sub_user_id.id',
       ])
       .getMany()
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
       .catch((err) => {
         throw err;
       });
@@ -37,6 +37,10 @@ export class CommentRepository extends Repository<CommentEntity> {
       .leftJoin('comment.userId', 'user_id')
       .leftJoin('comment.subComment', 'sub_comment')
       .leftJoin('sub_comment.userId', 'sub_user_id')
+      .orderBy({
+        'comment.createDate': 'ASC',
+        'sub_comment.createDate': 'ASC',
+      })
       .select([
         'comment.id',
         'comment.text',
@@ -49,10 +53,6 @@ export class CommentRepository extends Repository<CommentEntity> {
         'sub_user_id.id',
       ])
       .getMany()
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
       .catch((err) => {
         throw err;
       });
@@ -67,6 +67,10 @@ export class CommentRepository extends Repository<CommentEntity> {
       .leftJoin('comment.userId', 'user_id')
       .leftJoin('comment.subComment', 'sub_comment')
       .leftJoin('sub_comment.userId', 'sub_user_id')
+      .orderBy({
+        'comment.createDate': 'ASC',
+        'sub_comment.createDate': 'ASC',
+      })
       .select([
         'comment.id',
         'comment.text',
@@ -79,10 +83,6 @@ export class CommentRepository extends Repository<CommentEntity> {
         'sub_user_id.id',
       ])
       .getMany()
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
       .catch((err) => {
         throw err;
       });
@@ -97,6 +97,10 @@ export class CommentRepository extends Repository<CommentEntity> {
       .leftJoin('comment.userId', 'user_id')
       .leftJoin('comment.subComment', 'sub_comment')
       .leftJoin('sub_comment.userId', 'sub_user_id')
+      .orderBy({
+        'comment.createDate': 'ASC',
+        'sub_comment.createDate': 'ASC',
+      })
       .select([
         'comment.id',
         'comment.text',
@@ -109,10 +113,6 @@ export class CommentRepository extends Repository<CommentEntity> {
         'sub_user_id.id',
       ])
       .getMany()
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
       .catch((err) => {
         throw err;
       });
@@ -125,6 +125,7 @@ export class CommentRepository extends Repository<CommentEntity> {
       .leftJoinAndSelect('comment.sewingProductId', 'sewing_product_id')
       .leftJoinAndSelect('comment.patternProductId', 'pattern_product_id')
       .where('comment.userId = :userId', { userId })
+      .orderBy('comment.createDate', 'ASC')
       .getMany();
   }
 
@@ -143,10 +144,6 @@ export class CommentRepository extends Repository<CommentEntity> {
         'user_id.id',
       ])
       .getOne()
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
       .catch((err) => {
         throw err;
       });
@@ -160,6 +157,7 @@ export class SubCommentRepository extends Repository<SubCommentEntity> {
       .leftJoin('sub_comment.userId', 'user_id')
       .where('sub_comment.postId = :postId', { postId })
       .andWhere('sub_comment.commentId = :commentId', { commentId })
+      .orderBy('sub_comment.createDate', 'ASC')
       .select([
         'sub_comment.id',
         'sub_comment.text',
@@ -168,10 +166,6 @@ export class SubCommentRepository extends Repository<SubCommentEntity> {
         'user_id.id',
       ])
       .getMany()
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
       .catch((err) => {
         throw err;
       });
@@ -181,6 +175,7 @@ export class SubCommentRepository extends Repository<SubCommentEntity> {
     return await this.createQueryBuilder('sub_comment')
       .leftJoin('sub_comment.userId', 'user_id')
       .where('sub_comment.commentId = :commentId', { commentId })
+      .orderBy('sub_comment.createDate', 'ASC')
       .select([
         'sub_comment.id',
         'sub_comment.text',
@@ -189,10 +184,6 @@ export class SubCommentRepository extends Repository<SubCommentEntity> {
         'user_id.id',
       ])
       .getMany()
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
       .catch((err) => {
         throw err;
       });
@@ -210,10 +201,6 @@ export class SubCommentRepository extends Repository<SubCommentEntity> {
         'user_id.id',
       ])
       .getOne()
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
       .catch((err) => {
         throw err;
       });
