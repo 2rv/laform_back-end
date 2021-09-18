@@ -4,17 +4,15 @@ import { GetAccount } from '../user/decorator/get-account.decorator';
 import { AccountGuard } from '../user/guard/account.guard';
 import { UserEntity } from '../user/user.entity';
 import { UserService } from './user.service';
-import { UserGetSubscriptionStatusDto } from './dto/user-get-subscription-status.dto';
+import { UserGetEmailDto } from './dto/user-get-email.dto';
 
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @Get('/subscription')
+  @Get('/email')
   @UseGuards(AuthGuard(), AccountGuard)
-  getAccountEmail(
-    @GetAccount() user: UserEntity,
-  ): Promise<UserGetSubscriptionStatusDto> {
-    return this.userService.getSubscriptionStatus(user);
+  getAccountEmail(@GetAccount() user: UserEntity): Promise<UserGetEmailDto> {
+    return this.userService.getUserEmail(user);
   }
 }

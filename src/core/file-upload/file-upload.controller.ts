@@ -9,7 +9,6 @@ import {
   Get,
   Put,
   Delete,
-  Request,
   UploadedFile,
   UseInterceptors,
   UploadedFiles,
