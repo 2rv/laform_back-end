@@ -39,7 +39,11 @@ export class PurchaseController {
   async saveForNotAuthUser(
     @Body(new ValidationPipe()) body: CreatePurchaseDto,
   ) {
-    return await this.purchaseService.save(body, null, body.purchase.email);
+    return await this.purchaseService.save(
+      body,
+      undefined,
+      body.purchase.email,
+    );
   }
 
   @Get('get/:purchaseId')

@@ -38,10 +38,17 @@ export class MasterClassService {
     if (query === 'en') return await this.masterClassRepository.findOneEn(id);
   }
 
-  async getDiscount(id): Promise<number> {
-    return await (
-      await this.masterClassRepository.findOne(id)
+  async getPurchaseParams(masterClassId, programId): Promise<any> {
+    const discount = await (
+      await this.masterClassRepository.findOne(masterClassId)
     ).discount;
+
+    const price = await this.programsService.getProgramPrice(programId);
+
+    return {
+      totalPrice: price,
+      totalDiscount: discount,
+    };
   }
 
   async getAll(

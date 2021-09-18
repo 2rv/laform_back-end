@@ -37,6 +37,19 @@ export class SewingProductService {
     ).discount;
   }
 
+  async getPurchaseParams(sewingProductId, sizeId): Promise<any> {
+    const discount = await (
+      await this.sewingProductRepository.findOne(sewingProductId)
+    ).discount;
+
+    const price = await this.sizesService.getSizePrice(sizeId);
+
+    return {
+      totalPrice: price,
+      totalDiscount: discount,
+    };
+  }
+
   async update(id: string, body: UpdateSewingProductDto) {
     if (body.images) {
       for (let file of body.images) {

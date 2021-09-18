@@ -1,38 +1,83 @@
 import { Injectable } from '@nestjs/common';
-
 import { PurchaseEntity } from './purchase.entity';
 import { PurchaseRepository } from './purchase.repository';
 import { CreatePurchaseDto } from './dto/create-purchase.dto';
 import { PurchaseDto } from './dto/purchase.dto';
-import { ProgramsService } from '../programs/programs.service';
-import { SizesService } from '../sizes/sizes.service';
 import { PurchaseProductDto } from './dto/purchase-product.dto';
 import { PatternProductService } from '../pattern-product/pattern-product.service';
 import { SewingProductService } from '../sewing-product/sewing-product.service';
 import { MasterClassService } from '../master-class/master-class.service';
-import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
+import { VerifyPurchaseProductsDto } from './dto/verify-purchase-products.dto';
+import { PurchaseProductService } from '../purchase-product/purchase-product.service';
 
 @Injectable()
 export class PurchaseService {
   constructor(
     private purchaseRepository: PurchaseRepository,
-    private programsService: ProgramsService,
-    private sizesService: SizesService,
+    private purchaseProductService: PurchaseProductService,
     private patternProductService: PatternProductService,
     private sewingProductService: SewingProductService,
     private masterClassService: MasterClassService,
   ) {}
 
+  async VerifyPurchaseProducts(
+    purchaseProducts: PurchaseProductDto[],
+  ): Promise<VerifyPurchaseProductsDto> {
+    const verifyResult = {
+      verifiedPurchaseProducts: [],
+      price: 0,
+    };
+
+    for (const item of purchaseProducts) {
+      if (item.type === 0) {
+        const result = await this.masterClassService.getPurchaseParams(
+          item.masterClassId,
+          item.program,
+        );
+        item.totalDiscount = result.totalDiscount;
+        item.totalPrice = result.totalPrice;
+      }
+      if (item.type === 1) {
+        const result =
+          await this.patternProductService.getPurchaseParamsElectronic(
+            item.patternProductId,
+          );
+        item.totalDiscount = result.totalDiscount;
+        item.totalPrice = result.totalPrice;
+      }
+      if (item.type === 2) {
+        const result = await this.patternProductService.getPurchaseParamsPrint(
+          item.patternProductId,
+          item.size,
+        );
+        item.totalDiscount = result.totalDiscount;
+        item.totalPrice = result.totalPrice;
+      }
+      if (item.type === 3) {
+        const result = await this.sewingProductService.getPurchaseParams(
+          item.sewingProductId,
+          item.size,
+        );
+        item.totalDiscount = result.totalDiscount;
+        item.totalPrice = result.totalPrice;
+      }
+      verifyResult.price =
+        verifyResult.price +
+        (item.totalPrice - item.totalPrice * (item.totalDiscount / 100));
+      verifyResult.verifiedPurchaseProducts.push(item);
+    }
+
+    return verifyResult;
+  }
+
   async create(
-    body: PurchaseDto,
+    purchase: PurchaseDto,
     purchaseProducts: PurchaseProductDto[],
     userId,
     email: string,
   ): Promise<PurchaseEntity> {
-    console.log(purchaseProducts);
     return this.purchaseRepository.create({
-      ...body,
-      purchaseProducts,
+      ...purchase,
       userId,
       email,
     });
@@ -40,49 +85,24 @@ export class PurchaseService {
 
   async save(
     body: CreatePurchaseDto,
-    userId: number = null,
+    userId: number = undefined,
     email: string,
-  ): Promise<PurchaseEntity> {
-    const verifyPurchaseProducts: PurchaseProductDto[] =
-      body.purchaseProducts.map((item: PurchaseProductDto) => {
-        if (item.type === 0) {
-          item.totalDiscount = this.masterClassService.getDiscount(
-            item.masterClassId,
-          );
-          item.totalPrice = this.programsService.getProgramPrice(item.program);
-        }
-        if (item.type === 1) {
-          item.totalDiscount = this.patternProductService.getDiscount(
-            item.patternProductId,
-          );
-          item.totalPrice = this.patternProductService.getPrice(
-            item.patternProductId,
-          );
-        }
-        if (item.type === 2) {
-          item.totalDiscount = this.patternProductService.getDiscount(
-            item.patternProductId,
-          );
-          item.totalPrice = this.sizesService.getSizePrice(item.size);
-        }
-        if (item.type === 3) {
-          item.totalDiscount = this.sewingProductService.getDiscount(
-            item.sewingProductId,
-          );
-          item.totalPrice = this.sizesService.getSizePrice(item.size);
-        }
+  ): Promise<any | PurchaseEntity> {
+    const { verifiedPurchaseProducts, price }: VerifyPurchaseProductsDto =
+      await this.VerifyPurchaseProducts(body.purchaseProducts);
 
-        return item;
-      });
+    body.purchase.price = price;
+
     const purchase = await this.create(
       body.purchase,
-      verifyPurchaseProducts,
+      verifiedPurchaseProducts,
       userId,
       email,
     );
-    return await this.purchaseRepository.save({
-      ...purchase,
-    });
+    const purchaseProducts = await this.purchaseProductService.createMany(
+      verifiedPurchaseProducts,
+    );
+    // return await this.purchaseRepository.save({ ...purchase });
   }
 
   async getAll(size: number, page: number): Promise<PurchaseEntity[]> {

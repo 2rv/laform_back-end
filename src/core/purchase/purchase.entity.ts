@@ -89,9 +89,7 @@ export class PurchaseEntity {
   @OneToMany(
     () => PurchaseProductEntity,
     (purchaseProduct: PurchaseProductEntity) => purchaseProduct.purchase,
-    {
-      cascade: true,
-    },
+    { cascade: true },
   )
   purchaseProducts: PurchaseProductEntity[];
 
@@ -110,7 +108,6 @@ export class PurchaseEntity {
 
   @Column({
     type: 'int',
-    name: 'promo_code_discount',
     default: 0,
     nullable: true,
   })

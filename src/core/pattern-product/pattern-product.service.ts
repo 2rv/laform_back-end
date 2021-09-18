@@ -57,10 +57,25 @@ export class PatternProductService {
     ).discount;
   }
 
-  async getPrice(id): Promise<number> {
-    return await (
-      await this.patternProductRepository.findOne(id)
-    ).price;
+  async getPurchaseParamsPrint(patternProductId, sizeId): Promise<any> {
+    const discount = await (
+      await this.patternProductRepository.findOne(patternProductId)
+    ).discount;
+    const price = await this.sizesService.getSizePrice(sizeId);
+    return {
+      totalPrice: price,
+      totalDiscount: discount,
+    };
+  }
+
+  async getPurchaseParamsElectronic(patternProductId): Promise<any> {
+    const { discount, price } = await this.patternProductRepository.findOne(
+      patternProductId,
+    );
+    return {
+      totalPrice: price,
+      totalDiscount: discount,
+    };
   }
 
   async getAll(

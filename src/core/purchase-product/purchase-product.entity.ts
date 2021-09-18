@@ -1,4 +1,3 @@
-import { MasterClassEntity } from './../master-class/master-class.entity';
 import {
   Entity,
   Column,
@@ -6,11 +5,9 @@ import {
   CreateDateColumn,
   ManyToOne,
   JoinColumn,
-  OneToOne,
-  OneToMany,
 } from 'typeorm';
-
 import { PurchaseEntity } from '../purchase/purchase.entity';
+import { MasterClassEntity } from './../master-class/master-class.entity';
 import { PatternProductEntity } from '../pattern-product/pattern-product.entity';
 import { SewingProductEntity } from '../sewing-product/sewing-product.entity';
 import { ColorsEntity } from '../colors/colors.entity';
@@ -64,12 +61,6 @@ export class PurchaseProductEntity {
   })
   sewingProductId: SewingProductEntity;
 
-  @Column({
-    type: 'int',
-    name: 'type',
-  })
-  type: number;
-
   @ManyToOne(() => ColorsEntity, (res: ColorsEntity) => res.purchasedProductId)
   @JoinColumn({
     name: 'color',
@@ -90,6 +81,13 @@ export class PurchaseProductEntity {
     name: 'program',
   })
   program: ProgramsEntity;
+
+  @Column({
+    type: 'int',
+    name: 'type',
+    nullable: true,
+  })
+  type: number;
 
   @Column({
     type: 'int',
