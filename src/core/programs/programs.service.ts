@@ -9,11 +9,16 @@ export class ProgramsService {
   constructor(private programsRepository: ProgramsRepository) {}
 
   async create(body: CreateProgramDto): Promise<ProgramsEntity> {
+    body.vendorCode = ProgramsEntity.getVendorCode();
     return await this.programsRepository.save(body);
   }
 
   async createMany(programs: CreateProgramDto[]): Promise<ProgramsEntity> {
-    const result = await this.programsRepository.insert(programs);
+    const programsWithVendorCode = programs.map((item) => {
+      item.vendorCode = ProgramsEntity.getVendorCode();
+      return item;
+    });
+    const result = await this.programsRepository.insert(programsWithVendorCode);
     return result.raw;
   }
 
@@ -31,6 +36,13 @@ export class ProgramsService {
 
   async getAll(): Promise<ProgramsEntity[]> {
     return await this.programsRepository.find();
+  }
+
+  async getProgramPrice(id: ProgramsEntity): Promise<number> {
+    const result = await this.programsRepository.findOne(id);
+    if (!result) {
+      throw new BadRequestException('PROGRAMS_ERROR.PROGRAM_NOT_FOUND');
+    } else return result.price;
   }
 
   async delete(id: string): Promise<void> {

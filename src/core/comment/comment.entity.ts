@@ -30,39 +30,6 @@ export class CommentEntity {
   })
   createDate: Date;
 
-  @ManyToOne(() => PostEntity, (post: PostEntity) => post.comment)
-  @JoinColumn({
-    name: 'post_id',
-  })
-  postId?: PostEntity;
-
-  @ManyToOne(
-    () => SewingProductEntity,
-    (sewingProduct: SewingProductEntity) => sewingProduct.comment,
-  )
-  @JoinColumn({
-    name: 'sewing_product_id',
-  })
-  sewingProductId?: SewingProductEntity;
-
-  @ManyToOne(
-    () => PatternProductEntity,
-    (patternProduct: PatternProductEntity) => patternProduct.comment,
-  )
-  @JoinColumn({
-    name: 'pattern_product_id',
-  })
-  patternProductId?: PatternProductEntity;
-
-  @ManyToOne(
-    () => MasterClassEntity,
-    (masterClass: MasterClassEntity) => masterClass.comment,
-  )
-  @JoinColumn({
-    name: 'master_class_id',
-  })
-  masterClassId?: MasterClassEntity;
-
   @ManyToOne(() => UserEntity, (user: UserEntity) => user.comment)
   @JoinColumn({
     name: 'user_id',
@@ -74,6 +41,44 @@ export class CommentEntity {
     (subComment: SubCommentEntity) => subComment.commentId,
   )
   subComment: SubCommentEntity[];
+
+  @ManyToOne(() => PostEntity, (post: PostEntity) => post.comment, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({
+    name: 'post_id',
+  })
+  postId?: PostEntity;
+
+  @ManyToOne(
+    () => SewingProductEntity,
+    (sewingProduct: SewingProductEntity) => sewingProduct.comment,
+    { onDelete: 'CASCADE' },
+  )
+  @JoinColumn({
+    name: 'sewing_product_id',
+  })
+  sewingProductId?: SewingProductEntity;
+
+  @ManyToOne(
+    () => PatternProductEntity,
+    (patternProduct: PatternProductEntity) => patternProduct.comment,
+    { onDelete: 'CASCADE' },
+  )
+  @JoinColumn({
+    name: 'pattern_product_id',
+  })
+  patternProductId?: PatternProductEntity;
+
+  @ManyToOne(
+    () => MasterClassEntity,
+    (masterClass: MasterClassEntity) => masterClass.comment,
+    { onDelete: 'CASCADE' },
+  )
+  @JoinColumn({
+    name: 'master_class_id',
+  })
+  masterClassId?: MasterClassEntity;
 }
 
 @Entity({ name: 'sub_comment' })
@@ -92,21 +97,24 @@ export class SubCommentEntity {
   })
   createDate: Date;
 
-  @ManyToOne(() => PostEntity, (post: PostEntity) => post.comment)
-  @JoinColumn({
-    name: 'post_id',
-  })
-  postId!: PostEntity;
-
   @ManyToOne(() => UserEntity, (user: UserEntity) => user.comment)
   @JoinColumn({
     name: 'user_id',
   })
   userId!: UserEntity;
 
+  @ManyToOne(() => PostEntity, (post: PostEntity) => post.comment, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({
+    name: 'post_id',
+  })
+  postId!: PostEntity;
+
   @ManyToOne(
     () => SewingProductEntity,
     (sewingProduct: SewingProductEntity) => sewingProduct.comment,
+    { onDelete: 'CASCADE' },
   )
   @JoinColumn({
     name: 'sewing_product_id',
@@ -116,6 +124,7 @@ export class SubCommentEntity {
   @ManyToOne(
     () => PatternProductEntity,
     (patternProduct: PatternProductEntity) => patternProduct.comment,
+    { onDelete: 'CASCADE' },
   )
   @JoinColumn({
     name: 'pattern_product_id',
@@ -125,6 +134,7 @@ export class SubCommentEntity {
   @ManyToOne(
     () => MasterClassEntity,
     (masterClass: MasterClassEntity) => masterClass.comment,
+    { onDelete: 'CASCADE' },
   )
   @JoinColumn({
     name: 'master_class_id',

@@ -1,4 +1,3 @@
-import { MasterClassEntity } from './../master-class/master-class.entity';
 import {
   Entity,
   Column,
@@ -6,18 +5,25 @@ import {
   CreateDateColumn,
   ManyToOne,
   JoinColumn,
-  OneToMany,
 } from 'typeorm';
-import { CategoryEntity } from '../category/category.entity';
 import { PurchaseEntity } from '../purchase/purchase.entity';
-import { BasketEntity } from '../basket/basket.entity';
+import { MasterClassEntity } from './../master-class/master-class.entity';
 import { PatternProductEntity } from '../pattern-product/pattern-product.entity';
 import { SewingProductEntity } from '../sewing-product/sewing-product.entity';
+import { ColorsEntity } from '../colors/colors.entity';
+import { SizesEntity } from '../sizes/sizes.entity';
+import { ProgramsEntity } from '../programs/programs.entity';
 
 @Entity({ name: 'purchase_product' })
 export class PurchaseProductEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @CreateDateColumn({
+    name: 'created_date',
+    readonly: true,
+  })
+  createdDate: Date;
 
   @ManyToOne(
     () => PurchaseEntity,
@@ -55,73 +61,53 @@ export class PurchaseProductEntity {
   })
   sewingProductId: SewingProductEntity;
 
+  @ManyToOne(() => ColorsEntity, (res: ColorsEntity) => res.purchasedProductId)
+  @JoinColumn({
+    name: 'color',
+  })
+  color: ColorsEntity;
+
+  @ManyToOne(() => SizesEntity, (res: SizesEntity) => res.purchasedProductId)
+  @JoinColumn({
+    name: 'size',
+  })
+  size: SizesEntity;
+
   @ManyToOne(
-    () => BasketEntity,
-    (basket: BasketEntity) => basket.purchaseProducts,
+    () => ProgramsEntity,
+    (res: ProgramsEntity) => res.purchasedProductId,
   )
   @JoinColumn({
-    name: 'basket_id',
+    name: 'program',
   })
-  basketId: BasketEntity;
+  program: ProgramsEntity;
 
   @Column({
-    name: 'quantity',
-    nullable: true,
-    default: 1,
-  })
-  quantity?: number;
-
-  @Column({
-    type: 'varchar',
-    name: 'total',
-    nullable: true,
-  })
-  total: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'color',
-    nullable: true,
-  })
-  color?: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'size',
-    nullable: true,
-  })
-  size?: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'format',
-    nullable: true,
-  })
-  format?: string;
-
-  @Column({
-    type: 'varchar',
+    type: 'int',
     name: 'type',
     nullable: true,
   })
-  type?: string;
+  type: number;
 
   @Column({
-    type: 'varchar',
-    name: 'program',
+    type: 'int',
+    name: 'total_count',
     nullable: true,
+    default: 1,
   })
-  program?: string;
+  totalCount: number;
 
-  /* @ManyToOne(() => CategoryEntity, (category: CategoryEntity) => category.post)
-  @JoinColumn({
-    name: 'category_id',
+  @Column({
+    type: 'int',
+    name: 'total_discount',
+    nullable: true,
+    default: 0,
   })
-  categoryId?: CategoryEntity; */
+  totalDiscount: number;
 
-  @CreateDateColumn({
-    name: 'created_date',
-    readonly: true,
+  @Column({
+    type: 'numeric',
+    name: 'total_price',
   })
-  createdDate: Date;
+  totalPrice: number;
 }

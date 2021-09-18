@@ -8,9 +8,20 @@ import { DeleteManySizesDto } from './dto/delete-many-sizes.dto';
 export class SizesService {
   constructor(private sizesRepository: SizesRepository) {}
 
-  async createMany(Sizes: CreateSizeDto[]): Promise<SizesEntity> {
-    const result = await this.sizesRepository.insert(Sizes);
+  async createMany(sizes: CreateSizeDto[]): Promise<SizesEntity> {
+    const sizesWithVendorCode = sizes.map((item) => {
+      item.vendorCode = SizesEntity.getVendorCode();
+      return item;
+    });
+    const result = await this.sizesRepository.insert(sizesWithVendorCode);
     return result.raw;
+  }
+
+  async getSizePrice(id: SizesEntity): Promise<number> {
+    const result = await this.sizesRepository.findOne(id);
+    if (!result) {
+      throw new BadRequestException('SIZES_ERROR.SIZE_NOT_FOUND');
+    } else return result.price;
   }
 
   async update(id: string, body) {

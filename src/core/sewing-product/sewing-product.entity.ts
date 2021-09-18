@@ -96,12 +96,6 @@ export class SewingProductEntity {
   discount!: number;
 
   @Column({
-    type: 'int',
-    name: 'count',
-  })
-  count!: number;
-
-  @Column({
     type: 'bool',
     name: 'pinned',
     default: false,

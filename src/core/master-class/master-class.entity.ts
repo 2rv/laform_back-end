@@ -1,19 +1,11 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  ManyToMany,
-  JoinTable,
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
 import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
 import { ProgramsEntity } from '../programs/programs.entity';
 import { CategoryEntity } from '../category/category.entity';
 import { LikeEntity } from '../like/like.entity';
 import { CommentEntity } from '../comment/comment.entity';
+
 @Entity({ name: 'master_class' })
 export class MasterClassEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -43,7 +35,7 @@ export class MasterClassEntity {
   )
   purchaseProduct: PurchaseProductEntity[];
 
-  @OneToMany(() => LikeEntity, (like: LikeEntity) => like.masterClassId)
+  @OneToMany(() => LikeEntity, (like: LikeEntity) => like.masterClassId, {})
   like: LikeEntity[];
 
   @OneToMany(
@@ -79,18 +71,18 @@ export class MasterClassEntity {
   descriptionEn: string;
 
   @Column({
-    type: 'int',
-    name: 'discount',
-    default: 0,
-  })
-  discount!: number;
-
-  @Column({
     type: 'varchar',
     name: 'modifier',
     nullable: true,
   })
   modifier!: string;
+
+  @Column({
+    type: 'int',
+    name: 'discount',
+    default: 0,
+  })
+  discount!: number;
 
   @Column({
     type: 'int',
@@ -100,11 +92,11 @@ export class MasterClassEntity {
   type: number;
 
   @Column({
-    type: 'json',
-    name: 'master_class_article',
+    type: 'int',
+    name: 'like_count',
     nullable: true,
   })
-  masterClassArticle: object;
+  likeCount?: number;
 
   @Column({
     type: 'bool',
@@ -119,11 +111,4 @@ export class MasterClassEntity {
     default: false,
   })
   deleted?: boolean;
-
-  @Column({
-    type: 'int',
-    name: 'like_count',
-    nullable: true,
-  })
-  likeCount?: number;
 }

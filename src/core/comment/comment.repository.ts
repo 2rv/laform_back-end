@@ -25,10 +25,6 @@ export class CommentRepository extends Repository<CommentEntity> {
         'sub_user_id.id',
       ])
       .getMany()
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
       .catch((err) => {
         throw err;
       });
@@ -57,10 +53,6 @@ export class CommentRepository extends Repository<CommentEntity> {
         'sub_user_id.id',
       ])
       .getMany()
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
       .catch((err) => {
         throw err;
       });
@@ -91,10 +83,6 @@ export class CommentRepository extends Repository<CommentEntity> {
         'sub_user_id.id',
       ])
       .getMany()
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
       .catch((err) => {
         throw err;
       });
@@ -125,10 +113,6 @@ export class CommentRepository extends Repository<CommentEntity> {
         'sub_user_id.id',
       ])
       .getMany()
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
       .catch((err) => {
         throw err;
       });
@@ -160,10 +144,6 @@ export class CommentRepository extends Repository<CommentEntity> {
         'user_id.id',
       ])
       .getOne()
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
       .catch((err) => {
         throw err;
       });
@@ -186,10 +166,6 @@ export class SubCommentRepository extends Repository<SubCommentEntity> {
         'user_id.id',
       ])
       .getMany()
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
       .catch((err) => {
         throw err;
       });
@@ -208,10 +184,6 @@ export class SubCommentRepository extends Repository<SubCommentEntity> {
         'user_id.id',
       ])
       .getMany()
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
       .catch((err) => {
         throw err;
       });
@@ -229,10 +201,6 @@ export class SubCommentRepository extends Repository<SubCommentEntity> {
         'user_id.id',
       ])
       .getOne()
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
       .catch((err) => {
         throw err;
       });
