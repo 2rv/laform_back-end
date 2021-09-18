@@ -38,7 +38,7 @@ export class PurchaseDto {
   price: number;
 
   @IsOptional()
-  @IsString()
+  @IsNumber()
   promoCodeDiscount: number;
 
   @IsOptional()
