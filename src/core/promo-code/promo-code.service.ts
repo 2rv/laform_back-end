@@ -41,4 +41,12 @@ export class PromoCodeService {
     }
     return { discount: result.discount, promocode: body.text };
   }
+
+  async checkFromServer(promocode: string): Promise<number> {
+    const result = await this.promoCodeRepository.findOne({
+      text: promocode,
+    });
+    if (result) return result.discount;
+    else return 0;
+  }
 }

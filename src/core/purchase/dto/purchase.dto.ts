@@ -38,6 +38,10 @@ export class PurchaseDto {
   price: number;
 
   @IsOptional()
-  @IsNumber()
+  @IsString()
   promoCodeDiscount: number;
+
+  @IsOptional()
+  @IsString()
+  promoCode: string;
 }

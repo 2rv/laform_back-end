@@ -107,6 +107,12 @@ export class PurchaseEntity {
   price!: number;
 
   @Column({
+    type: 'varchar',
+    nullable: true,
+  })
+  promoCode?: string;
+
+  @Column({
     type: 'int',
     default: 0,
     nullable: true,

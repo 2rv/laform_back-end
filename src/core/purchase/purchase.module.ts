@@ -3,14 +3,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PurchaseController } from './purchase.controller';
 import { PurchaseRepository } from './purchase.repository';
 import { PurchaseService } from './purchase.service';
-import { PurchaseProductModule } from './../purchase-product/purchase-product.module';
 import { PatternProductModule } from '../pattern-product/pattern-product.module';
 import { MasterClassModule } from '../master-class/master-class.module';
 import { SewingProductModule } from '../sewing-product/sewing-product.module';
+import { PromoCodeModule } from '../promo-code/promo-code.module';
 
 @Module({
   imports: [
-    PurchaseProductModule,
+    PromoCodeModule,
     PatternProductModule,
     MasterClassModule,
     SewingProductModule,

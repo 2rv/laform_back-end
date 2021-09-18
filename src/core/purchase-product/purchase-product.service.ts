@@ -11,7 +11,7 @@ export class PurchaseProductService {
     for (const item of purchaseProducts) {
       console.log(item);
 
-      //   await this.purchaseProductRepository.save(item);
+      await this.purchaseProductRepository.save(item);
     }
     return;
   }

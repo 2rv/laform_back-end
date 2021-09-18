@@ -8,13 +8,13 @@ import { PatternProductService } from '../pattern-product/pattern-product.servic
 import { SewingProductService } from '../sewing-product/sewing-product.service';
 import { MasterClassService } from '../master-class/master-class.service';
 import { VerifyPurchaseProductsDto } from './dto/verify-purchase-products.dto';
-import { PurchaseProductService } from '../purchase-product/purchase-product.service';
+import { PromoCodeService } from '../promo-code/promo-code.service';
 
 @Injectable()
 export class PurchaseService {
   constructor(
+    private promoCodeService: PromoCodeService,
     private purchaseRepository: PurchaseRepository,
-    private purchaseProductService: PurchaseProductService,
     private patternProductService: PatternProductService,
     private sewingProductService: SewingProductService,
     private masterClassService: MasterClassService,
@@ -63,7 +63,8 @@ export class PurchaseService {
       }
       verifyResult.price =
         verifyResult.price +
-        (item.totalPrice - item.totalPrice * (item.totalDiscount / 100));
+        (item.totalPrice - item.totalPrice * (item.totalDiscount / 100)) *
+          item.totalCount;
       verifyResult.verifiedPurchaseProducts.push(item);
     }
 
@@ -78,6 +79,7 @@ export class PurchaseService {
   ): Promise<PurchaseEntity> {
     return this.purchaseRepository.create({
       ...purchase,
+      purchaseProducts,
       userId,
       email,
     });
@@ -90,7 +92,10 @@ export class PurchaseService {
   ): Promise<any | PurchaseEntity> {
     const { verifiedPurchaseProducts, price }: VerifyPurchaseProductsDto =
       await this.VerifyPurchaseProducts(body.purchaseProducts);
-
+    const promoCodeDiscount = await this.promoCodeService.checkFromServer(
+      body.purchase.promoCode,
+    );
+    body.purchase.promoCodeDiscount = promoCodeDiscount;
     body.purchase.price = price;
 
     const purchase = await this.create(
@@ -99,10 +104,8 @@ export class PurchaseService {
       userId,
       email,
     );
-    const purchaseProducts = await this.purchaseProductService.createMany(
-      verifiedPurchaseProducts,
-    );
-    // return await this.purchaseRepository.save({ ...purchase });
+
+    return await this.purchaseRepository.save(purchase);
   }
 
   async getAll(size: number, page: number): Promise<PurchaseEntity[]> {
