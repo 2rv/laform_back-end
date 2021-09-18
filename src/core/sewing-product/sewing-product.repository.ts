@@ -65,6 +65,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
   async findPinnedRu(): Promise<SewingProductEntity[]> {
     return await this.createQueryBuilder('sewing_product')
       .leftJoin('sewing_product.comment', 'comment')
+      .leftJoin('sewing_product.images', 'images')
       .leftJoin('comment.userId', 'userId')
       .leftJoin('comment.subComment', 'subComment')
       .leftJoin('subComment.userId', 'user')
@@ -80,6 +81,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'userId.login',
         'subComment',
         'user.login',
+        'images',
       ])
       .where('sewing_product.pinned = true')
       .getMany();
@@ -145,6 +147,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
 
   async findPinnedEn(): Promise<SewingProductEntity[]> {
     return await this.createQueryBuilder('sewing_product')
+      .leftJoin('sewing_product.images', 'images')
       .leftJoin('sewing_product.comment', 'comment')
       .leftJoin('comment.userId', 'userId')
       .leftJoin('comment.subComment', 'subComment')
@@ -162,6 +165,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'userId.login',
         'subComment',
         'user.login',
+        'images',
       ])
       .getMany();
   }
