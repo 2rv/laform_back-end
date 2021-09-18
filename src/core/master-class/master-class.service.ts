@@ -23,8 +23,9 @@ export class MasterClassService {
   }
 
   async delete(id: string) {
-    // this.fileUploadService.delete(file, { masterClassId: id });
-    return await this.masterClassRepository.delete(id);
+    const masterClass = await this.masterClassRepository.findOneOrFail(id);
+    await this.fileUploadService.deleteMasterClass(masterClass.id);
+    return await this.masterClassRepository.delete(masterClass.id);
   }
 
   async update(id: string, body: UpdateMasterClassDto) {
