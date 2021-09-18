@@ -38,6 +38,13 @@ export class ProgramsService {
     return await this.programsRepository.find();
   }
 
+  async getProgramPrice(id: ProgramsEntity): Promise<number> {
+    const result = await this.programsRepository.findOne(id);
+    if (!result) {
+      throw new BadRequestException('PROGRAMS_ERROR.PROGRAM_NOT_FOUND');
+    } else return result.price;
+  }
+
   async delete(id: string): Promise<void> {
     const result = this.programsRepository.findOne(id);
     if (!result) {
