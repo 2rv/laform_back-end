@@ -5,7 +5,6 @@ import { MasterClassEntity } from 'src/core/master-class/master-class.entity';
 import { ColorsEntity } from 'src/core/colors/colors.entity';
 import { SizesEntity } from 'src/core/sizes/sizes.entity';
 import { ProgramsEntity } from 'src/core/programs/programs.entity';
-import { PurchaseProductEntity } from 'src/core/purchase-product/purchase-product.entity';
 
 export class PurchaseProductDto {
   @IsOptional()

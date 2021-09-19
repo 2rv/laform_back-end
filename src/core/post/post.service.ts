@@ -36,11 +36,6 @@ export class PostService {
     if (query === 'en') return await this.postRepository.findAllEn(size, page);
   }
 
-  async getBest(query: string): Promise<PostEntity[]> {
-    if (query === 'ru') return await this.postRepository.findBestRu();
-    if (query === 'en') return await this.postRepository.findBestEn();
-  }
-
   async getPinned(query: string): Promise<PostEntity[]> {
     if (query === 'ru') return await this.postRepository.findPinnedRu();
     if (query === 'en') return await this.postRepository.findPinnedEn();
