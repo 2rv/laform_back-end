@@ -1,4 +1,3 @@
-import { Response } from '@nestjs/common';
 import { SewingProductEntity } from './sewing-product.entity';
 import { EntityRepository, Repository } from 'typeorm';
 
@@ -64,29 +63,6 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       products,
       total,
     };
-
-    // return await this.createQueryBuilder('sewing_product')
-    //   .leftJoin('sewing_product.images', 'images')
-    //   .leftJoin('sewing_product.sizes', 'sizes')
-    //   .leftJoin('sewing_product.colors', 'colors')
-    //   .leftJoin('sewing_product.categories', 'categories')
-    // .select([
-    //   'sewing_product.id',
-    //   'sewing_product.titleRu',
-    //   'sewing_product.descriptionRu',
-    //   'sewing_product.discount',
-    //   'sewing_product.modifier',
-    //   'sewing_product.type',
-    //   'sewing_product.pinned',
-    //   'images',
-    //   'sizes',
-    //   'colors',
-    //   'categories',
-    // ])
-    //   .where('sewing_product.deleted = false')
-    //   .limit(take)
-    //   .offset(skip)
-    //   .getMany()
   }
 
   async findPinnedRu(): Promise<SewingProductEntity[]> {
@@ -164,37 +140,6 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       products,
       total,
     };
-
-    // return await this.createQueryBuilder('sewing_product')
-    //   .leftJoin('sewing_product.comment', 'comment')
-    //   .leftJoin('comment.userId', 'userId')
-    //   .leftJoin('comment.subComment', 'subComment')
-    //   .leftJoin('subComment.userId', 'user')
-    //   .leftJoin('sewing_product.images', 'images')
-    //   .leftJoin('sewing_product.sizes', 'sizes')
-    //   .leftJoin('sewing_product.colors', 'colors')
-    //   .leftJoin('sewing_product.categories', 'categories')
-    //   .select([
-    //     'sewing_product.id',
-    //     'sewing_product.titleEn',
-    //     'sewing_product.descriptionEn',
-    //     'sewing_product.discount',
-    //     'sewing_product.modifier',
-    //     'sewing_product.type',
-    //     'sewing_product.pinned',
-    //     'comment',
-    //     'userId.login',
-    //     'subComment',
-    //     'user.login',
-    //     'images',
-    //     'sizes',
-    //     'colors',
-    //     'categories',
-    //   ])
-    //   .where('sewing_product.deleted = false')
-    //   .limit(take)
-    //   .offset(skip)
-    //   .getMany();
   }
 
   async findPinnedEn(): Promise<SewingProductEntity[]> {
