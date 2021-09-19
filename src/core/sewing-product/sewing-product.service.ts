@@ -68,7 +68,7 @@ export class SewingProductService {
     query: string,
     size: number,
     page: number,
-  ): Promise<SewingProductEntity[]> {
+  ): Promise<{ products: SewingProductEntity[]; total: number }> {
     if (query === 'ru')
       return await this.sewingProductRepository.findAllRu(size, page);
     if (query === 'en')
