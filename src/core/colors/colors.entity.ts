@@ -22,7 +22,7 @@ export class ColorsEntity {
 
   @ManyToOne(
     () => SewingProductEntity,
-    (sewingProducts: SewingProductEntity) => sewingProducts.colors,
+    (res: SewingProductEntity) => res.colors,
     { onDelete: 'CASCADE' },
   )
   @JoinColumn({
