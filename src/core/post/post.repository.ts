@@ -41,6 +41,7 @@ export class PostRepository extends Repository<PostEntity> {
         'post.titleRu',
         'post.modifier',
         'post.createdDate',
+        'post.type',
         'image',
         'categories',
       ])
