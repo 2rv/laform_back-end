@@ -48,11 +48,6 @@ export class PostController {
     return await this.postService.getAll(query, size, page);
   }
 
-  @Get('best/get/')
-  async getBest(@Query(new LangValidationPipe()) query: string) {
-    return await this.postService.getBest(query);
-  }
-
   @Get('pinned/get/')
   async getPinned(@Query(new LangValidationPipe()) query: string) {
     return await this.postService.getPinned(query);

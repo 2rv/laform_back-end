@@ -63,10 +63,8 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
 
   async findPinnedRu(): Promise<SewingProductEntity[]> {
     return await this.createQueryBuilder('sewing_product')
-      .leftJoin('sewing_product.comment', 'comment')
-      .leftJoin('comment.userId', 'userId')
-      .leftJoin('comment.subComment', 'subComment')
-      .leftJoin('subComment.userId', 'user')
+      .leftJoin('sewing_product.images', 'images')
+      .leftJoin('sewing_product.sizes', 'sizes')
       .select([
         'sewing_product.id',
         'sewing_product.titleRu',
@@ -75,10 +73,8 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sewing_product.modifier',
         'sewing_product.type',
         'sewing_product.pinned',
-        'comment',
-        'userId.login',
-        'subComment',
-        'user.login',
+        'images',
+        'sizes',
       ])
       .where('sewing_product.pinned = true')
       .getMany();

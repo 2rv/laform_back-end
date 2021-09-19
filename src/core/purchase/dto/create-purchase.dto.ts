@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, ValidateNested } from 'class-validator';
+import { IsArray, IsNotEmpty, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { PurchaseDto } from './purchase.dto';
 import { PurchaseProductDto } from './purchase-product.dto';
@@ -9,6 +9,7 @@ export class CreatePurchaseDto {
   @Type(() => PurchaseDto)
   purchase: PurchaseDto;
 
-  @IsOptional() // поменять на обязательное
+  @IsNotEmpty()
+  @IsArray()
   purchaseProducts: PurchaseProductDto[];
 }
