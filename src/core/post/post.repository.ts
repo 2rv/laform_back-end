@@ -112,12 +112,12 @@ export class PostRepository extends Repository<PostEntity> {
       .leftJoin('comment.userId', 'userId')
       .leftJoin('comment.subComment', 'subComment')
       .leftJoin('subComment.userId', 'user')
-      .where('post.id = :id', { id })
       .select([
         'post.id',
         'post.titleEn',
         'post.textEn',
         'post.createdDate',
+        'post.articleText',
         'post.likeCount',
         'image_url',
         'category_id.textEn',
@@ -126,6 +126,7 @@ export class PostRepository extends Repository<PostEntity> {
         'subComment',
         'user.login',
       ])
+      .where('post.id = :id', { id })
       .getOne();
   }
 
@@ -163,7 +164,6 @@ export class PostRepository extends Repository<PostEntity> {
       .leftJoin('comment.userId', 'userId')
       .leftJoin('comment.subComment', 'subComment')
       .leftJoin('subComment.userId', 'user')
-      .where('post.pinned = true')
       .select([
         'post.id',
         'post.titleEn',
@@ -177,6 +177,7 @@ export class PostRepository extends Repository<PostEntity> {
         'subComment',
         'user.login',
       ])
+      .where('post.pinned = true')
       .getMany();
   }
 
@@ -218,7 +219,6 @@ export class PostRepository extends Repository<PostEntity> {
   //AUTHTORIZED
   async findOneRuAuth(id: string, userId: number): Promise<PostEntity> {
     return await this.createQueryBuilder('post')
-      .where('post.id = :id', { id })
       .leftJoin('post.comment', 'comment')
       .leftJoin('post.like', 'like')
       .where('like.userId = :userId', { userId })
@@ -229,9 +229,9 @@ export class PostRepository extends Repository<PostEntity> {
       .leftJoin('post.categories', 'categories')
       .select([
         'post.id',
+        'post.articleText',
         'post.titleRu',
         'post.createdDate',
-        'post.postArticle',
         'post.likeCount',
         'post.pinned',
         'post.modifier',
@@ -244,6 +244,7 @@ export class PostRepository extends Repository<PostEntity> {
         'image',
         'categories',
       ])
+      .where('post.id = :id', { id })
       .getOne();
   }
 
@@ -274,7 +275,6 @@ export class PostRepository extends Repository<PostEntity> {
       .leftJoin('post.categories', 'categories')
       .leftJoin('post.like', 'like')
       .where('like.userId = :userId', { userId })
-      .where('post.pinned = true')
       .select([
         'post.id',
         'post.titleRu',
@@ -286,6 +286,7 @@ export class PostRepository extends Repository<PostEntity> {
         'categories',
         'like',
       ])
+      .where('post.pinned = true')
       .getMany();
   }
 
@@ -311,7 +312,6 @@ export class PostRepository extends Repository<PostEntity> {
         'post.id',
         'post.titleRu',
         'post.createdDate',
-        'post.postArticle',
         'post.likeCount',
         'post.pinned',
         'post.modifier',
@@ -340,10 +340,10 @@ export class PostRepository extends Repository<PostEntity> {
       .leftJoin('comment.userId', 'userId')
       .leftJoin('comment.subComment', 'subComment')
       .leftJoin('subComment.userId', 'user')
-      .where('post.id = :id', { id })
       .select([
         'post.id',
         'post.titleEn',
+        'post.articleText',
         'post.textEn',
         'post.createdDate',
         'post.likeCount',
@@ -355,6 +355,7 @@ export class PostRepository extends Repository<PostEntity> {
         'user.login',
         'like',
       ])
+      .where('post.id = :id', { id })
       .getOne();
   }
 
@@ -397,7 +398,6 @@ export class PostRepository extends Repository<PostEntity> {
       .leftJoin('comment.userId', 'userId')
       .leftJoin('comment.subComment', 'subComment')
       .leftJoin('subComment.userId', 'user')
-      .where('post.pinned = true')
       .select([
         'post.id',
         'post.titleEn',
@@ -412,6 +412,7 @@ export class PostRepository extends Repository<PostEntity> {
         'user.login',
         'like',
       ])
+      .where('post.pinned = true')
       .getMany();
   }
 
@@ -437,7 +438,6 @@ export class PostRepository extends Repository<PostEntity> {
         'post.id',
         'post.titleEn',
         'post.createdDate',
-        'post.postArticle',
         'post.likeCount',
         'post.pinned',
         'comment',

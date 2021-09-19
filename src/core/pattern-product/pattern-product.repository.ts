@@ -6,7 +6,6 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
   //UNAUTHTORIZED
   async findOneRu(id: string): Promise<PatternProductEntity> {
     return await this.createQueryBuilder('pattern_product')
-      .where('pattern_product.id = :id', { id })
       .leftJoin('pattern_product.comment', 'comment')
       .leftJoin('comment.userId', 'userId')
       .leftJoin('comment.subComment', 'subComment')
@@ -35,6 +34,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'categories',
         'fildePdf',
       ])
+      .where('pattern_product.id = :id', { id })
       .getOne();
   }
 
@@ -108,7 +108,6 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .leftJoin('comment.subComment', 'subComment')
       .leftJoin('subComment.userId', 'user')
       .leftJoin('pattern_product.filePdf', 'fildePdf')
-      .where('pattern_product.id = :id', { id })
       .select([
         'pattern_product.id',
         'pattern_product.titleRu',
@@ -125,6 +124,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'user.login',
         'filePdf',
       ])
+      .where('pattern_product.id = :id', { id })
       .getOne();
   }
 
@@ -196,7 +196,6 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
     userId: number,
   ): Promise<PatternProductEntity> {
     return await this.createQueryBuilder('pattern_product')
-      .where('pattern_product.id = :id', { id })
       .leftJoin('pattern_product.comment', 'comment')
       .leftJoin('pattern_product.like', 'like')
       .where('like.userId = :userId', { userId })
@@ -227,6 +226,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'categories',
         'fildePdf',
       ])
+      .where('pattern_product.id = :id', { id })
       .getOne();
   }
 
@@ -314,7 +314,6 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .leftJoin('comment.subComment', 'subComment')
       .leftJoin('subComment.userId', 'user')
       .leftJoin('pattern_product.filePdf', 'fildePdf')
-      .where('pattern_product.id = :id', { id })
       .select([
         'pattern_product.id',
         'like',
@@ -332,6 +331,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'user.login',
         'filePdf',
       ])
+      .where('pattern_product.id = :id', { id })
       .getOne();
   }
 

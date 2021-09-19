@@ -176,36 +176,27 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
     userId: number,
   ): Promise<SewingProductEntity> {
     return await this.createQueryBuilder('sewing_product')
-      .where('sewing_product.id = :id', { id })
-      .leftJoin('sewing_product.comment', 'comment')
       .leftJoin('sewing_product.like', 'like')
       .where('like.userId = :userId', { userId })
-      .leftJoin('comment.userId', 'userId')
-      .leftJoin('comment.subComment', 'subComment')
-      .leftJoin('subComment.userId', 'user')
       .leftJoin('sewing_product.images', 'images')
       .leftJoin('sewing_product.sizes', 'sizes')
       .leftJoin('sewing_product.colors', 'colors')
       .leftJoin('sewing_product.categories', 'categories')
       .select([
         'sewing_product.id',
-        'like',
         'sewing_product.titleRu',
         'sewing_product.descriptionRu',
         'sewing_product.discount',
         'sewing_product.modifier',
         'sewing_product.type',
-        'sewing_product.count',
         'sewing_product.pinned',
-        'comment',
-        'userId.login',
-        'subComment',
-        'user.login',
         'images',
         'sizes',
         'colors',
         'categories',
+        'like',
       ])
+      .where('sewing_product.id = :id', { id })
       .getOne();
   }
 
@@ -351,7 +342,6 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .leftJoin('comment.userId', 'userId')
       .leftJoin('comment.subComment', 'subComment')
       .leftJoin('subComment.userId', 'user')
-      .where('sewing_product.pinned = true')
       .select([
         'like',
         'sewing_product.id',
@@ -367,6 +357,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'subComment',
         'user.login',
       ])
+      .where('sewing_product.pinned = true')
       .getMany();
   }
 }

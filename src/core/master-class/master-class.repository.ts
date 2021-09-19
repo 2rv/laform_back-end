@@ -40,7 +40,6 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
     const take = size || 100;
     const skip = (page - 1) * size || 0;
     return await this.createQueryBuilder('master_class')
-      .where('master_class.deleted = false')
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.programs', 'programs')
       .leftJoin('master_class.categories', 'categories')
@@ -58,6 +57,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'programs.price',
         'programs.programNameRu',
       ])
+      .where('master_class.deleted = false')
       .limit(take)
       .offset(skip)
       .getMany();
@@ -89,7 +89,6 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
 
   async findOneEn(id: string): Promise<MasterClassEntity> {
     return await this.createQueryBuilder('master_class')
-      .where('master_class.id = :id', { id })
       .leftJoin('master_class.comment', 'comment')
       .leftJoin('comment.userId', 'userId')
       .leftJoin('comment.subComment', 'subComment')
@@ -116,6 +115,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'programs.programNameRu',
         'categories',
       ])
+      .where('master_class.id = :id', { id })
       .getOne();
   }
 
@@ -149,7 +149,6 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
 
   async findPinnedEn(): Promise<MasterClassEntity[]> {
     return await this.createQueryBuilder('master_class')
-      .where('master_class.pinned = true')
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.programs', 'programs')
       .leftJoin('master_class.categories', 'categories')
@@ -168,13 +167,13 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'programs.programNameRu',
         'master_class.pinned',
       ])
+      .where('master_class.pinned = true')
       .getMany();
   }
 
   //AUTHTORIZED
   async findOneRuAuth(id: string, userId: number): Promise<MasterClassEntity> {
     return await this.createQueryBuilder('master_class')
-      .where('master_class.id = :id', { id })
       .leftJoin('master_class.comment', 'comment')
       .leftJoin('master_class.like', 'like')
       .where('like.userId = :userId', { userId })
@@ -192,7 +191,6 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'master_class.discount',
         'master_class.type',
         'master_class.pinned',
-        'master_class.masterClassArticle',
         'comment',
         'userId.login',
         'subComment',
@@ -202,6 +200,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'programs',
         'like',
       ])
+      .where('master_class.id = :id', { id })
       .getOne();
   }
 
@@ -230,7 +229,6 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'master_class.discount',
         'master_class.type',
         'master_class.pinned',
-        'master_class.masterClassArticle',
         'comment',
         'userId.login',
         'subComment',
@@ -254,7 +252,6 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
       .where('like.userId = :userId', { userId })
       .leftJoin('comment.subComment', 'subComment')
       .leftJoin('subComment.userId', 'user')
-      .where('master_class.pinned = true')
       .select([
         'master_class.id',
         'master_class.titleRu',
@@ -269,6 +266,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'user.login',
         'like',
       ])
+      .where('master_class.pinned = true')
       .getMany();
   }
 
@@ -280,7 +278,6 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
       .leftJoin('comment.userId', 'userId')
       .leftJoin('comment.subComment', 'subComment')
       .leftJoin('subComment.userId', 'user')
-      .where('master_class.id = :id', { id })
       .select([
         'master_class.id',
         'master_class.titleEn',
@@ -295,6 +292,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'user.login',
         'like',
       ])
+      .where('master_class.id = :id', { id })
       .getOne();
   }
 
@@ -323,7 +321,6 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'master_class.discount',
         'master_class.type',
         'master_class.pinned',
-        'master_class.masterClassArticle',
         'comment',
         'userId.login',
         'subComment',
@@ -347,7 +344,6 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
       .leftJoin('comment.userId', 'userId')
       .leftJoin('comment.subComment', 'subComment')
       .leftJoin('subComment.userId', 'user')
-      .where('master_class.pinned = true')
       .select([
         'master_class.id',
         'master_class.titleEn',
@@ -362,6 +358,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'user.login',
         'like',
       ])
+      .where('master_class.pinned = true')
       .getMany();
   }
 }
