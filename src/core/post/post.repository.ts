@@ -203,27 +203,6 @@ export class PostRepository extends Repository<PostEntity> {
       .getOne();
   }
 
-  async findBestRuAuth(userId: number): Promise<PostEntity[]> {
-    return await this.createQueryBuilder('post')
-      .leftJoin('post.like', 'like')
-      .where('like.userId = :userId', { userId })
-      .leftJoin('post.imageUrl', 'image_url')
-      .leftJoin('post.categoryId', 'category_id')
-      .select([
-        'post.id',
-        'post.titleRu',
-        'post.textRu',
-        'post.likeCount',
-        'post.createdDate',
-        'image_url',
-        'category_id.textRu',
-        'like',
-      ])
-      .orderBy('RANDOM()')
-      .limit(3)
-      .getMany();
-  }
-
   async findPinnedRuAuth(userId: number): Promise<PostEntity[]> {
     return await this.createQueryBuilder('post')
       .leftJoin('post.image', 'image')
@@ -312,35 +291,6 @@ export class PostRepository extends Repository<PostEntity> {
       ])
       .where('post.id = :id', { id })
       .getOne();
-  }
-
-  async findBestEnAuth(userId: number): Promise<PostEntity[]> {
-    return await this.createQueryBuilder('post')
-      .leftJoin('post.imageUrl', 'image_url')
-      .leftJoin('post.categoryId', 'category_id')
-      .leftJoin('post.comment', 'comment')
-      .leftJoin('post.like', 'like')
-      .where('like.userId = :userId', { userId })
-      .leftJoin('comment.userId', 'userId')
-      .leftJoin('comment.subComment', 'subComment')
-      .leftJoin('subComment.userId', 'user')
-      .select([
-        'post.id',
-        'post.titleEn',
-        'post.textEn',
-        'post.createdDate',
-        'post.likeCount',
-        'image_url',
-        'category_id.textEn',
-        'comment',
-        'userId.login',
-        'subComment',
-        'user.login',
-        'like',
-      ])
-      .orderBy('RANDOM()')
-      .limit(3)
-      .getMany();
   }
 
   async findPinnedEnAuth(userId: number): Promise<PostEntity[]> {

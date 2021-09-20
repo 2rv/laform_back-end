@@ -73,20 +73,6 @@ export class PostController {
     return await this.postService.getAllAuth(query, size, page, user.id);
   }
 
-  @Get('best/get/')
-  async getBest(@Query(new LangValidationPipe()) query: string) {
-    return await this.postService.getBest(query);
-  }
-
-  @Get('best/get/auth')
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async getBestAuth(
-    @Query(new LangValidationPipe()) query: string,
-    @GetAccount() user: UserEntity,
-  ) {
-    return await this.postService.getBestAuth(query, user.id);
-  }
-
   @Get('pinned/get/')
   async getPinned(@Query(new LangValidationPipe()) query: string) {
     return await this.postService.getPinned(query);

@@ -57,7 +57,7 @@ export class SewingProductController {
     );
   }
 
-  @Get('get/')
+  @Get('get-all')
   async getAll(
     @Query(new LangValidationPipe()) query: string,
     @Query('size') size: number,
@@ -66,7 +66,7 @@ export class SewingProductController {
     return await this.sewingProductService.getAll(query, size, page);
   }
 
-  @Get('get/auth/')
+  @Get('get-all/authtorized')
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getAllAuth(
     @Query(new LangValidationPipe()) query: string,
