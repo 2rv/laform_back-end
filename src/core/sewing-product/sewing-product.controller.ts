@@ -47,7 +47,7 @@ export class SewingProductController {
     @Query('size') size: number,
     @Query('page') page: number,
   ) {
-    return await this.sewingProductService.getAll(query, size, page);;
+    return await this.sewingProductService.getAll(query, size, page);
   }
 
   @Get('pinned/get/')
