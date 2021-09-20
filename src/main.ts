@@ -10,9 +10,7 @@ export async function bootstrap() {
 
   const app = await NestFactory.create(AppModule);
 
-  app.enableCors({
-    exposedHeaders: ['Total-Records'],
-  });
+  app.enableCors();
   app.use(helmet());
   await app.listen(port);
 

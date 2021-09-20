@@ -10,7 +10,6 @@ import {
   Query,
   Delete,
   Request,
-  Response,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AccountGuard } from '../user/guard/account.guard';
@@ -47,11 +46,8 @@ export class SewingProductController {
     @Query(new LangValidationPipe()) query: string,
     @Query('size') size: number,
     @Query('page') page: number,
-    @Response() response,
   ) {
-    const result = await this.sewingProductService.getAll(query, size, page);
-    response.setHeader('Total-Records', result.total);
-    return response.send(result.products);
+    return await this.sewingProductService.getAll(query, size, page);;
   }
 
   @Get('pinned/get/')

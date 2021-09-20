@@ -37,11 +37,11 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
   async findAllRu(
     size: number,
     page: number,
-  ): Promise<{ products: SewingProductEntity[]; total: number }> {
+  ): Promise<{ products: SewingProductEntity[]; totalRecords: number }> {
     const take = size || 200;
     const skip = (page - 1) * size || 0;
 
-    const [products, total] = await this.findAndCount({
+    const [products, totalRecords] = await this.findAndCount({
       where: {
         deleted: false,
       },
@@ -61,7 +61,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
 
     return {
       products,
-      total,
+      totalRecords,
     };
   }
 
@@ -114,11 +114,11 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
   async findAllEn(
     size: number,
     page: number,
-  ): Promise<{ products: SewingProductEntity[]; total: number }> {
+  ): Promise<{ products: SewingProductEntity[]; totalRecords: number }> {
     const take = size || 10;
     const skip = (page - 1) * size || 0;
 
-    const [products, total] = await this.findAndCount({
+    const [products, totalRecords] = await this.findAndCount({
       where: {
         deleted: false,
       },
@@ -138,7 +138,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
 
     return {
       products,
-      total,
+      totalRecords,
     };
   }
 
