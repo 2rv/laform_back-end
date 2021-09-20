@@ -89,20 +89,6 @@ export class PostService {
     }
   }
 
-  async getBest(query: string): Promise<PostEntity[]> {
-    if (query === 'ru') return await this.postRepository.findBestRu();
-    if (query === 'en') return await this.postRepository.findBestEn();
-  }
-
-  async getBestAuth(query: string, userId: number): Promise<PostEntity[]> {
-    if (query === 'ru') {
-      return await this.postRepository.findBestRuAuth(userId);
-    }
-    if (query === 'en') {
-      return await this.postRepository.findBestEnAuth(userId);
-    }
-  }
-
   async getPinned(query: string): Promise<PostEntity[]> {
     if (query === 'ru') return await this.postRepository.findPinnedRu();
     if (query === 'en') return await this.postRepository.findPinnedEn();

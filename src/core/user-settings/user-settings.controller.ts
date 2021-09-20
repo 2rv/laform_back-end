@@ -4,7 +4,6 @@ import {
   UseGuards,
   Body,
   ValidationPipe,
-  Get,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -13,7 +12,6 @@ import { GetAccount } from '../user/decorator/get-account.decorator';
 import { UserEntity } from '../user/user.entity';
 
 import { UserSettingsUpdatePasswordDto } from './dto/user-settings-update-password.dto';
-import { UserSettingsGetEmailDto } from './dto/user-settings-get-email.dto';
 import { UserSettingsUpdateEmailDto } from './dto/user-settings-update-email.dto';
 import { PasswordGuard } from './guard/password.guard';
 import { UserSettingsService } from './user-settings.service';

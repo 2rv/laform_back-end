@@ -1,4 +1,3 @@
-import { MasterClassEntity } from './../master-class/master-class.entity';
 import {
   Entity,
   Column,
@@ -7,15 +6,24 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-
 import { PurchaseEntity } from '../purchase/purchase.entity';
+import { MasterClassEntity } from './../master-class/master-class.entity';
 import { PatternProductEntity } from '../pattern-product/pattern-product.entity';
 import { SewingProductEntity } from '../sewing-product/sewing-product.entity';
+import { ColorsEntity } from '../colors/colors.entity';
+import { SizesEntity } from '../sizes/sizes.entity';
+import { ProgramsEntity } from '../programs/programs.entity';
 
 @Entity({ name: 'purchase_product' })
 export class PurchaseProductEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @CreateDateColumn({
+    name: 'created_date',
+    readonly: true,
+  })
+  createdDate: Date;
 
   @ManyToOne(
     () => PurchaseEntity,
@@ -53,58 +61,53 @@ export class PurchaseProductEntity {
   })
   sewingProductId: SewingProductEntity;
 
-  @Column({
-    name: 'quantity',
-    nullable: true,
-    default: 1,
-  })
-  quantity?: number;
-
-  @Column({
-    type: 'varchar',
-    name: 'total',
-    nullable: true,
-  })
-  total: string;
-
-  @Column({
-    type: 'varchar',
+  @ManyToOne(() => ColorsEntity, (res: ColorsEntity) => res.purchasedProductId)
+  @JoinColumn({
     name: 'color',
-    nullable: true,
   })
-  color?: string;
+  color: ColorsEntity;
 
-  @Column({
-    type: 'varchar',
+  @ManyToOne(() => SizesEntity, (res: SizesEntity) => res.purchasedProductId)
+  @JoinColumn({
     name: 'size',
-    nullable: true,
   })
-  size?: string;
+  size: SizesEntity;
+
+  @ManyToOne(
+    () => ProgramsEntity,
+    (res: ProgramsEntity) => res.purchasedProductId,
+  )
+  @JoinColumn({
+    name: 'program',
+  })
+  program: ProgramsEntity;
 
   @Column({
-    type: 'varchar',
-    name: 'format',
-    nullable: true,
-  })
-  format?: string;
-
-  @Column({
-    type: 'varchar',
+    type: 'int',
     name: 'type',
     nullable: true,
   })
-  type?: string;
+  type: number;
 
   @Column({
-    type: 'varchar',
-    name: 'program',
+    type: 'int',
+    name: 'total_count',
     nullable: true,
+    default: 1,
   })
-  program?: string;
+  totalCount: number;
 
-  @CreateDateColumn({
-    name: 'created_date',
-    readonly: true,
+  @Column({
+    type: 'int',
+    name: 'total_discount',
+    nullable: true,
+    default: 0,
   })
-  createdDate: Date;
+  totalDiscount: number;
+
+  @Column({
+    type: 'numeric',
+    name: 'total_price',
+  })
+  totalPrice: number;
 }

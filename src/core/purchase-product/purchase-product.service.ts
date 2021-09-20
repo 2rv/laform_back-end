@@ -1,12 +1,17 @@
 import { Injectable } from '@nestjs/common';
+import { PurchaseProductDto } from '../purchase/dto/purchase-product.dto';
+import { PurchaseEntity } from '../purchase/purchase.entity';
 import { PurchaseProductRepository } from './purchase-product.repository';
 
 @Injectable()
 export class PurchaseProductService {
   constructor(private purchaseProductRepository: PurchaseProductRepository) {}
 
-  create(body: any): any {
-    return this.purchaseProductRepository.create(body);
+  async createMany(purchaseProducts: PurchaseProductDto[]) {
+    for (const item of purchaseProducts) {
+      await this.purchaseProductRepository.save(item);
+    }
+    return;
   }
 
   async update(id: any, body: any) {

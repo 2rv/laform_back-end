@@ -1,15 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { UserEntity } from '../user/user.entity';
-import { UserGetSubscriptionStatusDto } from './dto/user-get-subscription-status.dto';
+import { UserGetEmailDto } from './dto/user-get-email.dto';
 
 @Injectable()
 export class UserService {
-  async getSubscriptionStatus(
-    user: UserEntity,
-  ): Promise<UserGetSubscriptionStatusDto> {
-    const userGetSubscriptionStatusDto: UserGetSubscriptionStatusDto = {
-      notificationEmail: user.notificationEmail,
+  async getUserEmail(user: UserEntity): Promise<UserGetEmailDto> {
+    const userGetEmailDto: UserGetEmailDto = {
+      email: user.email,
     };
-    return userGetSubscriptionStatusDto;
+    return userGetEmailDto;
   }
 }

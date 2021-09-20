@@ -1,8 +1,7 @@
-import { IsNotEmpty, ValidateNested } from 'class-validator';
+import { IsArray, IsNotEmpty, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { PurchaseDto } from './purchase.dto';
-
-import { PurchaseProductEntity } from 'src/core/purchase-product/purchase-product.entity';
+import { PurchaseProductDto } from './purchase-product.dto';
 
 export class CreatePurchaseDto {
   @IsNotEmpty()
@@ -11,5 +10,6 @@ export class CreatePurchaseDto {
   purchase: PurchaseDto;
 
   @IsNotEmpty()
-  purchaseProducts: PurchaseProductEntity[];
+  @IsArray()
+  purchaseProducts: PurchaseProductDto[];
 }

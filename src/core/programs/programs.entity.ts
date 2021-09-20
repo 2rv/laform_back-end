@@ -5,9 +5,11 @@ import {
   JoinColumn,
   ManyToOne,
   Generated,
+  OneToMany,
 } from 'typeorm';
 import { MasterClassEntity } from '../master-class/master-class.entity';
 import { generateVendorCode } from '../../common/utils/vendor-coder';
+import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
 
 @Entity({ name: 'programs' })
 export class ProgramsEntity {
@@ -34,6 +36,15 @@ export class ProgramsEntity {
     name: 'master_class_id',
   })
   masterClassId: MasterClassEntity;
+
+  @OneToMany(
+    () => PurchaseProductEntity,
+    (res: PurchaseProductEntity) => res.program,
+  )
+  @JoinColumn({
+    name: 'purchased_product_id',
+  })
+  purchasedProductId: PurchaseProductEntity[];
 
   @Column({
     type: 'varchar',

@@ -48,7 +48,7 @@ export class CategoryEntity {
 
   @ManyToOne(
     () => PatternProductEntity,
-    (pattern: PatternProductEntity) => pattern.categories,
+    (res: PatternProductEntity) => res.categories,
     {
       onDelete: 'CASCADE',
     },
@@ -60,7 +60,7 @@ export class CategoryEntity {
 
   @ManyToOne(
     () => SewingProductEntity,
-    (sewing: SewingProductEntity) => sewing.categories,
+    (res: SewingProductEntity) => res.categories,
     {
       onDelete: 'CASCADE',
     },

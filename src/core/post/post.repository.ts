@@ -31,24 +31,6 @@ export class PostRepository extends Repository<PostEntity> {
       .getOne();
   }
 
-  async findBestRu(): Promise<PostEntity[]> {
-    return await this.createQueryBuilder('post')
-      .leftJoin('post.imageUrl', 'image_url')
-      .leftJoin('post.categoryId', 'category_id')
-      .select([
-        'post.id',
-        'post.titleRu',
-        'post.textRu',
-        'post.likeCount',
-        'post.createdDate',
-        'image_url',
-        'category_id.textRu',
-      ])
-      .orderBy('RANDOM()')
-      .limit(3)
-      .getMany();
-  }
-
   async findPinnedRu(): Promise<PostEntity[]> {
     return await this.createQueryBuilder('post')
       .leftJoin('post.image', 'image')
@@ -57,13 +39,13 @@ export class PostRepository extends Repository<PostEntity> {
       .select([
         'post.id',
         'post.titleRu',
-        'post.likeCount',
-        'post.pinned',
         'post.modifier',
+        'post.createdDate',
         'post.type',
         'image',
         'categories',
       ])
+      .limit(3)
       .getMany();
   }
 
@@ -130,32 +112,6 @@ export class PostRepository extends Repository<PostEntity> {
       .getOne();
   }
 
-  async findBestEn(): Promise<PostEntity[]> {
-    return await this.createQueryBuilder('post')
-      .leftJoin('post.imageUrl', 'image_url')
-      .leftJoin('post.categoryId', 'category_id')
-      .leftJoin('post.comment', 'comment')
-      .leftJoin('comment.userId', 'userId')
-      .leftJoin('comment.subComment', 'subComment')
-      .leftJoin('subComment.userId', 'user')
-      .select([
-        'post.id',
-        'post.titleEn',
-        'post.textEn',
-        'post.createdDate',
-        'post.likeCount',
-        'image_url',
-        'category_id.textEn',
-        'comment',
-        'userId.login',
-        'subComment',
-        'user.login',
-      ])
-      .orderBy('RANDOM()')
-      .limit(3)
-      .getMany();
-  }
-
   async findPinnedEn(): Promise<PostEntity[]> {
     return await this.createQueryBuilder('post')
       .leftJoin('post.imageUrl', 'image_url')
@@ -164,20 +120,19 @@ export class PostRepository extends Repository<PostEntity> {
       .leftJoin('comment.userId', 'userId')
       .leftJoin('comment.subComment', 'subComment')
       .leftJoin('subComment.userId', 'user')
+      .leftJoin('post.image', 'image')
+      .leftJoin('post.categories', 'categories')
+      .where('post.pinned = true')
       .select([
         'post.id',
         'post.titleEn',
-        'post.textEn',
+        'post.modifier',
         'post.createdDate',
-        'post.likeCount',
-        'image_url',
-        'category_id.textEn',
-        'comment',
-        'userId.login',
-        'subComment',
-        'user.login',
+        'image',
+        'categories',
       ])
       .where('post.pinned = true')
+      .limit(3)
       .getMany();
   }
 

@@ -37,7 +37,7 @@ export class PatternProductService {
 
   async update(id: string, body: UpdatePatternProductDto) {
     if (body.images) {
-      for (let file of body.images) {
+      for (const file of body.images) {
         await this.fileUploadService.update(file, { patternProductId: id });
       }
     }
@@ -69,6 +69,33 @@ export class PatternProductService {
       );
       return result;
     }
+  }
+
+  async getDiscount(id): Promise<number> {
+    return await (
+      await this.patternProductRepository.findOne(id)
+    ).discount;
+  }
+
+  async getPurchaseParamsPrint(patternProductId, sizeId): Promise<any> {
+    const discount = await (
+      await this.patternProductRepository.findOne(patternProductId)
+    ).discount;
+    const price = await this.sizesService.getSizePrice(sizeId);
+    return {
+      totalPrice: price,
+      totalDiscount: discount,
+    };
+  }
+
+  async getPurchaseParamsElectronic(patternProductId): Promise<any> {
+    const { discount, price } = await this.patternProductRepository.findOne(
+      patternProductId,
+    );
+    return {
+      totalPrice: price,
+      totalDiscount: discount,
+    };
   }
 
   async getAll(

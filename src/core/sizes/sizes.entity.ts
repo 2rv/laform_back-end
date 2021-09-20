@@ -4,10 +4,12 @@ import {
   PrimaryGeneratedColumn,
   JoinColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { PatternProductEntity } from '../pattern-product/pattern-product.entity';
 import { SewingProductEntity } from '../sewing-product/sewing-product.entity';
 import { generateVendorCode } from '../../common/utils/vendor-coder';
+import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
 
 @Entity({ name: 'sizes' })
 export class SizesEntity {
@@ -65,4 +67,13 @@ export class SizesEntity {
     name: 'sewingProductId',
   })
   sewingProductId: SewingProductEntity;
+
+  @OneToMany(
+    () => PurchaseProductEntity,
+    (res: PurchaseProductEntity) => res.size,
+  )
+  @JoinColumn({
+    name: 'purchased_product_id',
+  })
+  purchasedProductId: PurchaseProductEntity[];
 }
