@@ -95,4 +95,24 @@ export class AuthService {
 
     return accountData;
   }
+
+  async signUpWithGoogle(body: any): Promise<LoginInfoDto> {
+    const user = await this.userRepository.saveGoogleUser({
+      email: body.email,
+      googleId: body.id,
+    });
+    const accessToken = await this.createJwt(user);
+
+    return { accessToken };
+  }
+
+  async signUpWithFacebook(body: any): Promise<LoginInfoDto> {
+    const user = await this.userRepository.saveFacebookUser({
+      email: body.email,
+      facebookId: body.id,
+    });
+    const accessToken = await this.createJwt(user);
+
+    return { accessToken };
+  }
 }
