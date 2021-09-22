@@ -1,5 +1,5 @@
 import { PurchaseEntity } from './purchase.entity';
-import { EntityRepository, Like, Repository } from 'typeorm';
+import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(PurchaseEntity)
 export class PurchaseRepository extends Repository<PurchaseEntity> {
@@ -8,16 +8,11 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
     const skip = (page - 1) * size || 0;
 
     return await this.createQueryBuilder('purchase')
-      .leftJoinAndSelect('purchase.purchaseProducts', 'purchaseProducts')
-      .leftJoinAndSelect('purchaseProducts.masterClassId', 'masterClassId')
-      .leftJoinAndSelect('masterClassId.images', 'images')
-      .leftJoinAndSelect(
-        'purchaseProducts.patternProductId',
-        'patternProductId',
+      .select(['purchase'])
+      .loadRelationCountAndMap(
+        'purchase.purchaseProductsCount',
+        'purchase.purchaseProducts',
       )
-      .leftJoinAndSelect('patternProductId.images', 'image')
-      .leftJoinAndSelect('purchaseProducts.sewingProductId', 'sewingProductId')
-      .leftJoinAndSelect('sewingProductId.images', 'files')
       .limit(take)
       .offset(skip)
       .getMany();

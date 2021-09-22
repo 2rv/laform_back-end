@@ -82,7 +82,7 @@ export class PurchaseService {
     body: CreatePurchaseDto,
     userId: number = undefined,
     email: string,
-  ): Promise<any | PurchaseEntity> {
+  ): Promise<PurchaseEntity> {
     const { verifiedPurchaseProducts, price }: VerifyPurchaseProductsDto =
       await this.VerifyPurchaseProducts(body.purchaseProducts);
     const promoCodeDiscount = await this.promoCodeService.checkFromServer(
@@ -97,8 +97,11 @@ export class PurchaseService {
       userId,
       email,
     );
-
-    return await this.purchaseRepository.save(purchase);
+    const result = await this.purchaseRepository.save(purchase);
+    this.purchaseRepository.update(result.id, {
+      orderNumber: await PurchaseEntity.generateOrderNumber(result._NID),
+    });
+    return result;
   }
 
   async getAll(size: number, page: number): Promise<PurchaseEntity[]> {
