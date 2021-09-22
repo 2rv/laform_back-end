@@ -12,6 +12,8 @@ import { LikeEntity } from '../like/like.entity';
 import { CommentEntity } from '../comment/comment.entity';
 import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
 import { generateVendorCode } from '../../common/utils/vendor-coder';
+import { RecommendationProductEntity } from '../recommendation-product/recommendation-product.entity';
+import { RecommendationEntity } from '../recommendation/recommendation.entity';
 
 @Entity({ name: 'pattern_product' })
 export class PatternProductEntity {
@@ -60,6 +62,19 @@ export class PatternProductEntity {
       purchaseProduct.patternProductId,
   )
   purchaseProduct: PurchaseProductEntity[];
+
+  @OneToMany(
+    () => RecommendationProductEntity,
+    (purchaseProduct: RecommendationProductEntity) =>
+      purchaseProduct.patternProductId,
+  )
+  recommendationProduct: RecommendationProductEntity[];
+
+  @OneToMany(
+    () => RecommendationEntity,
+    (purchaseProduct: RecommendationEntity) => purchaseProduct.patternProductId,
+  )
+  recommendation: RecommendationEntity[];
 
   @OneToOne(
     () => FileUploadEntity,

@@ -23,6 +23,8 @@ import {
   CommentEntity,
   SubCommentEntity,
 } from 'src/core/comment/comment.entity';
+import { RecommendationProductEntity } from 'src/core/recommendation-product/recommendation-product.entity';
+import { RecommendationEntity } from 'src/core/recommendation/recommendation.entity';
 
 const DATABASE_CONFIG = config.get('DATABASE');
 
@@ -47,6 +49,8 @@ export const ApiEntities = [
   SizesEntity,
   CommentEntity,
   SubCommentEntity,
+  RecommendationEntity,
+  RecommendationProductEntity,
 ];
 
 export const typeOrmConfig: TypeOrmModuleOptions = {

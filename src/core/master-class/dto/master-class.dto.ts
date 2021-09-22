@@ -32,23 +32,23 @@ export class MasterClassDto {
   @IsString()
   descriptionEn: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsArray()
   @ArrayMinSize(1)
   @ArrayMaxSize(5)
   categories: [CategoryDto];
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsArray()
   programs: [CreateProgramDto];
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsArray()
   @ArrayMinSize(1)
   @ArrayMaxSize(6)
   images: [FileDto];
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
   @Min(0)
   @Max(0)

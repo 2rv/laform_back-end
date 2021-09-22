@@ -21,8 +21,8 @@ export class MasterClassService {
   }
 
   async save(body: MasterClassDto): Promise<MasterClassEntity> {
-    await this.programsService.createMany(body.programs);
-    await this.categoriesService.createMany(body.categories);
+    //await this.programsService.createMany(body.programs);
+    //await this.categoriesService.createMany(body.categories);
 
     const masterClass = await this.create(body);
 
