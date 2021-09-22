@@ -41,15 +41,13 @@ export class PatternProductDto {
   @ArrayMaxSize(5)
   categories: [CategoryDto];
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsArray()
   sizes: [CreateSizeDto];
 
   @ArrayNotEmpty()
   @IsArray()
   images: [FileDto];
-
-  filePdf: FileDto;
 
   @IsOptional()
   @IsNumber()
@@ -80,11 +78,6 @@ export class PatternProductDto {
     time: number;
     version: string;
   };
-
-  @IsOptional()
-  @IsNumber()
-  @Min(0)
-  price: number;
 
   @IsOptional()
   @IsBoolean()
