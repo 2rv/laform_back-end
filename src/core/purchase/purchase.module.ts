@@ -7,6 +7,7 @@ import { PatternProductModule } from '../pattern-product/pattern-product.module'
 import { MasterClassModule } from '../master-class/master-class.module';
 import { SewingProductModule } from '../sewing-product/sewing-product.module';
 import { PromoCodeModule } from '../promo-code/promo-code.module';
+import { PurchaseProductModule } from '../purchase-product/purchase-product.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { PromoCodeModule } from '../promo-code/promo-code.module';
     PatternProductModule,
     MasterClassModule,
     SewingProductModule,
+    PurchaseProductModule,
     TypeOrmModule.forFeature([PurchaseRepository]),
   ],
   providers: [PurchaseService],

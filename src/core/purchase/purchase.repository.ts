@@ -78,23 +78,6 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
       .getMany();
   }
 
-  async getOneForUser(id: string, userId): Promise<PurchaseEntity> {
-    return await this.createQueryBuilder('purchase')
-      .leftJoinAndSelect('purchase.purchaseProducts', 'purchaseProducts')
-      .leftJoinAndSelect('purchaseProducts.masterClassId', 'masterClassId')
-      .leftJoinAndSelect('masterClassId.images', 'images')
-      .leftJoinAndSelect(
-        'purchaseProducts.patternProductId',
-        'patternProductId',
-      )
-      .leftJoinAndSelect('patternProductId.images', 'image')
-      .leftJoinAndSelect('purchaseProducts.sewingProductId', 'sewingProductId')
-      .leftJoinAndSelect('sewingProductId.images', 'files')
-      .where('purchase.id = :id', { id })
-      .andWhere('purchase.userId = :userId', { userId })
-      .getOne();
-  }
-
   async getOne(id: string): Promise<PurchaseEntity> {
     return await this.createQueryBuilder('purchase')
       .leftJoinAndSelect('purchase.purchaseProducts', 'purchase_products')

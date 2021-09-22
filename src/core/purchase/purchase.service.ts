@@ -9,12 +9,14 @@ import { SewingProductService } from '../sewing-product/sewing-product.service';
 import { MasterClassService } from '../master-class/master-class.service';
 import { VerifyPurchaseProductsDto } from './dto/verify-purchase-products.dto';
 import { PromoCodeService } from '../promo-code/promo-code.service';
+import { PurchaseProductService } from '../purchase-product/purchase-product.service';
 
 @Injectable()
 export class PurchaseService {
   constructor(
     private promoCodeService: PromoCodeService,
     private purchaseRepository: PurchaseRepository,
+    private purchaseProductService: PurchaseProductService,
     private patternProductService: PatternProductService,
     private sewingProductService: SewingProductService,
     private masterClassService: MasterClassService,
@@ -118,8 +120,12 @@ export class PurchaseService {
     return await this.purchaseRepository.getOne(id);
   }
 
-  async getOneForUser(id: string, userId): Promise<PurchaseEntity> {
-    return await this.purchaseRepository.getOneForUser(id, userId);
+  async getOneForUser(id: string, userId) {
+    return await this.purchaseProductService.getOneProductForUser(id, userId);
+  }
+
+  async getOneMasterClass(id: string) {
+    return await this.purchaseProductService.getOneMasterClass(id);
   }
 
   async update(id: any, body: any) {
