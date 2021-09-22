@@ -24,13 +24,13 @@ export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
+  @Column({ unique: true, nullable: true })
   login: string;
 
   @Column({ unique: true, nullable: true })
   email: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   password: string;
 
   @Column({
@@ -46,6 +46,12 @@ export class UserEntity extends BaseEntity {
 
   @Column({ default: true })
   notificationEmail: boolean;
+
+  @Column({ name: 'google_id', nullable: true })
+  googleId?: string;
+
+  @Column({ name: 'facebook_id', nullable: true })
+  facebookId?: string;
 
   @CreateDateColumn()
   createDate: string;

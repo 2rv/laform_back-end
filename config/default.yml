@@ -26,3 +26,13 @@ MAIL:
   EMAIL: 'laformecompany@gmail.com'
   PASSWORD: 'laformecompany12'
   HOST: 'smtp.gmail.com'
+
+FACEBOOK:
+  CLIENT_ID: '168878955342230'
+  CLIENT_SECRET: 'd8b62ef1da6ba65940f90f373d4463b1'
+  CALLBACK_URL: 'https://laform-api.herokuapp.com/auth/facebook/redirect'
+
+GOOGLE:
+  CLIENT_ID: '857571824635-s9u3bhlc806ullpgiib8d626csnjh0de.apps.googleusercontent.com'
+  CLIENT_SECRET: 'ENwlRXt3vnRohU8hFNbAcQjf'
+  CALLBACK_URL: 'https://laform-api.herokuapp.com/auth/google/redirect'

@@ -5,6 +5,7 @@ import {
   ValidationPipe,
   UseGuards,
   Get,
+  Req,
 } from '@nestjs/common';
 import { UserSignUpDto } from './dto/user-sign-up.dto';
 import { UserLoginDto } from './dto/user-login.dto';
@@ -48,5 +49,29 @@ export class AuthController {
   @UseGuards(AuthGuard(), AccountGuard)
   checkUserConfirmed(@GetAccount() user: UserEntity): Promise<LoginInfoDto> {
     return this.authService.updateLogin(user);
+  }
+
+  @Get('/facebook')
+  @UseGuards(AuthGuard('facebook'))
+  async facebookLogin(): Promise<any> {
+    return { ok: 'ok' };
+  }
+
+  @Get('/facebook/redirect')
+  @UseGuards(AuthGuard('facebook'))
+  async facebookLoginRedirect(@Req() req): Promise<any> {
+    console.log(req.user);
+    return this.authService.signUpWithFacebook(req.user);
+  }
+
+  @Get('/google')
+  @UseGuards(AuthGuard('google'))
+  async googleAuth() {}
+
+  @Get('/google/redirect')
+  @UseGuards(AuthGuard('google'))
+  async googleAuthRedirect(@Req() req) {
+    //return req.user;
+    return this.authService.signUpWithGoogle(req.user);
   }
 }

@@ -10,6 +10,8 @@ import { UserCreateDto } from './dto/user-create.dto';
 import { UserChangePasswordDto } from './dto/user-change-password.dto';
 import { UserChangeEmailDto } from './dto/user-change-email.dto';
 import { UserEntity } from './user.entity';
+import { CreateGoogleUseDto } from './dto/create-user-google.dto';
+import { CreateFacebookUseDto } from './dto/create-user-facebook.dto';
 
 @EntityRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {
@@ -65,6 +67,40 @@ export class UserRepository extends Repository<UserEntity> {
       this.update(userId, { emailConfirmed: true });
     } catch {
       throw new BadRequestException();
+    }
+  }
+
+  async saveGoogleUser(body: CreateGoogleUseDto): Promise<UserEntity> {
+    const user: UserEntity = new UserEntity();
+    user.googleId = body.googleId;
+    user.email = body.email;
+
+    try {
+      await user.save();
+      return user;
+    } catch (err) {
+      if (err.code === '23505') {
+        throw new ConflictException(USER_ERROR.USER_ALREADY_EXISTS);
+      } else {
+        throw new InternalServerErrorException();
+      }
+    }
+  }
+
+  async saveFacebookUser(body: CreateFacebookUseDto): Promise<UserEntity> {
+    const user: UserEntity = new UserEntity();
+    user.facebookId = body.facebookId;
+    user.email = body.email;
+
+    try {
+      await user.save();
+      return user;
+    } catch (err) {
+      if (err.code === '23505') {
+        throw new ConflictException(USER_ERROR.USER_ALREADY_EXISTS);
+      } else {
+        throw new InternalServerErrorException();
+      }
     }
   }
 }

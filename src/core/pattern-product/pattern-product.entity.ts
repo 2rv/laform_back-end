@@ -1,34 +1,15 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  OneToMany,
-  OneToOne,
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { CategoryEntity } from '../category/category.entity';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
 import { SizesEntity } from '../sizes/sizes.entity';
 import { LikeEntity } from '../like/like.entity';
 import { CommentEntity } from '../comment/comment.entity';
 import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
-import { generateVendorCode } from '../../common/utils/vendor-coder';
 
 @Entity({ name: 'pattern_product' })
 export class PatternProductEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'vendor_code',
-    unique: true,
-    nullable: true,
-  })
-  vendorCode: string;
-
-  static getVendorCode() {
-    return generateVendorCode();
-  }
 
   @OneToMany(
     () => CategoryEntity,
@@ -60,12 +41,6 @@ export class PatternProductEntity {
       purchaseProduct.patternProductId,
   )
   purchaseProduct: PurchaseProductEntity[];
-
-  @OneToOne(
-    () => FileUploadEntity,
-    (res: FileUploadEntity) => res.filePdfPatternProductId,
-  )
-  filePdf: FileUploadEntity;
 
   @Column({
     type: 'varchar',
@@ -118,13 +93,6 @@ export class PatternProductEntity {
     name: 'type',
   })
   type!: number;
-
-  @Column({
-    type: 'int',
-    name: 'price',
-    nullable: true,
-  })
-  price!: number;
 
   @Column({
     type: 'int',

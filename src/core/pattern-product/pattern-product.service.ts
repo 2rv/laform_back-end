@@ -17,12 +17,7 @@ export class PatternProductService {
   ) {}
 
   async create(body: PatternProductDto): Promise<PatternProductEntity> {
-    if (body.sizes?.length > 0) {
-      await this.sizesService.createMany(body.sizes);
-    }
-    if (body.type === 1) {
-      body.vendorCode = PatternProductEntity.getVendorCode();
-    }
+    await this.sizesService.createMany(body.sizes);
     await this.categoriesService.createMany(body.categories);
     return await this.patternProductRepository.save(body);
   }
@@ -77,21 +72,14 @@ export class PatternProductService {
     ).discount;
   }
 
-  async getPurchaseParamsPrint(patternProductId, sizeId): Promise<any> {
+  async getPurchaseParamsPatternProduct(
+    patternProductId,
+    sizeId,
+  ): Promise<any> {
     const discount = await (
       await this.patternProductRepository.findOne(patternProductId)
     ).discount;
     const price = await this.sizesService.getSizePrice(sizeId);
-    return {
-      totalPrice: price,
-      totalDiscount: discount,
-    };
-  }
-
-  async getPurchaseParamsElectronic(patternProductId): Promise<any> {
-    const { discount, price } = await this.patternProductRepository.findOne(
-      patternProductId,
-    );
     return {
       totalPrice: price,
       totalDiscount: discount,
