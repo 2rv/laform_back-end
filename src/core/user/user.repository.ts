@@ -35,6 +35,60 @@ export class UserRepository extends Repository<UserEntity> {
     }
   }
 
+  async getProfile(userId: number) {
+    return await this.createQueryBuilder('user')
+      .leftJoin('user.purchase', 'purchases')
+      .leftJoin('user.comment', 'comments')
+
+      .leftJoin('comments.postId', 'comment_post')
+      .leftJoin('comment_post.image', 'comment_post_image')
+
+      .leftJoin('comments.sewingProductId', 'comment_sewing_good')
+      .leftJoin('comment_sewing_good.images', 'comment_sewing_good_images')
+
+      .leftJoin('comments.patternProductId', 'comment_pattern_product')
+      .leftJoin(
+        'comment_pattern_product.images',
+        'comment_pattern_product_images',
+      )
+
+      .leftJoin('comments.masterClassId', 'comment_master_class')
+      .leftJoin('comment_master_class.images', 'comment_master_class_images')
+
+      .leftJoin('user.userSettingId', 'user_info')
+      .select([
+        'user.id',
+        'user.login',
+        'user.email',
+        'user.role',
+        'user.emailConfirmed',
+        'user.notificationEmail',
+
+        'user_info.id',
+        'user_info.fullName',
+        'user_info.phone',
+        'user_info.location',
+
+        'comments',
+        'comment_post',
+        'comment_post_image',
+        'comment_sewing_good',
+        'comment_sewing_good_images',
+        'comment_pattern_product',
+        'comment_pattern_product_images',
+        'comment_master_class',
+        'comment_master_class_images',
+
+        'purchases',
+      ])
+      .loadRelationCountAndMap(
+        'purchases.purchaseProductsCount',
+        'purchases.purchaseProducts',
+      )
+      .where('user.id = :id', { id: userId })
+      .getOne();
+  }
+
   async changePassword(
     user: UserEntity,
     data: UserChangePasswordDto,
