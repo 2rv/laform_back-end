@@ -8,11 +8,12 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
     const skip = (page - 1) * size || 0;
 
     return await this.createQueryBuilder('purchase')
-      .select(['purchase'])
+      .leftJoin('purchase.userId', 'user')
       .loadRelationCountAndMap(
         'purchase.purchaseProductsCount',
         'purchase.purchaseProducts',
       )
+      .select(['purchase', 'user.id'])
       .limit(take)
       .offset(skip)
       .getMany();
