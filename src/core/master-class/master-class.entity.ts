@@ -53,7 +53,7 @@ export class MasterClassEntity {
   @OneToOne(
     () => RecommendationEntity,
     (recommendation: RecommendationEntity) => recommendation.masterClassId,
-    { cascade: true },
+    { cascade: true, onDelete: 'CASCADE' },
   )
   recommendation: RecommendationEntity;
 
