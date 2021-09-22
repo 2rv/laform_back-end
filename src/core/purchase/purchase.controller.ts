@@ -68,9 +68,9 @@ export class PurchaseController {
   }
 
   @Get('/user/get/')
-  @Roles(USER_ROLE.USER)
+  @Roles(USER_ROLE.USER, USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async getAllForUsers(
+  async getAllForUser(
     @GetUser() user: UserEntity,
     @Query('size') size: number,
     @Query('page') page: number,
