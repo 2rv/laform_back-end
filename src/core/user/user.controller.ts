@@ -24,6 +24,13 @@ export class UserController {
     return this.userService.getUserEmail(user);
   }
 
+  @Get('get/')
+  @UseGuards(AuthGuard(), AccountGuard)
+  @Roles(USER_ROLE.ADMIN)
+  async getAll() {
+    return await this.userService.getAll();
+  }
+
   @Get('get/:userId')
   @UseGuards(AuthGuard(), AccountGuard)
   @Roles(USER_ROLE.ADMIN)

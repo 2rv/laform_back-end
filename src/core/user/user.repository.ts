@@ -89,6 +89,18 @@ export class UserRepository extends Repository<UserEntity> {
       .getOne();
   }
 
+  async getAll() {
+    return await this.createQueryBuilder('user')
+      .select([
+        'user.id',
+        'user.login',
+        'user.role',
+        'user.emailConfirmed',
+        'user.notificationEmail',
+      ])
+      .getMany();
+  }
+
   async changePassword(
     user: UserEntity,
     data: UserChangePasswordDto,

@@ -16,4 +16,8 @@ export class UserService {
   async getProfile(userId: number): Promise<any> {
     return await this.userRepository.getProfile(userId);
   }
+
+  async getAll(): Promise<any> {
+    return await this.userRepository.getAll();
+  }
 }
