@@ -5,11 +5,13 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
 } from 'typeorm';
 import { PatternProductEntity } from '../pattern-product/pattern-product.entity';
 import { SewingProductEntity } from '../sewing-product/sewing-product.entity';
 import { generateVendorCode } from '../../common/utils/vendor-coder';
 import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
+import { FileUploadEntity } from '../file-upload/file-upload.entity';
 
 @Entity({ name: 'sizes' })
 export class SizesEntity {
@@ -76,4 +78,13 @@ export class SizesEntity {
     name: 'purchased_product_id',
   })
   purchasedProductId: PurchaseProductEntity[];
+
+  @OneToOne(
+    () => FileUploadEntity,
+    (res: FileUploadEntity) => res.filePdfPatternProductId,
+  )
+  @JoinColumn({
+    name: 'file_pdf_pattern_product_id',
+  })
+  filePdf: FileUploadEntity;
 }

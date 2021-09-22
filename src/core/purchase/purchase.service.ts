@@ -37,19 +37,12 @@ export class PurchaseService {
         item.totalDiscount = result.totalDiscount;
         item.totalPrice = result.totalPrice;
       }
-      if (item.type === 1) {
+      if (item.type === 2 || item.type === 1) {
         const result =
-          await this.patternProductService.getPurchaseParamsElectronic(
+          await this.patternProductService.getPurchaseParamsPatternProduct(
             item.patternProductId,
+            item.size,
           );
-        item.totalDiscount = result.totalDiscount;
-        item.totalPrice = result.totalPrice;
-      }
-      if (item.type === 2) {
-        const result = await this.patternProductService.getPurchaseParamsPrint(
-          item.patternProductId,
-          item.size,
-        );
         item.totalDiscount = result.totalDiscount;
         item.totalPrice = result.totalPrice;
       }
