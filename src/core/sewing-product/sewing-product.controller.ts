@@ -109,4 +109,13 @@ export class SewingProductController {
   async delete(@Request() req) {
     return await this.sewingProductService.delete(req.sewingProductId);
   }
+
+  @Get('liked')
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getLiked(
+    @Query(new LangValidationPipe()) query: string,
+    @GetAccount() user: UserEntity,
+  ) {
+    return await this.sewingProductService.getLiked(user.id, query);
+  }
 }

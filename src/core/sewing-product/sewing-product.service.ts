@@ -159,4 +159,14 @@ export class SewingProductService {
       return results;
     }
   }
+
+  async getLiked(
+    userId: number,
+    query: string,
+  ): Promise<SewingProductEntity[]> {
+    if (query === 'ru')
+      return await this.sewingProductRepository.findLikedRu(userId);
+    if (query === 'en')
+      return await this.sewingProductRepository.findLikedEn(userId);
+  }
 }

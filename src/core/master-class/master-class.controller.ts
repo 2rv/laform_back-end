@@ -56,7 +56,7 @@ export class MasterClassController {
     );
   }
 
-  @Get('get/')
+  @Get('get-all')
   async getAll(
     @Query(new LangValidationPipe()) query: string,
     @Query('size') size: number,
@@ -65,7 +65,7 @@ export class MasterClassController {
     return await this.masterClassService.getAll(query, size, page);
   }
 
-  @Get('get/auth')
+  @Get('get-all/authtorized')
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getAllAuth(
     @Query(new LangValidationPipe()) query: string,
@@ -105,5 +105,14 @@ export class MasterClassController {
   @UseGuards(AuthGuard('jwt'), AccountGuard, MasterClassGuard)
   async delete(@Param('masterClassId') masterClassId: string) {
     return await this.masterClassService.delete(masterClassId);
+  }
+
+  @Get('liked')
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getLiked(
+    @Query(new LangValidationPipe()) query: string,
+    @GetAccount() user: UserEntity,
+  ) {
+    return await this.masterClassService.getLiked(user.id, query);
   }
 }

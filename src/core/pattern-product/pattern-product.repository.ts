@@ -40,7 +40,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .leftJoin('pattern_product.images', 'images')
       .leftJoin('pattern_product.sizes', 'sizes')
       .leftJoin('pattern_product.categories', 'categories')
-      .leftJoin('pattern_product.filePdf', 'filePdf')
+      .where('pattern_product.deleted = false')
       .select([
         'pattern_product.id',
         'pattern_product.titleRu',
@@ -58,7 +58,6 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'sizes.vendorCode',
         'categories',
       ])
-      .where('pattern_product.deleted = false')
       .limit(take)
       .offset(skip)
       .getMany();
@@ -187,7 +186,6 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .leftJoin('pattern_product.images', 'images')
       .leftJoin('pattern_product.sizes', 'sizes')
       .leftJoin('pattern_product.categories', 'categories')
-      .leftJoin('pattern_product.filePdf', 'fildePdf')
       .select([
         'pattern_product.id',
         'like',
@@ -197,7 +195,6 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'pattern_product.modifier',
         'pattern_product.materialRu',
         'pattern_product.complexity',
-        'pattern_product.price',
         'pattern_product.discount',
         'comment',
         'userId.login',
@@ -229,7 +226,6 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .leftJoin('pattern_product.images', 'images')
       .leftJoin('pattern_product.sizes', 'sizes')
       .leftJoin('pattern_product.categories', 'categories')
-      .leftJoin('pattern_product.filePdf', 'filePdf')
       .select([
         'pattern_product.id',
         'pattern_product.titleRu',
@@ -238,7 +234,6 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'pattern_product.modifier',
         'pattern_product.materialRu',
         'pattern_product.complexity',
-        'pattern_product.price',
         'pattern_product.discount',
         'comment',
         'userId.login',
@@ -248,7 +243,6 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'images',
         'sizes',
         'categories',
-        'filePdf',
       ])
       .where('pattern_product.deleted = false')
       .limit(take)
@@ -274,7 +268,6 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'pattern_product.modifier',
         'pattern_product.materialRu',
         'pattern_product.complexity',
-        'pattern_product.price',
         'pattern_product.discount',
         'comment',
         'userId.login',
@@ -295,7 +288,6 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .leftJoin('comment.userId', 'userId')
       .leftJoin('comment.subComment', 'subComment')
       .leftJoin('subComment.userId', 'user')
-      .leftJoin('pattern_product.filePdf', 'fildePdf')
       .select([
         'pattern_product.id',
         'like',
@@ -305,13 +297,11 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'pattern_product.modifier',
         'pattern_product.materialRu',
         'pattern_product.complexity',
-        'pattern_product.price',
         'pattern_product.discount',
         'comment',
         'userId.login',
         'subComment',
         'user.login',
-        'filePdf',
       ])
       .where('pattern_product.id = :id', { id })
       .getOne();
@@ -334,7 +324,6 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .leftJoin('pattern_product.images', 'images')
       .leftJoin('pattern_product.sizes', 'sizes')
       .leftJoin('pattern_product.categories', 'categories')
-      .leftJoin('pattern_product.filePdf', 'fildePdf')
       .select([
         'pattern_product.id',
         'like',
@@ -344,7 +333,6 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'pattern_product.modifier',
         'pattern_product.materialRu',
         'pattern_product.complexity',
-        'pattern_product.price',
         'pattern_product.discount',
         'comment',
         'userId.login',
@@ -353,7 +341,6 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'images',
         'sizes',
         'categories',
-        'filePdf',
       ])
       .where('pattern_product.deleted = false')
       .limit(take)
@@ -379,13 +366,60 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'pattern_product.modifier',
         'pattern_product.materialRu',
         'pattern_product.complexity',
-        'pattern_product.price',
         'pattern_product.discount',
         'comment',
         'userId.login',
         'subComment',
         'user.login',
       ])
+      .getMany();
+  }
+
+  async findLikedEn(userId: number): Promise<PatternProductEntity[]> {
+    return await this.createQueryBuilder('pattern_product')
+      .leftJoin('pattern_product.like', 'like')
+      .leftJoin('pattern_product.images', 'images')
+      .leftJoin('pattern_product.sizes', 'sizes')
+      .leftJoin('pattern_product.categories', 'categories')
+      .select([
+        'pattern_product.id',
+        'pattern_product.titleRu',
+        'pattern_product.descriptionRu',
+        'pattern_product.type',
+        'pattern_product.modifier',
+        'pattern_product.materialRu',
+        'pattern_product.complexity',
+        'pattern_product.discount',
+        'like',
+        'images',
+        'sizes',
+        'categories',
+      ])
+      .where('like.userId = :userId', { userId })
+      .getMany();
+  }
+
+  async findLikedRu(userId: number): Promise<PatternProductEntity[]> {
+    return await this.createQueryBuilder('pattern_product')
+      .leftJoin('pattern_product.like', 'like')
+      .leftJoin('pattern_product.images', 'images')
+      .leftJoin('pattern_product.sizes', 'sizes')
+      .leftJoin('pattern_product.categories', 'categories')
+      .select([
+        'pattern_product.id',
+        'pattern_product.titleRu',
+        'pattern_product.descriptionRu',
+        'pattern_product.type',
+        'pattern_product.modifier',
+        'pattern_product.materialRu',
+        'pattern_product.complexity',
+        'pattern_product.discount',
+        'like',
+        'images',
+        'sizes',
+        'categories',
+      ])
+      .where('like.userId = :userId', { userId })
       .getMany();
   }
 }

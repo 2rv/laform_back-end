@@ -53,7 +53,7 @@ export class PatternProductController {
     );
   }
 
-  @Get('get/')
+  @Get('get-all/')
   async getAll(
     @Query(new LangValidationPipe()) query: string,
     @Query('size') size: number,
@@ -62,7 +62,7 @@ export class PatternProductController {
     return await this.patternProductService.getAll(query, size, page);
   }
 
-  @Get('get/auth')
+  @Get('get-all/authtorized')
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getAllAuth(
     @Query(new LangValidationPipe()) query: string,
@@ -104,5 +104,14 @@ export class PatternProductController {
   @UseGuards(AuthGuard('jwt'), AccountGuard, PatternProductGuard)
   async delete(@Request() req) {
     return await this.patternProductService.delete(req.patternProductId);
+  }
+
+  @Get('liked')
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getLiked(
+    @Query(new LangValidationPipe()) query: string,
+    @GetAccount() user: UserEntity,
+  ) {
+    return await this.patternProductService.getLiked(user.id, query);
   }
 }

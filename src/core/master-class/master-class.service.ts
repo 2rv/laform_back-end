@@ -38,6 +38,13 @@ export class MasterClassService {
     if (query === 'en') return await this.masterClassRepository.findOneEn(id);
   }
 
+  async getLiked(userId: number, query: string): Promise<MasterClassEntity[]> {
+    if (query === 'ru')
+      return await this.masterClassRepository.findLikedRu(userId);
+    if (query === 'en')
+      return await this.masterClassRepository.findLikedEn(userId);
+  }
+
   async getOneAuth(
     id: string,
     query: string,

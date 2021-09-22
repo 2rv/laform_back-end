@@ -362,4 +362,38 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
       .where('master_class.pinned = true')
       .getMany();
   }
+
+  async findLikedEn(userId: number): Promise<MasterClassEntity[]> {
+    return await this.createQueryBuilder('master_class')
+      .leftJoin('master_class.like', 'like')
+      .select([
+        'master_class.id',
+        'master_class.titleEn',
+        'master_class.descriptionEn',
+        'master_class.modifier',
+        'master_class.discount',
+        'master_class.type',
+        'master_class.pinned',
+        'like',
+      ])
+      .where('like.userId = :userId', { userId })
+      .getMany();
+  }
+
+  async findLikedRu(userId: number): Promise<MasterClassEntity[]> {
+    return await this.createQueryBuilder('master_class')
+      .leftJoin('master_class.like', 'like')
+      .select([
+        'master_class.id',
+        'master_class.titleRu',
+        'master_class.descriptionRu',
+        'master_class.modifier',
+        'master_class.discount',
+        'master_class.type',
+        'master_class.pinned',
+        'like',
+      ])
+      .where('like.userId = :userId', { userId })
+      .getMany();
+  }
 }

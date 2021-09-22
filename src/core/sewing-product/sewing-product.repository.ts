@@ -345,4 +345,52 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .where('sewing_product.pinned = true')
       .getMany();
   }
+
+  async findLikedEn(userId: number): Promise<SewingProductEntity[]> {
+    return await this.createQueryBuilder('sewing_product')
+      .leftJoin('sewing_product.like', 'like')
+      .leftJoin('sewing_product.images', 'images')
+      .leftJoin('sewing_product.sizes', 'sizes')
+      .leftJoin('sewing_product.colors', 'colors')
+      .leftJoin('sewing_product.categories', 'categories')
+      .select([
+        'sewing_product.id',
+        'sewing_product.titleEn',
+        'sewing_product.descriptionEn',
+        'sewing_product.discount',
+        'sewing_product.modifier',
+        'sewing_product.type',
+        'like',
+        'images',
+        'sizes',
+        'colors',
+        'categories',
+      ])
+      .where('like.userId = :userId', { userId })
+      .getMany();
+  }
+
+  async findLikedRu(userId: number): Promise<SewingProductEntity[]> {
+    return await this.createQueryBuilder('sewing_product')
+      .leftJoin('sewing_product.like', 'like')
+      .leftJoin('sewing_product.images', 'images')
+      .leftJoin('sewing_product.sizes', 'sizes')
+      .leftJoin('sewing_product.colors', 'colors')
+      .leftJoin('sewing_product.categories', 'categories')
+      .select([
+        'sewing_product.id',
+        'sewing_product.titleRu',
+        'sewing_product.descriptionRu',
+        'sewing_product.discount',
+        'sewing_product.modifier',
+        'sewing_product.type',
+        'like',
+        'images',
+        'sizes',
+        'colors',
+        'categories',
+      ])
+      .where('like.userId = :userId', { userId })
+      .getMany();
+  }
 }

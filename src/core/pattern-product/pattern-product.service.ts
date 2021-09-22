@@ -97,6 +97,16 @@ export class PatternProductService {
       return await this.patternProductRepository.findAllEn(size, page);
   }
 
+  async getLiked(
+    userId: number,
+    query: string,
+  ): Promise<PatternProductEntity[]> {
+    if (query === 'ru')
+      return await this.patternProductRepository.findLikedRu(userId);
+    if (query === 'en')
+      return await this.patternProductRepository.findLikedEn(userId);
+  }
+
   async getAllAuth(
     query: string,
     size: number,
