@@ -43,6 +43,14 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.programs', 'programs')
       .leftJoin('master_class.categories', 'categories')
+      .leftJoin('master_class.recommendation', 'recommendation')
+      .leftJoin(
+        'recommendation.recommendationProducts',
+        'recommendationProducts',
+      )
+      .leftJoin('recommendationProducts.masterClassId', 'masterClassId')
+      .leftJoin('recommendationProducts.sewingProductId', 'sewingProductId')
+      .leftJoin('recommendationProducts.patternProductId', 'patternProductId')
       .select([
         'master_class.id',
         'master_class.titleRu',
@@ -57,6 +65,11 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'programs.vendorCode',
         'programs.price',
         'programs.programNameRu',
+        'recommendation',
+        'recommendationProducts',
+        'masterClassId',
+        'sewingProductId',
+        'patternProductId',
       ])
       .limit(take)
       .offset(skip)

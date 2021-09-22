@@ -1,10 +1,18 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
 import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
 import { ProgramsEntity } from '../programs/programs.entity';
 import { CategoryEntity } from '../category/category.entity';
 import { LikeEntity } from '../like/like.entity';
 import { CommentEntity } from '../comment/comment.entity';
+import { RecommendationProductEntity } from '../recommendation-product/recommendation-product.entity';
+import { RecommendationEntity } from '../recommendation/recommendation.entity';
 
 @Entity({ name: 'master_class' })
 export class MasterClassEntity {
@@ -34,6 +42,20 @@ export class MasterClassEntity {
     (purchaseProduct: PurchaseProductEntity) => purchaseProduct.masterClassId,
   )
   purchaseProduct: PurchaseProductEntity[];
+
+  @OneToMany(
+    () => RecommendationProductEntity,
+    (purchaseProduct: RecommendationProductEntity) =>
+      purchaseProduct.masterClassId,
+  )
+  recommendationProduct: RecommendationProductEntity[];
+
+  @OneToOne(
+    () => RecommendationEntity,
+    (recommendation: RecommendationEntity) => recommendation.masterClassId,
+    { cascade: true },
+  )
+  recommendation: RecommendationEntity;
 
   @OneToMany(() => LikeEntity, (like: LikeEntity) => like.masterClassId, {})
   like: LikeEntity[];
