@@ -67,7 +67,7 @@ export class UserEntity extends BaseEntity {
     return this.password === hashPassword;
   }
 
-  @OneToMany(() => LikeEntity, (like: LikeEntity) => like.postId)
+  @OneToMany(() => LikeEntity, (like: LikeEntity) => like.userId)
   like: LikeEntity[];
 
   @OneToMany(

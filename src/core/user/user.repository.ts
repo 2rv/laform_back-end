@@ -39,6 +39,18 @@ export class UserRepository extends Repository<UserEntity> {
     return await this.createQueryBuilder('user')
       .leftJoin('user.purchase', 'purchases')
       .leftJoin('user.comment', 'comments')
+      .leftJoin('user.like', 'likes')
+      .leftJoin('likes.postId', 'like_post')
+      .leftJoin('like_post.image', 'like_post_image')
+
+      .leftJoin('likes.sewingProductId', 'like_sewing_good')
+      .leftJoin('like_sewing_good.images', 'like_sewing_good_images')
+
+      .leftJoin('likes.patternProductId', 'like_pattern_product')
+      .leftJoin('like_pattern_product.images', 'like_pattern_product_images')
+
+      .leftJoin('likes.masterClassId', 'like_master_class')
+      .leftJoin('like_master_class.images', 'like_master_class_images')
 
       .leftJoin('comments.postId', 'comment_post')
       .leftJoin('comment_post.image', 'comment_post_image')
@@ -63,6 +75,16 @@ export class UserRepository extends Repository<UserEntity> {
         'user.role',
         'user.emailConfirmed',
         'user.notificationEmail',
+
+        'likes',
+        'like_post',
+        'like_post_image.fileUrl',
+        'like_sewing_good',
+        'like_sewing_good_images.fileUrl',
+        'like_pattern_product',
+        'like_pattern_product_images.fileUrl',
+        'like_master_class',
+        'like_master_class_images.fileUrl',
 
         'user_info.id',
         'user_info.fullName',
