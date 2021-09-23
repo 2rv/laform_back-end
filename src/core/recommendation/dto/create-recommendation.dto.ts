@@ -1,10 +1,4 @@
-import {
-  IsNotEmpty,
-  IsNumber,
-  IsString,
-  IsOptional,
-  ValidateNested,
-} from 'class-validator';
+import { IsOptional, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { RecommendationDto } from './recommendation.dto';
 
@@ -15,6 +9,6 @@ export class CreateRecommendationDto {
   @Type(() => RecommendationDto)
   recommendation: RecommendationDto;
 
-  @IsNotEmpty()
+  @IsOptional()
   recommendationProducts: RecommendationProductDto[];
 }
