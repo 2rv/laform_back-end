@@ -16,10 +16,22 @@ export class MasterClassService {
     private categoriesService: CategoryService,
   ) {}
 
-  async create(body: MasterClassDto): Promise<MasterClassEntity> {
+  async create(body: MasterClassDto): Promise<any> {
+    return await this.masterClassRepository.create(body);
+  }
+
+  async save(body: MasterClassDto): Promise<MasterClassEntity> {
     await this.programsService.createMany(body.programs);
     await this.categoriesService.createMany(body.categories);
-    return await this.masterClassRepository.save(body);
+
+    const masterClass = await this.create(body);
+
+    masterClass.recommendation = body.recommendation;
+    masterClass.recommendation.recommendationProducts =
+      body.recommendation.recommendationProducts;
+    return await this.masterClassRepository.save({
+      ...masterClass,
+    });
   }
 
   async delete(id: string) {

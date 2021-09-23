@@ -1,10 +1,18 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 import { CategoryEntity } from '../category/category.entity';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
 import { SizesEntity } from '../sizes/sizes.entity';
 import { LikeEntity } from '../like/like.entity';
 import { CommentEntity } from '../comment/comment.entity';
 import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
+import { RecommendationProductEntity } from '../recommendation-product/recommendation-product.entity';
+import { RecommendationEntity } from '../recommendation/recommendation.entity';
 
 @Entity({ name: 'pattern_product' })
 export class PatternProductEntity {
@@ -41,6 +49,25 @@ export class PatternProductEntity {
       purchaseProduct.patternProductId,
   )
   purchaseProduct: PurchaseProductEntity[];
+
+  @OneToMany(
+    () => RecommendationProductEntity,
+    (purchaseProduct: RecommendationProductEntity) =>
+      purchaseProduct.patternProductId,
+  )
+  recommendationProduct: RecommendationProductEntity[];
+
+  @OneToMany(
+    () => RecommendationEntity,
+    (purchaseProduct: RecommendationEntity) => purchaseProduct.patternProductId,
+  )
+  recommendation: RecommendationEntity[];
+
+  @OneToOne(
+    () => FileUploadEntity,
+    (res: FileUploadEntity) => res.filePdfPatternProductId,
+  )
+  filePdf: FileUploadEntity;
 
   @Column({
     type: 'varchar',

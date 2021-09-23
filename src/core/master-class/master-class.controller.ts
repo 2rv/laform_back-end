@@ -28,7 +28,7 @@ export class MasterClassController {
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async save(@Body(new ValidationPipe()) body: MasterClassDto) {
-    return await this.masterClassService.create(body);
+    return await this.masterClassService.save(body);
   }
 
   @Get('get/:masterClassId')

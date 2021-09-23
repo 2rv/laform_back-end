@@ -6,6 +6,8 @@ import { SizesEntity } from '../sizes/sizes.entity';
 import { LikeEntity } from '../like/like.entity';
 import { CommentEntity } from '../comment/comment.entity';
 import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
+import { RecommendationProductEntity } from '../recommendation-product/recommendation-product.entity';
+import { RecommendationEntity } from '../recommendation/recommendation.entity';
 
 @Entity({ name: 'sewing_product' })
 export class SewingProductEntity {
@@ -47,6 +49,19 @@ export class SewingProductEntity {
     (purchaseProduct: PurchaseProductEntity) => purchaseProduct.sewingProductId,
   )
   purchaseProduct: PurchaseProductEntity[];
+
+  @OneToMany(
+    () => RecommendationProductEntity,
+    (purchaseProduct: RecommendationProductEntity) =>
+      purchaseProduct.sewingProductId,
+  )
+  recommendationProduct: RecommendationProductEntity[];
+
+  @OneToMany(
+    () => RecommendationEntity,
+    (purchaseProduct: RecommendationEntity) => purchaseProduct.sewingProductId,
+  )
+  recommendation: RecommendationEntity[];
 
   @Column({
     type: 'varchar',
