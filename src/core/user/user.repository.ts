@@ -75,6 +75,7 @@ export class UserRepository extends Repository<UserEntity> {
         'user.role',
         'user.emailConfirmed',
         'user.notificationEmail',
+        'user.createDate',
 
         'likes',
         'like_post',
