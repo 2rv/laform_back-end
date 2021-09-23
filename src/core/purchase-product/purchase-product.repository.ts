@@ -19,6 +19,8 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
       .leftJoin('pattern_product.images', 'pattern_product_images')
       .leftJoin('purchase_product.sewingProductId', 'sewing_product')
       .leftJoin('sewing_product.images', 'sewing_product_images')
+      .leftJoin('size.filePdf', 'filePdf')
+
       .select([
         'purchase',
         'purchase_product.id',
@@ -59,11 +61,11 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
         'size.count',
         'size.size',
         'size.price',
-        'size.filePdf',
+        'filePdf',
       ])
 
       .where('purchase_product.id = :id', { id })
-      .andWhere('purchase.userId = :userId', { userId })
+      .where('purchase.userId = :userId', { userId })
       .getOne();
   }
 
