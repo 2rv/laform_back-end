@@ -15,12 +15,14 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
       .leftJoin('purchase_product.color', 'color')
       .leftJoin('purchase_product.masterClassId', 'master_class')
       .leftJoin('master_class.images', 'master_class_images')
+      .leftJoin('master_class.categories', 'master_class_categories')
       .leftJoin('purchase_product.patternProductId', 'pattern_product')
       .leftJoin('pattern_product.images', 'pattern_product_images')
+      .leftJoin('pattern_product.categories', 'pattern_product_categories')
       .leftJoin('purchase_product.sewingProductId', 'sewing_product')
       .leftJoin('sewing_product.images', 'sewing_product_images')
-      .leftJoin('size.filePdf', 'filePdf')
-
+      .leftJoin('sewing_product.categories', 'sewing_product_categories')
+      .leftJoin('size.filePdf', 'size_file_pdf')
       .select([
         'purchase',
         'purchase_product.id',
@@ -33,20 +35,30 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
         'master_class.id',
         'master_class.titleRu',
         'master_class.titleEn',
+        'master_class.descriptionRu',
+        'master_class.descriptionEn',
         'master_class.type',
         'master_class_images.fileUrl',
+        'master_class_categories',
 
         'pattern_product.id',
         'pattern_product.titleRu',
         'pattern_product.titleEn',
+        'pattern_product.descriptionRu',
+        'pattern_product.descriptionEn',
+        'pattern_product.materialRu',
         'pattern_product.type',
         'pattern_product_images.fileUrl',
+        'pattern_product_categories',
 
         'sewing_product.id',
         'sewing_product.titleRu',
         'sewing_product.titleEn',
+        'sewing_product.descriptionRu',
+        'sewing_product.descriptionEn',
         'sewing_product.type',
         'sewing_product_images.fileUrl',
+        'sewing_product_categories',
 
         'program.id',
         'program.vendorCode',
@@ -61,7 +73,7 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
         'size.count',
         'size.size',
         'size.price',
-        'filePdf',
+        'size_file_pdf',
       ])
 
       .where('purchase_product.id = :id', { id })
