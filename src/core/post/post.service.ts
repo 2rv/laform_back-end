@@ -18,47 +18,14 @@ export class PostService {
     return await this.postRepository.save(body);
   }
 
-  async update(id: any, body: any) {
-    return await this.postRepository.update(id, body);
-  }
-
-  async getOne(id: string, query: string): Promise<PostEntity> {
-    if (query === 'ru') return await this.postRepository.findOneRu(id);
-    if (query === 'en') return await this.postRepository.findOneEn(id);
-  }
-
-  async getOneAuth(
-    id: string,
-    query: string,
-    userId: number,
-  ): Promise<PostEntity> {
-    if (query === 'ru') {
-      return await this.postRepository.findOneRuAuth(id, userId);
-    }
-    if (query === 'en') {
-      return await this.postRepository.findOneEnAuth(id, userId);
-    }
-  }
-
   async getAll(
     query: string,
     size: number,
     page: number,
-  ): Promise<PostEntity[]> {
-    if (query === 'ru') return await this.postRepository.findAllRu(size, page);
-    if (query === 'en') return await this.postRepository.findAllEn(size, page);
-  }
-
-  async getAllAuth(
-    query: string,
-    size: number,
-    page: number,
-    userId: number,
     //sort: string,
     //by: string,
   ): Promise<PostEntity[]> {
-    if (query === 'ru') {
-      /* if (sort === 'title') {
+    /* if (sort === 'title') {
         sort = 'post.titleRu';
       }
       if (sort === 'category') {
@@ -70,10 +37,8 @@ export class PostService {
       if (sort === 'like') {
         sort = 'post.likeCount';
       } else sort === ''; */
-      return await this.postRepository.findAllRuAuth(size, page, userId);
-    }
-    if (query === 'en') {
-      /* if (sort === 'title') {
+    if (query === 'ru') return await this.postRepository.findAllRu(size, page);
+    /* if (sort === 'title') {
         sort = 'post.titleEn';
       }
       if (sort === 'category') {
@@ -85,27 +50,52 @@ export class PostService {
       if (sort === 'like') {
         sort = 'post.likeCount';
       } else sort === ''; */
+    if (query === 'en') return await this.postRepository.findAllEn(size, page);
+  }
+  async getAllAuth(
+    query: string,
+    size: number,
+    page: number,
+    userId: number,
+  ): Promise<PostEntity[]> {
+    if (query === 'ru')
+      return await this.postRepository.findAllRuAuth(size, page, userId);
+    if (query === 'en')
       return await this.postRepository.findAllEnAuth(size, page, userId);
-    }
+  }
+
+  async getOne(id: string, query: string): Promise<PostEntity> {
+    if (query === 'ru') return await this.postRepository.findOneRu(id);
+    if (query === 'en') return await this.postRepository.findOneEn(id);
+  }
+  async getOneAuth(
+    id: string,
+    query: string,
+    userId: number,
+  ): Promise<PostEntity> {
+    if (query === 'ru')
+      return await this.postRepository.findOneRuAuth(id, userId);
+    if (query === 'en')
+      return await this.postRepository.findOneEnAuth(id, userId);
   }
 
   async getPinned(query: string): Promise<PostEntity[]> {
     if (query === 'ru') return await this.postRepository.findPinnedRu();
     if (query === 'en') return await this.postRepository.findPinnedEn();
   }
-
   async getPinnedAuth(query: string, userId: number): Promise<PostEntity[]> {
-    if (query === 'ru') {
+    if (query === 'ru')
       return await this.postRepository.findPinnedRuAuth(userId);
-    }
-    if (query === 'en') {
+    if (query === 'en')
       return await this.postRepository.findPinnedEnAuth(userId);
-    }
   }
 
   async delete(id: string) {
     const post = await this.postRepository.findOneOrFail(id);
     await this.fileUploadService.deletePost(post.id);
     return await this.postRepository.delete(post.id);
+  }
+  async update(id: any, body: any) {
+    return await this.postRepository.update(id, body);
   }
 }

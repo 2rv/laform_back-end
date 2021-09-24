@@ -72,6 +72,31 @@ export class MasterClassDto {
   @IsBoolean()
   deleted: boolean;
 
-  //   @IsNotEmpty()
-  //   recommendation: CreateRecommendationDto;
+  @IsOptional()
+  recommendation: CreateRecommendationDto;
 }
+
+const x = {
+  recommendation: {
+    masterClassId: 'string',
+    patternProductId: 'string',
+    sewingProductId: 'string',
+  },
+  recommendationProducts: [
+    {
+      masterClassId: 'string',
+      patternProductId: 'string',
+      sewingProductId: 'string',
+    },
+    {
+      masterClassId: 'string',
+      patternProductId: 'string',
+      sewingProductId: 'string',
+    },
+    {
+      masterClassId: 'string',
+      patternProductId: 'string',
+      sewingProductId: 'string',
+    },
+  ],
+};

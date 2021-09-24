@@ -25,14 +25,33 @@ import { UserEntity } from '../user/user.entity';
 export class PostController {
   constructor(private postService: PostService) {}
 
-  @Post('/create')
+  @Post('/create/')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async save(@Body(new ValidationPipe()) body: PostDto) {
     return await this.postService.create(body);
   }
 
-  @Get('get/:postId')
+  @Get('/get/')
+  async getAll(
+    @Query(new LangValidationPipe()) query: string,
+    @Query('size') size: number,
+    @Query('page') page: number,
+  ) {
+    return await this.postService.getAll(query, size, page);
+  }
+  @Get('/auth/get/')
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getAllAuth(
+    @Query(new LangValidationPipe()) query: string,
+    @Query('size') size: number,
+    @Query('page') page: number,
+    @GetAccount() user: UserEntity,
+  ) {
+    return await this.postService.getAllAuth(query, size, page, user.id);
+  }
+
+  @Get('/get/:postId')
   @UseGuards(PostGuard)
   async getOne(
     @Query(new LangValidationPipe()) query: string,
@@ -40,8 +59,7 @@ export class PostController {
   ) {
     return await this.postService.getOne(id, query);
   }
-
-  @Get('get/auth/:postId')
+  @Get('/auth/get/:postId')
   @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard)
   async getOneAuth(
     @Query(new LangValidationPipe()) query: string,
@@ -51,34 +69,11 @@ export class PostController {
     return await this.postService.getOneAuth(id, query, user.id);
   }
 
-  @Get('get/')
-  async getAll(
-    @Query(new LangValidationPipe()) query: string,
-    @Query('size') size: number,
-    @Query('page') page: number,
-  ) {
-    return await this.postService.getAll(query, size, page);
-  }
-
-  @Get('get/auth')
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async getAllAuth(
-    @Query(new LangValidationPipe()) query: string,
-    @Query('size') size: number,
-    @Query('page') page: number,
-    @GetAccount() user: UserEntity,
-    //@Query('sort') sort: string,
-    //@Query('by') by: string,
-  ) {
-    return await this.postService.getAllAuth(query, size, page, user.id);
-  }
-
-  @Get('pinned/get/')
+  @Get('/pinned/get/')
   async getPinned(@Query(new LangValidationPipe()) query: string) {
     return await this.postService.getPinned(query);
   }
-
-  @Get('pinned/get/auth')
+  @Get('/auth/pinned/get/')
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getPinnedAuth(
     @Query(new LangValidationPipe()) query: string,
@@ -87,14 +82,14 @@ export class PostController {
     return await this.postService.getPinnedAuth(query, user.id);
   }
 
-  @Put('update/:postId')
+  @Put('/update/:postId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard)
   async update(@Param('postId') id: string, @Body() body: any) {
     return await this.postService.update(id, body);
   }
 
-  @Delete('delete/:postId')
+  @Delete('/delete/:postId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard)
   async delete(@Param('postId') id: string) {

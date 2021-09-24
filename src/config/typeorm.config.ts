@@ -18,16 +18,13 @@ import { PromoCodeEntity } from '../core/promo-code/promo-code.entity';
 import { ProgramsEntity } from 'src/core/programs/programs.entity';
 import { ColorsEntity } from 'src/core/colors/colors.entity';
 import { SizesEntity } from 'src/core/sizes/sizes.entity';
-
+import { RecommendationEntity } from 'src/core/recommendation/recommendation.entity';
+import { RecommendationProductEntity } from 'src/core/recommendation-product/recommendation-product.entity';
 import {
   CommentEntity,
   SubCommentEntity,
 } from 'src/core/comment/comment.entity';
-import { RecommendationProductEntity } from 'src/core/recommendation-product/recommendation-product.entity';
-import { RecommendationEntity } from 'src/core/recommendation/recommendation.entity';
-
 const DATABASE_CONFIG = config.get('DATABASE');
-
 export const ApiEntities = [
   UserEntity,
   UserInfoEntity,

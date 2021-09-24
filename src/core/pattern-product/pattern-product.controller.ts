@@ -26,34 +26,14 @@ import { UserEntity } from '../user/user.entity';
 export class PatternProductController {
   constructor(private readonly patternProductService: PatternProductService) {}
 
-  @Post('/create')
+  @Post('/create/')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async save(@Body(new ValidationPipe()) body: PatternProductDto) {
     return await this.patternProductService.create(body);
   }
 
-  @Get('get/:patternProductId')
-  @UseGuards(PatternProductGuard)
-  async getOne(@Query(new LangValidationPipe()) query, @Request() req) {
-    return await this.patternProductService.getOne(req.patternProductId, query);
-  }
-
-  @Get('get/auth/:patternProductId')
-  @UseGuards(AuthGuard('jwt'), AccountGuard, PatternProductGuard)
-  async getOneAuth(
-    @Query(new LangValidationPipe()) query,
-    @Request() req,
-    @GetAccount() user: UserEntity,
-  ) {
-    return await this.patternProductService.getOneAuth(
-      req.patternProductId,
-      query,
-      user.id,
-    );
-  }
-
-  @Get('get-all/')
+  @Get('/get/')
   async getAll(
     @Query(new LangValidationPipe()) query: string,
     @Query('size') size: number,
@@ -61,8 +41,7 @@ export class PatternProductController {
   ) {
     return await this.patternProductService.getAll(query, size, page);
   }
-
-  @Get('get-all/authtorized')
+  @Get('/auth/get/')
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getAllAuth(
     @Query(new LangValidationPipe()) query: string,
@@ -78,12 +57,30 @@ export class PatternProductController {
     );
   }
 
-  @Get('pinned/get/')
+  @Get('/get/:patternProductId')
+  @UseGuards(PatternProductGuard)
+  async getOne(@Query(new LangValidationPipe()) query, @Request() req) {
+    return await this.patternProductService.getOne(req.patternProductId, query);
+  }
+  @Get('/auth/get/:patternProductId')
+  @UseGuards(AuthGuard('jwt'), AccountGuard, PatternProductGuard)
+  async getOneAuth(
+    @Query(new LangValidationPipe()) query,
+    @Request() req,
+    @GetAccount() user: UserEntity,
+  ) {
+    return await this.patternProductService.getOneAuth(
+      req.patternProductId,
+      query,
+      user.id,
+    );
+  }
+
+  @Get('/pinned/get/')
   async getPinned(@Query(new LangValidationPipe()) query: string) {
     return await this.patternProductService.getPinned(query);
   }
-
-  @Get('pinned/get/auth')
+  @Get('/auth/pinned/get/')
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getPinnedAuth(
     @Query(new LangValidationPipe()) query: string,
@@ -92,21 +89,21 @@ export class PatternProductController {
     return await this.patternProductService.getPinnedAuth(query, user.id);
   }
 
-  @Put('update/:patternProductId')
+  @Put('/update/:patternProductId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, PatternProductGuard)
   async update(@Request() req, @Body() body: UpdatePatternProductDto) {
     return await this.patternProductService.update(req.patternProductId, body);
   }
 
-  @Delete('delete/:patternProductId')
+  @Delete('/delete/:patternProductId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, PatternProductGuard)
   async delete(@Request() req) {
     return await this.patternProductService.delete(req.patternProductId);
   }
 
-  @Get('liked')
+  @Get('/liked/')
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getLiked(
     @Query(new LangValidationPipe()) query: string,

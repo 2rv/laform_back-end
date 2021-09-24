@@ -22,70 +22,6 @@ export class PatternProductService {
     return await this.patternProductRepository.save(body);
   }
 
-  async delete(id: string) {
-    const patternProduct = await this.patternProductRepository.findOneOrFail(
-      id,
-    );
-    await this.fileUploadService.deletePatternProduct(patternProduct.id);
-    return await this.patternProductRepository.delete(patternProduct.id);
-  }
-
-  async update(id: string, body: UpdatePatternProductDto) {
-    if (body.images) {
-      for (const file of body.images) {
-        await this.fileUploadService.update(file, { patternProductId: id });
-      }
-    }
-    return await this.patternProductRepository.update(id, body.patternProduct);
-  }
-
-  async getOne(id: string, query: string): Promise<PatternProductEntity> {
-    if (query === 'ru')
-      return await this.patternProductRepository.findOneRu(id);
-    if (query === 'en')
-      return await this.patternProductRepository.findOneEn(id);
-  }
-
-  async getOneAuth(
-    id: string,
-    query: string,
-    userId: number,
-  ): Promise<PatternProductEntity> {
-    if (query === 'ru') {
-      return await this.patternProductRepository.findOneRuAuth(id, userId);
-    }
-    if (query === 'en') {
-      const result = await this.patternProductRepository.findOneEnAuth(
-        id,
-        userId,
-      );
-      result.images = await this.fileUploadService.getAllPatternProducts(
-        result.id,
-      );
-      return result;
-    }
-  }
-
-  async getDiscount(id): Promise<number> {
-    return await (
-      await this.patternProductRepository.findOne(id)
-    ).discount;
-  }
-
-  async getPurchaseParamsPatternProduct(
-    patternProductId,
-    sizeId,
-  ): Promise<any> {
-    const discount = await (
-      await this.patternProductRepository.findOne(patternProductId)
-    ).discount;
-    const price = await this.sizesService.getSizePrice(sizeId);
-    return {
-      totalPrice: price,
-      totalDiscount: discount,
-    };
-  }
-
   async getAll(
     query: string,
     size: number,
@@ -96,17 +32,6 @@ export class PatternProductService {
     if (query === 'en')
       return await this.patternProductRepository.findAllEn(size, page);
   }
-
-  async getLiked(
-    userId: number,
-    query: string,
-  ): Promise<PatternProductEntity[]> {
-    if (query === 'ru')
-      return await this.patternProductRepository.findLikedRu(userId);
-    if (query === 'en')
-      return await this.patternProductRepository.findLikedEn(userId);
-  }
-
   async getAllAuth(
     query: string,
     size: number,
@@ -127,44 +52,84 @@ export class PatternProductService {
       );
   }
 
+  async getOne(id: string, query: string): Promise<PatternProductEntity> {
+    if (query === 'ru')
+      return await this.patternProductRepository.findOneRu(id);
+    if (query === 'en')
+      return await this.patternProductRepository.findOneEn(id);
+  }
+  async getOneAuth(
+    id: string,
+    query: string,
+    userId: number,
+  ): Promise<PatternProductEntity> {
+    if (query === 'ru')
+      return await this.patternProductRepository.findOneRuAuth(id, userId);
+
+    if (query === 'en')
+      return await this.patternProductRepository.findOneEnAuth(id, userId);
+  }
+
   async getPinned(query: string): Promise<PatternProductEntity[]> {
     if (query === 'ru')
       return await this.patternProductRepository.findPinnedRu();
     if (query === 'en')
       return await this.patternProductRepository.findPinnedEn();
   }
-
   async getPinnedAuth(
     query: string,
     userId: number,
   ): Promise<PatternProductEntity[]> {
-    if (query === 'ru') {
-      const results = await this.patternProductRepository.findPinnedRuAuth(
-        userId,
-      );
-      for (const result of results) {
-        result.images = await this.fileUploadService.getAllPatternProducts(
-          result.id,
-        );
+    if (query === 'ru')
+      return await this.patternProductRepository.findPinnedRuAuth(userId);
+    if (query === 'en')
+      return await this.patternProductRepository.findPinnedEnAuth(userId);
+  }
 
-        result.sizes = await this.sizesService.getAllPatternProducts(result.id);
+  async getLiked(
+    userId: number,
+    query: string,
+  ): Promise<PatternProductEntity[]> {
+    if (query === 'ru')
+      return await this.patternProductRepository.findLikedRu(userId);
+    if (query === 'en')
+      return await this.patternProductRepository.findLikedEn(userId);
+  }
 
-        result.categories = await this.categoriesService.getAllPatternProducts(
-          result.id,
-        );
+  async delete(id: string) {
+    const patternProduct = await this.patternProductRepository.findOneOrFail(
+      id,
+    );
+    await this.fileUploadService.deletePatternProduct(patternProduct.id);
+    return await this.patternProductRepository.delete(patternProduct.id);
+  }
+
+  async update(id: string, body: UpdatePatternProductDto) {
+    if (body.images) {
+      for (const file of body.images) {
+        await this.fileUploadService.update(file, { patternProductId: id });
       }
-      return results;
     }
-    if (query === 'en') {
-      const results = await this.patternProductRepository.findPinnedEnAuth(
-        userId,
-      );
-      for (const result of results) {
-        result.images = await this.fileUploadService.getAllPatternProducts(
-          result.id,
-        );
-      }
-      return results;
-    }
+    return await this.patternProductRepository.update(id, body.patternProduct);
+  }
+
+  async getDiscount(id): Promise<number> {
+    return await (
+      await this.patternProductRepository.findOne(id)
+    ).discount;
+  }
+
+  async getPurchaseParamsPatternProduct(
+    patternProductId,
+    sizeId,
+  ): Promise<any> {
+    const discount = await (
+      await this.patternProductRepository.findOne(patternProductId)
+    ).discount;
+    const price = await this.sizesService.getSizePrice(sizeId);
+    return {
+      totalPrice: price,
+      totalDiscount: discount,
+    };
   }
 }

@@ -26,14 +26,37 @@ import { UserEntity } from '../user/user.entity';
 export class MasterClassController {
   constructor(private readonly masterClassService: MasterClassService) {}
 
-  @Post('/create')
+  @Post('/create/')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async save(@Body(new ValidationPipe()) body: MasterClassDto) {
-    return await this.masterClassService.save(body);
+    // return await this.masterClassService.save(body);
+    console.log(body);
+
+    return body;
   }
 
-  @Get('get/:masterClassId')
+  @Get('/get/')
+  async getAll(
+    @Query(new LangValidationPipe()) query: string,
+    @Query('size') size: number,
+    @Query('page') page: number,
+  ) {
+    return await this.masterClassService.getAll(query, size, page);
+  }
+
+  @Get('/auth/get/')
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getAllAuth(
+    @Query(new LangValidationPipe()) query: string,
+    @Query('size') size: number,
+    @Query('page') page: number,
+    @GetAccount() user: UserEntity,
+  ) {
+    return await this.masterClassService.getAllAuth(query, size, page, user.id);
+  }
+
+  @Get('/get/:masterClassId')
   @UseGuards(MasterClassGuard)
   async getOne(
     @Query(new LangValidationPipe()) query,
@@ -42,7 +65,7 @@ export class MasterClassController {
     return await this.masterClassService.getOne(masterClassId, query);
   }
 
-  @Get('get/auth/:masterClassId')
+  @Get('/auth/get/:masterClassId')
   @UseGuards(AuthGuard('jwt'), AccountGuard, MasterClassGuard)
   async getOneAuth(
     @Query(new LangValidationPipe()) query,
@@ -56,32 +79,12 @@ export class MasterClassController {
     );
   }
 
-  @Get('get-all')
-  async getAll(
-    @Query(new LangValidationPipe()) query: string,
-    @Query('size') size: number,
-    @Query('page') page: number,
-  ) {
-    return await this.masterClassService.getAll(query, size, page);
-  }
-
-  @Get('get-all/authtorized')
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async getAllAuth(
-    @Query(new LangValidationPipe()) query: string,
-    @Query('size') size: number,
-    @Query('page') page: number,
-    @GetAccount() user: UserEntity,
-  ) {
-    return await this.masterClassService.getAllAuth(query, size, page, user.id);
-  }
-
-  @Get('pinned/get/')
+  @Get('/pinned/get/')
   async getPinned(@Query(new LangValidationPipe()) query: string) {
     return await this.masterClassService.getPinned(query);
   }
 
-  @Get('pinned/get/auth')
+  @Get('/auth/pinned/get/')
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getPinnedAuth(
     @Query(new LangValidationPipe()) query: string,
@@ -90,7 +93,16 @@ export class MasterClassController {
     return await this.masterClassService.getPinnedAuth(query, user.id);
   }
 
-  @Put('update/:masterClassId')
+  @Get('/liked/get/')
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getLiked(
+    @Query(new LangValidationPipe()) query: string,
+    @GetAccount() user: UserEntity,
+  ) {
+    return await this.masterClassService.getLiked(user.id, query);
+  }
+
+  @Put('/update/:masterClassId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, MasterClassGuard)
   async update(
@@ -99,20 +111,10 @@ export class MasterClassController {
   ) {
     return await this.masterClassService.update(masterClassId, body);
   }
-
-  @Delete('delete/:masterClassId')
+  @Delete('/delete/:masterClassId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, MasterClassGuard)
   async delete(@Param('masterClassId') masterClassId: string) {
     return await this.masterClassService.delete(masterClassId);
-  }
-
-  @Get('liked')
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async getLiked(
-    @Query(new LangValidationPipe()) query: string,
-    @GetAccount() user: UserEntity,
-  ) {
-    return await this.masterClassService.getLiked(user.id, query);
   }
 }
