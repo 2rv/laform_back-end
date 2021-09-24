@@ -75,28 +75,3 @@ export class MasterClassDto {
   @IsOptional()
   recommendation: CreateRecommendationDto;
 }
-
-const x = {
-  recommendation: {
-    masterClassId: 'string',
-    patternProductId: 'string',
-    sewingProductId: 'string',
-  },
-  recommendationProducts: [
-    {
-      masterClassId: 'string',
-      patternProductId: 'string',
-      sewingProductId: 'string',
-    },
-    {
-      masterClassId: 'string',
-      patternProductId: 'string',
-      sewingProductId: 'string',
-    },
-    {
-      masterClassId: 'string',
-      patternProductId: 'string',
-      sewingProductId: 'string',
-    },
-  ],
-};

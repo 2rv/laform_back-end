@@ -10,11 +10,47 @@ import { LikeEntity } from './../like/like.entity';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
 import { CategoryEntity } from '../category/category.entity';
 import { CommentEntity } from './../comment/comment.entity';
+import { RecommendationProductEntity } from '../recommendation-product/recommendation-product.entity';
+import { RecommendationEntity } from '../recommendation/recommendation.entity';
 
 @Entity({ name: 'post' })
 export class PostEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @CreateDateColumn({
+    name: 'created_date',
+    readonly: true,
+  })
+  createdDate: Date;
+
+  @OneToOne(() => FileUploadEntity, (res: FileUploadEntity) => res.postId)
+  image: FileUploadEntity;
+
+  @OneToMany(
+    () => CategoryEntity,
+    (category: CategoryEntity) => category.postId,
+  )
+  categories: CategoryEntity[];
+
+  @OneToMany(() => LikeEntity, (like: LikeEntity) => like.postId)
+  like: LikeEntity[];
+
+  @OneToMany(() => CommentEntity, (comment: CommentEntity) => comment.postId)
+  comment: CommentEntity[];
+
+  @OneToMany(
+    () => RecommendationProductEntity,
+    (purchaseProduct: RecommendationProductEntity) => purchaseProduct.postId,
+  )
+  recommendationProduct: RecommendationProductEntity[];
+
+  @OneToOne(
+    () => RecommendationEntity,
+    (recommendation: RecommendationEntity) => recommendation.postId,
+    { cascade: true },
+  )
+  recommendation: RecommendationEntity;
 
   @Column({
     type: 'varchar',
@@ -36,12 +72,6 @@ export class PostEntity {
   })
   titleEn!: string;
 
-  @CreateDateColumn({
-    name: 'created_date',
-    readonly: true,
-  })
-  createdDate: Date;
-
   @Column({
     type: 'json',
     name: 'article_ru',
@@ -51,15 +81,6 @@ export class PostEntity {
     time: number;
     version: string;
   };
-
-  @OneToOne(() => FileUploadEntity, (res: FileUploadEntity) => res.postId)
-  image: FileUploadEntity;
-
-  @OneToMany(
-    () => CategoryEntity,
-    (category: CategoryEntity) => category.postId,
-  )
-  categories: CategoryEntity[];
 
   @Column({
     type: 'int',
@@ -76,16 +97,17 @@ export class PostEntity {
   })
   pinned?: boolean;
 
-  @OneToMany(() => LikeEntity, (like: LikeEntity) => like.postId)
-  like: LikeEntity[];
-
-  @OneToMany(() => CommentEntity, (comment: CommentEntity) => comment.postId)
-  comment: CommentEntity[];
-
   @Column({
     type: 'int',
     name: 'type',
     default: 4,
   })
   type: number;
+  @Column({
+    type: 'bool',
+    name: 'deleted',
+    default: false,
+    nullable: true,
+  })
+  deleted?: boolean;
 }

@@ -13,6 +13,7 @@ import {
 } from 'class-validator';
 import { CategoryDto } from 'src/core/category/dto/category.dto';
 import { FileDto } from 'src/core/file-upload/dto/file-dto';
+import { CreateRecommendationDto } from 'src/core/recommendation/dto/create-recommendation.dto';
 
 export class PostDto {
   @IsNotEmpty()
@@ -56,6 +57,5 @@ export class PostDto {
   type: number;
 
   @IsOptional()
-  @IsArray()
-  recommendations: [];
+  recommendation: CreateRecommendationDto;
 }

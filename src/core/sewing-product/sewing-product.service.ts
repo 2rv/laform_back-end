@@ -5,8 +5,6 @@ import { SewingProductEntity } from './sewing-product.entity';
 import { Injectable } from '@nestjs/common';
 import { SewingProductDto } from './dto/sewing-product.dto';
 import { SizesService } from '../sizes/sizes.service';
-import { ColorsService } from '../colors/colors.service';
-import { CategoryService } from '../category/category.service';
 
 @Injectable()
 export class SewingProductService {
@@ -14,14 +12,10 @@ export class SewingProductService {
     private sewingProductRepository: SewingProductRepository,
     private fileUploadService: FileUploadService,
     private sizesService: SizesService,
-    private colorsService: ColorsService,
-    private categoriesService: CategoryService,
   ) {}
 
   async create(body: SewingProductDto): Promise<SewingProductEntity> {
-    await this.categoriesService.createMany(body.categories);
     await this.sizesService.createMany(body.sizes);
-    await this.colorsService.createMany(body.colors);
     return await this.sewingProductRepository.save(body);
   }
 

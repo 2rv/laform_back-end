@@ -10,6 +10,7 @@ import { MasterClassEntity } from '../master-class/master-class.entity';
 import { PatternProductEntity } from '../pattern-product/pattern-product.entity';
 import { SewingProductEntity } from '../sewing-product/sewing-product.entity';
 import { RecommendationEntity } from '../recommendation/recommendation.entity';
+import { PostEntity } from '../post/post.entity';
 
 @Entity({ name: 'recommendation_product' })
 export class RecommendationProductEntity {
@@ -24,6 +25,12 @@ export class RecommendationProductEntity {
     name: 'master_class_id',
   })
   masterClassId: MasterClassEntity;
+
+  @ManyToOne(() => PostEntity, (post: PostEntity) => post.recommendationProduct)
+  @JoinColumn({
+    name: 'post_id',
+  })
+  postId: PostEntity;
 
   @ManyToOne(
     () => PatternProductEntity,
@@ -53,10 +60,4 @@ export class RecommendationProductEntity {
     name: 'recommendation_id',
   })
   recommendation: RecommendationEntity;
-
-  @CreateDateColumn({
-    name: 'created_date',
-    readonly: true,
-  })
-  createdDate: Date;
 }

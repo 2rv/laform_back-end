@@ -57,11 +57,12 @@ export class PatternProductEntity {
   )
   recommendationProduct: RecommendationProductEntity[];
 
-  @OneToMany(
+  @OneToOne(
     () => RecommendationEntity,
-    (purchaseProduct: RecommendationEntity) => purchaseProduct.patternProductId,
+    (recommendation: RecommendationEntity) => recommendation.patternProductId,
+    { cascade: true },
   )
-  recommendation: RecommendationEntity[];
+  recommendation: RecommendationEntity;
 
   @OneToOne(
     () => FileUploadEntity,

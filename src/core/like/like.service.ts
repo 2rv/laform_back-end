@@ -6,6 +6,7 @@ import { PostRepository } from './../post/post.repository';
 import { PatternProductRepository } from '../pattern-product/pattern-product.repository';
 import { SewingProductRepository } from '../sewing-product/sewing-product.repository';
 import { LikeDto } from './dto/like.dto';
+import { LikeEntity } from './like.entity';
 
 @Injectable()
 export class LikeService {
@@ -50,22 +51,9 @@ export class LikeService {
     }
   }
 
-  async getUserLikes(userId) {
-    return await this.likeRepository.find({
-      where: {
-        userId: userId,
-      },
-      relations: [
-        'postId',
-        'postId.image',
-        'masterClassId',
-        'masterClassId.images',
-        'sewingProductId',
-        'sewingProductId.images',
-        'patternProductId',
-        'patternProductId.images',
-      ],
-    });
+  async getUserLikes(userId: number, query: string): Promise<LikeEntity[]> {
+    if (query === 'ru') return await this.likeRepository.getUserLikesRu(userId);
+    if (query === 'en') return await this.likeRepository.getUserLikesEn(userId);
   }
 
   async delete(body: LikeDto, userId) {

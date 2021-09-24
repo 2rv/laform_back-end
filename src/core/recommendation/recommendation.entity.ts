@@ -12,6 +12,7 @@ import { MasterClassEntity } from '../master-class/master-class.entity';
 import { PatternProductEntity } from '../pattern-product/pattern-product.entity';
 import { SewingProductEntity } from '../sewing-product/sewing-product.entity';
 import { RecommendationProductEntity } from '../recommendation-product/recommendation-product.entity';
+import { PostEntity } from '../post/post.entity';
 
 @Entity({ name: 'recommendation' })
 export class RecommendationEntity {
@@ -21,6 +22,7 @@ export class RecommendationEntity {
   @OneToOne(
     () => MasterClassEntity,
     (masterClass: MasterClassEntity) => masterClass.recommendation,
+    { onDelete: 'CASCADE' },
   )
   @JoinColumn({
     name: 'master_class_id',
@@ -30,6 +32,7 @@ export class RecommendationEntity {
   @ManyToOne(
     () => PatternProductEntity,
     (patternProduct: PatternProductEntity) => patternProduct.recommendation,
+    { onDelete: 'CASCADE' },
   )
   @JoinColumn({
     name: 'pattern_product_id',
@@ -39,11 +42,20 @@ export class RecommendationEntity {
   @ManyToOne(
     () => SewingProductEntity,
     (sewingProduct: SewingProductEntity) => sewingProduct.recommendation,
+    { onDelete: 'CASCADE' },
   )
   @JoinColumn({
     name: 'sewing_product_id',
   })
   sewingProductId: SewingProductEntity;
+
+  @ManyToOne(() => PostEntity, (post: PostEntity) => post.recommendation, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({
+    name: 'post_id',
+  })
+  postId: PostEntity;
 
   @OneToMany(
     () => RecommendationProductEntity,

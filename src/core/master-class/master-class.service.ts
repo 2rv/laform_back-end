@@ -1,11 +1,10 @@
-import { FileUploadService } from './../file-upload/file-upload.service';
-import { MasterClassRepository } from './master-class.repository';
-import { UpdateMasterClassDto } from './dto/update-master-class.dto';
-import { MasterClassEntity } from './master-class.entity';
 import { Injectable } from '@nestjs/common';
-import { MasterClassDto } from './dto/master-class.dto';
+import { MasterClassRepository } from './master-class.repository';
+import { MasterClassEntity } from './master-class.entity';
 import { ProgramsService } from '../programs/programs.service';
-import { CategoryService } from '../category/category.service';
+import { FileUploadService } from './../file-upload/file-upload.service';
+import { UpdateMasterClassDto } from './dto/update-master-class.dto';
+import { MasterClassDto } from './dto/master-class.dto';
 
 @Injectable()
 export class MasterClassService {
@@ -13,21 +12,11 @@ export class MasterClassService {
     private masterClassRepository: MasterClassRepository,
     private fileUploadService: FileUploadService,
     private programsService: ProgramsService,
-    private categoriesService: CategoryService,
   ) {}
-
-  async create(body: MasterClassDto): Promise<any> {
-    return await this.masterClassRepository.create(body);
-  }
 
   async save(body: MasterClassDto): Promise<MasterClassEntity> {
     await this.programsService.createMany(body.programs);
-    await this.categoriesService.createMany(body.categories);
-
-    const masterClass = await this.create(body);
-    return await this.masterClassRepository.save({
-      ...masterClass,
-    });
+    return await this.masterClassRepository.save(body);
   }
 
   async getAll(

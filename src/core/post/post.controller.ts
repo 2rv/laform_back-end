@@ -82,6 +82,15 @@ export class PostController {
     return await this.postService.getPinnedAuth(query, user.id);
   }
 
+  @Get('/liked/get/')
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getLiked(
+    @Query(new LangValidationPipe()) query: string,
+    @GetAccount() user: UserEntity,
+  ) {
+    return await this.postService.getLiked(user.id, query);
+  }
+
   @Put('/update/:postId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard)

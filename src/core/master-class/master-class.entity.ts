@@ -22,6 +22,7 @@ export class MasterClassEntity {
   @OneToMany(
     () => CategoryEntity,
     (category: CategoryEntity) => category.masterClassId,
+    { cascade: true },
   )
   categories: CategoryEntity[];
 
@@ -53,7 +54,7 @@ export class MasterClassEntity {
   @OneToOne(
     () => RecommendationEntity,
     (recommendation: RecommendationEntity) => recommendation.masterClassId,
-    { cascade: true, onDelete: 'CASCADE' },
+    { cascade: true },
   )
   recommendation: RecommendationEntity;
 

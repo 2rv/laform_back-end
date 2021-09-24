@@ -103,7 +103,7 @@ export class PatternProductController {
     return await this.patternProductService.delete(req.patternProductId);
   }
 
-  @Get('/liked/')
+  @Get('/liked/get/')
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getLiked(
     @Query(new LangValidationPipe()) query: string,
