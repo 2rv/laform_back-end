@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Put, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GetAccount } from '../user/decorator/get-account.decorator';
 import { AccountGuard } from '../user/guard/account.guard';
@@ -36,5 +36,12 @@ export class UserController {
   @Roles(USER_ROLE.ADMIN)
   async getOne(@Param('userId') userId: number) {
     return await this.userService.getProfile(userId);
+  }
+
+  @Put('update/:userId')
+  @UseGuards(AuthGuard(), AccountGuard)
+  @Roles(USER_ROLE.ADMIN)
+  async updateOne(@Param('userId') userId: number, @Body() body: any) {
+    return await this.userService.updateOne(userId, body);
   }
 }
