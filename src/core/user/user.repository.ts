@@ -151,7 +151,11 @@ export class UserRepository extends Repository<UserEntity> {
     try {
       await user.save();
     } catch (err) {
-      throw new InternalServerErrorException();
+      if (err.code === '23505') {
+        throw new ConflictException(USER_ERROR.EMAIL_ALREADY_IN_USE);
+      } else {
+        throw new InternalServerErrorException();
+      }
     }
   }
 
