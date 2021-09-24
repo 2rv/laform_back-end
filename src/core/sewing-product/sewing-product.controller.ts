@@ -20,6 +20,8 @@ import { SewingProductGuard } from './guard/sewing-product.guard';
 import { LangValidationPipe } from 'src/common/guards/lang.guard';
 import { UpdateSewingProductDto } from './dto/update-sewing-product.dto';
 import { SewingProductDto } from './dto/sewing-product.dto';
+import { GetAccount } from '../user/decorator/get-account.decorator';
+import { UserEntity } from '../user/user.entity';
 
 @Controller('sewing-product')
 export class SewingProductController {
@@ -41,7 +43,21 @@ export class SewingProductController {
     return await this.sewingProductService.getOne(sewingProductId, query);
   }
 
-  @Get('get/')
+  @Get('get/auth/:sewingProductId')
+  @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
+  async getOneAuth(
+    @Query(new LangValidationPipe()) query,
+    @Param('sewingProductId') sewingProductId: string,
+    @GetAccount() user: UserEntity,
+  ) {
+    return await this.sewingProductService.getOneAuth(
+      sewingProductId,
+      query,
+      user.id,
+    );
+  }
+
+  @Get('get-all')
   async getAll(
     @Query(new LangValidationPipe()) query: string,
     @Query('size') size: number,
@@ -50,9 +66,34 @@ export class SewingProductController {
     return await this.sewingProductService.getAll(query, size, page);
   }
 
+  @Get('get-all/authtorized')
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getAllAuth(
+    @Query(new LangValidationPipe()) query: string,
+    @Query('size') size: number,
+    @Query('page') page: number,
+    @GetAccount() user: UserEntity,
+  ) {
+    return await this.sewingProductService.getAllAuth(
+      query,
+      size,
+      page,
+      user.id,
+    );
+  }
+
   @Get('pinned/get/')
   async getPinned(@Query(new LangValidationPipe()) query: string) {
     return await this.sewingProductService.getPinned(query);
+  }
+
+  @Get('pinned/get/auth/')
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getPinnedAuth(
+    @Query(new LangValidationPipe()) query: string,
+    @GetAccount() user: UserEntity,
+  ) {
+    return await this.sewingProductService.getPinnedAuth(query, user.id);
   }
 
   @Put('update/:sewingProductId')
@@ -67,5 +108,14 @@ export class SewingProductController {
   @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
   async delete(@Request() req) {
     return await this.sewingProductService.delete(req.sewingProductId);
+  }
+
+  @Get('liked')
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getLiked(
+    @Query(new LangValidationPipe()) query: string,
+    @GetAccount() user: UserEntity,
+  ) {
+    return await this.sewingProductService.getLiked(user.id, query);
   }
 }

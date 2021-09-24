@@ -18,6 +18,8 @@ import { AccountGuard } from '../user/guard/account.guard';
 import { USER_ROLE } from '../user/enum/user-role.enum';
 import { Roles } from '../user/decorator/role.decorator';
 import { LangValidationPipe } from '../../common/guards/lang.guard';
+import { GetAccount } from '../user/decorator/get-account.decorator';
+import { UserEntity } from '../user/user.entity';
 
 @Controller('post')
 export class PostController {
@@ -39,6 +41,16 @@ export class PostController {
     return await this.postService.getOne(id, query);
   }
 
+  @Get('get/auth/:postId')
+  @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard)
+  async getOneAuth(
+    @Query(new LangValidationPipe()) query: string,
+    @Param('postId') id: string,
+    @GetAccount() user: UserEntity,
+  ) {
+    return await this.postService.getOneAuth(id, query, user.id);
+  }
+
   @Get('get/')
   async getAll(
     @Query(new LangValidationPipe()) query: string,
@@ -48,9 +60,31 @@ export class PostController {
     return await this.postService.getAll(query, size, page);
   }
 
+  @Get('get/auth')
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getAllAuth(
+    @Query(new LangValidationPipe()) query: string,
+    @Query('size') size: number,
+    @Query('page') page: number,
+    @GetAccount() user: UserEntity,
+    //@Query('sort') sort: string,
+    //@Query('by') by: string,
+  ) {
+    return await this.postService.getAllAuth(query, size, page, user.id);
+  }
+
   @Get('pinned/get/')
   async getPinned(@Query(new LangValidationPipe()) query: string) {
     return await this.postService.getPinned(query);
+  }
+
+  @Get('pinned/get/auth')
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getPinnedAuth(
+    @Query(new LangValidationPipe()) query: string,
+    @GetAccount() user: UserEntity,
+  ) {
+    return await this.postService.getPinnedAuth(query, user.id);
   }
 
   @Put('update/:postId')

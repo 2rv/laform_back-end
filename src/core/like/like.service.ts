@@ -1,7 +1,6 @@
 import { LikeRepository } from './like.repository';
-import { Injectable, BadRequestException, Inject } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { MasterClassRepository } from './../master-class/master-class.repository';
-import { LikeEntity } from './like.entity';
 import { LIKE_ERROR } from './enum/like.enum';
 import { PostRepository } from './../post/post.repository';
 import { PatternProductRepository } from '../pattern-product/pattern-product.repository';
@@ -29,25 +28,25 @@ export class LikeService {
     const count = await this.count(body);
     if (body.postId) {
       await this.postRepository.update(body.postId, { likeCount: count });
-      return { like: count };
+      return { id: body.postId };
     }
     if (body.masterClassId) {
       await this.masterClassRepository.update(body.masterClassId, {
         likeCount: count,
       });
-      return { like: count };
+      return { id: body.masterClassId };
     }
     if (body.sewingProductId) {
       await this.sewingProductRepository.update(body.sewingProductId, {
         likeCount: count,
       });
-      return { like: count };
+      return { id: body.sewingProductId };
     }
     if (body.patternProductId) {
       await this.patternProductRepository.update(body.patternProductId, {
         likeCount: count,
       });
-      return { like: count };
+      return { id: body.patternProductId };
     }
   }
 
@@ -80,25 +79,25 @@ export class LikeService {
     const count = await this.count(body);
     if (body.postId) {
       await this.postRepository.update(body.postId, { likeCount: count });
-      return { like: count };
+      return { id: body.postId };
     }
     if (body.masterClassId) {
       await this.masterClassRepository.update(body.masterClassId, {
         likeCount: count,
       });
-      return { like: count };
+      return { id: body.masterClassId };
     }
     if (body.sewingProductId) {
       await this.sewingProductRepository.update(body.sewingProductId, {
         likeCount: count,
       });
-      return { like: count };
+      return { id: body.sewingProductId };
     }
     if (body.patternProductId) {
       await this.patternProductRepository.update(body.patternProductId, {
         likeCount: count,
       });
-      return { like: count };
+      return { id: body.patternProductId };
     }
   }
 

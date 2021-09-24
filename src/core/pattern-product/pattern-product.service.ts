@@ -32,7 +32,7 @@ export class PatternProductService {
 
   async update(id: string, body: UpdatePatternProductDto) {
     if (body.images) {
-      for (let file of body.images) {
+      for (const file of body.images) {
         await this.fileUploadService.update(file, { patternProductId: id });
       }
     }
@@ -44,6 +44,26 @@ export class PatternProductService {
       return await this.patternProductRepository.findOneRu(id);
     if (query === 'en')
       return await this.patternProductRepository.findOneEn(id);
+  }
+
+  async getOneAuth(
+    id: string,
+    query: string,
+    userId: number,
+  ): Promise<PatternProductEntity> {
+    if (query === 'ru') {
+      return await this.patternProductRepository.findOneRuAuth(id, userId);
+    }
+    if (query === 'en') {
+      const result = await this.patternProductRepository.findOneEnAuth(
+        id,
+        userId,
+      );
+      result.images = await this.fileUploadService.getAllPatternProducts(
+        result.id,
+      );
+      return result;
+    }
   }
 
   async getDiscount(id): Promise<number> {
@@ -77,10 +97,74 @@ export class PatternProductService {
       return await this.patternProductRepository.findAllEn(size, page);
   }
 
+  async getLiked(
+    userId: number,
+    query: string,
+  ): Promise<PatternProductEntity[]> {
+    if (query === 'ru')
+      return await this.patternProductRepository.findLikedRu(userId);
+    if (query === 'en')
+      return await this.patternProductRepository.findLikedEn(userId);
+  }
+
+  async getAllAuth(
+    query: string,
+    size: number,
+    page: number,
+    userId: number,
+  ): Promise<PatternProductEntity[]> {
+    if (query === 'ru')
+      return await this.patternProductRepository.findAllRuAuth(
+        size,
+        page,
+        userId,
+      );
+    if (query === 'en')
+      return await this.patternProductRepository.findAllEnAuth(
+        size,
+        page,
+        userId,
+      );
+  }
+
   async getPinned(query: string): Promise<PatternProductEntity[]> {
     if (query === 'ru')
       return await this.patternProductRepository.findPinnedRu();
     if (query === 'en')
       return await this.patternProductRepository.findPinnedEn();
+  }
+
+  async getPinnedAuth(
+    query: string,
+    userId: number,
+  ): Promise<PatternProductEntity[]> {
+    if (query === 'ru') {
+      const results = await this.patternProductRepository.findPinnedRuAuth(
+        userId,
+      );
+      for (const result of results) {
+        result.images = await this.fileUploadService.getAllPatternProducts(
+          result.id,
+        );
+
+        result.sizes = await this.sizesService.getAllPatternProducts(result.id);
+
+        result.categories = await this.categoriesService.getAllPatternProducts(
+          result.id,
+        );
+      }
+      return results;
+    }
+    if (query === 'en') {
+      const results = await this.patternProductRepository.findPinnedEnAuth(
+        userId,
+      );
+      for (const result of results) {
+        result.images = await this.fileUploadService.getAllPatternProducts(
+          result.id,
+        );
+      }
+      return results;
+    }
   }
 }
