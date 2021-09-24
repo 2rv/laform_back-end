@@ -20,4 +20,8 @@ export class UserService {
   async getAll(): Promise<any> {
     return await this.userRepository.getAll();
   }
+
+  async updateOne(id: number, body: any): Promise<any> {
+    return await this.userRepository.updateOne(id, body);
+  }
 }

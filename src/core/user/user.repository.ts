@@ -124,6 +124,10 @@ export class UserRepository extends Repository<UserEntity> {
       .getMany();
   }
 
+  async updateOne(id: number, body: any): Promise<any> {
+    return await this.update(id, body);
+  }
+
   async changePassword(
     user: UserEntity,
     data: UserChangePasswordDto,
