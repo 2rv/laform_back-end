@@ -72,6 +72,6 @@ export class MasterClassDto {
   @IsBoolean()
   deleted: boolean;
 
-  @IsNotEmpty()
-  recommendation: CreateRecommendationDto;
+  //   @IsNotEmpty()
+  //   recommendation: CreateRecommendationDto;
 }

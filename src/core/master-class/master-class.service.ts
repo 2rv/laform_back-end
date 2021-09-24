@@ -26,9 +26,8 @@ export class MasterClassService {
 
     const masterClass = await this.create(body);
 
-    masterClass.recommendation = body.recommendation;
-    masterClass.recommendation.recommendationProducts =
-      body.recommendation.recommendationProducts;
+    // masterClass.recommendation = masterClass.id;
+    // masterClass.recommendation.recommendationProducts = body.recommendation.recommendationProducts;
     return await this.masterClassRepository.save({
       ...masterClass,
     });
