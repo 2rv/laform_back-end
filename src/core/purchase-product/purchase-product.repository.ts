@@ -77,7 +77,7 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
       ])
 
       .where('purchase_product.id = :id', { id })
-      .where('purchase.userId = :userId', { userId })
+      .andWhere('purchase.userId = :userId', { userId })
       .getOne();
   }
 
