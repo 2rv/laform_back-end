@@ -5,7 +5,6 @@ import { PatternProductEntity } from './pattern-product.entity';
 import { Injectable } from '@nestjs/common';
 import { PatternProductDto } from './dto/pattern-product.dto';
 import { SizesService } from '../sizes/sizes.service';
-import { CategoryService } from '../category/category.service';
 
 @Injectable()
 export class PatternProductService {
@@ -13,12 +12,10 @@ export class PatternProductService {
     private patternProductRepository: PatternProductRepository,
     private fileUploadService: FileUploadService,
     private sizesService: SizesService,
-    private categoriesService: CategoryService,
   ) {}
 
   async create(body: PatternProductDto): Promise<PatternProductEntity> {
     await this.sizesService.createMany(body.sizes);
-    await this.categoriesService.createMany(body.categories);
     return await this.patternProductRepository.save(body);
   }
 

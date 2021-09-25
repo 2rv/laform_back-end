@@ -93,7 +93,7 @@ export class SewingProductController {
     return await this.sewingProductService.getPinnedAuth(query, user.id);
   }
 
-  @Get('/liked/')
+  @Get('/liked/get/')
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getLiked(
     @Query(new LangValidationPipe()) query: string,

@@ -66,6 +66,44 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .leftJoin('sewing_product.categories', 'categories')
       .leftJoin('sewing_product.colors', 'colors')
       .leftJoin('sewing_product.sizes', 'sizes')
+      .leftJoin('sewing_product.recommendationProduct', 'recommendations')
+      .leftJoin('recommendations.masterClassId', 'recommendations_master_class')
+      .leftJoin(
+        'recommendations_master_class.images',
+        'recommendations_master_class_images',
+      )
+      .leftJoin(
+        'recommendations_master_class.programs',
+        'recommendations_master_class_programs',
+      )
+
+      .leftJoin(
+        'recommendations.patternProductId',
+        'recommendations_pattern_product',
+      )
+      .leftJoin(
+        'recommendations_pattern_product.images',
+        'recommendations_pattern_product_images',
+      )
+      .leftJoin(
+        'recommendations_pattern_product.sizes',
+        'recommendations_pattern_product_sizes',
+      )
+      .leftJoin(
+        'recommendations.sewingProductId',
+        'recommendations_sewing_product',
+      )
+      .leftJoin(
+        'recommendations_sewing_product.images',
+        'recommendations_sewing_product_images',
+      )
+      .leftJoin(
+        'recommendations_sewing_product.sizes',
+        'recommendations_sewing_product_sizes',
+      )
+
+      .leftJoin('recommendations.postId', 'recommendations_post')
+      .leftJoin('recommendations_post.image', 'recommendations_post_image')
       .select([
         'sewing_product.id',
         'sewing_product.titleRu',
@@ -81,7 +119,49 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sizes.count',
         'sizes.size',
         'sizes.price',
+
+        'recommendations.id',
+        'recommendations_master_class.id',
+        'recommendations_master_class.titleRu',
+        'recommendations_master_class.modifier',
+        'recommendations_master_class.discount',
+        'recommendations_master_class.type',
+        'recommendations_master_class_images',
+        'recommendations_master_class_programs.id',
+        'recommendations_master_class_programs.price',
+
+        'recommendations_pattern_product.id',
+        'recommendations_pattern_product.titleRu',
+        'recommendations_pattern_product.type',
+        'recommendations_pattern_product.modifier',
+        'recommendations_pattern_product.complexity',
+        'recommendations_pattern_product.discount',
+        'recommendations_pattern_product_images',
+        'recommendations_pattern_product_sizes.id',
+        'recommendations_pattern_product_sizes.price',
+
+        'recommendations_sewing_product.id',
+        'recommendations_sewing_product.titleRu',
+        'recommendations_sewing_product.discount',
+        'recommendations_sewing_product.modifier',
+        'recommendations_sewing_product.type',
+        'recommendations_sewing_product_images',
+        'recommendations_sewing_product_sizes.id',
+        'recommendations_sewing_product_sizes.size',
+        'recommendations_sewing_product_sizes.price',
+
+        'recommendations_post.id',
+        'recommendations_post.titleRu',
+        'recommendations_post.createdDate',
+        'recommendations_post.likeCount',
+        'recommendations_post.modifier',
+        'recommendations_post.type',
+        'recommendations_post_image',
       ])
+      .where('recommendations_sewing_product.deleted = false')
+      .where('recommendations_master_class.deleted = false')
+      .where('recommendations_pattern_product.deleted = false')
+      .where('recommendations_post.deleted = false')
       .where('sewing_product.id = :id', { id })
       .getOne();
   }
@@ -97,6 +177,77 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .leftJoin('sewing_product.like', 'like', 'like.userId = :userId', {
         userId,
       })
+      .leftJoin('sewing_product.recommendationProduct', 'recommendations')
+      .leftJoin('recommendations.masterClassId', 'recommendations_master_class')
+      .leftJoin(
+        'recommendations_master_class.images',
+        'recommendations_master_class_images',
+      )
+      .leftJoin(
+        'recommendations_master_class.programs',
+        'recommendations_master_class_programs',
+      )
+      .leftJoin(
+        'recommendations_master_class.like',
+        'recommendations_master_class_like',
+        'recommendations_master_class_like.userId = :userId',
+        {
+          userId,
+        },
+      )
+
+      .leftJoin(
+        'recommendations.patternProductId',
+        'recommendations_pattern_product',
+      )
+      .leftJoin(
+        'recommendations_pattern_product.images',
+        'recommendations_pattern_product_images',
+      )
+      .leftJoin(
+        'recommendations_pattern_product.sizes',
+        'recommendations_pattern_product_sizes',
+      )
+      .leftJoin(
+        'recommendations_pattern_product.like',
+        'recommendations_pattern_product_like',
+        'recommendations_pattern_product_like.userId = :userId',
+        {
+          userId,
+        },
+      )
+
+      .leftJoin(
+        'recommendations.sewingProductId',
+        'recommendations_sewing_product',
+      )
+      .leftJoin(
+        'recommendations_sewing_product.images',
+        'recommendations_sewing_product_images',
+      )
+      .leftJoin(
+        'recommendations_sewing_product.sizes',
+        'recommendations_sewing_product_sizes',
+      )
+      .leftJoin(
+        'recommendations_sewing_product.like',
+        'recommendations_sewing_product_like',
+        'recommendations_sewing_product_like.userId = :userId',
+        {
+          userId,
+        },
+      )
+
+      .leftJoin('recommendations.postId', 'recommendations_post')
+      .leftJoin('recommendations_post.image', 'recommendations_post_image')
+      .leftJoin(
+        'recommendations_post.like',
+        'recommendations_post_like',
+        'recommendations_post_like.userId = :userId',
+        {
+          userId,
+        },
+      )
       .select([
         'sewing_product.id',
         'sewing_product.titleRu',
@@ -113,7 +264,53 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sizes.size',
         'sizes.price',
         'like',
+
+        'recommendations.id',
+        'recommendations_master_class.id',
+        'recommendations_master_class.titleRu',
+        'recommendations_master_class.modifier',
+        'recommendations_master_class.discount',
+        'recommendations_master_class.type',
+        'recommendations_master_class_images',
+        'recommendations_master_class_programs.id',
+        'recommendations_master_class_programs.price',
+        'recommendations_master_class_like',
+
+        'recommendations_pattern_product.id',
+        'recommendations_pattern_product.titleRu',
+        'recommendations_pattern_product.type',
+        'recommendations_pattern_product.modifier',
+        'recommendations_pattern_product.complexity',
+        'recommendations_pattern_product.discount',
+        'recommendations_pattern_product_images',
+        'recommendations_pattern_product_sizes.id',
+        'recommendations_pattern_product_sizes.price',
+        'recommendations_pattern_product_like',
+
+        'recommendations_sewing_product.id',
+        'recommendations_sewing_product.titleRu',
+        'recommendations_sewing_product.discount',
+        'recommendations_sewing_product.modifier',
+        'recommendations_sewing_product.type',
+        'recommendations_sewing_product_images',
+        'recommendations_sewing_product_sizes.id',
+        'recommendations_sewing_product_sizes.size',
+        'recommendations_sewing_product_sizes.price',
+        'recommendations_sewing_product_like',
+
+        'recommendations_post.id',
+        'recommendations_post.titleRu',
+        'recommendations_post.createdDate',
+        'recommendations_post.likeCount',
+        'recommendations_post.modifier',
+        'recommendations_post.type',
+        'recommendations_post_image',
+        'recommendations_post_like',
       ])
+      .where('recommendations_sewing_product.deleted = false')
+      .where('recommendations_master_class.deleted = false')
+      .where('recommendations_pattern_product.deleted = false')
+      .where('recommendations_post.deleted = false')
       .where('sewing_product.id = :id', { id })
       .getOne();
   }
@@ -167,25 +364,25 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
 
   async findLikedRu(userId: number): Promise<SewingProductEntity[]> {
     return await this.createQueryBuilder('sewing_product')
-      .leftJoin('sewing_product.like', 'like')
       .leftJoin('sewing_product.images', 'images')
-      .leftJoin('sewing_product.sizes', 'sizes')
-      .leftJoin('sewing_product.colors', 'colors')
       .leftJoin('sewing_product.categories', 'categories')
+      .leftJoin('sewing_product.sizes', 'sizes')
+      .leftJoin('sewing_product.like', 'like')
       .select([
         'sewing_product.id',
         'sewing_product.titleRu',
-        'sewing_product.descriptionRu',
         'sewing_product.discount',
         'sewing_product.modifier',
         'sewing_product.type',
-        'like',
         'images',
-        'sizes',
-        'colors',
         'categories',
+        'sizes.id',
+        'sizes.size',
+        'sizes.price',
+        'like',
       ])
-      .where('like.userId = :userId', { userId })
+      .where('sewing_product.deleted = false')
+      .andWhere('like.userId = :userId', { userId })
       .getMany();
   }
 

@@ -3,18 +3,15 @@ import { Injectable } from '@nestjs/common';
 import { PostDto } from './dto/post.dto';
 import { PostRepository } from './post.repository';
 import { FileUploadService } from '../file-upload/file-upload.service';
-import { CategoryService } from '../category/category.service';
 
 @Injectable()
 export class PostService {
   constructor(
     private postRepository: PostRepository,
     private fileUploadService: FileUploadService,
-    private categoriesService: CategoryService,
   ) {}
 
   async create(body: PostDto): Promise<PostEntity> {
-    await this.categoriesService.createMany(body.categories);
     return await this.postRepository.save(body);
   }
 
@@ -88,6 +85,11 @@ export class PostService {
       return await this.postRepository.findPinnedRuAuth(userId);
     if (query === 'en')
       return await this.postRepository.findPinnedEnAuth(userId);
+  }
+
+  async getLiked(userId: number, query: string): Promise<PostEntity[]> {
+    if (query === 'ru') return await this.postRepository.findLikedRu(userId);
+    if (query === 'en') return await this.postRepository.findLikedEn(userId);
   }
 
   async delete(id: string) {

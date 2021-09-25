@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 import { CategoryEntity } from '../category/category.entity';
 import { ColorsEntity } from '../colors/colors.entity';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
@@ -57,11 +63,12 @@ export class SewingProductEntity {
   )
   recommendationProduct: RecommendationProductEntity[];
 
-  @OneToMany(
+  @OneToOne(
     () => RecommendationEntity,
-    (purchaseProduct: RecommendationEntity) => purchaseProduct.sewingProductId,
+    (recommendation: RecommendationEntity) => recommendation.sewingProductId,
+    { cascade: true },
   )
-  recommendation: RecommendationEntity[];
+  recommendation: RecommendationEntity;
 
   @Column({
     type: 'varchar',
