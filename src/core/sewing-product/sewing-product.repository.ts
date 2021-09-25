@@ -66,7 +66,8 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .leftJoin('sewing_product.categories', 'categories')
       .leftJoin('sewing_product.colors', 'colors')
       .leftJoin('sewing_product.sizes', 'sizes')
-      .leftJoin('sewing_product.recommendationProduct', 'recommendations')
+      .leftJoin('sewing_product.recommendation', 'recommendation')
+      .leftJoin('recommendation.recommendationProducts', 'recommendations')
       .leftJoin('recommendations.masterClassId', 'recommendations_master_class')
       .leftJoin(
         'recommendations_master_class.images',
@@ -120,6 +121,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sizes.size',
         'sizes.price',
 
+        'recommendation.id',
         'recommendations.id',
         'recommendations_master_class.id',
         'recommendations_master_class.titleRu',
@@ -177,7 +179,8 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .leftJoin('sewing_product.like', 'like', 'like.userId = :userId', {
         userId,
       })
-      .leftJoin('sewing_product.recommendationProduct', 'recommendations')
+      .leftJoin('sewing_product.recommendation', 'recommendation')
+      .leftJoin('recommendation.recommendationProducts', 'recommendations')
       .leftJoin('recommendations.masterClassId', 'recommendations_master_class')
       .leftJoin(
         'recommendations_master_class.images',
@@ -265,6 +268,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sizes.price',
         'like',
 
+        'recommendation.id',
         'recommendations.id',
         'recommendations_master_class.id',
         'recommendations_master_class.titleRu',

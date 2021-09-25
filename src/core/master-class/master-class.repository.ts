@@ -59,7 +59,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.categories', 'categories')
       .leftJoin('master_class.programs', 'programs')
-      .leftJoin('master_class.recommendationProduct', 'recommendations')
+      .leftJoin('master_class.recommendation', 'recommendation')
+      .leftJoin('recommendation.recommendationProducts', 'recommendations')
       .leftJoin('recommendations.masterClassId', 'recommendations_master_class')
       .leftJoin(
         'recommendations_master_class.images',
@@ -111,6 +112,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'programs.price',
         'programs.programNameRu',
 
+        'recommendation.id',
         'recommendations.id',
         'recommendations_master_class.id',
         'recommendations_master_class.titleRu',
@@ -164,7 +166,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
       .leftJoin('master_class.like', 'like', 'like.userId = :userId', {
         userId,
       })
-      .leftJoin('master_class.recommendationProduct', 'recommendations')
+      .leftJoin('master_class.recommendation', 'recommendation')
+      .leftJoin('recommendation.recommendationProducts', 'recommendations')
       .leftJoin('recommendations.masterClassId', 'recommendations_master_class')
       .leftJoin(
         'recommendations_master_class.images',
@@ -251,6 +254,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'programs.programNameRu',
         'like',
 
+        'recommendation.id',
         'recommendations.id',
         'recommendations_master_class.id',
         'recommendations_master_class.titleRu',
