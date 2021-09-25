@@ -30,6 +30,7 @@ export class PostEntity {
   @OneToMany(
     () => CategoryEntity,
     (category: CategoryEntity) => category.postId,
+    { cascade: true },
   )
   categories: CategoryEntity[];
 

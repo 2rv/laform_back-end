@@ -22,6 +22,7 @@ export class PatternProductEntity {
   @OneToMany(
     () => CategoryEntity,
     (category: CategoryEntity) => category.patternProductId,
+    { cascade: true },
   )
   categories: CategoryEntity[];
 

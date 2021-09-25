@@ -23,6 +23,7 @@ export class SewingProductEntity {
   @OneToMany(
     () => CategoryEntity,
     (category: CategoryEntity) => category.sewingProductId,
+    { cascade: true },
   )
   categories: CategoryEntity[];
 
@@ -32,6 +33,7 @@ export class SewingProductEntity {
   @OneToMany(
     () => ColorsEntity,
     (colors: ColorsEntity) => colors.sewingProductId,
+    { cascade: true },
   )
   colors: ColorsEntity[];
 
