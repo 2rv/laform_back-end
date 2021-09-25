@@ -38,7 +38,9 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
       .leftJoin('pattern_product.images', 'pattern_product_images')
       .leftJoin('purchase_products.sewingProductId', 'sewing_product')
       .leftJoin('sewing_product.images', 'sewing_product_images')
+      .leftJoin('sewing_product.categories', 'sewing_product_categories')
       .select([
+        'purchase.orderStatus',
         'purchase.id',
         'purchase_products',
 
@@ -47,6 +49,7 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
         'master_class.titleEn',
         'master_class.type',
         'master_class_images.fileUrl',
+        'sewing_product_categories',
 
         'pattern_product.id',
         'pattern_product.titleRu',

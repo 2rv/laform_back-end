@@ -39,12 +39,12 @@ export class PurchaseEntity {
   //   })
   //   orderNumber: string;
 
-  //   @Column({                              надо бы это обсудить
-  //     type: 'varchar',
-  //     name: 'order_status',
-  //     nullable: true,
-  //   })
-  //   orderStatus: string;
+  @Column({
+    type: 'varchar',
+    name: 'order_status',
+    nullable: true,
+  })
+  orderStatus: string;
 
   @ManyToOne(() => UserEntity, (user: UserEntity) => user.purchase)
   @JoinColumn({
