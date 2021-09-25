@@ -65,7 +65,8 @@ export class PostRepository extends Repository<PostEntity> {
     return await this.createQueryBuilder('post')
       .leftJoin('post.image', 'image')
       .leftJoin('post.categories', 'categories')
-      .leftJoin('post.recommendationProduct', 'recommendations')
+      .leftJoin('post.recommendation', 'recommendation')
+      .leftJoin('recommendation.recommendationProducts', 'recommendations')
       .leftJoin('recommendations.masterClassId', 'recommendations_master_class')
       .leftJoin(
         'recommendations_master_class.images',
@@ -111,6 +112,7 @@ export class PostRepository extends Repository<PostEntity> {
         'image',
         'categories',
 
+        'recommendation.id',
         'recommendations.id',
         'recommendations_master_class.id',
         'recommendations_master_class.titleRu',
@@ -161,7 +163,8 @@ export class PostRepository extends Repository<PostEntity> {
       .leftJoin('post.image', 'image')
       .leftJoin('post.categories', 'categories')
       .leftJoin('post.like', 'like', 'like.userId = :userId', { userId })
-      .leftJoin('post.recommendationProduct', 'recommendations')
+      .leftJoin('post.recommendation', 'recommendation')
+      .leftJoin('recommendation.recommendationProducts', 'recommendations')
       .leftJoin('recommendations.masterClassId', 'recommendations_master_class')
       .leftJoin(
         'recommendations_master_class.images',
@@ -245,6 +248,7 @@ export class PostRepository extends Repository<PostEntity> {
         'categories',
         'like',
 
+        'recommendation.id',
         'recommendations.id',
         'recommendations_master_class.id',
         'recommendations_master_class.titleRu',

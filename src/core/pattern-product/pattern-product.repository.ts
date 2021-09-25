@@ -64,7 +64,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .leftJoin('pattern_product.images', 'images')
       .leftJoin('pattern_product.categories', 'categories')
       .leftJoin('pattern_product.sizes', 'sizes')
-      .leftJoin('pattern_product.recommendationProduct', 'recommendations')
+      .leftJoin('pattern_product.recommendation', 'recommendation')
+      .leftJoin('recommendation.recommendationProducts', 'recommendations')
       .leftJoin('recommendations.masterClassId', 'recommendations_master_class')
       .leftJoin(
         'recommendations_master_class.images',
@@ -118,6 +119,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'sizes.price',
         'sizes.vendorCode',
 
+        'recommendation.id',
         'recommendations.id',
         'recommendations_master_class.id',
         'recommendations_master_class.titleRu',
@@ -171,15 +173,11 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .leftJoin('pattern_product.images', 'images')
       .leftJoin('pattern_product.categories', 'categories')
       .leftJoin('pattern_product.sizes', 'sizes')
-      .leftJoin('pattern_product.like', 'like')
-      .leftJoin(
-        'pattern_product.recommendationProduct',
-        'recommendations',
-        'like.userId = :userId',
-        {
-          userId,
-        },
-      )
+      .leftJoin('pattern_product.like', 'like', 'like.userId = :userId', {
+        userId,
+      })
+      .leftJoin('pattern_product.recommendation', 'recommendation')
+      .leftJoin('recommendation.recommendationProducts', 'recommendations')
       .leftJoin('recommendations.masterClassId', 'recommendations_master_class')
       .leftJoin(
         'recommendations_master_class.images',
@@ -268,6 +266,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'sizes.vendorCode',
         'like',
 
+        'recommendation.id',
         'recommendations.id',
         'recommendations_master_class.id',
         'recommendations_master_class.titleRu',
