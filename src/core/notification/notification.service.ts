@@ -2,6 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { BadRequestException } from '@nestjs/common';
+import { NOTIFICATION_ERROR } from './enum/notification-error.enum';
+
 import { NotificationEntity } from './notification.entity';
 import { UserEntity } from '../user/user.entity';
 
@@ -46,6 +49,8 @@ export class NotificationService {
 
     if (notificationSubscribeDto.subscribe) {
       if (!subscription) {
+        if (!user.emailConfirmed)
+          throw new BadRequestException(NOTIFICATION_ERROR.USER_NOT_VERIFIED);
         const newsubscribe = this.notificationRepository.create({
           email: user.email,
         });
