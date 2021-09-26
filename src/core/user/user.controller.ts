@@ -14,14 +14,8 @@ export class UserController {
 
   @Get('/email')
   @UseGuards(AuthGuard(), AccountGuard)
-  getAccountEmail(@GetAccount() user: UserEntity): Promise<UserGetEmailDto> {
-    return this.userService.getUserEmail(user);
-  }
-
-  @Get('/email')
-  @UseGuards(AuthGuard(), AccountGuard)
-  getProfile(@GetAccount() user: UserEntity): Promise<UserGetEmailDto> {
-    return this.userService.getUserEmail(user);
+  async getUserEmail(@GetAccount() user: UserEntity): Promise<UserGetEmailDto> {
+    return await this.userService.getUserEmail(user);
   }
 
   @Get('get/')
@@ -34,7 +28,7 @@ export class UserController {
   @Get('get/:userId')
   @UseGuards(AuthGuard(), AccountGuard)
   @Roles(USER_ROLE.ADMIN)
-  async getOne(@Param('userId') userId: number) {
+  async getProfile(@Param('userId') userId: number) {
     return await this.userService.getProfile(userId);
   }
 
