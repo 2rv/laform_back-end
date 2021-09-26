@@ -120,6 +120,8 @@ export class UserRepository extends Repository<UserEntity> {
         'user.role',
         'user.emailConfirmed',
         'user.notificationEmail',
+        'user.googleId',
+        'user.facebookId',
       ])
       .getMany();
   }

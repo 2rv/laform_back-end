@@ -62,4 +62,10 @@ export class UserInfoEntity extends BaseEntity {
     nullable: false,
   })
   paymentType: PAYMENT_TYPE;
+
+  @Column({ name: 'google_id', nullable: true })
+  googleId: string;
+
+  @Column({ name: 'facebook_id', nullable: true })
+  facebookId: string;
 }
