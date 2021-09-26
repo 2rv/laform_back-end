@@ -105,6 +105,7 @@ export class AuthService {
     });
 
     if (Boolean(findUser)) {
+      findUser.login = body?.firstName || '' + body?.lastName || '';
       accessToken = await this.createJwt(findUser);
     } else {
       const user = await this.userRepository.saveGoogleUser({
@@ -112,7 +113,7 @@ export class AuthService {
         googleId: body.id,
       });
       await this.userInfoService.create(user);
-
+      user.login = body.firstName + body.lastName;
       accessToken = await this.createJwt(user);
     }
 
@@ -121,6 +122,7 @@ export class AuthService {
 
   async signUpWithFacebook(body: any): Promise<LoginInfoDto> {
     let accessToken;
+
     const findUser: any = await this.userRepository.findOne({
       where: {
         facebookId: body.id,
