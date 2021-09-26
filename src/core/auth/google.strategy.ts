@@ -11,6 +11,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
       // clientID: GoogleConfig.clientID,
       // clientSecret: GoogleConfig.clientSecret,
       // callbackURL: GoogleConfig.callbackURL,
+      // Сверху данные конфиги Жени и там какие-то ошибки толи в хероку толи у него в настройках
+      // Снизу данные мои с которых прекрасно тестил
       clientID: '1042068275751-c6pbac6s5l3bjvo73amvl77f3ol2e8dj.apps.googleusercontent.com',
       clientSecret: 'pQRjjsvJLxydvHMESpajKikM',
       callbackURL: 'http://localhost:4000/auth/google/redirect',
