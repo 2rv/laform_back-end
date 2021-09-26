@@ -7,4 +7,6 @@ export interface UserInfoDto {
   location: string;
   deliveryType: DELIVERY_TYPE;
   paymentType: PAYMENT_TYPE;
+  googleId: string;
+  facebookId: string;
 }

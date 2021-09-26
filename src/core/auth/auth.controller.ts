@@ -6,6 +6,7 @@ import {
   UseGuards,
   Get,
   Req,
+  Res,
 } from '@nestjs/common';
 import { UserSignUpDto } from './dto/user-sign-up.dto';
 import { UserLoginDto } from './dto/user-login.dto';
@@ -16,6 +17,7 @@ import { UserEntity } from '../user/user.entity';
 import { AccountGuard } from '../user/guard/account.guard';
 import { LoginInfoDto } from './dto/login-info.dto';
 import { AccountDataDto } from './dto/account-data.dto';
+import { ClientConfig } from '../../config/client.config';
 
 @Controller('auth')
 export class AuthController {
@@ -59,9 +61,15 @@ export class AuthController {
 
   @Get('/facebook/redirect')
   @UseGuards(AuthGuard('facebook'))
-  async facebookLoginRedirect(@Req() req): Promise<any> {
-    console.log(req.user);
-    return this.authService.signUpWithFacebook(req.user);
+  async facebookLoginRedirect(@Req() req, @Res() res): Promise<any> {
+    const token = await this.authService.signUpWithFacebook(req.user);
+    const clientUrl = req.hostname.includes('localhost')
+      ? `${req.protocol}://localhost:3000`
+      : ClientConfig.url;
+
+    return res.redirect(
+      `${clientUrl}/social-auth-access?data=${token.accessToken}`,
+    );
   }
 
   @Get('/google')
@@ -70,8 +78,14 @@ export class AuthController {
 
   @Get('/google/redirect')
   @UseGuards(AuthGuard('google'))
-  async googleAuthRedirect(@Req() req) {
-    //return req.user;
-    return this.authService.signUpWithGoogle(req.user);
+  async googleAuthRedirect(@Req() req, @Res() res) {
+    const token = await this.authService.signUpWithGoogle(req.user);
+    const clientUrl = req.hostname.includes('localhost')
+      ? `${req.protocol}://localhost:3000`
+      : ClientConfig.url;
+
+    return res.redirect(
+      `${clientUrl}/social-auth-access?data=${token.accessToken}`,
+    );
   }
 }
