@@ -105,7 +105,7 @@ export class AuthService {
     });
 
     if (Boolean(findUser)) {
-      findUser.login = body?.firstName || '' + body?.lastName || '';
+      findUser.login = body?.firstName + body?.lastName;
       accessToken = await this.createJwt(findUser);
     } else {
       const user = await this.userRepository.saveGoogleUser({
