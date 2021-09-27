@@ -353,7 +353,7 @@ export class PostRepository extends Repository<PostEntity> {
         'categories',
         'like',
       ])
-      .where('sewing_product.deleted = false')
+      .where('post.deleted = false')
       .andWhere('like.userId = :userId', { userId })
       .getMany();
   }
@@ -373,7 +373,7 @@ export class PostRepository extends Repository<PostEntity> {
         'categories',
         'like',
       ])
-      .where('sewing_product.deleted = false')
+      .where('post.deleted = false')
       .andWhere('like.userId = :userId', { userId })
       .getMany();
   }
