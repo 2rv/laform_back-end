@@ -53,13 +53,14 @@ export class MailService {
   async sendNotification(body: { subject: string; html: string }) {
     const recipients = await this.notificationRepository.find();
     const mails = recipients.map((e) => e.email);
+    console.log(body.html);
     return await this.mailerService
       .sendMail({
         to: mails,
         subject: body.subject,
         template: path.join(path.resolve(), 'src/templates/notification.pug'),
         context: {
-          html: body.html,
+          htmlContent: body.html,
         },
       })
       .catch((e) => console.log(e));
@@ -77,7 +78,7 @@ export class MailService {
             path: body.productPdfUrl,
             contentType: 'application/pdf',
           },
-        ]
+        ],
       })
       .catch((e) => {
         console.log(e);
