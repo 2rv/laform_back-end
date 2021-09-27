@@ -28,8 +28,11 @@ MAIL:
   HOST: 'smtp.gmail.com'
 
 FACEBOOK:
-  CLIENT_ID: '168878955342230'
-  CLIENT_SECRET: 'd8b62ef1da6ba65940f90f373d4463b1'
+  # CLIENT_ID: '168878955342230'
+  # CLIENT_SECRET: 'd8b62ef1da6ba65940f90f373d4463b1'
+  # CALLBACK_URL: 'https://laform-api.herokuapp.com/auth/facebook/redirect'
+  CLIENT_ID: '201675022064842'
+  CLIENT_SECRET: 'e1ace87ecee2d68da565f977d0db0eb6'
   CALLBACK_URL: 'https://laform-api.herokuapp.com/auth/facebook/redirect'
 
 GOOGLE:
