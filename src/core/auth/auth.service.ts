@@ -97,21 +97,49 @@ export class AuthService {
   }
 
   async signUpWithGoogle(body: any): Promise<LoginInfoDto> {
-    const user = await this.userRepository.saveGoogleUser({
-      email: body.email,
-      googleId: body.id,
+    let accessToken;
+    const findUser: any = await this.userRepository.findOne({
+      where: {
+        googleId: body.id,
+      },
     });
-    const accessToken = await this.createJwt(user);
+
+    if (Boolean(findUser)) {
+      findUser.login = body?.firstName + body?.lastName;
+      accessToken = await this.createJwt(findUser);
+    } else {
+      const user = await this.userRepository.saveGoogleUser({
+        email: body.email,
+        googleId: body.id,
+      });
+      await this.userInfoService.create(user);
+      user.login = body.firstName + body.lastName;
+      accessToken = await this.createJwt(user);
+    }
 
     return { accessToken };
   }
 
   async signUpWithFacebook(body: any): Promise<LoginInfoDto> {
-    const user = await this.userRepository.saveFacebookUser({
-      email: body.email,
-      facebookId: body.id,
+    let accessToken;
+
+    const findUser: any = await this.userRepository.findOne({
+      where: {
+        facebookId: body.id,
+      },
     });
-    const accessToken = await this.createJwt(user);
+
+    if (Boolean(findUser)) {
+      accessToken = await this.createJwt(findUser);
+    } else {
+      const user = await this.userRepository.saveFacebookUser({
+        email: body.email,
+        facebookId: body.id,
+      });
+      await this.userInfoService.create(user);
+
+      accessToken = await this.createJwt(user);
+    }
 
     return { accessToken };
   }

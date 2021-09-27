@@ -44,7 +44,6 @@ export class UserRecoveryService {
       { toMail: user.email },
       code,
     );
-    console.log(messageDate);
   }
 
   async changeCredentials(

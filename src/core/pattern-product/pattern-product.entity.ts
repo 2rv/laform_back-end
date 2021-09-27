@@ -11,28 +11,18 @@ import { SizesEntity } from '../sizes/sizes.entity';
 import { LikeEntity } from '../like/like.entity';
 import { CommentEntity } from '../comment/comment.entity';
 import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
-import { generateVendorCode } from '../../common/utils/vendor-coder';
+import { RecommendationProductEntity } from '../recommendation-product/recommendation-product.entity';
+import { RecommendationEntity } from '../recommendation/recommendation.entity';
 
 @Entity({ name: 'pattern_product' })
 export class PatternProductEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({
-    type: 'varchar',
-    name: 'vendor_code',
-    unique: true,
-    nullable: true,
-  })
-  vendorCode: string;
-
-  static getVendorCode() {
-    return generateVendorCode();
-  }
-
   @OneToMany(
     () => CategoryEntity,
     (category: CategoryEntity) => category.patternProductId,
+    { cascade: true },
   )
   categories: CategoryEntity[];
 
@@ -60,6 +50,20 @@ export class PatternProductEntity {
       purchaseProduct.patternProductId,
   )
   purchaseProduct: PurchaseProductEntity[];
+
+  @OneToMany(
+    () => RecommendationProductEntity,
+    (purchaseProduct: RecommendationProductEntity) =>
+      purchaseProduct.patternProductId,
+  )
+  recommendationProduct: RecommendationProductEntity[];
+
+  @OneToOne(
+    () => RecommendationEntity,
+    (recommendation: RecommendationEntity) => recommendation.patternProductId,
+    { cascade: true },
+  )
+  recommendation: RecommendationEntity;
 
   @OneToOne(
     () => FileUploadEntity,
@@ -118,13 +122,6 @@ export class PatternProductEntity {
     name: 'type',
   })
   type!: number;
-
-  @Column({
-    type: 'int',
-    name: 'price',
-    nullable: true,
-  })
-  price!: number;
 
   @Column({
     type: 'int',

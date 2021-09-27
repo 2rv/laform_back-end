@@ -1,12 +1,12 @@
 import { LikeRepository } from './like.repository';
-import { Injectable, BadRequestException, Inject } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { MasterClassRepository } from './../master-class/master-class.repository';
-import { LikeEntity } from './like.entity';
 import { LIKE_ERROR } from './enum/like.enum';
 import { PostRepository } from './../post/post.repository';
 import { PatternProductRepository } from '../pattern-product/pattern-product.repository';
 import { SewingProductRepository } from '../sewing-product/sewing-product.repository';
 import { LikeDto } from './dto/like.dto';
+import { LikeEntity } from './like.entity';
 
 @Injectable()
 export class LikeService {
@@ -29,44 +29,31 @@ export class LikeService {
     const count = await this.count(body);
     if (body.postId) {
       await this.postRepository.update(body.postId, { likeCount: count });
-      return { like: count };
+      return { id: body.postId };
     }
     if (body.masterClassId) {
       await this.masterClassRepository.update(body.masterClassId, {
         likeCount: count,
       });
-      return { like: count };
+      return { id: body.masterClassId };
     }
     if (body.sewingProductId) {
       await this.sewingProductRepository.update(body.sewingProductId, {
         likeCount: count,
       });
-      return { like: count };
+      return { id: body.sewingProductId };
     }
     if (body.patternProductId) {
       await this.patternProductRepository.update(body.patternProductId, {
         likeCount: count,
       });
-      return { like: count };
+      return { id: body.patternProductId };
     }
   }
 
-  async getUserLikes(userId) {
-    return await this.likeRepository.find({
-      where: {
-        userId: userId,
-      },
-      relations: [
-        'postId',
-        'postId.image',
-        'masterClassId',
-        'masterClassId.images',
-        'sewingProductId',
-        'sewingProductId.images',
-        'patternProductId',
-        'patternProductId.images',
-      ],
-    });
+  async getUserLikes(userId: number, query: string): Promise<LikeEntity[]> {
+    if (query === 'ru') return await this.likeRepository.getUserLikesRu(userId);
+    if (query === 'en') return await this.likeRepository.getUserLikesEn(userId);
   }
 
   async delete(body: LikeDto, userId) {
@@ -80,25 +67,25 @@ export class LikeService {
     const count = await this.count(body);
     if (body.postId) {
       await this.postRepository.update(body.postId, { likeCount: count });
-      return { like: count };
+      return { id: body.postId };
     }
     if (body.masterClassId) {
       await this.masterClassRepository.update(body.masterClassId, {
         likeCount: count,
       });
-      return { like: count };
+      return { id: body.masterClassId };
     }
     if (body.sewingProductId) {
       await this.sewingProductRepository.update(body.sewingProductId, {
         likeCount: count,
       });
-      return { like: count };
+      return { id: body.sewingProductId };
     }
     if (body.patternProductId) {
       await this.patternProductRepository.update(body.patternProductId, {
         likeCount: count,
       });
-      return { like: count };
+      return { id: body.patternProductId };
     }
   }
 

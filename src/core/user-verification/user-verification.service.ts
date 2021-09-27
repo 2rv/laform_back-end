@@ -14,12 +14,15 @@ import { UserRepository } from '../user/user.repository';
 import { USER_VERIFICATION_ERROR } from './enum/user-verification-error.enum';
 import { UserVerificationEmailPayload } from './type/user-verification-email-payload.type';
 
+import { NotificationService } from '../notification/notification.service';
+
 @Injectable()
 export class UserVerificationService {
   constructor(
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private userRepository: UserRepository,
     private mailService: MailService,
+    private notificationService: NotificationService,
   ) {}
 
   async getEmailVerificationCode(user: UserEntity): Promise<void> {
@@ -57,7 +60,17 @@ export class UserVerificationService {
 
     const payload: UserVerificationEmailPayload = JSON.parse(rawPayload);
 
-    await this.userRepository.confirmEmailById(payload.userId);
+    const user = await this.userRepository.findOne({ id: payload.userId });
+    if (user.email !== payload.email) {
+      console.log('WRONG EMAIL IN CODE PAYLOAD');
+      throw new BadRequestException(
+        USER_VERIFICATION_ERROR.VERIFICATION_CODE_PAYLOAD_HAS_WRONG_EMAIL,
+      );
+    }
+    await this.userRepository.confirmEmailById(user.id);
+    await this.notificationService.subscribeAuthtorized(user, {
+      subscribe: true,
+    });
 
     this.cacheManager.del(code);
     return true;

@@ -3,7 +3,7 @@ import { UserEntity } from '../user.entity';
 
 export const GetAccount = createParamDecorator((data: string, ctx) => {
   const userAccount: UserEntity = ctx.switchToHttp().getRequest().userAccount;
-  console.log(ctx.switchToHttp().getRequest());
+  //   console.log(userAccount);
   return data ? userAccount && userAccount[data] : userAccount;
 });
 

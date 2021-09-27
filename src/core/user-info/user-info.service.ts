@@ -16,7 +16,11 @@ export class UserInfoService {
   ) {}
 
   async create(user): Promise<UserInfoDto> {
-    return await this.userInfoRepository.save({ userId: user.id });
+    return await this.userInfoRepository.save({
+      userId: user.id,
+      googleId: user?.googleId,
+      facebookId: user?.facebookId,
+    });
   }
 
   async findOne(user: UserEntity): Promise<UserInfoEntity> {

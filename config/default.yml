@@ -10,8 +10,8 @@ JWT:
   SECRET: 'FKdksk12l3ldlsfdlLlsdll123l05kgjgk04jdkgn6kk2d0fkgsdk32ldovyjkxg'
 
 CACHE:
-  HOST: 'ec2-44-196-89-67.compute-1.amazonaws.com'
-  PORT: 21739
+  HOST: 'ec2-44-194-122-143.compute-1.amazonaws.com'
+  PORT: 27889
   PASSWORD: 'pdeb811685305cf8c1bb28d6541d08d8b84190ca075f7189558595b5848891508'
   TTL: 6000000
 
@@ -36,3 +36,6 @@ GOOGLE:
   CLIENT_ID: '857571824635-s9u3bhlc806ullpgiib8d626csnjh0de.apps.googleusercontent.com'
   CLIENT_SECRET: 'ENwlRXt3vnRohU8hFNbAcQjf'
   CALLBACK_URL: 'https://laform-api.herokuapp.com/auth/google/redirect'
+
+CLIENT:
+  URL: 'https://laform-client.herokuapp.com'

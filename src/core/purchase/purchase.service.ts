@@ -9,12 +9,14 @@ import { SewingProductService } from '../sewing-product/sewing-product.service';
 import { MasterClassService } from '../master-class/master-class.service';
 import { VerifyPurchaseProductsDto } from './dto/verify-purchase-products.dto';
 import { PromoCodeService } from '../promo-code/promo-code.service';
+import { PurchaseProductService } from '../purchase-product/purchase-product.service';
 
 @Injectable()
 export class PurchaseService {
   constructor(
     private promoCodeService: PromoCodeService,
     private purchaseRepository: PurchaseRepository,
+    private purchaseProductService: PurchaseProductService,
     private patternProductService: PatternProductService,
     private sewingProductService: SewingProductService,
     private masterClassService: MasterClassService,
@@ -37,19 +39,12 @@ export class PurchaseService {
         item.totalDiscount = result.totalDiscount;
         item.totalPrice = result.totalPrice;
       }
-      if (item.type === 1) {
+      if (item.type === 2 || item.type === 1) {
         const result =
-          await this.patternProductService.getPurchaseParamsElectronic(
+          await this.patternProductService.getPurchaseParamsPatternProduct(
             item.patternProductId,
+            item.size,
           );
-        item.totalDiscount = result.totalDiscount;
-        item.totalPrice = result.totalPrice;
-      }
-      if (item.type === 2) {
-        const result = await this.patternProductService.getPurchaseParamsPrint(
-          item.patternProductId,
-          item.size,
-        );
         item.totalDiscount = result.totalDiscount;
         item.totalPrice = result.totalPrice;
       }
@@ -89,7 +84,7 @@ export class PurchaseService {
     body: CreatePurchaseDto,
     userId: number = undefined,
     email: string,
-  ): Promise<any | PurchaseEntity> {
+  ): Promise<PurchaseEntity> {
     const { verifiedPurchaseProducts, price }: VerifyPurchaseProductsDto =
       await this.VerifyPurchaseProducts(body.purchaseProducts);
     const promoCodeDiscount = await this.promoCodeService.checkFromServer(
@@ -104,8 +99,11 @@ export class PurchaseService {
       userId,
       email,
     );
-
-    return await this.purchaseRepository.save(purchase);
+    const result = await this.purchaseRepository.save(purchase);
+    this.purchaseRepository.update(result.id, {
+      orderNumber: await PurchaseEntity.generateOrderNumber(result._NID),
+    });
+    return result;
   }
 
   async getAll(size: number, page: number): Promise<PurchaseEntity[]> {
@@ -122,8 +120,12 @@ export class PurchaseService {
     return await this.purchaseRepository.getOne(id);
   }
 
-  async getOneForUser(id: string, userId): Promise<PurchaseEntity> {
-    return await this.purchaseRepository.getOneForUser(id, userId);
+  async getOneForUser(id: string, userId) {
+    return await this.purchaseProductService.getOneProductForUser(id, userId);
+  }
+
+  async getOneMasterClass(id: string) {
+    return await this.purchaseProductService.getOneMasterClass(id);
   }
 
   async update(id: any, body: any) {

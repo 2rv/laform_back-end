@@ -13,6 +13,7 @@ import {
   Query,
   Request,
   Delete,
+  Param,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AccountGuard } from '../user/guard/account.guard';
@@ -54,10 +55,18 @@ export class PurchaseController {
   }
 
   @Get('/user/get/:purchaseId')
-  @Roles(USER_ROLE.USER)
-  @UseGuards(AuthGuard('jwt'), AccountGuard, PurchaseGuard)
-  async getOneForUser(@GetUser() user: UserEntity, @Request() req) {
-    return await this.purchaseService.getOneForUser(req.purchaseId, user.id);
+  @Roles(USER_ROLE.USER, USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getOneForUser(
+    @GetUser() user: UserEntity,
+    @Param('purchaseId') purchaseId: string,
+  ) {
+    return await this.purchaseService.getOneForUser(purchaseId, user.id);
+  }
+
+  @Get('/user/get/master-class/:purchaseId')
+  async getOneMasterClass(@Param('purchaseId') purchaseId: string) {
+    return await this.purchaseService.getOneMasterClass(purchaseId);
   }
 
   @Get('/get/')
@@ -68,9 +77,9 @@ export class PurchaseController {
   }
 
   @Get('/user/get/')
-  @Roles(USER_ROLE.USER)
+  @Roles(USER_ROLE.USER, USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async getAllForUsers(
+  async getAllForUser(
     @GetUser() user: UserEntity,
     @Query('size') size: number,
     @Query('page') page: number,

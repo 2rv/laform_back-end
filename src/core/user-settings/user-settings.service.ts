@@ -24,6 +24,6 @@ export class UserSettingsService {
     user: UserEntity,
     data: UserSettingsUpdateEmailDto,
   ): Promise<void> {
-    this.userRepository.changeEmail(user, data);
+    return this.userRepository.changeEmail(user, data);
   }
 }

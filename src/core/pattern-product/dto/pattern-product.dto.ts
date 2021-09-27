@@ -14,6 +14,7 @@ import {
 } from 'class-validator';
 import { CategoryDto } from 'src/core/category/dto/category.dto';
 import { FileDto } from 'src/core/file-upload/dto/file-dto';
+import { CreateRecommendationDto } from 'src/core/recommendation/dto/create-recommendation.dto';
 import { CreateSizeDto } from 'src/core/sizes/dto/create-size.dto';
 
 export class PatternProductDto {
@@ -41,15 +42,13 @@ export class PatternProductDto {
   @ArrayMaxSize(5)
   categories: [CategoryDto];
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsArray()
   sizes: [CreateSizeDto];
 
   @ArrayNotEmpty()
   @IsArray()
   images: [FileDto];
-
-  filePdf: FileDto;
 
   @IsOptional()
   @IsNumber()
@@ -82,11 +81,9 @@ export class PatternProductDto {
   };
 
   @IsOptional()
-  @IsNumber()
-  @Min(0)
-  price: number;
-
-  @IsOptional()
   @IsBoolean()
   deleted: boolean;
+
+  @IsOptional()
+  recommendation: CreateRecommendationDto;
 }

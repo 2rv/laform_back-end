@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 import { CategoryEntity } from '../category/category.entity';
 import { ColorsEntity } from '../colors/colors.entity';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
@@ -6,6 +12,8 @@ import { SizesEntity } from '../sizes/sizes.entity';
 import { LikeEntity } from '../like/like.entity';
 import { CommentEntity } from '../comment/comment.entity';
 import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
+import { RecommendationProductEntity } from '../recommendation-product/recommendation-product.entity';
+import { RecommendationEntity } from '../recommendation/recommendation.entity';
 
 @Entity({ name: 'sewing_product' })
 export class SewingProductEntity {
@@ -15,6 +23,7 @@ export class SewingProductEntity {
   @OneToMany(
     () => CategoryEntity,
     (category: CategoryEntity) => category.sewingProductId,
+    { cascade: true },
   )
   categories: CategoryEntity[];
 
@@ -24,6 +33,7 @@ export class SewingProductEntity {
   @OneToMany(
     () => ColorsEntity,
     (colors: ColorsEntity) => colors.sewingProductId,
+    { cascade: true },
   )
   colors: ColorsEntity[];
 
@@ -47,6 +57,20 @@ export class SewingProductEntity {
     (purchaseProduct: PurchaseProductEntity) => purchaseProduct.sewingProductId,
   )
   purchaseProduct: PurchaseProductEntity[];
+
+  @OneToMany(
+    () => RecommendationProductEntity,
+    (purchaseProduct: RecommendationProductEntity) =>
+      purchaseProduct.sewingProductId,
+  )
+  recommendationProduct: RecommendationProductEntity[];
+
+  @OneToOne(
+    () => RecommendationEntity,
+    (recommendation: RecommendationEntity) => recommendation.sewingProductId,
+    { cascade: true },
+  )
+  recommendation: RecommendationEntity;
 
   @Column({
     type: 'varchar',

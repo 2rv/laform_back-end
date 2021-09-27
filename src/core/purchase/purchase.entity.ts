@@ -6,6 +6,7 @@ import {
   ManyToOne,
   JoinColumn,
   OneToMany,
+  Generated,
 } from 'typeorm';
 import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
 import { UserEntity } from '../user/user.entity';
@@ -16,11 +17,20 @@ export class PurchaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column()
+  @Generated()
+  _NID: number;
+
   @CreateDateColumn({
     name: 'created_date',
     readonly: true,
   })
   createdDate: Date;
+
+  static async generateOrderNumber(id: number): Promise<string> {
+    const defaultId = '00000000';
+    return defaultId.substring(0, defaultId.length - id.toString().length) + id;
+  }
 
   //   @Column({                               зачем оно????????????
   //     type: 'varchar',
@@ -29,12 +39,12 @@ export class PurchaseEntity {
   //   })
   //   orderNumber: string;
 
-  //   @Column({                              надо бы это обсудить
-  //     type: 'varchar',
-  //     name: 'order_status',
-  //     nullable: true,
-  //   })
-  //   orderStatus: string;
+  @Column({
+    type: 'varchar',
+    name: 'order_status',
+    nullable: true,
+  })
+  orderStatus: string;
 
   @ManyToOne(() => UserEntity, (user: UserEntity) => user.purchase)
   @JoinColumn({
@@ -118,4 +128,10 @@ export class PurchaseEntity {
     nullable: true,
   })
   promoCodeDiscount?: number;
+
+  @Column({
+    type: 'varchar',
+    nullable: true,
+  })
+  orderNumber?: string;
 }

@@ -18,28 +18,21 @@ import { AccountGuard } from '../user/guard/account.guard';
 import { USER_ROLE } from '../user/enum/user-role.enum';
 import { Roles } from '../user/decorator/role.decorator';
 import { LangValidationPipe } from '../../common/guards/lang.guard';
+import { GetAccount } from '../user/decorator/get-account.decorator';
+import { UserEntity } from '../user/user.entity';
 
 @Controller('post')
 export class PostController {
   constructor(private postService: PostService) {}
 
-  @Post('/create')
+  @Post('/create/')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async save(@Body(new ValidationPipe()) body: PostDto) {
     return await this.postService.create(body);
   }
 
-  @Get('get/:postId')
-  @UseGuards(PostGuard)
-  async getOne(
-    @Query(new LangValidationPipe()) query: string,
-    @Param('postId') id: string,
-  ) {
-    return await this.postService.getOne(id, query);
-  }
-
-  @Get('get/')
+  @Get('/get/')
   async getAll(
     @Query(new LangValidationPipe()) query: string,
     @Query('size') size: number,
@@ -47,20 +40,65 @@ export class PostController {
   ) {
     return await this.postService.getAll(query, size, page);
   }
+  @Get('/auth/get/')
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getAllAuth(
+    @Query(new LangValidationPipe()) query: string,
+    @Query('size') size: number,
+    @Query('page') page: number,
+    @GetAccount() user: UserEntity,
+  ) {
+    return await this.postService.getAllAuth(query, size, page, user.id);
+  }
 
-  @Get('pinned/get/')
+  @Get('/get/:postId')
+  @UseGuards(PostGuard)
+  async getOne(
+    @Query(new LangValidationPipe()) query: string,
+    @Param('postId') id: string,
+  ) {
+    return await this.postService.getOne(id, query);
+  }
+  @Get('/auth/get/:postId')
+  @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard)
+  async getOneAuth(
+    @Query(new LangValidationPipe()) query: string,
+    @Param('postId') id: string,
+    @GetAccount() user: UserEntity,
+  ) {
+    return await this.postService.getOneAuth(id, query, user.id);
+  }
+
+  @Get('/pinned/get/')
   async getPinned(@Query(new LangValidationPipe()) query: string) {
     return await this.postService.getPinned(query);
   }
+  @Get('/auth/pinned/get/')
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getPinnedAuth(
+    @Query(new LangValidationPipe()) query: string,
+    @GetAccount() user: UserEntity,
+  ) {
+    return await this.postService.getPinnedAuth(query, user.id);
+  }
 
-  @Put('update/:postId')
+  @Get('/liked/get/')
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getLiked(
+    @Query(new LangValidationPipe()) query: string,
+    @GetAccount() user: UserEntity,
+  ) {
+    return await this.postService.getLiked(user.id, query);
+  }
+
+  @Put('/update/:postId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard)
   async update(@Param('postId') id: string, @Body() body: any) {
     return await this.postService.update(id, body);
   }
 
-  @Delete('delete/:postId')
+  @Delete('/delete/:postId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard)
   async delete(@Param('postId') id: string) {

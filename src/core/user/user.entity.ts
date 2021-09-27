@@ -1,4 +1,3 @@
-import { PurchaseEntity } from './../purchase/purchase.entity';
 import {
   Entity,
   Unique,
@@ -14,8 +13,9 @@ import {
   generateBcryptHash,
 } from '../../common/utils/hash';
 import { USER_ROLE } from './enum/user-role.enum';
-import { LikeEntity } from '../like/like.entity';
+import { PurchaseEntity } from '../purchase/purchase.entity';
 import { CommentEntity } from '../comment/comment.entity';
+import { LikeEntity } from '../like/like.entity';
 import { UserInfoEntity } from '../user-info/user-info.entity';
 
 @Entity({ name: 'user' })
@@ -67,7 +67,7 @@ export class UserEntity extends BaseEntity {
     return this.password === hashPassword;
   }
 
-  @OneToMany(() => LikeEntity, (like: LikeEntity) => like.postId)
+  @OneToMany(() => LikeEntity, (like: LikeEntity) => like.userId)
   like: LikeEntity[];
 
   @OneToMany(
