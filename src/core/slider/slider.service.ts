@@ -1,9 +1,8 @@
 import { UpdateSliderDto } from './dto/update-slider.dto';
 import { SliderEntity } from './slider.entity';
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { SliderDto } from './dto/slider.dto';
 import { SliderRepository } from './slider.repository';
-import { SLIDER_ERROR } from './enum/slider.enum';
 
 @Injectable()
 export class SliderService {
@@ -18,22 +17,13 @@ export class SliderService {
   }
 
   async getOne(id: string, query: string): Promise<SliderEntity> {
-    if (query === 'ru') {
-      return await this.sliderRepository.findOneRu(id);
-    }
-    if (query === 'en') {
-      return await this.sliderRepository.findOneEn(id);
-    }
+    if (query === 'ru') return await this.sliderRepository.findOneRu(id);
+    if (query === 'en') return await this.sliderRepository.findOneEn(id);
   }
 
   async getAll(query: string): Promise<SliderEntity[]> {
-    if (query === 'ru') {
-      return await this.sliderRepository.findAllRu();
-    }
-    if (query === 'en') {
-      return await this.sliderRepository.findAllEn();
-    }
-    return await this.sliderRepository.find();
+    if (query === 'ru') return await this.sliderRepository.findAllRu();
+    if (query === 'en') return await this.sliderRepository.findAllEn();
   }
 
   async delete(id: string) {

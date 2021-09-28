@@ -27,24 +27,6 @@ export class SliderRepository extends Repository<SliderEntity> {
       ])
       .getOne();
   }
-
-  async findAllRu(): Promise<SliderEntity[]> {
-    return await this.createQueryBuilder('slider')
-      .leftJoin('slider.imageUrl', 'image_url')
-      .select([
-        'slider.id',
-        'slider.headingTextRu',
-        'slider.buttonTextRu',
-        'slider.buttonUrl',
-        'slider.titleTextColor',
-        'slider.buttonColor',
-        'slider.buttonTextColor',
-        'slider.isHaveButton',
-        'image_url',
-      ])
-      .getMany();
-  }
-
   async findOneEn(id: string): Promise<SliderEntity> {
     return await this.createQueryBuilder('slider')
       .leftJoin('slider.imageUrl', 'image_url')
@@ -63,6 +45,22 @@ export class SliderRepository extends Repository<SliderEntity> {
       .getOne();
   }
 
+  async findAllRu(): Promise<SliderEntity[]> {
+    return await this.createQueryBuilder('slider')
+      .leftJoin('slider.imageUrl', 'image_url')
+      .select([
+        'slider.id',
+        'slider.headingTextRu',
+        'slider.buttonTextRu',
+        'slider.buttonUrl',
+        'slider.titleTextColor',
+        'slider.buttonColor',
+        'slider.buttonTextColor',
+        'slider.isHaveButton',
+        'image_url',
+      ])
+      .getMany();
+  }
   async findAllEn(): Promise<SliderEntity[]> {
     return await this.createQueryBuilder('slider')
       .leftJoin('slider.imageUrl', 'image_url')
