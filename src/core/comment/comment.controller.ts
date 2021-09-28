@@ -39,8 +39,8 @@ export class CommentController {
   @Delete('delete/:id')
   @Roles(USER_ROLE.USER, USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async delete(@GetUser() user: UserEntity, @Param('id') id: string) {
-    return await this.commentService.delete(id, user.id);
+  async delete(@Param('id') id: string) {
+    return await this.commentService.delete(id);
   }
 
   @Post('sub/create/')
@@ -56,8 +56,8 @@ export class CommentController {
   @Delete('sub/delete/:id')
   @Roles(USER_ROLE.USER, USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async deleteSub(@GetUser() user: UserEntity, @Param('id') id: string) {
-    return await this.commentService.deleteSub(id, user.id);
+  async deleteSub(@Param('id') id: string) {
+    return await this.commentService.deleteSub(id);
   }
 
   @Get('get/master-class/:id')

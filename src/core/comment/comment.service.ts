@@ -22,11 +22,10 @@ export class CommentService {
     return await this.commentRepository.findOneComment(result.id);
   }
 
-  async delete(id: string, userId: number) {
+  async delete(id: string) {
     const result = await this.commentRepository.findOne({
       where: {
         id: id,
-        userId: userId,
       },
     });
     if (!result) {
@@ -39,11 +38,10 @@ export class CommentService {
     return await this.subCommentRepository.findOneSubComment(result.id);
   }
 
-  async deleteSub(id: string, userId: any) {
+  async deleteSub(id: string) {
     const result = await this.subCommentRepository.findOne({
       where: {
         id: id,
-        userId: userId,
       },
     });
     if (!result) {
