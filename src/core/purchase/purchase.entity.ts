@@ -21,23 +21,22 @@ export class PurchaseEntity {
   @Generated()
   _NID: number;
 
-  @CreateDateColumn({
-    name: 'created_date',
-    readonly: true,
-  })
-  createdDate: Date;
-
   static async generateOrderNumber(id: number): Promise<string> {
     const defaultId = '00000000';
     return defaultId.substring(0, defaultId.length - id.toString().length) + id;
   }
 
-  //   @Column({                               зачем оно????????????
-  //     type: 'varchar',
-  //     name: 'order_number',
-  //     nullable: true,
-  //   })
-  //   orderNumber: string;
+  @Column({
+    type: 'varchar',
+    nullable: true,
+  })
+  orderNumber?: string;
+
+  @CreateDateColumn({
+    name: 'created_date',
+    readonly: true,
+  })
+  createdDate: Date;
 
   @Column({
     type: 'varchar',
@@ -77,18 +76,6 @@ export class PurchaseEntity {
   })
   phoneNumber!: string;
 
-  //   @Column({                                    надо бы это обсудить
-  //     type: 'varchar',
-  //     name: 'type_of_payment',
-  //   })
-  //   typeOfPayment!: string;
-
-  //   @Column({
-  //     type: 'varchar',
-  //     name: 'type_of_delivery',
-  //   })
-  //   typeOfDelivery!: string;
-
   @Column({
     type: 'varchar',
     name: 'comment',
@@ -102,13 +89,6 @@ export class PurchaseEntity {
     { cascade: true },
   )
   purchaseProducts: PurchaseProductEntity[];
-
-  //   @Column({                               надо бы это обсудить
-  //     type: 'int',
-  //     name: 'delivery_price',
-  //     nullable: true,
-  //   })
-  //   deliveryPrice: number;
 
   @Column({
     type: 'numeric',
@@ -128,10 +108,23 @@ export class PurchaseEntity {
     nullable: true,
   })
   promoCodeDiscount?: number;
-
-  @Column({
-    type: 'varchar',
-    nullable: true,
-  })
-  orderNumber?: string;
 }
+
+//   @Column({
+//     type: 'varchar',
+//     name: 'type_of_payment',
+//   })
+//   typeOfPayment!: string;
+
+//   @Column({
+//     type: 'varchar',
+//     name: 'type_of_delivery',
+//   })
+//   typeOfDelivery!: string;
+
+//   @Column({
+//     type: 'int',
+//     name: 'delivery_price',
+//     nullable: true,
+//   })
+//   deliveryPrice: number;

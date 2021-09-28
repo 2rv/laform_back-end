@@ -31,14 +31,6 @@ export class SizesEntity {
   }
 
   @Column({
-    type: 'int',
-    name: 'count',
-    default: 0,
-    nullable: true,
-  })
-  count: number;
-
-  @Column({
     type: 'varchar',
     name: 'size',
   })

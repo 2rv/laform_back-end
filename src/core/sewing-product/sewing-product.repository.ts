@@ -169,7 +169,6 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'colors',
         'sizes.id',
         'sizes.vendorCode',
-        'sizes.count',
         'sizes.size',
         'sizes.price',
 
@@ -276,7 +275,6 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'colors',
         'sizes.id',
         'sizes.vendorCode',
-        'sizes.count',
         'sizes.size',
         'sizes.price',
 
@@ -422,7 +420,6 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'colors',
         'sizes.id',
         'sizes.vendorCode',
-        'sizes.count',
         'sizes.size',
         'sizes.price',
         'like',
@@ -573,7 +570,6 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'colors',
         'sizes.id',
         'sizes.vendorCode',
-        'sizes.count',
         'sizes.size',
         'sizes.price',
         'like',
