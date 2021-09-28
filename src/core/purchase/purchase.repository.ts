@@ -72,7 +72,6 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
         'selected_color',
         'selected_size.id',
         'selected_size.vendorCode',
-        'selected_size.count',
         'selected_size.size',
         'selected_size.price',
         'selected_size_file_pdf',
@@ -120,7 +119,6 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
         'selected_color',
         'selected_size.id',
         'selected_size.vendorCode',
-        'selected_size.count',
         'selected_size.size',
         'selected_size.price',
 
