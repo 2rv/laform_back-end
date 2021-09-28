@@ -48,8 +48,9 @@ export class LikeRepository extends Repository<LikeEntity> {
         'pattern_product.complexity',
         'pattern_product.discount',
         'pattern_product_images',
-        'pattern_product_sizes',
         'pattern_product_categories',
+        'pattern_product_sizes.id',
+        'pattern_product_sizes.price',
 
         'sewing_product.id',
         'sewing_product.titleRu',
@@ -59,7 +60,6 @@ export class LikeRepository extends Repository<LikeEntity> {
         'sewing_product_images',
         'sewing_product_categories',
         'sewing_product_sizes.id',
-        'sewing_product_sizes.size',
         'sewing_product_sizes.price',
       ])
       .where('like.userId = :userId', { userId })
@@ -115,8 +115,9 @@ export class LikeRepository extends Repository<LikeEntity> {
         'pattern_product.complexity',
         'pattern_product.discount',
         'pattern_product_images',
-        'pattern_product_sizes',
         'pattern_product_categories',
+        'pattern_product_sizes.id',
+        'pattern_product_sizes.price',
 
         'sewing_product.id',
         'sewing_product.titleEn',
@@ -126,7 +127,6 @@ export class LikeRepository extends Repository<LikeEntity> {
         'sewing_product_images',
         'sewing_product_categories',
         'sewing_product_sizes.id',
-        'sewing_product_sizes.size',
         'sewing_product_sizes.price',
       ])
       .where('like.userId = :userId', { userId })
