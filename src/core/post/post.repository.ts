@@ -24,6 +24,7 @@ export class PostRepository extends Repository<PostEntity> {
         'post.likeCount',
         'post.modifier',
         'post.type',
+        'post.pinned',
         'image',
         'categories',
       ])
@@ -51,6 +52,7 @@ export class PostRepository extends Repository<PostEntity> {
         'post.likeCount',
         'post.modifier',
         'post.type',
+        'post.pinned',
         'image',
         'categories',
       ])
