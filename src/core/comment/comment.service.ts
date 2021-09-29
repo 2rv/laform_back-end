@@ -9,6 +9,8 @@ import { CommentEntity, SubCommentEntity } from './comment.entity';
 import { COMMENT_ERROR } from './enum/comment.enum';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { SubCommentDto } from './dto/sub-comment.dto';
+import { UserEntity } from '../user/user.entity';
+import { USER_ROLE } from '../user/enum/user-role.enum';
 
 @Injectable()
 export class CommentService {
@@ -22,13 +24,18 @@ export class CommentService {
     return await this.commentRepository.findOneComment(result.id);
   }
 
-  async delete(id: string, userId: number) {
+  async delete(id: string, user: UserEntity) {
+    if (user.role === USER_ROLE.ADMIN) {
+      return await this.commentRepository.delete(id);
+    }
+
     const result = await this.commentRepository.findOne({
       where: {
         id: id,
-        userId: userId,
+        userId: user.id,
       },
     });
+
     if (!result) {
       throw new BadRequestException(COMMENT_ERROR.COMMENT_NOT_FOUND);
     } else return await this.commentRepository.delete(id);
@@ -39,11 +46,15 @@ export class CommentService {
     return await this.subCommentRepository.findOneSubComment(result.id);
   }
 
-  async deleteSub(id: string, userId: any) {
+  async deleteSub(id: string, user: UserEntity) {
+    if (user.role === USER_ROLE.ADMIN) {
+      return await this.subCommentRepository.delete(id);
+    }
+
     const result = await this.subCommentRepository.findOne({
       where: {
         id: id,
-        userId: userId,
+        userId: user.id,
       },
     });
     if (!result) {

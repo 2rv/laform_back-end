@@ -70,7 +70,6 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
         'color',
         'size.id',
         'size.vendorCode',
-        'size.count',
         'size.size',
         'size.price',
         'size_file_pdf',

@@ -4,8 +4,10 @@ import { EntityRepository, Repository } from 'typeorm';
 @EntityRepository(PurchaseEntity)
 export class PurchaseRepository extends Repository<PurchaseEntity> {
   async getAll(size: number, page: number): Promise<PurchaseEntity[]> {
-    const take = size || 10;
-    const skip = (page - 1) * size || 0;
+    // const take = size || 10;
+    // const skip = (page - 1) * size || 0;
+    // .limit(take)
+    // .offset(skip)
 
     return await this.createQueryBuilder('purchase')
       .leftJoin('purchase.userId', 'user')
@@ -14,8 +16,6 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
         'purchase.purchaseProducts',
       )
       .select(['purchase', 'user.id'])
-      .limit(take)
-      .offset(skip)
       .getMany();
   }
 
@@ -24,8 +24,10 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
     page: number,
     userId,
   ): Promise<PurchaseEntity[]> {
-    const take = size || 10;
-    const skip = (page - 1) * size || 0;
+    // const take = size || 10;
+    // const skip = (page - 1) * size || 0;
+    // .limit(take)
+    // .offset(skip)
 
     return await this.createQueryBuilder('purchase')
       .leftJoin('purchase.purchaseProducts', 'purchase_products')
@@ -72,14 +74,11 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
         'selected_color',
         'selected_size.id',
         'selected_size.vendorCode',
-        'selected_size.count',
         'selected_size.size',
         'selected_size.price',
         'selected_size_file_pdf',
       ])
       .where('purchase.userId = :userId', { userId })
-      .limit(take)
-      .offset(skip)
       .getMany();
   }
 
@@ -120,7 +119,6 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
         'selected_color',
         'selected_size.id',
         'selected_size.vendorCode',
-        'selected_size.count',
         'selected_size.size',
         'selected_size.price',
 

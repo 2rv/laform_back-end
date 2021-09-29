@@ -22,11 +22,6 @@ export class CreateSizeDto {
   vendorCode: string;
 
   @IsOptional()
-  @IsNumber()
-  @Min(0)
-  count: number;
-
-  @IsOptional()
   @IsArray()
   @MinLength(1)
   filePdf: FileDto;
