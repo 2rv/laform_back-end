@@ -12,7 +12,6 @@ import { GetAccount } from '../user/decorator/get-account.decorator';
 import { UserEntity } from '../user/user.entity';
 
 import { UserSettingsUpdatePasswordDto } from './dto/user-settings-update-password.dto';
-import { UserSettingsUpdateEmailDto } from './dto/user-settings-update-email.dto';
 import { PasswordGuard } from './guard/password.guard';
 import { UserSettingsService } from './user-settings.service';
 
@@ -37,7 +36,7 @@ export class UserSettingsController {
   @UseGuards(AuthGuard(), AccountGuard, PasswordGuard)
   async updateUserEmail(
     @GetAccount() user: UserEntity,
-    @Body(ValidationPipe) data: UserSettingsUpdateEmailDto,
+    @Body(ValidationPipe) data: any,
   ): Promise<void> {
     return this.userSettingsService.updateEmail(user, data);
   }

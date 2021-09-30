@@ -30,7 +30,6 @@ export class UserVerificationService {
       throw new BadRequestException(
         USER_VERIFICATION_ERROR.USER_VERIFICATION_EMAIL_ALREADY_CONFIRMED,
       );
-      return;
     }
 
     const data: UserVerificationEmailPayload = {
@@ -67,8 +66,8 @@ export class UserVerificationService {
         USER_VERIFICATION_ERROR.VERIFICATION_CODE_PAYLOAD_HAS_WRONG_EMAIL,
       );
     }
-    await this.userRepository.confirmEmailById(user.id);
-    await this.notificationService.subscribeAuthtorized(user, {
+    const updatedUser = await this.userRepository.confirmEmailById(user);
+    await this.notificationService.subscribeAuthtorized(updatedUser, {
       subscribe: true,
     });
 
