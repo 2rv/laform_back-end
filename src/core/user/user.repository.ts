@@ -145,9 +145,7 @@ export class UserRepository extends Repository<UserEntity> {
     }
   }
 
-  async changeEmail(user: UserEntity, data: UserChangeEmailDto): Promise<void> {
-    const { email } = data;
-
+  async changeEmail(user: UserEntity, email: string): Promise<void> {
     user.email = email;
     user.emailConfirmed = false;
     try {
@@ -161,10 +159,12 @@ export class UserRepository extends Repository<UserEntity> {
     }
   }
 
-  async confirmEmailById(userId: number): Promise<void> {
+  async confirmEmailById(user: UserEntity): Promise<UserEntity> {
+    user.emailConfirmed = true;
     try {
-      this.update(userId, { emailConfirmed: true });
-    } catch {
+      await user.save();
+      return user;
+    } catch (err) {
       throw new BadRequestException();
     }
   }
