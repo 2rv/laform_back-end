@@ -23,22 +23,68 @@ export class MasterClassService {
     query: string,
     size: number,
     page: number,
-  ): Promise<MasterClassEntity[]> {
+    sort: string,
+    by: string,
+    where: string,
+  ): Promise<[MasterClassEntity[], number]> {
+    if (sort === 'title') {
+      if (query === 'ru') {
+        sort = 'master_class.titleRu';
+      } else if (query === 'en') {
+        sort = 'master_class.titleEn';
+      }
+    } else sort = '';
     if (query === 'ru')
-      return await this.masterClassRepository.findAllRu(size, page);
+      return await this.masterClassRepository.findAllRu(
+        size,
+        page,
+        sort,
+        by,
+        where,
+      );
     if (query === 'en')
-      return await this.masterClassRepository.findAllEn(size, page);
+      return await this.masterClassRepository.findAllEn(
+        size,
+        page,
+        sort,
+        by,
+        where,
+      );
   }
   async getAllAuth(
     query: string,
     size: number,
     page: number,
+    sort: string,
+    by: string,
+    where: string,
     userId: number,
-  ): Promise<MasterClassEntity[]> {
+  ): Promise<[MasterClassEntity[], number]> {
+    if (sort === 'title') {
+      if (query === 'ru') {
+        sort = 'master_class.titleRu';
+      } else if (query === 'en') {
+        sort = 'master_class.titleEn';
+      }
+    } else sort = '';
     if (query === 'ru')
-      return await this.masterClassRepository.findAllRuAuth(size, page, userId);
+      return await this.masterClassRepository.findAllRuAuth(
+        size,
+        page,
+        sort,
+        by,
+        where,
+        userId,
+      );
     if (query === 'en')
-      return await this.masterClassRepository.findAllEnAuth(size, page, userId);
+      return await this.masterClassRepository.findAllEnAuth(
+        size,
+        page,
+        sort,
+        by,
+        where,
+        userId,
+      );
   }
 
   async getOne(id: string, query: string): Promise<MasterClassEntity> {

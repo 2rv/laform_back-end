@@ -19,46 +19,62 @@ export class PostService {
     query: string,
     size: number,
     page: number,
-    //sort: string,
-    //by: string,
-  ): Promise<PostEntity[]> {
-    /* if (sort === 'title') {
+    sort: string,
+    by: string,
+    where: string,
+  ): Promise<[PostEntity[], number]> {
+    if (sort === 'title') {
+      if (query === 'ru') {
         sort = 'post.titleRu';
-      }
-      if (sort === 'category') {
-        sort = 'category_id.textRu';
-      }
-      if (sort === 'date') {
-        sort = 'post.createdDate';
-      }
-      if (sort === 'like') {
-        sort = 'post.likeCount';
-      } else sort === ''; */
-    if (query === 'ru') return await this.postRepository.findAllRu(size, page);
-    /* if (sort === 'title') {
+      } else if (query === 'en') {
         sort = 'post.titleEn';
       }
-      if (sort === 'category') {
-        sort = 'category_id.textEn';
-      }
-      if (sort === 'date') {
-        sort = 'post.createdDate';
-      }
-      if (sort === 'like') {
-        sort = 'post.likeCount';
-      } else sort === ''; */
-    if (query === 'en') return await this.postRepository.findAllEn(size, page);
+    } else if (sort === 'date') {
+      sort = 'post.createdDate';
+    } else sort = '';
+
+    if (query === 'ru')
+      return await this.postRepository.findAllRu(size, page, sort, by, where);
+    if (query === 'en')
+      return await this.postRepository.findAllEn(size, page, sort, by, where);
   }
   async getAllAuth(
     query: string,
     size: number,
     page: number,
+    sort: string,
+    by: string,
+    where: string,
     userId: number,
-  ): Promise<PostEntity[]> {
+  ): Promise<[PostEntity[], number]> {
+    if (sort === 'title') {
+      if (query === 'ru') {
+        sort = 'post.titleRu';
+      } else if (query === 'en') {
+        sort = 'post.titleEn';
+      }
+    } else if (sort === 'date') {
+      sort = 'post.createdDate';
+    } else sort = '';
+
     if (query === 'ru')
-      return await this.postRepository.findAllRuAuth(size, page, userId);
+      return await this.postRepository.findAllRuAuth(
+        size,
+        page,
+        sort,
+        by,
+        where,
+        userId,
+      );
     if (query === 'en')
-      return await this.postRepository.findAllEnAuth(size, page, userId);
+      return await this.postRepository.findAllEnAuth(
+        size,
+        page,
+        sort,
+        by,
+        where,
+        userId,
+      );
   }
 
   async getOne(id: string, query: string): Promise<PostEntity> {

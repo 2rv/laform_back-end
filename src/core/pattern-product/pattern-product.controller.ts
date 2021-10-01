@@ -37,22 +37,42 @@ export class PatternProductController {
   async getAll(
     @Query(new LangValidationPipe()) query: string,
     @Query('size') size: number,
+    @Query('sort') sort: string,
     @Query('page') page: number,
+    @Query('by') by: any,
+    @Query('where') where: string,
+    @Query('type') type: string,
   ) {
-    return await this.patternProductService.getAll(query, size, page);
+    return await this.patternProductService.getAll(
+      query,
+      size,
+      page,
+      sort,
+      by,
+      where,
+      type,
+    );
   }
   @Get('/auth/get/')
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getAllAuth(
     @Query(new LangValidationPipe()) query: string,
     @Query('size') size: number,
+    @Query('sort') sort: string,
     @Query('page') page: number,
+    @Query('by') by: any,
+    @Query('where') where: string,
+    @Query('type') type: string,
     @GetAccount() user: UserEntity,
   ) {
     return await this.patternProductService.getAllAuth(
       query,
       size,
       page,
+      sort,
+      by,
+      where,
+      type,
       user.id,
     );
   }

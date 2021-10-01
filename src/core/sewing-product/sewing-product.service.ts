@@ -23,28 +23,68 @@ export class SewingProductService {
     query: string,
     size: number,
     page: number,
-  ): Promise<SewingProductEntity[]> {
+    sort: string,
+    by: string,
+    where: string,
+  ): Promise<[SewingProductEntity[], number]> {
+    if (sort === 'title') {
+      if (query === 'ru') {
+        sort = 'sewing_product.titleRu';
+      } else if (query === 'en') {
+        sort = 'sewing_product.titleEn';
+      }
+    } else sort = '';
+
     if (query === 'ru')
-      return await this.sewingProductRepository.findAllRu(size, page);
+      return await this.sewingProductRepository.findAllRu(
+        size,
+        page,
+        sort,
+        by,
+        where,
+      );
     if (query === 'en')
-      return await this.sewingProductRepository.findAllEn(size, page);
+      return await this.sewingProductRepository.findAllEn(
+        size,
+        page,
+        sort,
+        by,
+        where,
+      );
   }
   async getAllAuth(
     query: string,
     size: number,
     page: number,
+    sort: string,
+    by: string,
+    where: string,
     userId: number,
-  ): Promise<SewingProductEntity[]> {
+  ): Promise<[SewingProductEntity[], number]> {
+    if (sort === 'title') {
+      if (query === 'ru') {
+        sort = 'sewing_product.titleRu';
+      } else if (query === 'en') {
+        sort = 'sewing_product.titleEn';
+      }
+    } else sort = '';
+
     if (query === 'ru')
       return await this.sewingProductRepository.findAllRuAuth(
         size,
         page,
+        sort,
+        by,
+        where,
         userId,
       );
     if (query === 'en')
       return await this.sewingProductRepository.findAllEnAuth(
         size,
         page,
+        sort,
+        by,
+        where,
         userId,
       );
   }
