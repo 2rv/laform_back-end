@@ -1,13 +1,16 @@
 import { PatternProductEntity } from './pattern-product.entity';
-import { EntityRepository, Repository } from 'typeorm';
+import { Brackets, EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(PatternProductEntity)
 export class PatternProductRepository extends Repository<PatternProductEntity> {
-  async findAllRu(size: number, page: number): Promise<PatternProductEntity[]> {
-    // const take = size || 100;
-    // const skip = (page - 1) * size || 0;
-    // .limit(take)
-    // .offset(skip)
+  async findAllRu(
+    size: number = 30,
+    page: number = 1,
+    sort: string,
+    by: any = 'ASC',
+    where: string,
+    type: string,
+  ): Promise<[PatternProductEntity[], number]> {
     return await this.createQueryBuilder('pattern_product')
       .leftJoin('pattern_product.images', 'images')
       .leftJoin('pattern_product.sizes', 'sizes')
@@ -25,14 +28,37 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'sizes.price',
         'categories',
       ])
+      .orderBy(sort, by)
+      .take(size)
+      .skip(page > 0 ? page - 1 : 0)
       .where('pattern_product.deleted = false')
-      .getMany();
+      .andWhere(
+        new Brackets((qb) => {
+          if (where) {
+            qb.where('pattern_product.titleRu ILIKE :search', {
+              search: `%${where}%`,
+            }).orWhere('categories.textRu ILIKE :search', {
+              search: `%${where}%`,
+            });
+          } else if (type) {
+            qb.where('pattern_product.type = :type', {
+              type: type,
+            });
+          } else {
+            qb.where('pattern_product.deleted = false');
+          }
+        }),
+      )
+      .getManyAndCount();
   }
-  async findAllEn(size: number, page: number): Promise<PatternProductEntity[]> {
-    // const take = size || 100;
-    // const skip = (page - 1) * size || 0;
-    // .limit(take)
-    // .offset(skip)
+  async findAllEn(
+    size: number = 30,
+    page: number = 1,
+    sort: string,
+    by: any = 'ASC',
+    where: string,
+    type: string,
+  ): Promise<[PatternProductEntity[], number]> {
     return await this.createQueryBuilder('pattern_product')
       .leftJoin('pattern_product.images', 'images')
       .leftJoin('pattern_product.sizes', 'sizes')
@@ -50,18 +76,38 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'sizes.price',
         'categories',
       ])
+      .orderBy(sort, by)
+      .take(size)
+      .skip(page > 0 ? page - 1 : 0)
       .where('pattern_product.deleted = false')
-      .getMany();
+      .andWhere(
+        new Brackets((qb) => {
+          if (where) {
+            qb.where('pattern_product.titleEn ILIKE :search', {
+              search: `%${where}%`,
+            }).orWhere('categories.textEn ILIKE :search', {
+              search: `%${where}%`,
+            });
+          } else if (type) {
+            qb.where('pattern_product.type = :type', {
+              type: type,
+            });
+          } else {
+            qb.where('pattern_product.deleted = false');
+          }
+        }),
+      )
+      .getManyAndCount();
   }
   async findAllRuAuth(
-    size: number,
-    page: number,
+    size: number = 30,
+    page: number = 1,
+    sort: string,
+    by: any = 'ASC',
+    where: string,
+    type: string,
     userId: number,
-  ): Promise<PatternProductEntity[]> {
-    // const take = size || 100;
-    // const skip = (page - 1) * size || 0;
-    // .limit(take)
-    // .offset(skip)
+  ): Promise<[PatternProductEntity[], number]> {
     return await this.createQueryBuilder('pattern_product')
       .leftJoin('pattern_product.images', 'images')
       .leftJoin('pattern_product.sizes', 'sizes')
@@ -81,18 +127,38 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'categories',
         'like',
       ])
+      .orderBy(sort, by)
+      .take(size)
+      .skip(page > 0 ? page - 1 : 0)
       .where('pattern_product.deleted = false')
-      .getMany();
+      .andWhere(
+        new Brackets((qb) => {
+          if (where) {
+            qb.where('pattern_product.titleRu ILIKE :search', {
+              search: `%${where}%`,
+            }).orWhere('categories.textRu ILIKE :search', {
+              search: `%${where}%`,
+            });
+          } else if (type) {
+            qb.where('pattern_product.type = :type', {
+              type: type,
+            });
+          } else {
+            qb.where('pattern_product.deleted = false');
+          }
+        }),
+      )
+      .getManyAndCount();
   }
   async findAllEnAuth(
-    size: number,
-    page: number,
+    size: number = 30,
+    page: number = 1,
+    sort: string,
+    by: any = 'ASC',
+    where: string,
+    type: string,
     userId: number,
-  ): Promise<PatternProductEntity[]> {
-    // const take = size || 100;
-    // const skip = (page - 1) * size || 0;
-    // .limit(take)
-    // .offset(skip)
+  ): Promise<[PatternProductEntity[], number]> {
     return await this.createQueryBuilder('pattern_product')
       .leftJoin('pattern_product.images', 'images')
       .leftJoin('pattern_product.sizes', 'sizes')
@@ -112,8 +178,28 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'categories',
         'like',
       ])
+      .orderBy(sort, by)
+      .take(size)
+      .skip(page > 0 ? page - 1 : 0)
       .where('pattern_product.deleted = false')
-      .getMany();
+      .andWhere(
+        new Brackets((qb) => {
+          if (where) {
+            qb.where('pattern_product.titleEn ILIKE :search', {
+              search: `%${where}%`,
+            }).orWhere('categories.textEn ILIKE :search', {
+              search: `%${where}%`,
+            });
+          } else if (type) {
+            qb.where('pattern_product.type = :type', {
+              type: type,
+            });
+          } else {
+            qb.where('pattern_product.deleted = false');
+          }
+        }),
+      )
+      .getManyAndCount();
   }
 
   async findOneRu(id: string): Promise<PatternProductEntity> {

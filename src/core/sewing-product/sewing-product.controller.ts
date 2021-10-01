@@ -38,22 +38,38 @@ export class SewingProductController {
   async getAll(
     @Query(new LangValidationPipe()) query: string,
     @Query('size') size: number,
+    @Query('sort') sort: string,
     @Query('page') page: number,
+    @Query('by') by: any,
+    @Query('where') where: string,
   ) {
-    return await this.sewingProductService.getAll(query, size, page);
+    return await this.sewingProductService.getAll(
+      query,
+      size,
+      page,
+      sort,
+      by,
+      where,
+    );
   }
   @Get('/auth/get/')
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getAllAuth(
     @Query(new LangValidationPipe()) query: string,
     @Query('size') size: number,
+    @Query('sort') sort: string,
     @Query('page') page: number,
+    @Query('by') by: any,
+    @Query('where') where: string,
     @GetAccount() user: UserEntity,
   ) {
     return await this.sewingProductService.getAllAuth(
       query,
       size,
       page,
+      sort,
+      by,
+      where,
       user.id,
     );
   }

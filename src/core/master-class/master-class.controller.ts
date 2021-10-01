@@ -37,9 +37,19 @@ export class MasterClassController {
   async getAll(
     @Query(new LangValidationPipe()) query: string,
     @Query('size') size: number,
+    @Query('sort') sort: string,
     @Query('page') page: number,
+    @Query('by') by: any,
+    @Query('where') where: string,
   ) {
-    return await this.masterClassService.getAll(query, size, page);
+    return await this.masterClassService.getAll(
+      query,
+      size,
+      page,
+      sort,
+      by,
+      where,
+    );
   }
 
   @Get('/auth/get/')
@@ -47,10 +57,21 @@ export class MasterClassController {
   async getAllAuth(
     @Query(new LangValidationPipe()) query: string,
     @Query('size') size: number,
+    @Query('sort') sort: string,
     @Query('page') page: number,
+    @Query('by') by: any,
+    @Query('where') where: string,
     @GetAccount() user: UserEntity,
   ) {
-    return await this.masterClassService.getAllAuth(query, size, page, user.id);
+    return await this.masterClassService.getAllAuth(
+      query,
+      size,
+      page,
+      sort,
+      by,
+      where,
+      user.id,
+    );
   }
 
   @Get('/get/:masterClassId')

@@ -1,13 +1,15 @@
 import { SewingProductEntity } from './sewing-product.entity';
-import { EntityRepository, Repository } from 'typeorm';
+import { Brackets, EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(SewingProductEntity)
 export class SewingProductRepository extends Repository<SewingProductEntity> {
-  async findAllRu(size: number, page: number): Promise<SewingProductEntity[]> {
-    // const take = size || 200;
-    // const skip = (page - 1) * size || 0;
-    // .limit(take)
-    // .offset(skip)
+  async findAllRu(
+    size: number = 30,
+    page: number = 1,
+    sort: string,
+    by: any = 'ASC',
+    where: string,
+  ): Promise<[SewingProductEntity[], number]> {
     return await this.createQueryBuilder('sewing_product')
       .leftJoin('sewing_product.images', 'images')
       .leftJoin('sewing_product.categories', 'categories')
@@ -24,14 +26,32 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sizes.id',
         'sizes.price',
       ])
+      .orderBy(sort, by)
+      .take(size)
+      .skip(page > 0 ? page - 1 : 0)
       .where('sewing_product.deleted = false')
-      .getMany();
+      .andWhere(
+        new Brackets((qb) => {
+          if (where) {
+            qb.where('sewing_product.titleRu ILIKE :search', {
+              search: `%${where}%`,
+            }).orWhere('categories.textRu ILIKE :search', {
+              search: `%${where}%`,
+            });
+          } else {
+            qb.where('sewing_product.deleted = false');
+          }
+        }),
+      )
+      .getManyAndCount();
   }
-  async findAllEn(size: number, page: number): Promise<SewingProductEntity[]> {
-    // const take = size || 200;
-    // const skip = (page - 1) * size || 0;
-    // .limit(take)
-    // .offset(skip)
+  async findAllEn(
+    size: number = 30,
+    page: number = 1,
+    sort: string,
+    by: any = 'ASC',
+    where: string,
+  ): Promise<[SewingProductEntity[], number]> {
     return await this.createQueryBuilder('sewing_product')
       .leftJoin('sewing_product.images', 'images')
       .leftJoin('sewing_product.categories', 'categories')
@@ -48,18 +68,33 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sizes.id',
         'sizes.price',
       ])
+      .orderBy(sort, by)
+      .take(size)
+      .skip(page > 0 ? page - 1 : 0)
       .where('sewing_product.deleted = false')
-      .getMany();
+      .andWhere(
+        new Brackets((qb) => {
+          if (where) {
+            qb.where('sewing_product.titleEn ILIKE :search', {
+              search: `%${where}%`,
+            }).orWhere('categories.textEn ILIKE :search', {
+              search: `%${where}%`,
+            });
+          } else {
+            qb.where('sewing_product.deleted = false');
+          }
+        }),
+      )
+      .getManyAndCount();
   }
   async findAllRuAuth(
-    size: number,
-    page: number,
+    size: number = 30,
+    page: number = 1,
+    sort: string,
+    by: any = 'ASC',
+    where: string,
     userId: number,
-  ): Promise<SewingProductEntity[]> {
-    // const take = size || 100;
-    // const skip = (page - 1) * size || 0;
-    // .limit(take)
-    // .offset(skip)
+  ): Promise<[SewingProductEntity[], number]> {
     return await this.createQueryBuilder('sewing_product')
       .leftJoin('sewing_product.images', 'images')
       .leftJoin('sewing_product.categories', 'categories')
@@ -79,18 +114,33 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sizes.price',
         'like',
       ])
+      .orderBy(sort, by)
+      .take(size)
+      .skip(page > 0 ? page - 1 : 0)
       .where('sewing_product.deleted = false')
-      .getMany();
+      .andWhere(
+        new Brackets((qb) => {
+          if (where) {
+            qb.where('sewing_product.titleRu ILIKE :search', {
+              search: `%${where}%`,
+            }).orWhere('categories.textRu ILIKE :search', {
+              search: `%${where}%`,
+            });
+          } else {
+            qb.where('sewing_product.deleted = false');
+          }
+        }),
+      )
+      .getManyAndCount();
   }
   async findAllEnAuth(
-    size: number,
-    page: number,
+    size: number = 30,
+    page: number = 1,
+    sort: string,
+    by: any = 'ASC',
+    where: string,
     userId: number,
-  ): Promise<SewingProductEntity[]> {
-    // const take = size || 100;
-    // const skip = (page - 1) * size || 0;
-    // .limit(take)
-    // .offset(skip)
+  ): Promise<[SewingProductEntity[], number]> {
     return await this.createQueryBuilder('sewing_product')
       .leftJoin('sewing_product.images', 'images')
       .leftJoin('sewing_product.categories', 'categories')
@@ -110,8 +160,24 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sizes.price',
         'like',
       ])
+      .orderBy(sort, by)
+      .take(size)
+      .skip(page > 0 ? page - 1 : 0)
       .where('sewing_product.deleted = false')
-      .getMany();
+      .andWhere(
+        new Brackets((qb) => {
+          if (where) {
+            qb.where('sewing_product.titleEn ILIKE :search', {
+              search: `%${where}%`,
+            }).orWhere('categories.textEn ILIKE :search', {
+              search: `%${where}%`,
+            });
+          } else {
+            qb.where('sewing_product.deleted = false');
+          }
+        }),
+      )
+      .getManyAndCount();
   }
 
   async findOneRu(id: string): Promise<SewingProductEntity> {
