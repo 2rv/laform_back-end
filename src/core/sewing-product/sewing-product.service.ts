@@ -26,7 +26,7 @@ export class SewingProductService {
     sort: string,
     by: string,
     where: string,
-  ): Promise<[SewingProductEntity[], number]> {
+  ): Promise<SewingProductEntity[]> {
     if (sort === 'title') {
       if (query === 'ru') {
         sort = 'sewing_product.titleRu';
@@ -60,7 +60,7 @@ export class SewingProductService {
     by: string,
     where: string,
     userId: number,
-  ): Promise<[SewingProductEntity[], number]> {
+  ): Promise<SewingProductEntity[]> {
     if (sort === 'title') {
       if (query === 'ru') {
         sort = 'sewing_product.titleRu';

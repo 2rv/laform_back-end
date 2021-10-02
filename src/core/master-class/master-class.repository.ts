@@ -9,7 +9,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
     sort: string,
     by: any = 'ASC',
     where: string,
-  ): Promise<[MasterClassEntity[], number]> {
+  ): Promise<MasterClassEntity[]> {
     return await this.createQueryBuilder('master_class')
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.categories', 'categories')
@@ -27,8 +27,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'programs.price',
       ])
       .orderBy(sort, by)
-      .take(size)
-      .skip(page > 0 ? page - 1 : 0)
+      //   .take(size)
+      //   .skip(page > 0 ? page - 1 : 0)
       .where('master_class.deleted = false')
       .andWhere(
         new Brackets((qb) => {
@@ -43,7 +43,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
           }
         }),
       )
-      .getManyAndCount();
+      //   .getManyAndCount();
+      .getMany();
   }
   async findAllEn(
     size: number = 30,
@@ -51,7 +52,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
     sort: string,
     by: any = 'ASC',
     where: string,
-  ): Promise<[MasterClassEntity[], number]> {
+  ): Promise<MasterClassEntity[]> {
     return await this.createQueryBuilder('master_class')
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.categories', 'categories')
@@ -69,8 +70,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'programs.price',
       ])
       .orderBy(sort, by)
-      .take(size)
-      .skip(page > 0 ? page - 1 : 0)
+      //   .take(size)
+      //   .skip(page > 0 ? page - 1 : 0)
       .where('master_class.deleted = false')
       .andWhere(
         new Brackets((qb) => {
@@ -85,16 +86,17 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
           }
         }),
       )
-      .getManyAndCount();
+      //   .getManyAndCount();
+      .getMany();
   }
   async findAllRuAuth(
-    size: number = 30,
+    size: number = 2,
     page: number = 1,
     sort: string,
-    by: any = 'ASC',
+    by: any,
     where: string,
     userId: number,
-  ): Promise<[MasterClassEntity[], number]> {
+  ): Promise<MasterClassEntity[]> {
     return await this.createQueryBuilder('master_class')
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.categories', 'categories')
@@ -115,8 +117,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'like',
       ])
       .orderBy(sort, by)
-      .take(size)
-      .skip(page > 0 ? page - 1 : 0)
+      //   .take(page * size)
+      //   .skip(page)
       .where('master_class.deleted = false')
       .andWhere(
         new Brackets((qb) => {
@@ -131,7 +133,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
           }
         }),
       )
-      .getManyAndCount();
+      //   .getManyAndCount();
+      .getMany();
   }
   async findAllEnAuth(
     size: number = 30,
@@ -140,7 +143,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
     by: any = 'ASC',
     where: string,
     userId: number,
-  ): Promise<[MasterClassEntity[], number]> {
+  ): Promise<MasterClassEntity[]> {
     return await this.createQueryBuilder('master_class')
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.categories', 'categories')
@@ -161,8 +164,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'like',
       ])
       .orderBy(sort, by)
-      .take(size)
-      .skip(page > 0 ? page - 1 : 0)
+      //   .take(size)
+      //   .skip(page > 0 ? page - 1 : 0)
       .where('master_class.deleted = false')
       .andWhere(
         new Brackets((qb) => {
@@ -177,7 +180,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
           }
         }),
       )
-      .getManyAndCount();
+      //    .getManyAndCount();
+      .getMany();
   }
 
   async findOneRu(id: string): Promise<MasterClassEntity> {

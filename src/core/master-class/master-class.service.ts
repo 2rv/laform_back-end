@@ -26,7 +26,7 @@ export class MasterClassService {
     sort: string,
     by: string,
     where: string,
-  ): Promise<[MasterClassEntity[], number]> {
+  ): Promise<MasterClassEntity[]> {
     if (sort === 'title') {
       if (query === 'ru') {
         sort = 'master_class.titleRu';
@@ -59,7 +59,7 @@ export class MasterClassService {
     by: string,
     where: string,
     userId: number,
-  ): Promise<[MasterClassEntity[], number]> {
+  ): Promise<MasterClassEntity[]> {
     if (sort === 'title') {
       if (query === 'ru') {
         sort = 'master_class.titleRu';

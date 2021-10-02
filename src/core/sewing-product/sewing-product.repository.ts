@@ -9,7 +9,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
     sort: string,
     by: any = 'ASC',
     where: string,
-  ): Promise<[SewingProductEntity[], number]> {
+  ): Promise<SewingProductEntity[]> {
     return await this.createQueryBuilder('sewing_product')
       .leftJoin('sewing_product.images', 'images')
       .leftJoin('sewing_product.categories', 'categories')
@@ -27,8 +27,8 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sizes.price',
       ])
       .orderBy(sort, by)
-      .take(size)
-      .skip(page > 0 ? page - 1 : 0)
+      //   .take(size)
+      //   .skip(page > 0 ? page - 1 : 0)
       .where('sewing_product.deleted = false')
       .andWhere(
         new Brackets((qb) => {
@@ -43,7 +43,8 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
           }
         }),
       )
-      .getManyAndCount();
+      //   .getManyAndCount();
+      .getMany();
   }
   async findAllEn(
     size: number = 30,
@@ -51,7 +52,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
     sort: string,
     by: any = 'ASC',
     where: string,
-  ): Promise<[SewingProductEntity[], number]> {
+  ): Promise<SewingProductEntity[]> {
     return await this.createQueryBuilder('sewing_product')
       .leftJoin('sewing_product.images', 'images')
       .leftJoin('sewing_product.categories', 'categories')
@@ -69,8 +70,8 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sizes.price',
       ])
       .orderBy(sort, by)
-      .take(size)
-      .skip(page > 0 ? page - 1 : 0)
+      //   .take(size)
+      //   .skip(page > 0 ? page - 1 : 0)
       .where('sewing_product.deleted = false')
       .andWhere(
         new Brackets((qb) => {
@@ -85,7 +86,8 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
           }
         }),
       )
-      .getManyAndCount();
+      //   .getManyAndCount();
+      .getMany();
   }
   async findAllRuAuth(
     size: number = 30,
@@ -94,7 +96,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
     by: any = 'ASC',
     where: string,
     userId: number,
-  ): Promise<[SewingProductEntity[], number]> {
+  ): Promise<SewingProductEntity[]> {
     return await this.createQueryBuilder('sewing_product')
       .leftJoin('sewing_product.images', 'images')
       .leftJoin('sewing_product.categories', 'categories')
@@ -115,8 +117,8 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'like',
       ])
       .orderBy(sort, by)
-      .take(size)
-      .skip(page > 0 ? page - 1 : 0)
+      //   .take(size)
+      //   .skip(page > 0 ? page - 1 : 0)
       .where('sewing_product.deleted = false')
       .andWhere(
         new Brackets((qb) => {
@@ -131,7 +133,8 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
           }
         }),
       )
-      .getManyAndCount();
+      //   .getManyAndCount();
+      .getMany();
   }
   async findAllEnAuth(
     size: number = 30,
@@ -140,7 +143,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
     by: any = 'ASC',
     where: string,
     userId: number,
-  ): Promise<[SewingProductEntity[], number]> {
+  ): Promise<SewingProductEntity[]> {
     return await this.createQueryBuilder('sewing_product')
       .leftJoin('sewing_product.images', 'images')
       .leftJoin('sewing_product.categories', 'categories')
@@ -161,8 +164,8 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'like',
       ])
       .orderBy(sort, by)
-      .take(size)
-      .skip(page > 0 ? page - 1 : 0)
+      //   .take(size)
+      //   .skip(page > 0 ? page - 1 : 0)
       .where('sewing_product.deleted = false')
       .andWhere(
         new Brackets((qb) => {
@@ -177,7 +180,8 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
           }
         }),
       )
-      .getManyAndCount();
+      //   .getManyAndCount();
+      .getMany();
   }
 
   async findOneRu(id: string): Promise<SewingProductEntity> {
