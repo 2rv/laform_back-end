@@ -9,7 +9,7 @@ export class PostRepository extends Repository<PostEntity> {
     sort: string,
     by: any = 'ASC',
     where: string,
-  ): Promise<[PostEntity[], number]> {
+  ): Promise<PostEntity[]> {
     return await this.createQueryBuilder('post')
       .leftJoin('post.image', 'image')
       .leftJoin('post.categories', 'categories')
@@ -25,8 +25,8 @@ export class PostRepository extends Repository<PostEntity> {
         'categories',
       ])
       .orderBy(sort, by)
-      .take(size)
-      .skip(page > 0 ? page - 1 : 0)
+      //   .take(size)
+      //   .skip(page > 0 ? page - 1 : 0)
       .where('post.deleted = false')
       .andWhere(
         new Brackets((qb) => {
@@ -41,7 +41,8 @@ export class PostRepository extends Repository<PostEntity> {
           }
         }),
       )
-      .getManyAndCount();
+      //   .getManyAndCount();
+      .getMany();
   }
   async findAllEn(
     size: number = 30,
@@ -49,7 +50,7 @@ export class PostRepository extends Repository<PostEntity> {
     sort: string,
     by: any = 'ASC',
     where: string,
-  ): Promise<[PostEntity[], number]> {
+  ): Promise<PostEntity[]> {
     return await this.createQueryBuilder('post')
       .leftJoin('post.image', 'image')
       .leftJoin('post.categories', 'categories')
@@ -65,8 +66,8 @@ export class PostRepository extends Repository<PostEntity> {
         'categories',
       ])
       .orderBy(sort, by)
-      .take(size)
-      .skip(page > 0 ? page - 1 : 0)
+      //   .take(size)
+      //   .skip(page > 0 ? page - 1 : 0)
       .where('post.deleted = false')
       .andWhere(
         new Brackets((qb) => {
@@ -81,7 +82,8 @@ export class PostRepository extends Repository<PostEntity> {
           }
         }),
       )
-      .getManyAndCount();
+      //   .getManyAndCount();
+      .getMany();
   }
   async findAllRuAuth(
     size: number = 30,
@@ -90,7 +92,7 @@ export class PostRepository extends Repository<PostEntity> {
     by: any = 'ASC',
     where: string,
     userId: number,
-  ): Promise<[PostEntity[], number]> {
+  ): Promise<PostEntity[]> {
     return await this.createQueryBuilder('post')
       .leftJoin('post.image', 'image')
       .leftJoin('post.categories', 'categories')
@@ -107,8 +109,8 @@ export class PostRepository extends Repository<PostEntity> {
         'like',
       ])
       .orderBy(sort, by)
-      .take(size)
-      .skip(page > 0 ? page - 1 : 0)
+      //   .take(size)
+      //   .skip(page > 0 ? page - 1 : 0)
       .where('post.deleted = false')
       .andWhere(
         new Brackets((qb) => {
@@ -123,7 +125,8 @@ export class PostRepository extends Repository<PostEntity> {
           }
         }),
       )
-      .getManyAndCount();
+      //   .getManyAndCount();
+      .getMany();
   }
   async findAllEnAuth(
     size: number = 30,
@@ -132,7 +135,7 @@ export class PostRepository extends Repository<PostEntity> {
     by: any = 'ASC',
     where: string,
     userId: number,
-  ): Promise<[PostEntity[], number]> {
+  ): Promise<PostEntity[]> {
     return await this.createQueryBuilder('post')
       .leftJoin('post.image', 'image')
       .leftJoin('post.categories', 'categories')
@@ -149,8 +152,8 @@ export class PostRepository extends Repository<PostEntity> {
         'like',
       ])
       .orderBy(sort, by)
-      .take(size)
-      .skip(page > 0 ? page - 1 : 0)
+      //   .take(size)
+      //   .skip(page > 0 ? page - 1 : 0)
       .where('post.deleted = false')
       .andWhere(
         new Brackets((qb) => {
@@ -165,7 +168,8 @@ export class PostRepository extends Repository<PostEntity> {
           }
         }),
       )
-      .getManyAndCount();
+      //   .getManyAndCount();
+      .getMany();
   }
 
   async findOneRu(id: string): Promise<PostEntity> {

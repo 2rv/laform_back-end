@@ -22,7 +22,7 @@ export class PostService {
     sort: string,
     by: string,
     where: string,
-  ): Promise<[PostEntity[], number]> {
+  ): Promise<PostEntity[]> {
     if (sort === 'title') {
       if (query === 'ru') {
         sort = 'post.titleRu';
@@ -46,7 +46,7 @@ export class PostService {
     by: string,
     where: string,
     userId: number,
-  ): Promise<[PostEntity[], number]> {
+  ): Promise<PostEntity[]> {
     if (sort === 'title') {
       if (query === 'ru') {
         sort = 'post.titleRu';

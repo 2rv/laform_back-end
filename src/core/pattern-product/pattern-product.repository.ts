@@ -10,7 +10,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
     by: any = 'ASC',
     where: string,
     type: string,
-  ): Promise<[PatternProductEntity[], number]> {
+  ): Promise<PatternProductEntity[]> {
     return await this.createQueryBuilder('pattern_product')
       .leftJoin('pattern_product.images', 'images')
       .leftJoin('pattern_product.sizes', 'sizes')
@@ -29,8 +29,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'categories',
       ])
       .orderBy(sort, by)
-      .take(size)
-      .skip(page > 0 ? page - 1 : 0)
+      //   .take(size)
+      //   .skip(page > 0 ? page - 1 : 0)
       .where('pattern_product.deleted = false')
       .andWhere(
         new Brackets((qb) => {
@@ -49,7 +49,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
           }
         }),
       )
-      .getManyAndCount();
+      //   .getManyAndCount();
+      .getMany();
   }
   async findAllEn(
     size: number = 30,
@@ -58,7 +59,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
     by: any = 'ASC',
     where: string,
     type: string,
-  ): Promise<[PatternProductEntity[], number]> {
+  ): Promise<PatternProductEntity[]> {
     return await this.createQueryBuilder('pattern_product')
       .leftJoin('pattern_product.images', 'images')
       .leftJoin('pattern_product.sizes', 'sizes')
@@ -77,8 +78,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'categories',
       ])
       .orderBy(sort, by)
-      .take(size)
-      .skip(page > 0 ? page - 1 : 0)
+      //   .take(size)
+      //   .skip(page > 0 ? page - 1 : 0)
       .where('pattern_product.deleted = false')
       .andWhere(
         new Brackets((qb) => {
@@ -97,7 +98,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
           }
         }),
       )
-      .getManyAndCount();
+      //   .getManyAndCount();
+      .getMany();
   }
   async findAllRuAuth(
     size: number = 30,
@@ -107,7 +109,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
     where: string,
     type: string,
     userId: number,
-  ): Promise<[PatternProductEntity[], number]> {
+  ): Promise<PatternProductEntity[]> {
     return await this.createQueryBuilder('pattern_product')
       .leftJoin('pattern_product.images', 'images')
       .leftJoin('pattern_product.sizes', 'sizes')
@@ -128,8 +130,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'like',
       ])
       .orderBy(sort, by)
-      .take(size)
-      .skip(page > 0 ? page - 1 : 0)
+      //   .take(size)
+      //   .skip(page > 0 ? page - 1 : 0)
       .where('pattern_product.deleted = false')
       .andWhere(
         new Brackets((qb) => {
@@ -148,7 +150,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
           }
         }),
       )
-      .getManyAndCount();
+      //   .getManyAndCount();
+      .getMany();
   }
   async findAllEnAuth(
     size: number = 30,
@@ -158,7 +161,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
     where: string,
     type: string,
     userId: number,
-  ): Promise<[PatternProductEntity[], number]> {
+  ): Promise<PatternProductEntity[]> {
     return await this.createQueryBuilder('pattern_product')
       .leftJoin('pattern_product.images', 'images')
       .leftJoin('pattern_product.sizes', 'sizes')
@@ -179,8 +182,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'like',
       ])
       .orderBy(sort, by)
-      .take(size)
-      .skip(page > 0 ? page - 1 : 0)
+      //   .take(size)
+      //   .skip(page > 0 ? page - 1 : 0)
       .where('pattern_product.deleted = false')
       .andWhere(
         new Brackets((qb) => {
@@ -199,7 +202,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
           }
         }),
       )
-      .getManyAndCount();
+      //   .getManyAndCount();
+      .getMany();
   }
 
   async findOneRu(id: string): Promise<PatternProductEntity> {

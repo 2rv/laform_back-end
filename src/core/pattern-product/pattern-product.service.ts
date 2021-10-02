@@ -27,7 +27,7 @@ export class PatternProductService {
     by: string,
     where: string,
     type: string,
-  ): Promise<[PatternProductEntity[], number]> {
+  ): Promise<PatternProductEntity[]> {
     if (sort === 'title') {
       if (query === 'ru') {
         sort = 'pattern_product.titleRu';
@@ -71,7 +71,7 @@ export class PatternProductService {
     where: string,
     type: string,
     userId: number,
-  ): Promise<[PatternProductEntity[], number]> {
+  ): Promise<PatternProductEntity[]> {
     if (sort === 'title') {
       if (query === 'ru') {
         sort = 'pattern_product.titleRu';
