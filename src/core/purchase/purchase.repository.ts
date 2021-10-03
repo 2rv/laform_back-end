@@ -44,6 +44,10 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
       .leftJoin('sewing_product.categories', 'sewing_product_categories')
       .select([
         'purchase.orderStatus',
+        'purchase.city',
+        'purchase.fullName',
+        'purchase.phoneNumber',
+        'purchase.email',
         'purchase.id',
         'purchase_products',
 
