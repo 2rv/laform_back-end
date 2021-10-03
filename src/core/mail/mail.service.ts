@@ -90,7 +90,7 @@ export class MailService {
     return await this.mailerService
       .sendMail({
         to: user.email,
-        subject: `Laforme, информация о купленных продуктах`,
+        subject: `LaForme, информация о купленных продуктах`,
         template: path.join(
           path.resolve(),
           'src/templates/purchased-products-info.pug',
