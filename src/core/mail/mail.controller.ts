@@ -15,7 +15,7 @@ export class MailController {
   async send(@Body() body): Promise<any> {
     return await this.mailService.sendMessage(body, '123');
   }
-  
+
   @Post('/notification')
   async notify(@Body() body: { subject: string; html: string }): Promise<any> {
     return await this.mailService.sendNotification(body);
@@ -26,5 +26,15 @@ export class MailController {
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async sendPdf(@GetUser() user: UserEntity, @Body() body): Promise<any> {
     return await this.mailService.sendPdf(user, body);
+  }
+
+  @Post('/send-purchased-products-info')
+  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async sendPurchasedProductsInfo(
+    @GetUser() user: UserEntity,
+    @Body() body,
+  ): Promise<any> {
+    return await this.mailService.sendPurchasedProductsInfo(user, body);
   }
 }

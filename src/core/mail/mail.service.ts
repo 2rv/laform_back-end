@@ -70,7 +70,7 @@ export class MailService {
     return await this.mailerService
       .sendMail({
         to: user.email,
-        subject: `Laforme, скачивание pdf товара`,
+        subject: `LaForme, скачивание pdf товара`,
         html: `<p style="font-size: 20px;">PDF версия товара - <b>${body.productName}</b></p>`,
         attachments: [
           {
@@ -79,6 +79,27 @@ export class MailService {
             contentType: 'application/pdf',
           },
         ],
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
+  async sendPurchasedProductsInfo(user: UserEntity, body: any) {
+    console.log('body:', body);
+    return await this.mailerService
+      .sendMail({
+        to: user.email,
+        subject: `Laforme, информация о купленных продуктах`,
+        template: path.join(
+          path.resolve(),
+          'src/templates/purchased-products-info.pug',
+        ),
+        context: {
+          address: body.purchase.city,
+          phone: body.purchase.phoneNumber,
+          fullName: body.purchase.fullName,
+        },
       })
       .catch((e) => {
         console.log(e);
