@@ -86,7 +86,6 @@ export class MailService {
   }
 
   async sendPurchasedProductsInfo(user: UserEntity, body: any) {
-    console.log('body:', body);
     return await this.mailerService
       .sendMail({
         to: user.email,
