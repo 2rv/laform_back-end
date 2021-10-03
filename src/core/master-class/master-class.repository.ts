@@ -233,6 +233,10 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'recommendations_sewing_product.sizes',
         'recommendations_sewing_product_sizes',
       )
+      .leftJoin(
+        'recommendations_sewing_product.colors',
+        'recommendations_sewing_product_colors',
+      )
 
       .leftJoin('recommendations.postId', 'recommendations_post')
       .leftJoin('recommendations_post.image', 'recommendations_post_image')
@@ -260,6 +264,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'recommendations_master_class_images',
         'recommendations_master_class_programs.id',
         'recommendations_master_class_programs.price',
+        'recommendations_master_class_programs.vendorCode',
+        'recommendations_master_class_programs.programNameRu',
 
         'recommendations_pattern_product.id',
         'recommendations_pattern_product.titleRu',
@@ -270,6 +276,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'recommendations_pattern_product_images',
         'recommendations_pattern_product_sizes.id',
         'recommendations_pattern_product_sizes.price',
+        'recommendations_pattern_product_sizes.size',
+        'recommendations_pattern_product_sizes.vendorCode',
 
         'recommendations_sewing_product.id',
         'recommendations_sewing_product.titleRu',
@@ -280,6 +288,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'recommendations_sewing_product_sizes.id',
         'recommendations_sewing_product_sizes.size',
         'recommendations_sewing_product_sizes.price',
+        'recommendations_sewing_product_sizes.vendorCode',
+        'recommendations_sewing_product_colors',
 
         'recommendations_post.id',
         'recommendations_post.titleRu',
@@ -337,6 +347,10 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'recommendations_sewing_product.sizes',
         'recommendations_sewing_product_sizes',
       )
+      .leftJoin(
+        'recommendations_sewing_product.colors',
+        'recommendations_sewing_product_colors',
+      )
 
       .leftJoin('recommendations.postId', 'recommendations_post')
       .leftJoin('recommendations_post.image', 'recommendations_post_image')
@@ -364,6 +378,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'recommendations_master_class_images',
         'recommendations_master_class_programs.id',
         'recommendations_master_class_programs.price',
+        'recommendations_master_class_programs.ProgramNameRu',
+        'recommendations_master_class_programs.vendorCode',
 
         'recommendations_pattern_product.id',
         'recommendations_pattern_product.titleEn',
@@ -374,6 +390,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'recommendations_pattern_product_images',
         'recommendations_pattern_product_sizes.id',
         'recommendations_pattern_product_sizes.price',
+        'recommendations_pattern_product_sizes.size',
+        'recommendations_pattern_product_sizes.vendorCode',
 
         'recommendations_sewing_product.id',
         'recommendations_sewing_product.titleEn',
@@ -384,6 +402,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'recommendations_sewing_product_sizes.id',
         'recommendations_sewing_product_sizes.size',
         'recommendations_sewing_product_sizes.price',
+        'recommendations_sewing_product_sizes.vendorCode',
+        'recommendations_sewing_product_colors',
 
         'recommendations_post.id',
         'recommendations_post.titleEn',
@@ -462,6 +482,10 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'recommendations_sewing_product_sizes',
       )
       .leftJoin(
+        'recommendations_sewing_product.colors',
+        'recommendations_sewing_product_colors',
+      )
+      .leftJoin(
         'recommendations_sewing_product.like',
         'recommendations_sewing_product_like',
         'recommendations_sewing_product_like.userId = :userId',
@@ -506,6 +530,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'recommendations_master_class_images',
         'recommendations_master_class_programs.id',
         'recommendations_master_class_programs.price',
+        'recommendations_master_class_programs.programNameRu',
+        'recommendations_master_class_programs.vendorCode',
         'recommendations_master_class_like',
 
         'recommendations_pattern_product.id',
@@ -517,6 +543,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'recommendations_pattern_product_images',
         'recommendations_pattern_product_sizes.id',
         'recommendations_pattern_product_sizes.price',
+        'recommendations_pattern_product_sizes.size',
+        'recommendations_pattern_product_sizes.vendorCode',
         'recommendations_pattern_product_like',
 
         'recommendations_sewing_product.id',
@@ -528,6 +556,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'recommendations_sewing_product_sizes.id',
         'recommendations_sewing_product_sizes.size',
         'recommendations_sewing_product_sizes.price',
+        'recommendations_sewing_product_sizes.vendorCode',
+        'recommendations_sewing_product_colors',
         'recommendations_sewing_product_like',
 
         'recommendations_post.id',
@@ -608,6 +638,10 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'recommendations_sewing_product_sizes',
       )
       .leftJoin(
+        'recommendations_sewing_product.color',
+        'recommendations_sewing_product_color',
+      )
+      .leftJoin(
         'recommendations_sewing_product.like',
         'recommendations_sewing_product_like',
         'recommendations_sewing_product_like.userId = :userId',
@@ -652,6 +686,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'recommendations_master_class_images',
         'recommendations_master_class_programs.id',
         'recommendations_master_class_programs.price',
+        'recommendations_master_class_programs.programNameEn',
+        'recommendations_master_class_programs.vendorCode',
         'recommendations_master_class_like',
 
         'recommendations_pattern_product.id',
@@ -663,6 +699,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'recommendations_pattern_product_images',
         'recommendations_pattern_product_sizes.id',
         'recommendations_pattern_product_sizes.price',
+        'recommendations_pattern_product_sizes.size',
+        'recommendations_pattern_product_sizes.vendorCode',
         'recommendations_pattern_product_like',
 
         'recommendations_sewing_product.id',
@@ -674,6 +712,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'recommendations_sewing_product_sizes.id',
         'recommendations_sewing_product_sizes.size',
         'recommendations_sewing_product_sizes.price',
+        'recommendations_sewing_product_sizes.vendorCode',
+        'recommendations_sewing_product_color',
         'recommendations_sewing_product_like',
 
         'recommendations_post.id',
