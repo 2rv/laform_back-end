@@ -739,7 +739,9 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'pattern_product.pinned',
         'images',
         'sizes.id',
+        'sizes.size',
         'sizes.price',
+        'sizes.vendorCode',
       ])
       .where('pattern_product.deleted = false')
       .andWhere('pattern_product.pinned = true')
@@ -749,8 +751,6 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
     return await this.createQueryBuilder('pattern_product')
       .leftJoin('pattern_product.images', 'images')
       .leftJoin('pattern_product.sizes', 'sizes')
-      .leftJoin('pattern_product.categories', 'categories')
-      .leftJoin('pattern_product.like', 'like')
       .select([
         'pattern_product.id',
         'pattern_product.titleEn',
@@ -787,7 +787,9 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'pattern_product.pinned',
         'images',
         'sizes.id',
+        'sizes.size',
         'sizes.price',
+        'sizes.vendorCode',
         'like',
       ])
       .where('pattern_product.deleted = false')
@@ -796,28 +798,28 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
   }
   async findPinnedEnAuth(userId: number): Promise<PatternProductEntity[]> {
     return await this.createQueryBuilder('pattern_product')
-      .leftJoin('pattern_product.comment', 'comment')
-      .leftJoin('pattern_product.like', 'like')
-      .where('like.userId = :userId', { userId })
-      .leftJoin('comment.userId', 'userId')
-      .leftJoin('comment.subComment', 'subComment')
-      .leftJoin('subComment.userId', 'user')
-      .where('pattern_product.pinned = true')
+      .leftJoin('pattern_product.like', 'like', 'like.userId = :userId', {
+        userId,
+      })
+      .leftJoin('pattern_product.images', 'images')
+      .leftJoin('pattern_product.sizes', 'sizes')
       .select([
-        'like',
         'pattern_product.id',
         'pattern_product.titleRu',
-        'pattern_product.descriptionRu',
         'pattern_product.type',
         'pattern_product.modifier',
-        'pattern_product.materialRu',
         'pattern_product.complexity',
         'pattern_product.discount',
-        'comment',
-        'userId.login',
-        'subComment',
-        'user.login',
+        'pattern_product.pinned',
+        'images',
+        'sizes.id',
+        'sizes.size',
+        'sizes.price',
+        'sizes.vendorCode',
+        'like',
       ])
+      .where('pattern_product.deleted = false')
+      .andWhere('pattern_product.pinned = true')
       .getMany();
   }
 
@@ -837,7 +839,9 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'categories',
         'images',
         'sizes.id',
+        'sizes.size',
         'sizes.price',
+        'sizes.vendorCode',
         'like',
       ])
       .where('pattern_product.deleted = false')
@@ -860,7 +864,9 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'categories',
         'images',
         'sizes.id',
+        'sizes.size',
         'sizes.price',
+        'sizes.vendorCode',
         'like',
       ])
       .where('pattern_product.deleted = false')

@@ -26,6 +26,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'programs.id',
         'programs.price',
         'programs.programNameRu',
+        'programs.vendorCode',
       ])
       .orderBy(sort, by)
       //   .take(size)
@@ -70,6 +71,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'programs.id',
         'programs.price',
         'programs.programNameEn',
+        'programs.vendorCode',
       ])
       .orderBy(sort, by)
       //   .take(size)
@@ -117,6 +119,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'programs.id',
         'programs.price',
         'programs.programNameRu',
+        'programs.vendorCode',
         'like',
       ])
       .orderBy(sort, by)
@@ -165,6 +168,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'programs.id',
         'programs.price',
         'programs.programNameEn',
+        'programs.vendorCode',
         'like',
       ])
       .orderBy(sort, by)
@@ -705,6 +709,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'categories',
         'programs.id',
         'programs.price',
+        'programs.programNameRu',
+        'programs.vendorCode',
       ])
       .where('master_class.pinned = true')
       .getMany();
@@ -725,6 +731,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'categories',
         'programs.id',
         'programs.price',
+        'programs.programNameEn',
+        'programs.vendorCode',
       ])
       .where('master_class.pinned = true')
       .getMany();
@@ -748,6 +756,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'categories',
         'programs.id',
         'programs.price',
+        'programs.programNameRu',
+        'programs.vendorCode',
         'like',
       ])
       .where('master_class.pinned = true')
@@ -772,6 +782,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'categories',
         'programs.id',
         'programs.price',
+        'programs.programNameEn',
+        'programs.vendorCode',
         'like',
       ])
       .where('master_class.pinned = true')
@@ -794,6 +806,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'categories',
         'programs.id',
         'programs.price',
+        'programs.programNameRu',
+        'programs.vendorCode',
         'like',
       ])
       .where('master_class.deleted = false')
@@ -816,6 +830,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'categories',
         'programs.id',
         'programs.price',
+        'programs.programNameEn',
+        'programs.vendorCode',
         'like',
       ])
       .where('master_class.deleted = false')

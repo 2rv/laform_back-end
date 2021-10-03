@@ -26,8 +26,9 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'categories',
         'colors',
         'sizes.id',
-        'sizes.price',
         'sizes.size',
+        'sizes.price',
+        'sizes.vendorCode',
       ])
       .orderBy(sort, by)
       //   .take(size)
@@ -72,8 +73,9 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'categories',
         'colors',
         'sizes.id',
-        'sizes.price',
         'sizes.size',
+        'sizes.price',
+        'sizes.vendorCode',
       ])
       .orderBy(sort, by)
       //   .take(size)
@@ -121,8 +123,9 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'categories',
         'colors',
         'sizes.id',
-        'sizes.price',
         'sizes.size',
+        'sizes.price',
+        'sizes.vendorCode',
         'like',
       ])
       .orderBy(sort, by)
@@ -171,8 +174,9 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'categories',
         'colors',
         'sizes.id',
-        'sizes.price',
         'sizes.size',
+        'sizes.price',
+        'sizes.vendorCode',
         'like',
       ])
       .orderBy(sort, by)
@@ -714,6 +718,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .leftJoin('sewing_product.images', 'images')
       .leftJoin('sewing_product.categories', 'categories')
       .leftJoin('sewing_product.sizes', 'sizes')
+      .leftJoin('sewing_product.colors', 'colors')
       .select([
         'sewing_product.id',
         'sewing_product.titleRu',
@@ -722,8 +727,11 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sewing_product.type',
         'images',
         'categories',
+        'colors',
         'sizes.id',
+        'sizes.size',
         'sizes.price',
+        'sizes.vendorCode',
       ])
       .where('sewing_product.pinned = true')
       .andWhere('sewing_product.deleted = false')
@@ -734,6 +742,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .leftJoin('sewing_product.images', 'images')
       .leftJoin('sewing_product.categories', 'categories')
       .leftJoin('sewing_product.sizes', 'sizes')
+      .leftJoin('sewing_product.colors', 'colors')
       .select([
         'sewing_product.id',
         'sewing_product.titleEn',
@@ -742,8 +751,11 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sewing_product.type',
         'images',
         'categories',
+        'colors',
         'sizes.id',
+        'sizes.size',
         'sizes.price',
+        'sizes.vendorCode',
       ])
       .where('sewing_product.pinned = true')
       .andWhere('sewing_product.deleted = false')
@@ -754,6 +766,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .leftJoin('sewing_product.images', 'images')
       .leftJoin('sewing_product.categories', 'categories')
       .leftJoin('sewing_product.sizes', 'sizes')
+      .leftJoin('sewing_product.colors', 'colors')
       .leftJoin('sewing_product.like', 'like', 'like.userId = :userId', {
         userId,
       })
@@ -765,8 +778,11 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sewing_product.type',
         'images',
         'categories',
+        'colors',
         'sizes.id',
+        'sizes.size',
         'sizes.price',
+        'sizes.vendorCode',
         'like',
       ])
       .where('sewing_product.pinned = true')
@@ -778,6 +794,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .leftJoin('sewing_product.images', 'images')
       .leftJoin('sewing_product.categories', 'categories')
       .leftJoin('sewing_product.sizes', 'sizes')
+      .leftJoin('sewing_product.colors', 'colors')
       .leftJoin('sewing_product.like', 'like', 'like.userId = :userId', {
         userId,
       })
@@ -789,8 +806,11 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sewing_product.type',
         'images',
         'categories',
+        'colors',
         'sizes.id',
+        'sizes.size',
         'sizes.price',
+        'sizes.vendorCode',
         'like',
       ])
       .where('sewing_product.pinned = true')
@@ -803,6 +823,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .leftJoin('sewing_product.images', 'images')
       .leftJoin('sewing_product.categories', 'categories')
       .leftJoin('sewing_product.sizes', 'sizes')
+      .leftJoin('sewing_product.colors', 'colors')
       .leftJoin('sewing_product.like', 'like')
       .select([
         'sewing_product.id',
@@ -812,8 +833,11 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sewing_product.type',
         'images',
         'categories',
+        'colors',
         'sizes.id',
+        'sizes.size',
         'sizes.price',
+        'sizes.vendorCode',
         'like',
       ])
       .where('sewing_product.deleted = false')
@@ -825,6 +849,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .leftJoin('sewing_product.images', 'images')
       .leftJoin('sewing_product.categories', 'categories')
       .leftJoin('sewing_product.sizes', 'sizes')
+      .leftJoin('sewing_product.colors', 'colors')
       .leftJoin('sewing_product.like', 'like')
       .select([
         'sewing_product.id',
@@ -834,8 +859,11 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sewing_product.type',
         'images',
         'categories',
+        'colors',
         'sizes.id',
+        'sizes.size',
         'sizes.price',
+        'sizes.vendorCode',
         'like',
       ])
       .where('sewing_product.deleted = false')
