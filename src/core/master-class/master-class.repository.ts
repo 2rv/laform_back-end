@@ -25,6 +25,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'categories',
         'programs.id',
         'programs.price',
+        'programs.programNameRu',
       ])
       .orderBy(sort, by)
       //   .take(size)
@@ -68,6 +69,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'categories',
         'programs.id',
         'programs.price',
+        'programs.programNameEn',
       ])
       .orderBy(sort, by)
       //   .take(size)
@@ -114,6 +116,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'categories',
         'programs.id',
         'programs.price',
+        'programs.programNameRu',
         'like',
       ])
       .orderBy(sort, by)
@@ -161,6 +164,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'categories',
         'programs.id',
         'programs.price',
+        'programs.programNameEn',
         'like',
       ])
       .orderBy(sort, by)

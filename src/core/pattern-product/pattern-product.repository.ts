@@ -26,6 +26,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'images',
         'sizes.id',
         'sizes.price',
+        'sizes.size',
         'categories',
       ])
       .orderBy(sort, by)
@@ -75,6 +76,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'images',
         'sizes.id',
         'sizes.price',
+        'sizes.size',
         'categories',
       ])
       .orderBy(sort, by)
@@ -125,7 +127,9 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'pattern_product.complexity',
         'pattern_product.discount',
         'images',
-        'sizes',
+        'sizes.id',
+        'sizes.price',
+        'sizes.size',
         'categories',
         'like',
       ])
@@ -177,7 +181,9 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'pattern_product.complexity',
         'pattern_product.discount',
         'images',
-        'sizes',
+        'sizes.id',
+        'sizes.price',
+        'sizes.size',
         'categories',
         'like',
       ])
