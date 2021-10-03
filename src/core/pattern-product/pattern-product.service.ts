@@ -23,28 +23,88 @@ export class PatternProductService {
     query: string,
     size: number,
     page: number,
+    sort: string,
+    by: string,
+    where: string,
+    type: string,
   ): Promise<PatternProductEntity[]> {
+    if (sort === 'title') {
+      if (query === 'ru') {
+        sort = 'pattern_product.titleRu';
+      } else if (query === 'en') {
+        sort = 'pattern_product.titleEn';
+      }
+    } else sort = '';
+    if (type === 'printed') {
+      type = '2';
+    } else if (type === 'electronic') {
+      type = '1';
+    } else {
+      type = '';
+    }
+
     if (query === 'ru')
-      return await this.patternProductRepository.findAllRu(size, page);
+      return await this.patternProductRepository.findAllRu(
+        size,
+        page,
+        sort,
+        by,
+        where,
+        type,
+      );
     if (query === 'en')
-      return await this.patternProductRepository.findAllEn(size, page);
+      return await this.patternProductRepository.findAllEn(
+        size,
+        page,
+        sort,
+        by,
+        where,
+        type,
+      );
   }
   async getAllAuth(
     query: string,
     size: number,
     page: number,
+    sort: string,
+    by: string,
+    where: string,
+    type: string,
     userId: number,
   ): Promise<PatternProductEntity[]> {
+    if (sort === 'title') {
+      if (query === 'ru') {
+        sort = 'pattern_product.titleRu';
+      } else if (query === 'en') {
+        sort = 'pattern_product.titleEn';
+      }
+    } else sort = '';
+    if (type === 'printed') {
+      type = '2';
+    } else if (type === 'electronic') {
+      type = '1';
+    } else {
+      type = '';
+    }
+
     if (query === 'ru')
       return await this.patternProductRepository.findAllRuAuth(
         size,
         page,
+        sort,
+        by,
+        where,
+        type,
         userId,
       );
     if (query === 'en')
       return await this.patternProductRepository.findAllEnAuth(
         size,
         page,
+        sort,
+        by,
+        where,
+        type,
         userId,
       );
   }

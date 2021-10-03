@@ -1,19 +1,15 @@
 import { PostEntity } from './post.entity';
-import { EntityRepository, Repository } from 'typeorm';
+import { Brackets, EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(PostEntity)
 export class PostRepository extends Repository<PostEntity> {
   async findAllRu(
-    size: number,
-    page: number,
-    // sort: string,
-    // by: any,
+    size: number = 30,
+    page: number = 1,
+    sort: string,
+    by: any = 'ASC',
+    where: string,
   ): Promise<PostEntity[]> {
-    // const take = size || 10;
-    // const skip = (page - 1) * size || 0;
-    // .orderBy(sort, by)
-    //   .limit(take)
-    //   .offset(skip)
     return await this.createQueryBuilder('post')
       .leftJoin('post.image', 'image')
       .leftJoin('post.categories', 'categories')
@@ -28,20 +24,33 @@ export class PostRepository extends Repository<PostEntity> {
         'image',
         'categories',
       ])
+      .orderBy(sort, by)
+      //   .take(size)
+      //   .skip(page > 0 ? page - 1 : 0)
       .where('post.deleted = false')
+      .andWhere(
+        new Brackets((qb) => {
+          if (where) {
+            qb.where('post.titleRu ILIKE :search', {
+              search: `%${where}%`,
+            }).orWhere('categories.textRu ILIKE :search', {
+              search: `%${where}%`,
+            });
+          } else {
+            qb.where('post.deleted = false');
+          }
+        }),
+      )
+      //   .getManyAndCount();
       .getMany();
   }
   async findAllEn(
-    size: number,
-    page: number,
-    // sort: string,
-    // by: any,
+    size: number = 30,
+    page: number = 1,
+    sort: string,
+    by: any = 'ASC',
+    where: string,
   ): Promise<PostEntity[]> {
-    // const take = size || 10;
-    // const skip = (page - 1) * size || 0;
-    // .orderBy(sort, by)
-    //   .limit(take)
-    //   .offset(skip)
     return await this.createQueryBuilder('post')
       .leftJoin('post.image', 'image')
       .leftJoin('post.categories', 'categories')
@@ -56,21 +65,34 @@ export class PostRepository extends Repository<PostEntity> {
         'image',
         'categories',
       ])
+      .orderBy(sort, by)
+      //   .take(size)
+      //   .skip(page > 0 ? page - 1 : 0)
       .where('post.deleted = false')
+      .andWhere(
+        new Brackets((qb) => {
+          if (where) {
+            qb.where('post.titleEn ILIKE :search', {
+              search: `%${where}%`,
+            }).orWhere('categories.textEn ILIKE :search', {
+              search: `%${where}%`,
+            });
+          } else {
+            qb.where('post.deleted = false');
+          }
+        }),
+      )
+      //   .getManyAndCount();
       .getMany();
   }
   async findAllRuAuth(
-    size: number,
-    page: number,
+    size: number = 30,
+    page: number = 1,
+    sort: string,
+    by: any = 'ASC',
+    where: string,
     userId: number,
-    // sort: string,
-    // by: any,
   ): Promise<PostEntity[]> {
-    // const take = size || 10;
-    // const skip = (page - 1) * size || 0;
-    // .orderBy(sort, by)
-    // .limit(take)
-    // .offset(skip)
     return await this.createQueryBuilder('post')
       .leftJoin('post.image', 'image')
       .leftJoin('post.categories', 'categories')
@@ -86,21 +108,34 @@ export class PostRepository extends Repository<PostEntity> {
         'categories',
         'like',
       ])
+      .orderBy(sort, by)
+      //   .take(size)
+      //   .skip(page > 0 ? page - 1 : 0)
       .where('post.deleted = false')
+      .andWhere(
+        new Brackets((qb) => {
+          if (where) {
+            qb.where('post.titleRu ILIKE :search', {
+              search: `%${where}%`,
+            }).orWhere('categories.textRu ILIKE :search', {
+              search: `%${where}%`,
+            });
+          } else {
+            qb.where('post.deleted = false');
+          }
+        }),
+      )
+      //   .getManyAndCount();
       .getMany();
   }
   async findAllEnAuth(
-    size: number,
-    page: number,
+    size: number = 30,
+    page: number = 1,
+    sort: string,
+    by: any = 'ASC',
+    where: string,
     userId: number,
-    // sort: string,
-    // by: any,
   ): Promise<PostEntity[]> {
-    // const take = size || 10;
-    // const skip = (page - 1) * size || 0;
-    // .orderBy(sort, by)
-    // .limit(take)
-    // .offset(skip)
     return await this.createQueryBuilder('post')
       .leftJoin('post.image', 'image')
       .leftJoin('post.categories', 'categories')
@@ -116,7 +151,24 @@ export class PostRepository extends Repository<PostEntity> {
         'categories',
         'like',
       ])
+      .orderBy(sort, by)
+      //   .take(size)
+      //   .skip(page > 0 ? page - 1 : 0)
       .where('post.deleted = false')
+      .andWhere(
+        new Brackets((qb) => {
+          if (where) {
+            qb.where('post.titleEn ILIKE :search', {
+              search: `%${where}%`,
+            }).orWhere('categories.textEn ILIKE :search', {
+              search: `%${where}%`,
+            });
+          } else {
+            qb.where('post.deleted = false');
+          }
+        }),
+      )
+      //   .getManyAndCount();
       .getMany();
   }
 
@@ -160,6 +212,12 @@ export class PostRepository extends Repository<PostEntity> {
         'recommendations_sewing_product.sizes',
         'recommendations_sewing_product_sizes',
       )
+      .leftJoin(
+        'recommendations_sewing_product.colors',
+        'recommendations_sewing_product_colors',
+      )
+      .leftJoin('recommendations.postId', 'recommendations_post')
+      .leftJoin('recommendations_post.image', 'recommendations_post_image')
       .select([
         'post.id',
         'post.titleRu',
@@ -181,6 +239,8 @@ export class PostRepository extends Repository<PostEntity> {
         'recommendations_master_class_images',
         'recommendations_master_class_programs.id',
         'recommendations_master_class_programs.price',
+        'recommendations_master_class_programs.programNameRu',
+        'recommendations_master_class_programs.vendorCode',
 
         'recommendations_pattern_product.id',
         'recommendations_pattern_product.titleRu',
@@ -191,6 +251,8 @@ export class PostRepository extends Repository<PostEntity> {
         'recommendations_pattern_product_images',
         'recommendations_pattern_product_sizes.id',
         'recommendations_pattern_product_sizes.price',
+        'recommendations_pattern_product_sizes.size',
+        'recommendations_pattern_product_sizes.vendorCode',
 
         'recommendations_sewing_product.id',
         'recommendations_sewing_product.titleRu',
@@ -201,6 +263,8 @@ export class PostRepository extends Repository<PostEntity> {
         'recommendations_sewing_product_sizes.id',
         'recommendations_sewing_product_sizes.size',
         'recommendations_sewing_product_sizes.price',
+        'recommendations_sewing_product_sizes.vendorCode',
+        'recommendations_sewing_product_colors',
 
         'recommendations_post.id',
         'recommendations_post.titleRu',
@@ -257,6 +321,12 @@ export class PostRepository extends Repository<PostEntity> {
         'recommendations_sewing_product.sizes',
         'recommendations_sewing_product_sizes',
       )
+      .leftJoin(
+        'recommendations_sewing_product.colors',
+        'recommendations_sewing_product_colors',
+      )
+      .leftJoin('recommendations.postId', 'recommendations_post')
+      .leftJoin('recommendations_post.image', 'recommendations_post_image')
       .select([
         'post.id',
         'post.titleEn',
@@ -278,6 +348,8 @@ export class PostRepository extends Repository<PostEntity> {
         'recommendations_master_class_images',
         'recommendations_master_class_programs.id',
         'recommendations_master_class_programs.price',
+        'recommendations_master_class_programs.programNameEn',
+        'recommendations_master_class_programs.vendorCode',
 
         'recommendations_pattern_product.id',
         'recommendations_pattern_product.titleEn',
@@ -288,6 +360,8 @@ export class PostRepository extends Repository<PostEntity> {
         'recommendations_pattern_product_images',
         'recommendations_pattern_product_sizes.id',
         'recommendations_pattern_product_sizes.price',
+        'recommendations_pattern_product_sizes.size',
+        'recommendations_pattern_product_sizes.vendorCode',
 
         'recommendations_sewing_product.id',
         'recommendations_sewing_product.titleEn',
@@ -298,6 +372,8 @@ export class PostRepository extends Repository<PostEntity> {
         'recommendations_sewing_product_sizes.id',
         'recommendations_sewing_product_sizes.size',
         'recommendations_sewing_product_sizes.price',
+        'recommendations_sewing_product_sizes.vendorCode',
+        'recommendations_sewing_product_colors',
 
         'recommendations_post.id',
         'recommendations_post.titleEn',
@@ -373,6 +449,10 @@ export class PostRepository extends Repository<PostEntity> {
         'recommendations_sewing_product_sizes',
       )
       .leftJoin(
+        'recommendations_sewing_product.colors',
+        'recommendations_sewing_product_colors',
+      )
+      .leftJoin(
         'recommendations_sewing_product.like',
         'recommendations_sewing_product_like',
         'recommendations_sewing_product_like.userId = :userId',
@@ -414,6 +494,8 @@ export class PostRepository extends Repository<PostEntity> {
         'recommendations_master_class_images',
         'recommendations_master_class_programs.id',
         'recommendations_master_class_programs.price',
+        'recommendations_master_class_programs.programNameRu',
+        'recommendations_master_class_programs.vendorCode',
         'recommendations_master_class_like',
 
         'recommendations_pattern_product.id',
@@ -425,6 +507,8 @@ export class PostRepository extends Repository<PostEntity> {
         'recommendations_pattern_product_images',
         'recommendations_pattern_product_sizes.id',
         'recommendations_pattern_product_sizes.price',
+        'recommendations_pattern_product_sizes.size',
+        'recommendations_pattern_product_sizes.vendorCode',
         'recommendations_pattern_product_like',
 
         'recommendations_sewing_product.id',
@@ -436,6 +520,8 @@ export class PostRepository extends Repository<PostEntity> {
         'recommendations_sewing_product_sizes.id',
         'recommendations_sewing_product_sizes.size',
         'recommendations_sewing_product_sizes.price',
+        'recommendations_sewing_product_sizes.vendorCode',
+        'recommendations_sewing_product_colors',
         'recommendations_sewing_product_like',
 
         'recommendations_post.id',
@@ -513,6 +599,10 @@ export class PostRepository extends Repository<PostEntity> {
         'recommendations_sewing_product_sizes',
       )
       .leftJoin(
+        'recommendations_sewing_product.colors',
+        'recommendations_sewing_product_colors',
+      )
+      .leftJoin(
         'recommendations_sewing_product.like',
         'recommendations_sewing_product_like',
         'recommendations_sewing_product_like.userId = :userId',
@@ -554,6 +644,8 @@ export class PostRepository extends Repository<PostEntity> {
         'recommendations_master_class_images',
         'recommendations_master_class_programs.id',
         'recommendations_master_class_programs.price',
+        'recommendations_master_class_programs.programNameEn',
+        'recommendations_master_class_programs.vendorCode',
         'recommendations_master_class_like',
 
         'recommendations_pattern_product.id',
@@ -565,6 +657,8 @@ export class PostRepository extends Repository<PostEntity> {
         'recommendations_pattern_product_images',
         'recommendations_pattern_product_sizes.id',
         'recommendations_pattern_product_sizes.price',
+        'recommendations_pattern_product_sizes.size',
+        'recommendations_pattern_product_sizes.vendorCode',
         'recommendations_pattern_product_like',
 
         'recommendations_sewing_product.id',
@@ -576,6 +670,8 @@ export class PostRepository extends Repository<PostEntity> {
         'recommendations_sewing_product_sizes.id',
         'recommendations_sewing_product_sizes.size',
         'recommendations_sewing_product_sizes.price',
+        'recommendations_sewing_product_sizes.vendorCode',
+        'recommendations_sewing_product_colors',
         'recommendations_sewing_product_like',
 
         'recommendations_post.id',

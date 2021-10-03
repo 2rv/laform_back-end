@@ -1,13 +1,16 @@
 import { PatternProductEntity } from './pattern-product.entity';
-import { EntityRepository, Repository } from 'typeorm';
+import { Brackets, EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(PatternProductEntity)
 export class PatternProductRepository extends Repository<PatternProductEntity> {
-  async findAllRu(size: number, page: number): Promise<PatternProductEntity[]> {
-    // const take = size || 100;
-    // const skip = (page - 1) * size || 0;
-    // .limit(take)
-    // .offset(skip)
+  async findAllRu(
+    size: number = 30,
+    page: number = 1,
+    sort: string,
+    by: any = 'ASC',
+    where: string,
+    type: string,
+  ): Promise<PatternProductEntity[]> {
     return await this.createQueryBuilder('pattern_product')
       .leftJoin('pattern_product.images', 'images')
       .leftJoin('pattern_product.sizes', 'sizes')
@@ -23,16 +26,41 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'images',
         'sizes.id',
         'sizes.price',
+        'sizes.size',
         'categories',
       ])
+      .orderBy(sort, by)
+      //   .take(size)
+      //   .skip(page > 0 ? page - 1 : 0)
       .where('pattern_product.deleted = false')
+      .andWhere(
+        new Brackets((qb) => {
+          if (where) {
+            qb.where('pattern_product.titleRu ILIKE :search', {
+              search: `%${where}%`,
+            }).orWhere('categories.textRu ILIKE :search', {
+              search: `%${where}%`,
+            });
+          } else if (type) {
+            qb.where('pattern_product.type = :type', {
+              type: type,
+            });
+          } else {
+            qb.where('pattern_product.deleted = false');
+          }
+        }),
+      )
+      //   .getManyAndCount();
       .getMany();
   }
-  async findAllEn(size: number, page: number): Promise<PatternProductEntity[]> {
-    // const take = size || 100;
-    // const skip = (page - 1) * size || 0;
-    // .limit(take)
-    // .offset(skip)
+  async findAllEn(
+    size: number = 30,
+    page: number = 1,
+    sort: string,
+    by: any = 'ASC',
+    where: string,
+    type: string,
+  ): Promise<PatternProductEntity[]> {
     return await this.createQueryBuilder('pattern_product')
       .leftJoin('pattern_product.images', 'images')
       .leftJoin('pattern_product.sizes', 'sizes')
@@ -48,20 +76,42 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'images',
         'sizes.id',
         'sizes.price',
+        'sizes.size',
         'categories',
       ])
+      .orderBy(sort, by)
+      //   .take(size)
+      //   .skip(page > 0 ? page - 1 : 0)
       .where('pattern_product.deleted = false')
+      .andWhere(
+        new Brackets((qb) => {
+          if (where) {
+            qb.where('pattern_product.titleEn ILIKE :search', {
+              search: `%${where}%`,
+            }).orWhere('categories.textEn ILIKE :search', {
+              search: `%${where}%`,
+            });
+          } else if (type) {
+            qb.where('pattern_product.type = :type', {
+              type: type,
+            });
+          } else {
+            qb.where('pattern_product.deleted = false');
+          }
+        }),
+      )
+      //   .getManyAndCount();
       .getMany();
   }
   async findAllRuAuth(
-    size: number,
-    page: number,
+    size: number = 30,
+    page: number = 1,
+    sort: string,
+    by: any = 'ASC',
+    where: string,
+    type: string,
     userId: number,
   ): Promise<PatternProductEntity[]> {
-    // const take = size || 100;
-    // const skip = (page - 1) * size || 0;
-    // .limit(take)
-    // .offset(skip)
     return await this.createQueryBuilder('pattern_product')
       .leftJoin('pattern_product.images', 'images')
       .leftJoin('pattern_product.sizes', 'sizes')
@@ -77,22 +127,45 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'pattern_product.complexity',
         'pattern_product.discount',
         'images',
-        'sizes',
+        'sizes.id',
+        'sizes.price',
+        'sizes.size',
         'categories',
         'like',
       ])
+      .orderBy(sort, by)
+      //   .take(size)
+      //   .skip(page > 0 ? page - 1 : 0)
       .where('pattern_product.deleted = false')
+      .andWhere(
+        new Brackets((qb) => {
+          if (where) {
+            qb.where('pattern_product.titleRu ILIKE :search', {
+              search: `%${where}%`,
+            }).orWhere('categories.textRu ILIKE :search', {
+              search: `%${where}%`,
+            });
+          } else if (type) {
+            qb.where('pattern_product.type = :type', {
+              type: type,
+            });
+          } else {
+            qb.where('pattern_product.deleted = false');
+          }
+        }),
+      )
+      //   .getManyAndCount();
       .getMany();
   }
   async findAllEnAuth(
-    size: number,
-    page: number,
+    size: number = 30,
+    page: number = 1,
+    sort: string,
+    by: any = 'ASC',
+    where: string,
+    type: string,
     userId: number,
   ): Promise<PatternProductEntity[]> {
-    // const take = size || 100;
-    // const skip = (page - 1) * size || 0;
-    // .limit(take)
-    // .offset(skip)
     return await this.createQueryBuilder('pattern_product')
       .leftJoin('pattern_product.images', 'images')
       .leftJoin('pattern_product.sizes', 'sizes')
@@ -108,11 +181,34 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'pattern_product.complexity',
         'pattern_product.discount',
         'images',
-        'sizes',
+        'sizes.id',
+        'sizes.price',
+        'sizes.size',
         'categories',
         'like',
       ])
+      .orderBy(sort, by)
+      //   .take(size)
+      //   .skip(page > 0 ? page - 1 : 0)
       .where('pattern_product.deleted = false')
+      .andWhere(
+        new Brackets((qb) => {
+          if (where) {
+            qb.where('pattern_product.titleEn ILIKE :search', {
+              search: `%${where}%`,
+            }).orWhere('categories.textEn ILIKE :search', {
+              search: `%${where}%`,
+            });
+          } else if (type) {
+            qb.where('pattern_product.type = :type', {
+              type: type,
+            });
+          } else {
+            qb.where('pattern_product.deleted = false');
+          }
+        }),
+      )
+      //   .getManyAndCount();
       .getMany();
   }
 
@@ -157,6 +253,10 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'recommendations_sewing_product.sizes',
         'recommendations_sewing_product_sizes',
       )
+      .leftJoin(
+        'recommendations_sewing_product.colors',
+        'recommendations_sewing_product_colors',
+      )
 
       .leftJoin('recommendations.postId', 'recommendations_post')
       .leftJoin('recommendations_post.image', 'recommendations_post_image')
@@ -186,6 +286,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'recommendations_master_class_images',
         'recommendations_master_class_programs.id',
         'recommendations_master_class_programs.price',
+        'recommendations_master_class_programs.programNameRu',
+        'recommendations_master_class_programs.vendorCode',
 
         'recommendations_pattern_product.id',
         'recommendations_pattern_product.titleRu',
@@ -196,6 +298,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'recommendations_pattern_product_images',
         'recommendations_pattern_product_sizes.id',
         'recommendations_pattern_product_sizes.price',
+        'recommendations_pattern_product_sizes.size',
+        'recommendations_pattern_product_sizes.vendorCode',
 
         'recommendations_sewing_product.id',
         'recommendations_sewing_product.titleRu',
@@ -206,6 +310,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'recommendations_sewing_product_sizes.id',
         'recommendations_sewing_product_sizes.size',
         'recommendations_sewing_product_sizes.price',
+        'recommendations_sewing_product_sizes.vendorCode',
+        'recommendations_sewing_product_colors',
 
         'recommendations_post.id',
         'recommendations_post.titleRu',
@@ -263,6 +369,10 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'recommendations_sewing_product.sizes',
         'recommendations_sewing_product_sizes',
       )
+      .leftJoin(
+        'recommendations_sewing_product.colors',
+        'recommendations_sewing_product_colors',
+      )
 
       .leftJoin('recommendations.postId', 'recommendations_post')
       .leftJoin('recommendations_post.image', 'recommendations_post_image')
@@ -292,6 +402,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'recommendations_master_class_images',
         'recommendations_master_class_programs.id',
         'recommendations_master_class_programs.price',
+        'recommendations_master_class_programs.programNameEn',
+        'recommendations_master_class_programs.vendorCode',
 
         'recommendations_pattern_product.id',
         'recommendations_pattern_product.titleEn',
@@ -302,6 +414,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'recommendations_pattern_product_images',
         'recommendations_pattern_product_sizes.id',
         'recommendations_pattern_product_sizes.price',
+        'recommendations_pattern_product_sizes.size',
+        'recommendations_pattern_product_sizes.vendorCode',
 
         'recommendations_sewing_product.id',
         'recommendations_sewing_product.titleEn',
@@ -312,6 +426,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'recommendations_sewing_product_sizes.id',
         'recommendations_sewing_product_sizes.size',
         'recommendations_sewing_product_sizes.price',
+        'recommendations_sewing_product_sizes.vendorCode',
+        'recommendations_sewing_product_colors',
 
         'recommendations_post.id',
         'recommendations_post.titleEn',
@@ -393,6 +509,10 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'recommendations_sewing_product_sizes',
       )
       .leftJoin(
+        'recommendations_sewing_product.colors',
+        'recommendations_sewing_product_colors',
+      )
+      .leftJoin(
         'recommendations_sewing_product.like',
         'recommendations_sewing_product_like',
         'recommendations_sewing_product_like.userId = :userId',
@@ -439,6 +559,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'recommendations_master_class_images',
         'recommendations_master_class_programs.id',
         'recommendations_master_class_programs.price',
+        'recommendations_master_class_programs.programNameRu',
+        'recommendations_master_class_programs.vendorCode',
         'recommendations_master_class_like',
 
         'recommendations_pattern_product.id',
@@ -450,6 +572,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'recommendations_pattern_product_images',
         'recommendations_pattern_product_sizes.id',
         'recommendations_pattern_product_sizes.price',
+        'recommendations_pattern_product_sizes.size',
+        'recommendations_pattern_product_sizes.vendorCode',
         'recommendations_pattern_product_like',
 
         'recommendations_sewing_product.id',
@@ -461,6 +585,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'recommendations_sewing_product_sizes.id',
         'recommendations_sewing_product_sizes.size',
         'recommendations_sewing_product_sizes.price',
+        'recommendations_sewing_product_sizes.vendorCode',
+        'recommendations_sewing_product_colors',
         'recommendations_sewing_product_like',
 
         'recommendations_post.id',
@@ -470,6 +596,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'recommendations_post.modifier',
         'recommendations_post.type',
         'recommendations_post_image',
+        'recommendations_post_like',
       ])
       .where('recommendations_sewing_product.deleted = false')
       .where('recommendations_master_class.deleted = false')
@@ -543,6 +670,10 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'recommendations_sewing_product_sizes',
       )
       .leftJoin(
+        'recommendations_sewing_product.colors',
+        'recommendations_sewing_product_colors',
+      )
+      .leftJoin(
         'recommendations_sewing_product.like',
         'recommendations_sewing_product_like',
         'recommendations_sewing_product_like.userId = :userId',
@@ -589,6 +720,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'recommendations_master_class_images',
         'recommendations_master_class_programs.id',
         'recommendations_master_class_programs.price',
+        'recommendations_master_class_programs.programNameEn',
+        'recommendations_master_class_programs.vendorCode',
         'recommendations_master_class_like',
 
         'recommendations_pattern_product.id',
@@ -600,6 +733,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'recommendations_pattern_product_images',
         'recommendations_pattern_product_sizes.id',
         'recommendations_pattern_product_sizes.price',
+        'recommendations_pattern_product_sizes.size',
+        'recommendations_pattern_product_sizes.vendorCode',
         'recommendations_pattern_product_like',
 
         'recommendations_sewing_product.id',
@@ -611,6 +746,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'recommendations_sewing_product_sizes.id',
         'recommendations_sewing_product_sizes.size',
         'recommendations_sewing_product_sizes.price',
+        'recommendations_sewing_product_sizes.vendorCode',
+        'recommendations_sewing_product_colors',
         'recommendations_sewing_product_like',
 
         'recommendations_post.id',
@@ -620,6 +757,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'recommendations_post.modifier',
         'recommendations_post.type',
         'recommendations_post_image',
+        'recommendations_post_like',
       ])
       .where('recommendations_sewing_product.deleted = false')
       .where('recommendations_master_class.deleted = false')
@@ -643,7 +781,9 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'pattern_product.pinned',
         'images',
         'sizes.id',
+        'sizes.size',
         'sizes.price',
+        'sizes.vendorCode',
       ])
       .where('pattern_product.deleted = false')
       .andWhere('pattern_product.pinned = true')
@@ -653,8 +793,6 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
     return await this.createQueryBuilder('pattern_product')
       .leftJoin('pattern_product.images', 'images')
       .leftJoin('pattern_product.sizes', 'sizes')
-      .leftJoin('pattern_product.categories', 'categories')
-      .leftJoin('pattern_product.like', 'like')
       .select([
         'pattern_product.id',
         'pattern_product.titleEn',
@@ -691,7 +829,9 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'pattern_product.pinned',
         'images',
         'sizes.id',
+        'sizes.size',
         'sizes.price',
+        'sizes.vendorCode',
         'like',
       ])
       .where('pattern_product.deleted = false')
@@ -700,28 +840,28 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
   }
   async findPinnedEnAuth(userId: number): Promise<PatternProductEntity[]> {
     return await this.createQueryBuilder('pattern_product')
-      .leftJoin('pattern_product.comment', 'comment')
-      .leftJoin('pattern_product.like', 'like')
-      .where('like.userId = :userId', { userId })
-      .leftJoin('comment.userId', 'userId')
-      .leftJoin('comment.subComment', 'subComment')
-      .leftJoin('subComment.userId', 'user')
-      .where('pattern_product.pinned = true')
+      .leftJoin('pattern_product.like', 'like', 'like.userId = :userId', {
+        userId,
+      })
+      .leftJoin('pattern_product.images', 'images')
+      .leftJoin('pattern_product.sizes', 'sizes')
       .select([
-        'like',
         'pattern_product.id',
         'pattern_product.titleRu',
-        'pattern_product.descriptionRu',
         'pattern_product.type',
         'pattern_product.modifier',
-        'pattern_product.materialRu',
         'pattern_product.complexity',
         'pattern_product.discount',
-        'comment',
-        'userId.login',
-        'subComment',
-        'user.login',
+        'pattern_product.pinned',
+        'images',
+        'sizes.id',
+        'sizes.size',
+        'sizes.price',
+        'sizes.vendorCode',
+        'like',
       ])
+      .where('pattern_product.deleted = false')
+      .andWhere('pattern_product.pinned = true')
       .getMany();
   }
 
@@ -741,7 +881,9 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'categories',
         'images',
         'sizes.id',
+        'sizes.size',
         'sizes.price',
+        'sizes.vendorCode',
         'like',
       ])
       .where('pattern_product.deleted = false')
@@ -764,7 +906,9 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'categories',
         'images',
         'sizes.id',
+        'sizes.size',
         'sizes.price',
+        'sizes.vendorCode',
         'like',
       ])
       .where('pattern_product.deleted = false')
