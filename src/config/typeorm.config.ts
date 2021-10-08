@@ -24,6 +24,7 @@ import {
   CommentEntity,
   SubCommentEntity,
 } from 'src/core/comment/comment.entity';
+import { AboutUsEntity } from 'src/core/about-us/about-us.entity';
 const DATABASE_CONFIG = config.get('DATABASE');
 export const ApiEntities = [
   UserEntity,
@@ -48,6 +49,7 @@ export const ApiEntities = [
   SubCommentEntity,
   RecommendationEntity,
   RecommendationProductEntity,
+  AboutUsEntity,
 ];
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
