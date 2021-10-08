@@ -1,5 +1,11 @@
 import { PostEntity } from './post.entity';
 import { Brackets, EntityRepository, Repository } from 'typeorm';
+import {
+  recommendationsEn,
+  recommendationsEnAuth,
+  recommendationsRu,
+  recommendationsRuAuth,
+} from '../recommendation/recommendation.select';
 
 @EntityRepository(PostEntity)
 export class PostRepository extends Repository<PostEntity> {
@@ -17,12 +23,12 @@ export class PostRepository extends Repository<PostEntity> {
         'post.id',
         'post.titleRu',
         'post.createdDate',
-        'post.likeCount',
-        'post.modifier',
+        'post.modifierRu',
         'post.type',
         'post.pinned',
         'image',
-        'categories',
+        'categories.id',
+        'categories.categoryNameRu',
       ])
       .orderBy(sort, by)
       //   .take(size)
@@ -58,12 +64,12 @@ export class PostRepository extends Repository<PostEntity> {
         'post.id',
         'post.titleEn',
         'post.createdDate',
-        'post.likeCount',
-        'post.modifier',
+        'post.modifierEn',
         'post.type',
         'post.pinned',
         'image',
-        'categories',
+        'categories.id',
+        'categories.categoryNameEn',
       ])
       .orderBy(sort, by)
       //   .take(size)
@@ -101,11 +107,12 @@ export class PostRepository extends Repository<PostEntity> {
         'post.id',
         'post.titleRu',
         'post.createdDate',
-        'post.likeCount',
-        'post.modifier',
+        'post.modifierRu',
         'post.type',
+        'post.pinned',
         'image',
-        'categories',
+        'categories.id',
+        'categories.categoryNameRu',
         'like',
       ])
       .orderBy(sort, by)
@@ -144,11 +151,12 @@ export class PostRepository extends Repository<PostEntity> {
         'post.id',
         'post.titleEn',
         'post.createdDate',
-        'post.likeCount',
-        'post.modifier',
+        'post.modifierEn',
         'post.type',
+        'post.pinned',
         'image',
-        'categories',
+        'categories.id',
+        'categories.categoryNameEn',
         'like',
       ])
       .orderBy(sort, by)
@@ -229,50 +237,7 @@ export class PostRepository extends Repository<PostEntity> {
         'image',
         'categories',
 
-        'recommendation.id',
-        'recommendations.id',
-        'recommendations_master_class.id',
-        'recommendations_master_class.titleRu',
-        'recommendations_master_class.modifier',
-        'recommendations_master_class.discount',
-        'recommendations_master_class.type',
-        'recommendations_master_class_images',
-        'recommendations_master_class_programs.id',
-        'recommendations_master_class_programs.price',
-        'recommendations_master_class_programs.programNameRu',
-        'recommendations_master_class_programs.vendorCode',
-
-        'recommendations_pattern_product.id',
-        'recommendations_pattern_product.titleRu',
-        'recommendations_pattern_product.type',
-        'recommendations_pattern_product.modifier',
-        'recommendations_pattern_product.complexity',
-        'recommendations_pattern_product.discount',
-        'recommendations_pattern_product_images',
-        'recommendations_pattern_product_sizes.id',
-        'recommendations_pattern_product_sizes.price',
-        'recommendations_pattern_product_sizes.size',
-        'recommendations_pattern_product_sizes.vendorCode',
-
-        'recommendations_sewing_product.id',
-        'recommendations_sewing_product.titleRu',
-        'recommendations_sewing_product.discount',
-        'recommendations_sewing_product.modifier',
-        'recommendations_sewing_product.type',
-        'recommendations_sewing_product_images',
-        'recommendations_sewing_product_sizes.id',
-        'recommendations_sewing_product_sizes.size',
-        'recommendations_sewing_product_sizes.price',
-        'recommendations_sewing_product_sizes.vendorCode',
-        'recommendations_sewing_product_colors',
-
-        'recommendations_post.id',
-        'recommendations_post.titleRu',
-        'recommendations_post.createdDate',
-        'recommendations_post.likeCount',
-        'recommendations_post.modifier',
-        'recommendations_post.type',
-        'recommendations_post_image',
+        ...recommendationsRu,
       ])
       .where('recommendations_sewing_product.deleted = false')
       .where('recommendations_master_class.deleted = false')
@@ -337,51 +302,7 @@ export class PostRepository extends Repository<PostEntity> {
         'post.type',
         'image',
         'categories',
-
-        'recommendation.id',
-        'recommendations.id',
-        'recommendations_master_class.id',
-        'recommendations_master_class.titleEn',
-        'recommendations_master_class.modifier',
-        'recommendations_master_class.discount',
-        'recommendations_master_class.type',
-        'recommendations_master_class_images',
-        'recommendations_master_class_programs.id',
-        'recommendations_master_class_programs.price',
-        'recommendations_master_class_programs.programNameEn',
-        'recommendations_master_class_programs.vendorCode',
-
-        'recommendations_pattern_product.id',
-        'recommendations_pattern_product.titleEn',
-        'recommendations_pattern_product.type',
-        'recommendations_pattern_product.modifier',
-        'recommendations_pattern_product.complexity',
-        'recommendations_pattern_product.discount',
-        'recommendations_pattern_product_images',
-        'recommendations_pattern_product_sizes.id',
-        'recommendations_pattern_product_sizes.price',
-        'recommendations_pattern_product_sizes.size',
-        'recommendations_pattern_product_sizes.vendorCode',
-
-        'recommendations_sewing_product.id',
-        'recommendations_sewing_product.titleEn',
-        'recommendations_sewing_product.discount',
-        'recommendations_sewing_product.modifier',
-        'recommendations_sewing_product.type',
-        'recommendations_sewing_product_images',
-        'recommendations_sewing_product_sizes.id',
-        'recommendations_sewing_product_sizes.size',
-        'recommendations_sewing_product_sizes.price',
-        'recommendations_sewing_product_sizes.vendorCode',
-        'recommendations_sewing_product_colors',
-
-        'recommendations_post.id',
-        'recommendations_post.titleEn',
-        'recommendations_post.createdDate',
-        'recommendations_post.likeCount',
-        'recommendations_post.modifier',
-        'recommendations_post.type',
-        'recommendations_post_image',
+        ...recommendationsEn,
       ])
       .where('recommendations_sewing_product.deleted = false')
       .where('recommendations_master_class.deleted = false')
@@ -484,54 +405,7 @@ export class PostRepository extends Repository<PostEntity> {
         'categories',
         'like',
 
-        'recommendation.id',
-        'recommendations.id',
-        'recommendations_master_class.id',
-        'recommendations_master_class.titleRu',
-        'recommendations_master_class.modifier',
-        'recommendations_master_class.discount',
-        'recommendations_master_class.type',
-        'recommendations_master_class_images',
-        'recommendations_master_class_programs.id',
-        'recommendations_master_class_programs.price',
-        'recommendations_master_class_programs.programNameRu',
-        'recommendations_master_class_programs.vendorCode',
-        'recommendations_master_class_like',
-
-        'recommendations_pattern_product.id',
-        'recommendations_pattern_product.titleRu',
-        'recommendations_pattern_product.type',
-        'recommendations_pattern_product.modifier',
-        'recommendations_pattern_product.complexity',
-        'recommendations_pattern_product.discount',
-        'recommendations_pattern_product_images',
-        'recommendations_pattern_product_sizes.id',
-        'recommendations_pattern_product_sizes.price',
-        'recommendations_pattern_product_sizes.size',
-        'recommendations_pattern_product_sizes.vendorCode',
-        'recommendations_pattern_product_like',
-
-        'recommendations_sewing_product.id',
-        'recommendations_sewing_product.titleRu',
-        'recommendations_sewing_product.discount',
-        'recommendations_sewing_product.modifier',
-        'recommendations_sewing_product.type',
-        'recommendations_sewing_product_images',
-        'recommendations_sewing_product_sizes.id',
-        'recommendations_sewing_product_sizes.size',
-        'recommendations_sewing_product_sizes.price',
-        'recommendations_sewing_product_sizes.vendorCode',
-        'recommendations_sewing_product_colors',
-        'recommendations_sewing_product_like',
-
-        'recommendations_post.id',
-        'recommendations_post.titleRu',
-        'recommendations_post.createdDate',
-        'recommendations_post.likeCount',
-        'recommendations_post.modifier',
-        'recommendations_post.type',
-        'recommendations_post_image',
-        'recommendations_post_like',
+        ...recommendationsRuAuth,
       ])
       .where('recommendations_sewing_product.deleted = false')
       .where('recommendations_master_class.deleted = false')
@@ -634,54 +508,7 @@ export class PostRepository extends Repository<PostEntity> {
         'categories',
         'like',
 
-        'recommendation.id',
-        'recommendations.id',
-        'recommendations_master_class.id',
-        'recommendations_master_class.titleEn',
-        'recommendations_master_class.modifier',
-        'recommendations_master_class.discount',
-        'recommendations_master_class.type',
-        'recommendations_master_class_images',
-        'recommendations_master_class_programs.id',
-        'recommendations_master_class_programs.price',
-        'recommendations_master_class_programs.programNameEn',
-        'recommendations_master_class_programs.vendorCode',
-        'recommendations_master_class_like',
-
-        'recommendations_pattern_product.id',
-        'recommendations_pattern_product.titleEn',
-        'recommendations_pattern_product.type',
-        'recommendations_pattern_product.modifier',
-        'recommendations_pattern_product.complexity',
-        'recommendations_pattern_product.discount',
-        'recommendations_pattern_product_images',
-        'recommendations_pattern_product_sizes.id',
-        'recommendations_pattern_product_sizes.price',
-        'recommendations_pattern_product_sizes.size',
-        'recommendations_pattern_product_sizes.vendorCode',
-        'recommendations_pattern_product_like',
-
-        'recommendations_sewing_product.id',
-        'recommendations_sewing_product.titleEn',
-        'recommendations_sewing_product.discount',
-        'recommendations_sewing_product.modifier',
-        'recommendations_sewing_product.type',
-        'recommendations_sewing_product_images',
-        'recommendations_sewing_product_sizes.id',
-        'recommendations_sewing_product_sizes.size',
-        'recommendations_sewing_product_sizes.price',
-        'recommendations_sewing_product_sizes.vendorCode',
-        'recommendations_sewing_product_colors',
-        'recommendations_sewing_product_like',
-
-        'recommendations_post.id',
-        'recommendations_post.titleEn',
-        'recommendations_post.createdDate',
-        'recommendations_post.likeCount',
-        'recommendations_post.modifier',
-        'recommendations_post.type',
-        'recommendations_post_image',
-        'recommendations_post_like',
+        ...recommendationsEnAuth,
       ])
       .where('recommendations_sewing_product.deleted = false')
       .where('recommendations_master_class.deleted = false')
@@ -698,15 +525,15 @@ export class PostRepository extends Repository<PostEntity> {
       .select([
         'post.id',
         'post.titleRu',
-        'post.modifier',
         'post.createdDate',
+        'post.modifierRu',
         'post.type',
         'post.pinned',
         'image',
-        'categories',
+        'categories.id',
+        'categories.categoryNameRu',
       ])
       .where('post.pinned = true')
-      .limit(3)
       .getMany();
   }
   async findPinnedEn(): Promise<PostEntity[]> {
@@ -716,15 +543,15 @@ export class PostRepository extends Repository<PostEntity> {
       .select([
         'post.id',
         'post.titleEn',
-        'post.modifier',
         'post.createdDate',
+        'post.modifierEn',
         'post.type',
         'post.pinned',
         'image',
-        'categories',
+        'categories.id',
+        'categories.categoryNameEn',
       ])
       .where('post.pinned = true')
-      .limit(3)
       .getMany();
   }
   async findPinnedRuAuth(userId: number): Promise<PostEntity[]> {
@@ -735,12 +562,13 @@ export class PostRepository extends Repository<PostEntity> {
       .select([
         'post.id',
         'post.titleRu',
-        'post.likeCount',
-        'post.modifier',
+        'post.createdDate',
+        'post.modifierRu',
         'post.type',
         'post.pinned',
         'image',
-        'categories',
+        'categories.id',
+        'categories.categoryNameRu',
         'like',
       ])
       .where('post.pinned = true')
@@ -754,12 +582,13 @@ export class PostRepository extends Repository<PostEntity> {
       .select([
         'post.id',
         'post.titleEn',
-        'post.likeCount',
-        'post.modifier',
+        'post.createdDate',
+        'post.modifierEn',
         'post.type',
         'post.pinned',
         'image',
-        'categories',
+        'categories.id',
+        'categories.categoryNameEn',
         'like',
       ])
       .where('post.pinned = true')
@@ -775,11 +604,12 @@ export class PostRepository extends Repository<PostEntity> {
         'post.id',
         'post.titleRu',
         'post.createdDate',
-        'post.likeCount',
-        'post.modifier',
+        'post.modifierRu',
         'post.type',
+        'post.pinned',
         'image',
-        'categories',
+        'categories.id',
+        'categories.categoryNameRu',
         'like',
       ])
       .where('post.deleted = false')
@@ -795,11 +625,12 @@ export class PostRepository extends Repository<PostEntity> {
         'post.id',
         'post.titleEn',
         'post.createdDate',
-        'post.likeCount',
-        'post.modifier',
+        'post.modifierEn',
         'post.type',
+        'post.pinned',
         'image',
-        'categories',
+        'categories.id',
+        'categories.categoryNameEn',
         'like',
       ])
       .where('post.deleted = false')

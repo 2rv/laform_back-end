@@ -1,4 +1,4 @@
-import { CategoryDto } from './dto/category.dto';
+import { CategoryDto } from './dto/tags.dto';
 import {
   Body,
   Controller,
@@ -11,12 +11,12 @@ import {
   Delete,
   Patch,
 } from '@nestjs/common';
-import { CategoryService } from './category.service';
+import { CategoryService } from './tags.service';
 import { AuthGuard } from '@nestjs/passport';
 import { AccountGuard } from '../user/guard/account.guard';
 import { Roles } from '../user/decorator/role.decorator';
 import { USER_ROLE } from '../user/enum/user-role.enum';
-import { CategoryEntity } from './category.entity';
+import { CategoryEntity } from './tags.entity';
 
 @Controller('category')
 export class CategoryController {

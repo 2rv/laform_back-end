@@ -15,15 +15,14 @@ import { SewingProductEntity } from './../core/sewing-product/sewing-product.ent
 import { MasterClassEntity } from './../core/master-class/master-class.entity';
 import { PatternProductEntity } from 'src/core/pattern-product/pattern-product.entity';
 import { PromoCodeEntity } from '../core/promo-code/promo-code.entity';
-import { ProgramsEntity } from 'src/core/programs/programs.entity';
-import { ColorsEntity } from 'src/core/colors/colors.entity';
-import { SizesEntity } from 'src/core/sizes/sizes.entity';
 import { RecommendationEntity } from 'src/core/recommendation/recommendation.entity';
 import { RecommendationProductEntity } from 'src/core/recommendation-product/recommendation-product.entity';
 import {
   CommentEntity,
   SubCommentEntity,
 } from 'src/core/comment/comment.entity';
+import { ProductOptionEntity } from 'src/core/product-option/product-option.entity';
+
 const DATABASE_CONFIG = config.get('DATABASE');
 export const ApiEntities = [
   UserEntity,
@@ -41,20 +40,28 @@ export const ApiEntities = [
   SewingProductEntity,
   PatternProductEntity,
   PromoCodeEntity,
-  ProgramsEntity,
-  ColorsEntity,
-  SizesEntity,
+  ProductOptionEntity,
   CommentEntity,
   SubCommentEntity,
   RecommendationEntity,
   RecommendationProductEntity,
 ];
 
+// export const typeOrmConfig: TypeOrmModuleOptions = {
+//   type: DATABASE_CONFIG.TYPE,
+//   url: process.env.DATABASE_URL || DATABASE_CONFIG.URL,
+//   entities: ApiEntities,
+//   ssl: { rejectUnauthorized: false },
+//     logging: ['query', 'error'],
+//   synchronize: process.env.TYPEORM_SYNC || DATABASE_CONFIG.SYNCHRONIZE,
+// };
 export const typeOrmConfig: TypeOrmModuleOptions = {
-  type: DATABASE_CONFIG.TYPE,
-  url: process.env.DATABASE_URL || DATABASE_CONFIG.URL,
+  type: 'postgres',
+  host: 'localhost',
+  port: 5432,
+  username: 'postgres',
+  password: 'pasha1neo',
+  database: 'laforme',
+  synchronize: true,
   entities: ApiEntities,
-  ssl: { rejectUnauthorized: false },
-  logging: ['query', 'error'],
-  synchronize: process.env.TYPEORM_SYNC || DATABASE_CONFIG.SYNCHRONIZE,
 };

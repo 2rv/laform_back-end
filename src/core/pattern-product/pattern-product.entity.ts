@@ -7,76 +7,81 @@ import {
 } from 'typeorm';
 import { CategoryEntity } from '../category/category.entity';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
-import { SizesEntity } from '../sizes/sizes.entity';
+import { ProductOptionEntity } from '../product-option/product-option.entity';
 import { LikeEntity } from '../like/like.entity';
 import { CommentEntity } from '../comment/comment.entity';
 import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
 import { RecommendationProductEntity } from '../recommendation-product/recommendation-product.entity';
 import { RecommendationEntity } from '../recommendation/recommendation.entity';
+import { generateVendorCode } from 'src/common/utils/vendor-coder';
 
 @Entity({ name: 'pattern_product' })
 export class PatternProductEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column({
+    type: 'int',
+    name: 'type',
+    readonly: true,
+  })
+  type!: number;
+
+  static getVendorCode() {
+    return generateVendorCode();
+  }
+
   @OneToMany(
     () => CategoryEntity,
-    (category: CategoryEntity) => category.patternProductId,
-    { cascade: true },
+    (res: CategoryEntity) => res.patternProductId,
   )
   categories: CategoryEntity[];
 
   @OneToMany(
     () => FileUploadEntity,
-    (file: FileUploadEntity) => file.patternProductId,
+    (res: FileUploadEntity) => res.patternProductId,
   )
   images: FileUploadEntity[];
 
-  @OneToMany(() => SizesEntity, (sizes: SizesEntity) => sizes.patternProductId)
-  sizes: SizesEntity[];
-
-  @OneToMany(() => LikeEntity, (like: LikeEntity) => like.patternProductId)
-  like: LikeEntity[];
-
   @OneToMany(
-    () => CommentEntity,
-    (comment: CommentEntity) => comment.patternProductId,
+    () => ProductOptionEntity,
+    (res: ProductOptionEntity) => res.patternProductId,
+    {
+      cascade: true,
+    },
   )
-  comment: CommentEntity[];
+  options: ProductOptionEntity[];
 
   @OneToMany(
     () => PurchaseProductEntity,
-    (purchaseProduct: PurchaseProductEntity) =>
-      purchaseProduct.patternProductId,
+    (res: PurchaseProductEntity) => res.patternProductId,
   )
   purchaseProduct: PurchaseProductEntity[];
 
-  @OneToMany(
-    () => RecommendationProductEntity,
-    (purchaseProduct: RecommendationProductEntity) =>
-      purchaseProduct.patternProductId,
-  )
-  recommendationProduct: RecommendationProductEntity[];
-
   @OneToOne(
     () => RecommendationEntity,
-    (recommendation: RecommendationEntity) => recommendation.patternProductId,
+    (res: RecommendationEntity) => res.patternProductId,
     { cascade: true },
   )
   recommendation: RecommendationEntity;
 
-  @OneToOne(
-    () => FileUploadEntity,
-    (res: FileUploadEntity) => res.filePdfPatternProductId,
+  @OneToMany(
+    () => RecommendationProductEntity,
+    (res: RecommendationProductEntity) => res.patternProductId,
   )
-  filePdf: FileUploadEntity;
+  recommendationProduct: RecommendationProductEntity[];
+
+  @OneToMany(() => LikeEntity, (res: LikeEntity) => res.patternProductId)
+  like: LikeEntity[];
+
+  @OneToMany(() => CommentEntity, (res: CommentEntity) => res.patternProductId)
+  comment: CommentEntity[];
 
   @Column({
     type: 'varchar',
     name: 'title_ru',
   })
   titleRu!: string;
-
   @Column({
     type: 'varchar',
     name: 'title_en',
@@ -85,18 +90,31 @@ export class PatternProductEntity {
   titleEn!: string;
 
   @Column({
-    type: 'varchar',
-    name: 'description_ru',
-  })
-  descriptionRu!: string;
-
-  @Column({
     type: 'json',
     name: ' material_ru',
     nullable: true,
   })
-  materialRu: object;
+  materialRu: {
+    blocks: [];
+    time: number;
+    version: string;
+  };
+  @Column({
+    type: 'json',
+    name: ' material_en',
+    nullable: true,
+  })
+  materialEn: {
+    blocks: [];
+    time: number;
+    version: string;
+  };
 
+  @Column({
+    type: 'varchar',
+    name: 'description_ru',
+  })
+  descriptionRu!: string;
   @Column({
     type: 'varchar',
     name: 'description_en',
@@ -105,27 +123,22 @@ export class PatternProductEntity {
   descriptionEn!: string;
 
   @Column({
-    type: 'int',
-    name: 'discount',
-  })
-  discount!: number;
-
-  @Column({
     type: 'varchar',
-    name: 'modifier',
+    name: 'modifier_ru',
     nullable: true,
   })
-  modifier!: string;
-
+  modifierRu!: string;
   @Column({
-    type: 'int',
-    name: 'type',
+    type: 'varchar',
+    name: 'modifier_en',
+    nullable: true,
   })
-  type!: number;
+  modifierEn!: string;
 
   @Column({
     type: 'int',
     name: 'complexity',
+    default: 0,
   })
   complexity!: number;
 
@@ -135,18 +148,10 @@ export class PatternProductEntity {
     default: false,
   })
   pinned?: boolean;
-
   @Column({
     type: 'bool',
     name: 'deleted',
     default: false,
   })
   deleted?: boolean;
-
-  @Column({
-    type: 'int',
-    name: 'like_count',
-    nullable: true,
-  })
-  likeCount?: number;
 }

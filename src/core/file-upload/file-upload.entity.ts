@@ -12,7 +12,7 @@ import {
 } from 'typeorm';
 import { SliderEntity } from './../slider/slider.entity';
 import { PostEntity } from './../post/post.entity';
-import { SizesEntity } from '../sizes/sizes.entity';
+import { ProductOptionEntity } from '../product-option/product-option.entity';
 
 @Entity({ name: 'files' })
 export class FileUploadEntity {
@@ -28,8 +28,11 @@ export class FileUploadEntity {
   @OneToMany(() => SliderEntity, (slider: SliderEntity) => slider.imageUrl)
   slider: SliderEntity[];
 
-  @OneToOne(() => SizesEntity, (res: SizesEntity) => res.filePdf)
-  filePdfPatternProductId: SizesEntity;
+  @OneToOne(
+    () => ProductOptionEntity,
+    (res: ProductOptionEntity) => res.filePdf,
+  )
+  filePdf: ProductOptionEntity;
 
   @OneToOne(() => PostEntity, (res: PostEntity) => res.image)
   @JoinColumn({

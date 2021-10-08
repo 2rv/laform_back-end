@@ -1,21 +1,21 @@
 import { FileUploadService } from '../file-upload/file-upload.service';
 import { SewingProductRepository } from './sewing-product.repository';
-import { UpdateSewingProductDto } from './dto/update-sewing-product.dto';
 import { SewingProductEntity } from './sewing-product.entity';
 import { Injectable } from '@nestjs/common';
 import { SewingProductDto } from './dto/sewing-product.dto';
-import { SizesService } from '../sizes/sizes.service';
 
 @Injectable()
 export class SewingProductService {
   constructor(
     private sewingProductRepository: SewingProductRepository,
     private fileUploadService: FileUploadService,
-    private sizesService: SizesService,
   ) {}
 
   async create(body: SewingProductDto): Promise<SewingProductEntity> {
-    await this.sizesService.createMany(body.sizes);
+    body.options = body.options.map((item) => {
+      item.vendorCode = SewingProductEntity.getVendorCode();
+      return item;
+    });
     return await this.sewingProductRepository.save(body);
   }
 
@@ -135,31 +135,25 @@ export class SewingProductService {
     await this.fileUploadService.deleteSewingGoods(sewingProduct.id);
     return await this.sewingProductRepository.delete(sewingProduct.id);
   }
-  async update(id: string, body: UpdateSewingProductDto) {
-    if (body.images) {
-      for (let file of body.images) {
-        await this.fileUploadService.update(file, { sewingProductId: id });
-      }
-    }
-    return await this.sewingProductRepository.update(id, body.sewingProduct);
+
+  async update(id: string, body: SewingProductDto) {
+    return await this.sewingProductRepository.update(id, body);
   }
 
-  async getDiscount(id): Promise<number> {
-    return await (
-      await this.sewingProductRepository.findOne(id)
-    ).discount;
-  }
-
-  async getPurchaseParams(sewingProductId, sizeId): Promise<any> {
-    const discount = await (
-      await this.sewingProductRepository.findOne(sewingProductId)
-    ).discount;
-
-    const price = await this.sizesService.getSizePrice(sizeId);
-
+  async getPriceAndDiscount(
+    sewingProduct: SewingProductEntity,
+    sizeId: string,
+  ): Promise<{ totalPrice: number; totalDiscount: number }> {
+    const result = await this.sewingProductRepository.findOne(sewingProduct, {
+      relations: ['options'],
+      select: ['id', 'options'],
+      where: {
+        sizes: { id: sizeId },
+      },
+    });
     return {
-      totalPrice: price,
-      totalDiscount: discount,
+      totalPrice: result.options[0].price,
+      totalDiscount: result.options[0].discount,
     };
   }
 }

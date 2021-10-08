@@ -5,7 +5,6 @@ import {
   IsBoolean,
   IsArray,
   ArrayMinSize,
-  ArrayMaxSize,
   IsObject,
   IsNumber,
   Min,
@@ -16,17 +15,15 @@ import { FileDto } from 'src/core/file-upload/dto/file-dto';
 import { CreateRecommendationDto } from 'src/core/recommendation/dto/create-recommendation.dto';
 
 export class PostDto {
-  @IsNotEmpty()
-  @IsString()
-  titleRu: string;
+  @IsOptional()
+  @IsNumber()
+  @Min(4)
+  @Max(4)
+  type: number;
 
   @IsOptional()
-  @IsString()
-  titleEn: string;
-
-  @IsOptional()
-  @IsString()
-  modifier: string;
+  @IsBoolean()
+  pinned: boolean;
 
   @IsNotEmpty()
   @IsObject()
@@ -35,27 +32,38 @@ export class PostDto {
   @IsNotEmpty()
   @IsArray()
   @ArrayMinSize(1)
-  @ArrayMaxSize(5)
-  categories: [CategoryDto];
+  categories: CategoryDto[];
+
+  @IsOptional()
+  @IsObject()
+  recommendation: CreateRecommendationDto;
+
+  @IsNotEmpty()
+  @IsString()
+  titleRu: string;
+  @IsOptional()
+  @IsString()
+  titleEn: string;
+
+  @IsOptional()
+  @IsString()
+  modifierRu: string;
+  @IsOptional()
+  @IsString()
+  modifierEn: string;
 
   @IsNotEmpty()
   @IsObject()
-  articleText: {
+  articleRu: {
     blocks: [];
     time: number;
     version: string;
   };
-
   @IsOptional()
-  @IsBoolean()
-  pinned: boolean;
-
-  @IsOptional()
-  @IsNumber()
-  @Min(4)
-  @Max(4)
-  type: number;
-
-  @IsOptional()
-  recommendation: CreateRecommendationDto;
+  @IsObject()
+  articleEn: {
+    blocks: [];
+    time: number;
+    version: string;
+  };
 }

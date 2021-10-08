@@ -18,14 +18,13 @@ import { USER_ROLE } from '../user/enum/user-role.enum';
 import { SewingProductService } from './sewing-product.service';
 import { SewingProductGuard } from './guard/sewing-product.guard';
 import { LangValidationPipe } from 'src/common/guards/lang.guard';
-import { UpdateSewingProductDto } from './dto/update-sewing-product.dto';
 import { SewingProductDto } from './dto/sewing-product.dto';
 import { GetAccount } from '../user/decorator/get-account.decorator';
 import { UserEntity } from '../user/user.entity';
 
 @Controller('sewing-product')
 export class SewingProductController {
-  constructor(private readonly sewingProductService: SewingProductService) {}
+  constructor(private sewingProductService: SewingProductService) {}
 
   @Post('/create/')
   @Roles(USER_ROLE.ADMIN)
@@ -121,7 +120,7 @@ export class SewingProductController {
   @Put('/update/:sewingProductId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
-  async update(@Request() req, @Body() body: UpdateSewingProductDto) {
+  async update(@Request() req, @Body() body: SewingProductDto) {
     return await this.sewingProductService.update(req.sewingProductId, body);
   }
   @Delete('/delete/:sewingProductId')

@@ -32,26 +32,24 @@ export class PurchaseService {
 
     for (const item of purchaseProducts) {
       if (item.type === 0) {
-        const result = await this.masterClassService.getPurchaseParams(
+        const result = await this.masterClassService.getPriceAndDiscount(
           item.masterClassId,
-          item.program,
         );
         item.totalDiscount = result.totalDiscount;
         item.totalPrice = result.totalPrice;
       }
-      if (item.type === 2 || item.type === 1) {
-        const result =
-          await this.patternProductService.getPurchaseParamsPatternProduct(
-            item.patternProductId,
-            item.size,
-          );
+      if (item.type === 1 || item.type === 2) {
+        const result = await this.patternProductService.getPriceAndDiscount(
+          item.patternProductId,
+          item.optionsId,
+        );
         item.totalDiscount = result.totalDiscount;
         item.totalPrice = result.totalPrice;
       }
       if (item.type === 3) {
-        const result = await this.sewingProductService.getPurchaseParams(
+        const result = await this.sewingProductService.getPriceAndDiscount(
           item.sewingProductId,
-          item.size,
+          item.optionsId.id,
         );
         item.totalDiscount = result.totalDiscount;
         item.totalPrice = result.totalPrice;

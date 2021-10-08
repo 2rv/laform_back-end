@@ -108,7 +108,7 @@ export class PostController {
   @Put('/update/:postId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard)
-  async update(@Param('postId') id: string, @Body() body: any) {
+  async update(@Param('postId') id: string, @Body() body: PostDto) {
     return await this.postService.update(id, body);
   }
 

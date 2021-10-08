@@ -9,12 +9,11 @@ import {
 } from 'typeorm';
 import { PatternProductEntity } from '../pattern-product/pattern-product.entity';
 import { SewingProductEntity } from '../sewing-product/sewing-product.entity';
-import { generateVendorCode } from '../../common/utils/vendor-coder';
 import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
 
-@Entity({ name: 'sizes' })
-export class SizesEntity {
+@Entity({ name: 'product_options' })
+export class ProductOptionEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -22,61 +21,74 @@ export class SizesEntity {
     type: 'varchar',
     name: 'vendor_code',
     unique: true,
-    nullable: true,
+    readonly: true,
   })
   vendorCode: string;
 
-  static getVendorCode() {
-    return generateVendorCode();
-  }
+  @Column({
+    type: 'varchar',
+    name: 'color_ru',
+    nullable: true,
+  })
+  colorRu!: string;
+  @Column({
+    type: 'varchar',
+    name: 'color_en',
+    nullable: true,
+  })
+  colorEn!: string;
 
   @Column({
     type: 'varchar',
     name: 'size',
+    nullable: true,
   })
   size!: string;
 
   @Column({
-    type: 'int',
+    type: 'numeric',
     name: 'price',
+    default: 0,
   })
   price!: number;
 
+  @Column({
+    type: 'int',
+    name: 'discount',
+    default: 0,
+  })
+  discount!: number;
+
+  @OneToOne(() => FileUploadEntity, (res: FileUploadEntity) => res.filePdf)
+  @JoinColumn({
+    name: 'file_pdf',
+  })
+  filePdf: FileUploadEntity;
+
   @ManyToOne(
     () => PatternProductEntity,
-    (pattern: PatternProductEntity) => pattern.sizes,
-    { onDelete: 'CASCADE' },
+    (res: PatternProductEntity) => res.options,
   )
   @JoinColumn({
-    name: 'patternProductId',
+    name: 'pattern_product_id',
   })
   patternProductId: PatternProductEntity;
 
   @ManyToOne(
     () => SewingProductEntity,
-    (pattern: SewingProductEntity) => pattern.sizes,
-    { onDelete: 'CASCADE' },
+    (res: SewingProductEntity) => res.options,
   )
   @JoinColumn({
-    name: 'sewingProductId',
+    name: 'sewing_product_id',
   })
   sewingProductId: SewingProductEntity;
 
   @OneToMany(
     () => PurchaseProductEntity,
-    (res: PurchaseProductEntity) => res.size,
+    (res: PurchaseProductEntity) => res.options,
   )
   @JoinColumn({
     name: 'purchased_product_id',
   })
   purchasedProductId: PurchaseProductEntity[];
-
-  @OneToOne(
-    () => FileUploadEntity,
-    (res: FileUploadEntity) => res.filePdfPatternProductId,
-  )
-  @JoinColumn({
-    name: 'file_pdf_pattern_product_id',
-  })
-  filePdf: FileUploadEntity;
 }

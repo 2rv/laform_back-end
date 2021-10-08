@@ -12,11 +12,28 @@ import { CategoryEntity } from '../category/category.entity';
 import { CommentEntity } from './../comment/comment.entity';
 import { RecommendationProductEntity } from '../recommendation-product/recommendation-product.entity';
 import { RecommendationEntity } from '../recommendation/recommendation.entity';
+import { generateVendorCode } from 'src/common/utils/vendor-coder';
 
 @Entity({ name: 'post' })
 export class PostEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column({
+    type: 'varchar',
+    name: 'vendor_code',
+    unique: true,
+    readonly: true,
+  })
+  vendorCode: string;
+
+  @Column({
+    type: 'int',
+    name: 'type',
+    default: 4,
+    readonly: true,
+  })
+  type: number;
 
   @CreateDateColumn({
     name: 'created_date',
@@ -24,48 +41,40 @@ export class PostEntity {
   })
   createdDate: Date;
 
+  static getVendorCode() {
+    return generateVendorCode();
+  }
+
   @OneToOne(() => FileUploadEntity, (res: FileUploadEntity) => res.postId)
   image: FileUploadEntity;
 
-  @OneToMany(
-    () => CategoryEntity,
-    (category: CategoryEntity) => category.postId,
-    { cascade: true },
-  )
+  @OneToMany(() => CategoryEntity, (res: CategoryEntity) => res.postId)
   categories: CategoryEntity[];
-
-  @OneToMany(() => LikeEntity, (like: LikeEntity) => like.postId)
-  like: LikeEntity[];
-
-  @OneToMany(() => CommentEntity, (comment: CommentEntity) => comment.postId)
-  comment: CommentEntity[];
-
-  @OneToMany(
-    () => RecommendationProductEntity,
-    (purchaseProduct: RecommendationProductEntity) => purchaseProduct.postId,
-  )
-  recommendationProduct: RecommendationProductEntity[];
 
   @OneToOne(
     () => RecommendationEntity,
-    (recommendation: RecommendationEntity) => recommendation.postId,
+    (res: RecommendationEntity) => res.postId,
     { cascade: true },
   )
   recommendation: RecommendationEntity;
+
+  @OneToMany(
+    () => RecommendationProductEntity,
+    (res: RecommendationProductEntity) => res.postId,
+  )
+  recommendationProduct: RecommendationProductEntity[];
+
+  @OneToMany(() => LikeEntity, (res: LikeEntity) => res.postId)
+  like: LikeEntity[];
+
+  @OneToMany(() => CommentEntity, (res: CommentEntity) => res.postId)
+  comment: CommentEntity[];
 
   @Column({
     type: 'varchar',
     name: 'title_ru',
   })
   titleRu!: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'modifier',
-    nullable: true,
-  })
-  modifier!: string;
-
   @Column({
     type: 'varchar',
     name: 'title_en',
@@ -74,21 +83,37 @@ export class PostEntity {
   titleEn!: string;
 
   @Column({
+    type: 'varchar',
+    name: 'modifier_ru',
+    nullable: true,
+  })
+  modifierRu!: string;
+  @Column({
+    type: 'varchar',
+    name: 'modifier_en',
+    nullable: true,
+  })
+  modifierEn!: string;
+
+  @Column({
     type: 'json',
     name: 'article_ru',
   })
-  articleText: {
+  articleRu: {
     blocks: [];
     time: number;
     version: string;
   };
-
   @Column({
-    type: 'int',
-    name: 'like_count',
+    type: 'json',
+    name: 'article_en',
     nullable: true,
   })
-  likeCount?: number;
+  articleEn: {
+    blocks: [];
+    time: number;
+    version: string;
+  };
 
   @Column({
     type: 'bool',
@@ -98,12 +123,6 @@ export class PostEntity {
   })
   pinned?: boolean;
 
-  @Column({
-    type: 'int',
-    name: 'type',
-    default: 4,
-  })
-  type: number;
   @Column({
     type: 'bool',
     name: 'deleted',

@@ -109,22 +109,3 @@ export class PurchaseEntity {
   })
   promoCodeDiscount?: number;
 }
-
-//   @Column({
-//     type: 'varchar',
-//     name: 'type_of_payment',
-//   })
-//   typeOfPayment!: string;
-
-//   @Column({
-//     type: 'varchar',
-//     name: 'type_of_delivery',
-//   })
-//   typeOfDelivery!: string;
-
-//   @Column({
-//     type: 'int',
-//     name: 'delivery_price',
-//     nullable: true,
-//   })
-//   deliveryPrice: number;

@@ -1,21 +1,22 @@
 import { FileUploadService } from '../file-upload/file-upload.service';
 import { PatternProductRepository } from './pattern-product.repository';
-import { UpdatePatternProductDto } from './dto/update-pattern-product.dto';
 import { PatternProductEntity } from './pattern-product.entity';
 import { Injectable } from '@nestjs/common';
 import { PatternProductDto } from './dto/pattern-product.dto';
-import { SizesService } from '../sizes/sizes.service';
+import { ProductOptionEntity } from '../product-option/product-option.entity';
 
 @Injectable()
 export class PatternProductService {
   constructor(
     private patternProductRepository: PatternProductRepository,
     private fileUploadService: FileUploadService,
-    private sizesService: SizesService,
   ) {}
 
   async create(body: PatternProductDto): Promise<PatternProductEntity> {
-    await this.sizesService.createMany(body.sizes);
+    body.options = body.options.map((item) => {
+      item.vendorCode = PatternProductEntity.getVendorCode();
+      return item;
+    });
     return await this.patternProductRepository.save(body);
   }
 
@@ -161,32 +162,24 @@ export class PatternProductService {
     return await this.patternProductRepository.delete(patternProduct.id);
   }
 
-  async update(id: string, body: UpdatePatternProductDto) {
-    if (body.images) {
-      for (const file of body.images) {
-        await this.fileUploadService.update(file, { patternProductId: id });
-      }
-    }
-    return await this.patternProductRepository.update(id, body.patternProduct);
+  async update(id: string, body: PatternProductDto) {
+    return await this.patternProductRepository.update(id, body);
   }
 
-  async getDiscount(id): Promise<number> {
-    return await (
-      await this.patternProductRepository.findOne(id)
-    ).discount;
-  }
-
-  async getPurchaseParamsPatternProduct(
-    patternProductId,
-    sizeId,
-  ): Promise<any> {
-    const discount = await (
-      await this.patternProductRepository.findOne(patternProductId)
-    ).discount;
-    const price = await this.sizesService.getSizePrice(sizeId);
+  async getPriceAndDiscount(
+    patternProduct: PatternProductEntity,
+    option: ProductOptionEntity,
+  ): Promise<{ totalPrice: number; totalDiscount: number }> {
+    const result = await this.patternProductRepository.findOne(patternProduct, {
+      relations: ['options'],
+      select: ['id', 'options'],
+      where: {
+        option: option,
+      },
+    });
     return {
-      totalPrice: price,
-      totalDiscount: discount,
+      totalPrice: result.options[0].price,
+      totalDiscount: result.options[0].discount,
     };
   }
 }

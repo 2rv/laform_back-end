@@ -12,7 +12,9 @@ export class PostService {
   ) {}
 
   async create(body: PostDto): Promise<PostEntity> {
-    return await this.postRepository.save(body);
+    const result = await this.postRepository.save(body);
+    result.vendorCode = PostEntity.getVendorCode();
+    return await this.postRepository.save(result);
   }
 
   async getAll(
@@ -113,7 +115,7 @@ export class PostService {
     await this.fileUploadService.deletePost(post.id);
     return await this.postRepository.delete(post.id);
   }
-  async update(id: any, body: any) {
+  async update(id: string, body: PostDto) {
     return await this.postRepository.update(id, body);
   }
 }

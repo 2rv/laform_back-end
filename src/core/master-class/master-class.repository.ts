@@ -1,5 +1,11 @@
 import { MasterClassEntity } from './master-class.entity';
 import { Brackets, EntityRepository, Repository } from 'typeorm';
+import {
+  recommendationsEn,
+  recommendationsEnAuth,
+  recommendationsRu,
+  recommendationsRuAuth,
+} from '../recommendation/recommendation.select';
 
 @EntityRepository(MasterClassEntity)
 export class MasterClassRepository extends Repository<MasterClassEntity> {
@@ -13,20 +19,18 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
     return await this.createQueryBuilder('master_class')
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.categories', 'categories')
-      .leftJoin('master_class.programs', 'programs')
       .select([
         'master_class.id',
-        'master_class.titleRu',
-        'master_class.modifier',
-        'master_class.discount',
         'master_class.type',
+        'master_class.vendorCode',
+        'master_class.titleRu',
+        'master_class.modifierRu',
+        'master_class.discount',
+        'master_class.price',
         'master_class.pinned',
         'images',
-        'categories',
-        'programs.id',
-        'programs.price',
-        'programs.programNameRu',
-        'programs.vendorCode',
+        'categories.id',
+        'categories.categoryNameRu',
       ])
       .orderBy(sort, by)
       //   .take(size)
@@ -37,7 +41,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
           if (where) {
             qb.where('master_class.titleRu ILIKE :search', {
               search: `%${where}%`,
-            }).orWhere('categories.textRu ILIKE :search', {
+            }).orWhere('categories.categoryNameRu ILIKE :search', {
               search: `%${where}%`,
             });
           } else {
@@ -58,20 +62,18 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
     return await this.createQueryBuilder('master_class')
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.categories', 'categories')
-      .leftJoin('master_class.programs', 'programs')
       .select([
         'master_class.id',
-        'master_class.titleEn',
-        'master_class.modifier',
-        'master_class.discount',
         'master_class.type',
+        'master_class.vendorCode',
+        'master_class.titleEn',
+        'master_class.modifierEn',
+        'master_class.discount',
+        'master_class.price',
         'master_class.pinned',
         'images',
-        'categories',
-        'programs.id',
-        'programs.price',
-        'programs.programNameEn',
-        'programs.vendorCode',
+        'categories.id',
+        'categories.categoryNameEn',
       ])
       .orderBy(sort, by)
       //   .take(size)
@@ -82,7 +84,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
           if (where) {
             qb.where('master_class.titleEn ILIKE :search', {
               search: `%${where}%`,
-            }).orWhere('categories.textEn ILIKE :search', {
+            }).orWhere('categories.categoryNameEn ILIKE :search', {
               search: `%${where}%`,
             });
           } else {
@@ -104,22 +106,21 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
     return await this.createQueryBuilder('master_class')
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.categories', 'categories')
-      .leftJoin('master_class.programs', 'programs')
       .leftJoin('master_class.like', 'like', 'like.userId = :userId', {
         userId,
       })
       .select([
         'master_class.id',
-        'master_class.titleRu',
-        'master_class.modifier',
-        'master_class.discount',
         'master_class.type',
+        'master_class.vendorCode',
+        'master_class.titleRu',
+        'master_class.modifierRu',
+        'master_class.discount',
+        'master_class.price',
+        'master_class.pinned',
         'images',
-        'categories',
-        'programs.id',
-        'programs.price',
-        'programs.programNameRu',
-        'programs.vendorCode',
+        'categories.id',
+        'categories.categoryNameRu',
         'like',
       ])
       .orderBy(sort, by)
@@ -131,7 +132,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
           if (where) {
             qb.where('master_class.titleRu ILIKE :search', {
               search: `%${where}%`,
-            }).orWhere('categories.textRu ILIKE :search', {
+            }).orWhere('categories.categoryNameRu ILIKE :search', {
               search: `%${where}%`,
             });
           } else {
@@ -153,22 +154,21 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
     return await this.createQueryBuilder('master_class')
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.categories', 'categories')
-      .leftJoin('master_class.programs', 'programs')
       .leftJoin('master_class.like', 'like', 'like.userId = :userId', {
         userId,
       })
       .select([
         'master_class.id',
-        'master_class.titleEn',
-        'master_class.modifier',
-        'master_class.discount',
         'master_class.type',
+        'master_class.vendorCode',
+        'master_class.titleEn',
+        'master_class.modifierEn',
+        'master_class.discount',
+        'master_class.price',
+        'master_class.pinned',
         'images',
-        'categories',
-        'programs.id',
-        'programs.price',
-        'programs.programNameEn',
-        'programs.vendorCode',
+        'categories.id',
+        'categories.categoryNameEn',
         'like',
       ])
       .orderBy(sort, by)
@@ -180,7 +180,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
           if (where) {
             qb.where('master_class.titleEn ILIKE :search', {
               search: `%${where}%`,
-            }).orWhere('categories.textEn ILIKE :search', {
+            }).orWhere('categories.categoryNameEn ILIKE :search', {
               search: `%${where}%`,
             });
           } else {
@@ -254,50 +254,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'programs.price',
         'programs.programNameRu',
 
-        'recommendation.id',
-        'recommendations.id',
-        'recommendations_master_class.id',
-        'recommendations_master_class.titleRu',
-        'recommendations_master_class.modifier',
-        'recommendations_master_class.discount',
-        'recommendations_master_class.type',
-        'recommendations_master_class_images',
-        'recommendations_master_class_programs.id',
-        'recommendations_master_class_programs.price',
-        'recommendations_master_class_programs.vendorCode',
-        'recommendations_master_class_programs.programNameRu',
-
-        'recommendations_pattern_product.id',
-        'recommendations_pattern_product.titleRu',
-        'recommendations_pattern_product.type',
-        'recommendations_pattern_product.modifier',
-        'recommendations_pattern_product.complexity',
-        'recommendations_pattern_product.discount',
-        'recommendations_pattern_product_images',
-        'recommendations_pattern_product_sizes.id',
-        'recommendations_pattern_product_sizes.price',
-        'recommendations_pattern_product_sizes.size',
-        'recommendations_pattern_product_sizes.vendorCode',
-
-        'recommendations_sewing_product.id',
-        'recommendations_sewing_product.titleRu',
-        'recommendations_sewing_product.discount',
-        'recommendations_sewing_product.modifier',
-        'recommendations_sewing_product.type',
-        'recommendations_sewing_product_images',
-        'recommendations_sewing_product_sizes.id',
-        'recommendations_sewing_product_sizes.size',
-        'recommendations_sewing_product_sizes.price',
-        'recommendations_sewing_product_sizes.vendorCode',
-        'recommendations_sewing_product_colors',
-
-        'recommendations_post.id',
-        'recommendations_post.titleRu',
-        'recommendations_post.createdDate',
-        'recommendations_post.likeCount',
-        'recommendations_post.modifier',
-        'recommendations_post.type',
-        'recommendations_post_image',
+        ...recommendationsRu,
       ])
       .where('recommendations_sewing_product.deleted = false')
       .where('recommendations_master_class.deleted = false')
@@ -368,50 +325,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'programs.price',
         'programs.programNameEn',
 
-        'recommendation.id',
-        'recommendations.id',
-        'recommendations_master_class.id',
-        'recommendations_master_class.titleEn',
-        'recommendations_master_class.modifier',
-        'recommendations_master_class.discount',
-        'recommendations_master_class.type',
-        'recommendations_master_class_images',
-        'recommendations_master_class_programs.id',
-        'recommendations_master_class_programs.price',
-        'recommendations_master_class_programs.ProgramNameRu',
-        'recommendations_master_class_programs.vendorCode',
-
-        'recommendations_pattern_product.id',
-        'recommendations_pattern_product.titleEn',
-        'recommendations_pattern_product.type',
-        'recommendations_pattern_product.modifier',
-        'recommendations_pattern_product.complexity',
-        'recommendations_pattern_product.discount',
-        'recommendations_pattern_product_images',
-        'recommendations_pattern_product_sizes.id',
-        'recommendations_pattern_product_sizes.price',
-        'recommendations_pattern_product_sizes.size',
-        'recommendations_pattern_product_sizes.vendorCode',
-
-        'recommendations_sewing_product.id',
-        'recommendations_sewing_product.titleEn',
-        'recommendations_sewing_product.discount',
-        'recommendations_sewing_product.modifier',
-        'recommendations_sewing_product.type',
-        'recommendations_sewing_product_images',
-        'recommendations_sewing_product_sizes.id',
-        'recommendations_sewing_product_sizes.size',
-        'recommendations_sewing_product_sizes.price',
-        'recommendations_sewing_product_sizes.vendorCode',
-        'recommendations_sewing_product_colors',
-
-        'recommendations_post.id',
-        'recommendations_post.titleEn',
-        'recommendations_post.createdDate',
-        'recommendations_post.likeCount',
-        'recommendations_post.modifier',
-        'recommendations_post.type',
-        'recommendations_post_image',
+        ...recommendationsEn,
       ])
       .where('recommendations_sewing_product.deleted = false')
       .where('recommendations_master_class.deleted = false')
@@ -520,54 +434,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'programs.programNameRu',
         'like',
 
-        'recommendation.id',
-        'recommendations.id',
-        'recommendations_master_class.id',
-        'recommendations_master_class.titleRu',
-        'recommendations_master_class.modifier',
-        'recommendations_master_class.discount',
-        'recommendations_master_class.type',
-        'recommendations_master_class_images',
-        'recommendations_master_class_programs.id',
-        'recommendations_master_class_programs.price',
-        'recommendations_master_class_programs.programNameRu',
-        'recommendations_master_class_programs.vendorCode',
-        'recommendations_master_class_like',
-
-        'recommendations_pattern_product.id',
-        'recommendations_pattern_product.titleRu',
-        'recommendations_pattern_product.type',
-        'recommendations_pattern_product.modifier',
-        'recommendations_pattern_product.complexity',
-        'recommendations_pattern_product.discount',
-        'recommendations_pattern_product_images',
-        'recommendations_pattern_product_sizes.id',
-        'recommendations_pattern_product_sizes.price',
-        'recommendations_pattern_product_sizes.size',
-        'recommendations_pattern_product_sizes.vendorCode',
-        'recommendations_pattern_product_like',
-
-        'recommendations_sewing_product.id',
-        'recommendations_sewing_product.titleRu',
-        'recommendations_sewing_product.discount',
-        'recommendations_sewing_product.modifier',
-        'recommendations_sewing_product.type',
-        'recommendations_sewing_product_images',
-        'recommendations_sewing_product_sizes.id',
-        'recommendations_sewing_product_sizes.size',
-        'recommendations_sewing_product_sizes.price',
-        'recommendations_sewing_product_sizes.vendorCode',
-        'recommendations_sewing_product_colors',
-        'recommendations_sewing_product_like',
-
-        'recommendations_post.id',
-        'recommendations_post.titleRu',
-        'recommendations_post.createdDate',
-        'recommendations_post.likeCount',
-        'recommendations_post.modifier',
-        'recommendations_post.type',
-        'recommendations_post_image',
-        'recommendations_post_like',
+        ...recommendationsRuAuth,
       ])
       .where('recommendations_sewing_product.deleted = false')
       .where('recommendations_master_class.deleted = false')
@@ -676,54 +543,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'programs.programNameEn',
         'like',
 
-        'recommendation.id',
-        'recommendations.id',
-        'recommendations_master_class.id',
-        'recommendations_master_class.titleEn',
-        'recommendations_master_class.modifier',
-        'recommendations_master_class.discount',
-        'recommendations_master_class.type',
-        'recommendations_master_class_images',
-        'recommendations_master_class_programs.id',
-        'recommendations_master_class_programs.price',
-        'recommendations_master_class_programs.programNameEn',
-        'recommendations_master_class_programs.vendorCode',
-        'recommendations_master_class_like',
-
-        'recommendations_pattern_product.id',
-        'recommendations_pattern_product.titleEn',
-        'recommendations_pattern_product.type',
-        'recommendations_pattern_product.modifier',
-        'recommendations_pattern_product.complexity',
-        'recommendations_pattern_product.discount',
-        'recommendations_pattern_product_images',
-        'recommendations_pattern_product_sizes.id',
-        'recommendations_pattern_product_sizes.price',
-        'recommendations_pattern_product_sizes.size',
-        'recommendations_pattern_product_sizes.vendorCode',
-        'recommendations_pattern_product_like',
-
-        'recommendations_sewing_product.id',
-        'recommendations_sewing_product.titleEn',
-        'recommendations_sewing_product.discount',
-        'recommendations_sewing_product.modifier',
-        'recommendations_sewing_product.type',
-        'recommendations_sewing_product_images',
-        'recommendations_sewing_product_sizes.id',
-        'recommendations_sewing_product_sizes.size',
-        'recommendations_sewing_product_sizes.price',
-        'recommendations_sewing_product_sizes.vendorCode',
-        'recommendations_sewing_product_color',
-        'recommendations_sewing_product_like',
-
-        'recommendations_post.id',
-        'recommendations_post.titleEn',
-        'recommendations_post.createdDate',
-        'recommendations_post.likeCount',
-        'recommendations_post.modifier',
-        'recommendations_post.type',
-        'recommendations_post_image',
-        'recommendations_post_like',
+        ...recommendationsEnAuth,
       ])
       .where('recommendations_sewing_product.deleted = false')
       .where('recommendations_master_class.deleted = false')
@@ -737,20 +557,18 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
     return await this.createQueryBuilder('master_class')
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.categories', 'categories')
-      .leftJoin('master_class.programs', 'programs')
       .select([
         'master_class.id',
-        'master_class.titleRu',
-        'master_class.modifier',
-        'master_class.discount',
         'master_class.type',
+        'master_class.vendorCode',
+        'master_class.titleRu',
+        'master_class.modifierRu',
+        'master_class.discount',
+        'master_class.price',
         'master_class.pinned',
         'images',
-        'categories',
-        'programs.id',
-        'programs.price',
-        'programs.programNameRu',
-        'programs.vendorCode',
+        'categories.id',
+        'categories.categoryNameRu',
       ])
       .where('master_class.pinned = true')
       .getMany();
@@ -759,20 +577,18 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
     return await this.createQueryBuilder('master_class')
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.categories', 'categories')
-      .leftJoin('master_class.programs', 'programs')
       .select([
         'master_class.id',
-        'master_class.titleEn',
-        'master_class.modifier',
-        'master_class.discount',
         'master_class.type',
+        'master_class.vendorCode',
+        'master_class.titleEn',
+        'master_class.modifierEn',
+        'master_class.discount',
+        'master_class.price',
         'master_class.pinned',
         'images',
-        'categories',
-        'programs.id',
-        'programs.price',
-        'programs.programNameEn',
-        'programs.vendorCode',
+        'categories.id',
+        'categories.categoryNameEn',
       ])
       .where('master_class.pinned = true')
       .getMany();
@@ -781,23 +597,21 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
     return await this.createQueryBuilder('master_class')
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.categories', 'categories')
-      .leftJoin('master_class.programs', 'programs')
       .leftJoin('master_class.like', 'like', 'like.userId = :userId', {
         userId,
       })
       .select([
         'master_class.id',
-        'master_class.titleRu',
-        'master_class.modifier',
-        'master_class.discount',
         'master_class.type',
+        'master_class.vendorCode',
+        'master_class.titleRu',
+        'master_class.modifierRu',
+        'master_class.discount',
+        'master_class.price',
         'master_class.pinned',
         'images',
-        'categories',
-        'programs.id',
-        'programs.price',
-        'programs.programNameRu',
-        'programs.vendorCode',
+        'categories.id',
+        'categories.categoryNameRu',
         'like',
       ])
       .where('master_class.pinned = true')
@@ -807,23 +621,21 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
     return await this.createQueryBuilder('master_class')
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.categories', 'categories')
-      .leftJoin('master_class.programs', 'programs')
       .leftJoin('master_class.like', 'like', 'like.userId = :userId', {
         userId,
       })
       .select([
         'master_class.id',
-        'master_class.titleEn',
-        'master_class.modifier',
-        'master_class.discount',
         'master_class.type',
+        'master_class.vendorCode',
+        'master_class.titleEn',
+        'master_class.modifierEn',
+        'master_class.discount',
+        'master_class.price',
         'master_class.pinned',
         'images',
-        'categories',
-        'programs.id',
-        'programs.price',
-        'programs.programNameEn',
-        'programs.vendorCode',
+        'categories.id',
+        'categories.categoryNameEn',
         'like',
       ])
       .where('master_class.pinned = true')
@@ -834,20 +646,19 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
     return await this.createQueryBuilder('master_class')
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.categories', 'categories')
-      .leftJoin('master_class.programs', 'programs')
       .leftJoin('master_class.like', 'like')
       .select([
         'master_class.id',
-        'master_class.titleRu',
-        'master_class.modifier',
-        'master_class.discount',
         'master_class.type',
+        'master_class.vendorCode',
+        'master_class.titleRu',
+        'master_class.modifierRu',
+        'master_class.discount',
+        'master_class.price',
+        'master_class.pinned',
         'images',
-        'categories',
-        'programs.id',
-        'programs.price',
-        'programs.programNameRu',
-        'programs.vendorCode',
+        'categories.id',
+        'categories.categoryNameRu',
         'like',
       ])
       .where('master_class.deleted = false')
@@ -858,20 +669,19 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
     return await this.createQueryBuilder('master_class')
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.categories', 'categories')
-      .leftJoin('master_class.programs', 'programs')
       .leftJoin('master_class.like', 'like')
       .select([
         'master_class.id',
-        'master_class.titleEn',
-        'master_class.modifier',
-        'master_class.discount',
         'master_class.type',
+        'master_class.vendorCode',
+        'master_class.titleEn',
+        'master_class.modifierEn',
+        'master_class.discount',
+        'master_class.price',
+        'master_class.pinned',
         'images',
-        'categories',
-        'programs.id',
-        'programs.price',
-        'programs.programNameEn',
-        'programs.vendorCode',
+        'categories.id',
+        'categories.categoryNameEn',
         'like',
       ])
       .where('master_class.deleted = false')

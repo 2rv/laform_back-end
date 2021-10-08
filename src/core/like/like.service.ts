@@ -26,27 +26,27 @@ export class LikeService {
     if (result) {
       throw new BadRequestException(LIKE_ERROR.LIKE_ALREADY_EXISTS);
     } else await this.likeRepository.save({ ...body, userId: userId });
-    const count = await this.count(body);
+    // const count = await this.count(body);
     if (body.postId) {
-      await this.postRepository.update(body.postId, { likeCount: count });
+      //   await this.postRepository.update(body.postId, { likeCount: count });
       return { id: body.postId };
     }
     if (body.masterClassId) {
-      await this.masterClassRepository.update(body.masterClassId, {
-        likeCount: count,
-      });
+      //   await this.masterClassRepository.update(body.masterClassId, {
+      //     likeCount: count,
+      //   });
       return { id: body.masterClassId };
     }
     if (body.sewingProductId) {
-      await this.sewingProductRepository.update(body.sewingProductId, {
-        likeCount: count,
-      });
+      //   await this.sewingProductRepository.update(body.sewingProductId, {
+      //     likeCount: count,
+      //   });
       return { id: body.sewingProductId };
     }
     if (body.patternProductId) {
-      await this.patternProductRepository.update(body.patternProductId, {
-        likeCount: count,
-      });
+      //   await this.patternProductRepository.update(body.patternProductId, {
+      //     likeCount: count,
+      //   });
       return { id: body.patternProductId };
     }
   }
@@ -64,27 +64,27 @@ export class LikeService {
     if (!result) {
       throw new BadRequestException(LIKE_ERROR.LIKE_NOT_EXISTS);
     } else await this.likeRepository.delete(result.id);
-    const count = await this.count(body);
+    // const count = await this.count(body);
     if (body.postId) {
-      await this.postRepository.update(body.postId, { likeCount: count });
+      //   await this.postRepository.update(body.postId, { likeCount: count });
       return { id: body.postId };
     }
     if (body.masterClassId) {
-      await this.masterClassRepository.update(body.masterClassId, {
-        likeCount: count,
-      });
+      //   await this.masterClassRepository.update(body.masterClassId, {
+      //     likeCount: count,
+      //   });
       return { id: body.masterClassId };
     }
     if (body.sewingProductId) {
-      await this.sewingProductRepository.update(body.sewingProductId, {
-        likeCount: count,
-      });
+      //   await this.sewingProductRepository.update(body.sewingProductId, {
+      //     likeCount: count,
+      //   });
       return { id: body.sewingProductId };
     }
     if (body.patternProductId) {
-      await this.patternProductRepository.update(body.patternProductId, {
-        likeCount: count,
-      });
+      //   await this.patternProductRepository.update(body.patternProductId, {
+      //     likeCount: count,
+      //   });
       return { id: body.patternProductId };
     }
   }
