@@ -11,11 +11,12 @@ import { UserVerificationController } from './user-verification.controller';
 import { UserVerificationService } from './user-verification.service';
 
 import { NotificationModule } from '../notification/notification.module';
+import { PurchaseRepository } from '../purchase/purchase.repository';
 
 @Module({
   imports: [
     CacheModule.register(CacheModuleConfig),
-    TypeOrmModule.forFeature([UserRepository, UserEntity]),
+    TypeOrmModule.forFeature([UserRepository, UserEntity, PurchaseRepository]),
     AuthModule,
     MailModule,
     NotificationModule,

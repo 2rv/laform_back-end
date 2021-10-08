@@ -15,6 +15,7 @@ import { USER_VERIFICATION_ERROR } from './enum/user-verification-error.enum';
 import { UserVerificationEmailPayload } from './type/user-verification-email-payload.type';
 
 import { NotificationService } from '../notification/notification.service';
+import { PurchaseRepository } from '../purchase/purchase.repository';
 
 @Injectable()
 export class UserVerificationService {
@@ -23,6 +24,7 @@ export class UserVerificationService {
     private userRepository: UserRepository,
     private mailService: MailService,
     private notificationService: NotificationService,
+    private purchaseRepository: PurchaseRepository,
   ) {}
 
   async getEmailVerificationCode(user: UserEntity): Promise<void> {
@@ -70,6 +72,8 @@ export class UserVerificationService {
     await this.notificationService.subscribeAuthtorized(updatedUser, {
       subscribe: true,
     });
+
+    await this.purchaseRepository.connectPurchasesToUser(updatedUser);
 
     this.cacheManager.del(code);
     return true;

@@ -98,22 +98,28 @@ export class AuthService {
 
   async signUpWithGoogle(body: any): Promise<LoginInfoDto> {
     let accessToken;
-    const findUser: any = await this.userRepository.findOne({
-      where: {
-        googleId: body.id,
-      },
+    const findUserByEmail: UserEntity = await this.userRepository.findOne({
+      email: body.email,
     });
 
-    if (Boolean(findUser)) {
-      findUser.login = body?.firstName + body?.lastName;
-      accessToken = await this.createJwt(findUser);
+    if (Boolean(findUserByEmail) && !findUserByEmail.googleId) {
+      findUserByEmail.googleId = body.id;
+      await findUserByEmail.save();
+    }
+
+    const findUserByGoogleId: UserEntity = await this.userRepository.findOne({
+      googleId: body.id,
+    });
+
+    if (Boolean(findUserByGoogleId)) {
+      accessToken = await this.createJwt(findUserByGoogleId);
     } else {
       const user = await this.userRepository.saveGoogleUser({
         email: body.email,
+        login: body.email.split('@')[0],
         googleId: body.id,
       });
       await this.userInfoService.create(user);
-      user.login = body.firstName + body.lastName;
       accessToken = await this.createJwt(user);
     }
 
@@ -123,17 +129,25 @@ export class AuthService {
   async signUpWithFacebook(body: any): Promise<LoginInfoDto> {
     let accessToken;
 
-    const findUser: any = await this.userRepository.findOne({
-      where: {
-        facebookId: body.id,
-      },
+    const findUserByEmail: UserEntity = await this.userRepository.findOne({
+      email: body.email,
     });
 
-    if (Boolean(findUser)) {
-      accessToken = await this.createJwt(findUser);
+    if (Boolean(findUserByEmail) && !findUserByEmail.facebookId) {
+      findUserByEmail.facebookId = body.id;
+      await findUserByEmail.save();
+    }
+
+    const findUserByFacebookId: any = await this.userRepository.findOne({
+      facebookId: body.id,
+    });
+
+    if (Boolean(findUserByFacebookId)) {
+      accessToken = await this.createJwt(findUserByFacebookId);
     } else {
       const user = await this.userRepository.saveFacebookUser({
         email: body.email,
+        login: body.email.split('@')[0],
         facebookId: body.id,
       });
       await this.userInfoService.create(user);

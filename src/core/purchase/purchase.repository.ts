@@ -1,5 +1,6 @@
 import { PurchaseEntity } from './purchase.entity';
 import { EntityRepository, Repository } from 'typeorm';
+import { UserEntity } from '../user/user.entity';
 
 @EntityRepository(PurchaseEntity)
 export class PurchaseRepository extends Repository<PurchaseEntity> {
@@ -146,5 +147,9 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
       ])
       .where('purchase.id = :id', { id })
       .getOne();
+  }
+
+  async connectPurchasesToUser(user: UserEntity): Promise<any> {
+    await this.update({ email: user.email }, { userId: user });
   }
 }
