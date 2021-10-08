@@ -17,6 +17,7 @@ import { PurchaseEntity } from '../purchase/purchase.entity';
 import { CommentEntity } from '../comment/comment.entity';
 import { LikeEntity } from '../like/like.entity';
 import { UserInfoEntity } from '../user-info/user-info.entity';
+import { Transform } from 'class-transformer';
 
 @Entity({ name: 'user' })
 @Unique(['login', 'email'])
@@ -25,12 +26,16 @@ export class UserEntity extends BaseEntity {
   id: number;
 
   @Column({ unique: true, nullable: true })
+  @Transform((value: string) => value?.trim())
+  @Transform((value: string) => value?.toLowerCase())
   login: string;
 
   @Column({ unique: true, nullable: true })
+  @Transform((value: string) => value?.trim())
   email: string;
 
   @Column({ nullable: true })
+  @Transform((value: string) => value?.trim())
   password: string;
 
   @Column({

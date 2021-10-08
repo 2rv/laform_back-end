@@ -172,6 +172,7 @@ export class UserRepository extends Repository<UserEntity> {
   async saveGoogleUser(body: CreateGoogleUseDto): Promise<UserEntity> {
     const user: UserEntity = new UserEntity();
     user.googleId = body.googleId;
+    user.login = body.login;
     user.email = body.email;
 
     try {
@@ -189,6 +190,7 @@ export class UserRepository extends Repository<UserEntity> {
   async saveFacebookUser(body: CreateFacebookUseDto): Promise<UserEntity> {
     const user: UserEntity = new UserEntity();
     user.facebookId = body.facebookId;
+    user.login = body.login;
     user.email = body.email;
 
     try {
