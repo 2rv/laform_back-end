@@ -24,6 +24,7 @@ import { ColorsModule } from './core/colors/colors.module';
 import { SizesModule } from './core/sizes/sizes.module';
 import { ProgramsModule } from './core/programs/programs.module';
 import { CommentModule } from './core/comment/comment.module';
+import { AboutUsModule } from './core/about-us/about-us.module';
 
 @Module({
   providers: [],
@@ -52,6 +53,7 @@ import { CommentModule } from './core/comment/comment.module';
     PromoCodeModule,
     MailModule,
     CommentModule,
+    AboutUsModule,
   ],
 })
 export class AppModule {}
