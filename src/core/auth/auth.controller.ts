@@ -62,14 +62,18 @@ export class AuthController {
   @Get('/facebook/redirect')
   @UseGuards(AuthGuard('facebook'))
   async facebookLoginRedirect(@Req() req, @Res() res): Promise<any> {
-    const token = await this.authService.signUpWithFacebook(req.user);
     const clientUrl = req.hostname.includes('localhost')
       ? `${req.protocol}://localhost:3000`
       : ClientConfig.url;
 
-    return res.redirect(
-      `${clientUrl}/social-auth-access?data=${token.accessToken}`,
-    );
+    if (res.status === 'connected') {
+      const token = await this.authService.signUpWithFacebook(req.user);
+      return res.redirect(
+        `${clientUrl}/social-auth-access?data=${token.accessToken}`,
+      );
+    } else {
+      return res.redirect(clientUrl);
+    }
   }
 
   @Get('/google')
