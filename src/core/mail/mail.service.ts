@@ -70,7 +70,7 @@ export class MailService {
     return await this.mailerService
       .sendMail({
         to: user.email,
-        subject: `LaForme, скачивание pdf товара`,
+        subject: 'La`forme Patterns, скачивание pdf товара',
         html: `<p style="font-size: 20px;">PDF версия товара - <b>${body.productName}</b></p>`,
         attachments: [
           {
@@ -89,7 +89,7 @@ export class MailService {
     return await this.mailerService
       .sendMail({
         to: user.email,
-        subject: `LaForme, информация о купленных продуктах`,
+        subject: 'La`forme Patterns, информация о купленных продуктах',
         template: path.join(
           path.resolve(),
           'src/templates/purchased-products-info.pug',
