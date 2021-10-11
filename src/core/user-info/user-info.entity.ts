@@ -48,12 +48,12 @@ export class UserInfoEntity extends BaseEntity {
   location: string;
 
   @Column({
-    type: 'enum',
-    enum: DELIVERY_TYPE,
-    default: DELIVERY_TYPE.ON_THE_POINT,
-    nullable: false,
+    type: 'varchar',
+    name: 'delivery_type',
+    default: null,
+    nullable: true,
   })
-  deliveryType: DELIVERY_TYPE;
+  deliveryType: string;
 
   @Column({
     type: 'enum',
