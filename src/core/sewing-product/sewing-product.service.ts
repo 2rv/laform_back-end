@@ -146,14 +146,14 @@ export class SewingProductService {
   ): Promise<{ totalPrice: number; totalDiscount: number }> {
     const result = await this.sewingProductRepository.findOne(sewingProduct, {
       relations: ['options'],
-      select: ['id', 'options'],
+      select: ['id', 'price', 'discount', 'options'],
       where: {
         sizes: { id: sizeId },
       },
     });
     return {
-      totalPrice: result.options[0].price,
-      totalDiscount: result.options[0].discount,
+      totalPrice: (result.price || result.options[0].price) ?? 0,
+      totalDiscount: result.options[0].discount ?? 0,
     };
   }
 }

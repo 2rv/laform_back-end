@@ -178,8 +178,8 @@ export class PatternProductService {
       },
     });
     return {
-      totalPrice: result.options[0].price,
-      totalDiscount: result.options[0].discount,
+      totalPrice: (0 || result.options[0].price) ?? 0,
+      totalDiscount: result.options[0].discount ?? 0,
     };
   }
 }

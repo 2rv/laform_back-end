@@ -11,13 +11,6 @@ export class ProductOptionService {
     return await this.productOptionRepository.find();
   }
 
-  async getOptionPrice(id: ProductOptionEntity): Promise<number> {
-    const result = await this.productOptionRepository.findOne(id);
-    if (!result) {
-      throw new BadRequestException(PRODUCT_OPTION.NOT_FOUND);
-    } else return result.price;
-  }
-
   async update(id: string, body) {
     const result = await this.productOptionRepository.update(id, body);
     return result;

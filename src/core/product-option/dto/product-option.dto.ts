@@ -14,17 +14,17 @@ import { FileDto } from 'src/core/file-upload/dto/file-dto';
 export class ProductOptionDto {
   @IsOptional()
   @IsString()
+  size: string;
+
+  @IsOptional()
+  @IsString()
   colorRu: string;
 
   @IsOptional()
   @IsString()
   colorEn: string;
 
-  @IsNotEmpty()
-  @IsString()
-  size: string;
-
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
   @Min(0)
   price: number;

@@ -48,14 +48,14 @@ export class ProductOptionEntity {
   @Column({
     type: 'numeric',
     name: 'price',
-    default: 0,
+    nullable: true,
   })
   price!: number;
 
   @Column({
     type: 'int',
     name: 'discount',
-    default: 0,
+    nullable: true,
   })
   discount!: number;
 

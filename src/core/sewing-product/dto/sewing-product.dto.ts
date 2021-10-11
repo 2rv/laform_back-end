@@ -45,7 +45,6 @@ export class SewingProductDto {
 
   @IsNotEmpty()
   @IsArray()
-  @ArrayMinSize(1)
   options: ProductOptionDto[];
 
   @ArrayNotEmpty()
@@ -60,9 +59,26 @@ export class SewingProductDto {
 
   @IsOptional()
   @IsNumber()
+  @Min(0)
+  price: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  @Max(100)
+  discount: number;
+
+  @IsOptional()
+  @IsNumber()
   @Min(3)
   @Max(3)
   type: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  @Max(3)
+  optionType: number;
 
   @IsOptional()
   @IsBoolean()

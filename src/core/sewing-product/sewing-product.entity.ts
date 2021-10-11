@@ -27,6 +27,12 @@ export class SewingProductEntity {
     readonly: true,
   })
   type!: number;
+  @Column({
+    type: 'int',
+    name: 'option_type',
+    default: 0,
+  })
+  optionType?: number;
 
   static getVendorCode() {
     return generateVendorCode();
@@ -72,6 +78,20 @@ export class SewingProductEntity {
 
   @OneToMany(() => CommentEntity, (res: CommentEntity) => res.sewingProductId)
   comment: CommentEntity[];
+
+  @Column({
+    type: 'int',
+    name: 'discount',
+    nullable: true,
+  })
+  discount?: number;
+
+  @Column({
+    type: 'numeric',
+    name: 'price',
+    nullable: true,
+  })
+  price?: number;
 
   @Column({
     type: 'varchar',
