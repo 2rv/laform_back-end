@@ -25,6 +25,7 @@ import { SizesModule } from './core/sizes/sizes.module';
 import { ProgramsModule } from './core/programs/programs.module';
 import { CommentModule } from './core/comment/comment.module';
 import { AboutUsModule } from './core/about-us/about-us.module';
+import { DeliveryPriceModule } from './core/delivery-price/delivery-price.module';
 
 @Module({
   providers: [],
@@ -54,6 +55,7 @@ import { AboutUsModule } from './core/about-us/about-us.module';
     MailModule,
     CommentModule,
     AboutUsModule,
+    DeliveryPriceModule,
   ],
 })
 export class AppModule {}

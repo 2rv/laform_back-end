@@ -23,7 +23,7 @@ import { NotificationEntity } from '../notification/notification.entity';
         },
       },
       defaults: {
-        from: `LaForm <${MailConfig.email}>`,
+        from: `La\`forme Patterns <${MailConfig.email}>`,
       },
       template: {
         dir: path.join(path.resolve(), 'src/templates/'),
