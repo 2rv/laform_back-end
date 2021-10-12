@@ -96,8 +96,10 @@ export class MailService {
         ),
         context: {
           address: body.purchase.city,
-          phone: body.purchase.phoneNumber,
           fullName: body.purchase.fullName,
+          phone: body.purchase.phoneNumber,
+          totalPrice: body.totalPrice,
+          purchasedProducts: body.purchaseProducts,
         },
       })
       .catch((e) => {
