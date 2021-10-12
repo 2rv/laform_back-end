@@ -78,13 +78,6 @@ export class PurchaseEntity {
 
   @Column({
     type: 'varchar',
-    name: 'type_of_delivery',
-    nullable: true,
-  })
-  typeOfDelivery!: string;
-
-  @Column({
-    type: 'varchar',
     name: 'comment',
     nullable: true,
   })

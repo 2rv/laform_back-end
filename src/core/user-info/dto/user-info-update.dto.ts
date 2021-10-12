@@ -17,8 +17,8 @@ export class UserInfoUpdateDto {
   location: string;
 
   @IsOptional()
-  @IsString()
-  deliveryType: string;
+  @IsEnum(DELIVERY_TYPE)
+  deliveryType: DELIVERY_TYPE;
 
   @IsOptional()
   @IsEnum(PAYMENT_TYPE)

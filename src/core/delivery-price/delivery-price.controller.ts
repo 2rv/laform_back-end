@@ -18,6 +18,8 @@ export class DeliveryPriceController {
   constructor(private deliveryPriceService: DeliveryPriceService) {}
 
   @Get('get')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
   async get() {
     return await this.deliveryPriceService.get();
   }
