@@ -25,9 +25,9 @@ export class PurchaseDto {
   //   @IsString()
   //   typeOfPayment: string;
 
-  //   @IsNotEmpty()
-  //   @IsString()
-  //   typeOfDelivery: string;
+  @IsNotEmpty()
+  @IsString()
+  typeOfDelivery: string;
 
   @IsOptional()
   @IsString()

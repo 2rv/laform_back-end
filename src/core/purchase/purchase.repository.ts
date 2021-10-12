@@ -106,6 +106,7 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
         'purchase.fullName',
         'purchase.city',
         'purchase.phoneNumber',
+        'purchase.typeOfDelivery',
         'purchase.comment',
         'purchase.price',
         'purchase.promoCode',
