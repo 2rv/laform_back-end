@@ -1,4 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  CACHE_MANAGER,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
+import { Cache } from 'cache-manager';
 import { PurchaseEntity } from './purchase.entity';
 import { PurchaseRepository } from './purchase.repository';
 import { CreatePurchaseDto } from './dto/create-purchase.dto';
@@ -10,10 +16,11 @@ import { MasterClassService } from '../master-class/master-class.service';
 import { VerifyPurchaseProductsDto } from './dto/verify-purchase-products.dto';
 import { PromoCodeService } from '../promo-code/promo-code.service';
 import { PurchaseProductService } from '../purchase-product/purchase-product.service';
-
+import { USER_VERIFICATION_ERROR } from '../user-verification/enum/user-verification-error.enum';
 @Injectable()
 export class PurchaseService {
   constructor(
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private promoCodeService: PromoCodeService,
     private purchaseRepository: PurchaseRepository,
     private purchaseProductService: PurchaseProductService,
@@ -134,5 +141,20 @@ export class PurchaseService {
 
   async delete(id: string) {
     return await this.purchaseRepository.delete(id);
+  }
+
+  async confirmEmailForOrder(code: string): Promise<any> {
+    const purchaseEmailConfirmationCode: string = await this.cacheManager.get(
+      'purchaseEmailConfirmationCode',
+    );
+
+    if (purchaseEmailConfirmationCode === code) {
+      this.cacheManager.del('purchaseEmailConfirmationCode');
+      return true;
+    } else {
+      throw new BadRequestException(
+        USER_VERIFICATION_ERROR.USER_VERIFICATION_EMAIL_CODE_DOESNT_EXISTS,
+      );
+    }
   }
 }
