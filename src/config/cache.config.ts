@@ -5,7 +5,7 @@ import * as config from 'config';
 const CACHE_CONFIG = config.get('CACHE');
 
 export const CacheModuleConfig: CacheModuleOptions = {
-  // store: redisStore,
+  store: redisStore,
   host: CACHE_CONFIG.HOST,
   port: CACHE_CONFIG.PORT,
   password: CACHE_CONFIG.PASSWORD,
