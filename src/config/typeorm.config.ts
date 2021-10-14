@@ -25,7 +25,6 @@ import {
   SubCommentEntity,
 } from 'src/core/comment/comment.entity';
 import { AboutUsEntity } from 'src/core/about-us/about-us.entity';
-import { DeliveryPriceEntity } from 'src/core/delivery-price/delivery-price.entity';
 const DATABASE_CONFIG = config.get('DATABASE');
 export const ApiEntities = [
   UserEntity,
@@ -51,14 +50,21 @@ export const ApiEntities = [
   RecommendationEntity,
   RecommendationProductEntity,
   AboutUsEntity,
-  DeliveryPriceEntity,
 ];
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
-  type: DATABASE_CONFIG.TYPE,
-  url: process.env.DATABASE_URL || DATABASE_CONFIG.URL,
-  entities: ApiEntities,
-  ssl: { rejectUnauthorized: false },
-  logging: ['query', 'error'],
-  synchronize: process.env.TYPEORM_SYNC || DATABASE_CONFIG.SYNCHRONIZE,
+  // type: DATABASE_CONFIG.TYPE,
+  // url: process.env.DATABASE_URL || DATABASE_CONFIG.URL,
+  // entities: ApiEntities,
+  // ssl: { rejectUnauthorized: false },
+  // logging: ['query', 'error'],
+  // synchronize: process.env.TYPEORM_SYNC || DATABASE_CONFIG.SYNCHRONIZE,
+  type: 'postgres',
+  username: 'postgres',
+  password: 'supernagibator001',
+  port: 7778,
+  host: 'localhost',
+  database: 'laform',
+  synchronize: true,
+  entities: ['dist/**/*.entity{.ts,.js}'],
 };

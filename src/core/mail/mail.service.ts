@@ -9,6 +9,7 @@ import { NotificationEntity } from '../notification/notification.entity';
 import * as path from 'path';
 import { UserEntity } from '../user/user.entity';
 import { randomUUID } from 'src/common/utils/hash';
+import { UserRepository } from '../user/user.repository';
 
 @Injectable()
 export class MailService {
@@ -17,6 +18,7 @@ export class MailService {
     private notificationRepository: Repository<NotificationEntity>,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly mailerService: MailerService,
+    private userRepository: UserRepository,
   ) {}
 
   async sendMessage(body: any, code: string) {
@@ -55,18 +57,29 @@ export class MailService {
 
   async sendNotification(body: { subject: string; html: string }) {
     const recipients = await this.notificationRepository.find();
-    const mails = recipients.map((e) => e.email);
-    console.log(body.html);
-    return await this.mailerService
-      .sendMail({
-        to: mails,
-        subject: body.subject,
-        template: path.join(path.resolve(), 'src/templates/notification.pug'),
-        context: {
-          htmlContent: body.html,
-        },
-      })
-      .catch((e) => console.log(e));
+    return recipients.map(async (recipient) => {
+      const payload = { email: recipient.email };
+      const code = randomUUID();
+      await this.cacheManager.set(code, JSON.stringify(payload));
+      const findedUser = await this.userRepository.findOne(payload);
+
+      if (findedUser?.notificationEmail === true) {
+        return await this.mailerService
+          .sendMail({
+            to: recipient.email,
+            subject: body.subject,
+            template: path.join(
+              path.resolve(),
+              'src/templates/notification.pug',
+            ),
+            context: {
+              htmlContent: body.html,
+              code,
+            },
+          })
+          .catch((e) => console.log(e));
+      }
+    });
   }
 
   async sendPdf(user: UserEntity, body: any) {

@@ -11,6 +11,7 @@ import * as path from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { NotificationEntity } from '../notification/notification.entity';
 import { CacheModuleConfig } from 'src/config/cache.config';
+import { UserRepository } from '../user/user.repository';
 
 @Module({
   imports: [
@@ -35,7 +36,7 @@ import { CacheModuleConfig } from 'src/config/cache.config';
         },
       },
     }),
-    TypeOrmModule.forFeature([NotificationEntity]),
+    TypeOrmModule.forFeature([NotificationEntity, UserRepository]),
   ],
   providers: [MailService],
   controllers: [MailController],
