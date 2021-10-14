@@ -37,4 +37,9 @@ export class MailController {
   ): Promise<any> {
     return await this.mailService.sendPurchasedProductsInfo(user, body);
   }
+
+  @Post('/send-email-code')
+  async confirmEmailForOrder(@Body() body): Promise<any> {
+    return await this.mailService.confirmEmailForOrder(body);
+  }
 }

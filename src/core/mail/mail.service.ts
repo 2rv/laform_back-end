@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
+import { Cache } from 'cache-manager';
 
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -7,12 +8,14 @@ import { NotificationEntity } from '../notification/notification.entity';
 
 import * as path from 'path';
 import { UserEntity } from '../user/user.entity';
+import { randomUUID } from 'src/common/utils/hash';
 
 @Injectable()
 export class MailService {
   constructor(
     @InjectRepository(NotificationEntity)
     private notificationRepository: Repository<NotificationEntity>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly mailerService: MailerService,
   ) {}
 
@@ -100,6 +103,28 @@ export class MailService {
           phone: body.purchase.phoneNumber,
           totalPrice: body.totalPrice,
           purchasedProducts: body.purchaseProducts,
+        },
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
+  async confirmEmailForOrder(body: any) {
+    const code = randomUUID();
+    await this.cacheManager.set('purchaseEmailConfirmationCode', code);
+
+    return await this.mailerService
+      .sendMail({
+        to: body.email,
+        subject: 'Подтверждение почту для совершения покупок',
+        text: `Подтвердите почту для совершения покупок`,
+        template: path.join(
+          path.resolve(),
+          'src/templates/confirm-email-for-order.pug',
+        ),
+        context: {
+          code,
         },
       })
       .catch((e) => {
