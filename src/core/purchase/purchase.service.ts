@@ -41,7 +41,7 @@ export class PurchaseService {
       if (item.type === 1 || item.type === 2) {
         const result = await this.patternProductService.getPriceAndDiscount(
           item.patternProductId,
-          item.optionsId,
+          item.option.id,
         );
         item.totalDiscount = result.totalDiscount;
         item.totalPrice = result.totalPrice;
@@ -49,7 +49,7 @@ export class PurchaseService {
       if (item.type === 3) {
         const result = await this.sewingProductService.getPriceAndDiscount(
           item.sewingProductId,
-          item.optionsId.id,
+          item.option.id,
         );
         item.totalDiscount = result.totalDiscount;
         item.totalPrice = result.totalPrice;

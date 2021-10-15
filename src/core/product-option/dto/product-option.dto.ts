@@ -44,4 +44,14 @@ export class ProductOptionDto {
   @IsOptional()
   @IsString()
   vendorCode: string;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  count: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  length: number;
 }

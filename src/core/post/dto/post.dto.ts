@@ -29,9 +29,8 @@ export class PostDto {
   @IsObject()
   image: FileDto;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsArray()
-  @ArrayMinSize(1)
   categories: CategoryDto[];
 
   @IsOptional()
@@ -66,4 +65,8 @@ export class PostDto {
     time: number;
     version: string;
   };
+
+  @IsOptional()
+  @IsString()
+  vendorCode: string;
 }

@@ -1,4 +1,3 @@
-import { FileUploadService } from '../file-upload/file-upload.service';
 import { SewingProductRepository } from './sewing-product.repository';
 import { SewingProductEntity } from './sewing-product.entity';
 import { Injectable } from '@nestjs/common';
@@ -6,16 +5,16 @@ import { SewingProductDto } from './dto/sewing-product.dto';
 
 @Injectable()
 export class SewingProductService {
-  constructor(
-    private sewingProductRepository: SewingProductRepository,
-    private fileUploadService: FileUploadService,
-  ) {}
+  constructor(private sewingProductRepository: SewingProductRepository) {}
 
   async create(body: SewingProductDto): Promise<SewingProductEntity> {
     body.options = body.options.map((item) => {
       item.vendorCode = SewingProductEntity.getVendorCode();
       return item;
     });
+    if (body.optionType === 0) {
+      body.vendorCode = SewingProductEntity.getVendorCode();
+    }
     return await this.sewingProductRepository.save(body);
   }
 
@@ -132,7 +131,6 @@ export class SewingProductService {
 
   async delete(id: string) {
     const sewingProduct = await this.sewingProductRepository.findOneOrFail(id);
-    await this.fileUploadService.deleteSewingGoods(sewingProduct.id);
     return await this.sewingProductRepository.delete(sewingProduct.id);
   }
 
@@ -142,18 +140,18 @@ export class SewingProductService {
 
   async getPriceAndDiscount(
     sewingProduct: SewingProductEntity,
-    sizeId: string,
+    optionId: string,
   ): Promise<{ totalPrice: number; totalDiscount: number }> {
     const result = await this.sewingProductRepository.findOne(sewingProduct, {
       relations: ['options'],
       select: ['id', 'price', 'discount', 'options'],
       where: {
-        sizes: { id: sizeId },
+        options: { id: optionId },
       },
     });
     return {
       totalPrice: (result.price || result.options[0].price) ?? 0,
-      totalDiscount: result.options[0].discount ?? 0,
+      totalDiscount: (result.discount || result.options[0].discount) ?? 0,
     };
   }
 }

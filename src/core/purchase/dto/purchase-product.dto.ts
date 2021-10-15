@@ -19,7 +19,7 @@ export class PurchaseProductDto {
 
   @IsOptional()
   @IsUUID()
-  optionsId: ProductOptionEntity;
+  option: ProductOptionEntity;
 
   @IsNotEmpty()
   @IsNumber()

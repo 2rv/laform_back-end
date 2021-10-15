@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   OneToOne,
+  JoinColumn,
 } from 'typeorm';
 import { CategoryEntity } from '../category/category.entity';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
@@ -26,6 +27,21 @@ export class PatternProductEntity {
     readonly: true,
   })
   type!: number;
+
+  @Column({
+    type: 'int',
+    name: 'option_type',
+    default: 0,
+  })
+  optionType?: number;
+
+  @Column({
+    type: 'varchar',
+    name: 'vendor_code',
+    unique: true,
+    nullable: true,
+  })
+  vendorCode: string;
 
   static getVendorCode() {
     return generateVendorCode();
@@ -52,12 +68,6 @@ export class PatternProductEntity {
   )
   options: ProductOptionEntity[];
 
-  @OneToMany(
-    () => PurchaseProductEntity,
-    (res: PurchaseProductEntity) => res.patternProductId,
-  )
-  purchaseProduct: PurchaseProductEntity[];
-
   @OneToOne(
     () => RecommendationEntity,
     (res: RecommendationEntity) => res.patternProductId,
@@ -71,11 +81,23 @@ export class PatternProductEntity {
   )
   recommendationProduct: RecommendationProductEntity[];
 
+  @OneToMany(
+    () => PurchaseProductEntity,
+    (res: PurchaseProductEntity) => res.patternProductId,
+  )
+  purchaseProduct: PurchaseProductEntity[];
+
   @OneToMany(() => LikeEntity, (res: LikeEntity) => res.patternProductId)
   like: LikeEntity[];
 
   @OneToMany(() => CommentEntity, (res: CommentEntity) => res.patternProductId)
   comment: CommentEntity[];
+
+  @OneToOne(() => FileUploadEntity, (res: FileUploadEntity) => res.filePdf)
+  @JoinColumn({
+    name: 'file_pdf',
+  })
+  filePdf: FileUploadEntity;
 
   @Column({
     type: 'varchar',
@@ -141,6 +163,27 @@ export class PatternProductEntity {
     default: 0,
   })
   complexity!: number;
+
+  @Column({
+    type: 'int',
+    name: 'discount',
+    nullable: true,
+  })
+  discount?: number;
+
+  @Column({
+    type: 'numeric',
+    name: 'price',
+    nullable: true,
+  })
+  price?: number;
+
+  @Column({
+    type: 'int',
+    name: 'count',
+    nullable: true,
+  })
+  count!: number;
 
   @Column({
     type: 'bool',

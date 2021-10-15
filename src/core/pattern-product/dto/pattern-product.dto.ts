@@ -59,14 +59,9 @@ export class PatternProductDto {
   @IsString()
   modifierEn: string;
 
-  @ArrayNotEmpty()
+  @IsOptional()
   @IsArray()
-  @ArrayMinSize(1)
   categories: CategoryDto[];
-
-  @IsNotEmpty()
-  @IsObject()
-  options: ProductOptionDto[];
 
   @ArrayNotEmpty()
   @IsArray()
@@ -79,6 +74,10 @@ export class PatternProductDto {
   recommendation: CreateRecommendationDto;
 
   @IsOptional()
+  @IsArray()
+  options: ProductOptionDto[];
+
+  @IsOptional()
   @IsNumber()
   @Min(0)
   @Max(5)
@@ -87,7 +86,37 @@ export class PatternProductDto {
   @IsOptional()
   @IsBoolean()
   deleted: boolean;
+
   @IsOptional()
   @IsBoolean()
   pinned: boolean;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  price: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  count: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  @Max(100)
+  discount: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  @Max(3)
+  optionType: number;
+
+  @IsOptional()
+  @IsString()
+  vendorCode: string;
+
+  @IsOptional()
+  filePdf: FileDto;
 }

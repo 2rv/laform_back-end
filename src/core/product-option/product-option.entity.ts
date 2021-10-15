@@ -59,6 +59,20 @@ export class ProductOptionEntity {
   })
   discount!: number;
 
+  @Column({
+    type: 'int',
+    name: 'count',
+    nullable: true,
+  })
+  count!: number;
+
+  @Column({
+    type: 'numeric',
+    name: 'length',
+    nullable: true,
+  })
+  length!: number;
+
   @OneToOne(() => FileUploadEntity, (res: FileUploadEntity) => res.filePdf)
   @JoinColumn({
     name: 'file_pdf',
@@ -68,6 +82,7 @@ export class ProductOptionEntity {
   @ManyToOne(
     () => PatternProductEntity,
     (res: PatternProductEntity) => res.options,
+    { onDelete: 'CASCADE' },
   )
   @JoinColumn({
     name: 'pattern_product_id',
@@ -77,6 +92,7 @@ export class ProductOptionEntity {
   @ManyToOne(
     () => SewingProductEntity,
     (res: SewingProductEntity) => res.options,
+    { onDelete: 'CASCADE' },
   )
   @JoinColumn({
     name: 'sewing_product_id',

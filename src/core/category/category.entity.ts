@@ -56,8 +56,5 @@ export class CategoryEntity {
     () => SewingProductEntity,
     (res: SewingProductEntity) => res.categories,
   )
-  @JoinColumn({
-    name: 'sewingProductId',
-  })
   sewingProductId: SewingProductEntity;
 }

@@ -1,22 +1,20 @@
-import { FileUploadService } from '../file-upload/file-upload.service';
 import { PatternProductRepository } from './pattern-product.repository';
 import { PatternProductEntity } from './pattern-product.entity';
 import { Injectable } from '@nestjs/common';
 import { PatternProductDto } from './dto/pattern-product.dto';
-import { ProductOptionEntity } from '../product-option/product-option.entity';
 
 @Injectable()
 export class PatternProductService {
-  constructor(
-    private patternProductRepository: PatternProductRepository,
-    private fileUploadService: FileUploadService,
-  ) {}
+  constructor(private patternProductRepository: PatternProductRepository) {}
 
   async create(body: PatternProductDto): Promise<PatternProductEntity> {
     body.options = body.options.map((item) => {
       item.vendorCode = PatternProductEntity.getVendorCode();
       return item;
     });
+    if (body.optionType === 0) {
+      body.vendorCode = PatternProductEntity.getVendorCode();
+    }
     return await this.patternProductRepository.save(body);
   }
 
@@ -158,7 +156,6 @@ export class PatternProductService {
     const patternProduct = await this.patternProductRepository.findOneOrFail(
       id,
     );
-    await this.fileUploadService.deletePatternProduct(patternProduct.id);
     return await this.patternProductRepository.delete(patternProduct.id);
   }
 
@@ -168,18 +165,18 @@ export class PatternProductService {
 
   async getPriceAndDiscount(
     patternProduct: PatternProductEntity,
-    option: ProductOptionEntity,
+    optionId: string,
   ): Promise<{ totalPrice: number; totalDiscount: number }> {
     const result = await this.patternProductRepository.findOne(patternProduct, {
       relations: ['options'],
-      select: ['id', 'options'],
+      select: ['id', 'price', 'discount', 'options'],
       where: {
-        option: option,
+        options: { id: optionId },
       },
     });
     return {
-      totalPrice: (0 || result.options[0].price) ?? 0,
-      totalDiscount: result.options[0].discount ?? 0,
+      totalPrice: (result.price || result.options[0].price) ?? 0,
+      totalDiscount: (result.discount || result.options[0].discount) ?? 0,
     };
   }
 }

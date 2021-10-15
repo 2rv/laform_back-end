@@ -43,7 +43,7 @@ export class SewingProductDto {
   @IsArray()
   categories: CategoryDto[];
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsArray()
   options: ProductOptionDto[];
 
@@ -61,6 +61,16 @@ export class SewingProductDto {
   @IsNumber()
   @Min(0)
   price: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  count: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  length: number;
 
   @IsOptional()
   @IsNumber()
@@ -83,4 +93,8 @@ export class SewingProductDto {
   @IsOptional()
   @IsBoolean()
   deleted: boolean;
+
+  @IsOptional()
+  @IsString()
+  vendorCode: string;
 }

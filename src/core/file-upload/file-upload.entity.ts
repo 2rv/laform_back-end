@@ -31,10 +31,13 @@ export class FileUploadEntity {
   @OneToOne(
     () => ProductOptionEntity,
     (res: ProductOptionEntity) => res.filePdf,
+    { onDelete: 'CASCADE' },
   )
   filePdf: ProductOptionEntity;
 
-  @OneToOne(() => PostEntity, (res: PostEntity) => res.image)
+  @OneToOne(() => PostEntity, (res: PostEntity) => res.image, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({
     name: 'post_id',
   })
@@ -43,6 +46,7 @@ export class FileUploadEntity {
   @ManyToOne(
     () => MasterClassEntity,
     (masterClass: MasterClassEntity) => masterClass.images,
+    { onDelete: 'CASCADE' },
   )
   @JoinColumn({
     name: 'master_class_id',
@@ -52,6 +56,7 @@ export class FileUploadEntity {
   @ManyToOne(
     () => SewingProductEntity,
     (sewingProduct: SewingProductEntity) => sewingProduct.images,
+    { onDelete: 'CASCADE' },
   )
   @JoinColumn({
     name: 'sewing_product_id',
@@ -61,6 +66,7 @@ export class FileUploadEntity {
   @ManyToOne(
     () => PatternProductEntity,
     (patternProduct: PatternProductEntity) => patternProduct.images,
+    { onDelete: 'CASCADE' },
   )
   @JoinColumn({
     name: 'pattern_product_id',

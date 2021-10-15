@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   OneToOne,
+  JoinColumn,
 } from 'typeorm';
 import { CategoryEntity } from '../category/category.entity';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
@@ -27,6 +28,7 @@ export class SewingProductEntity {
     readonly: true,
   })
   type!: number;
+
   @Column({
     type: 'int',
     name: 'option_type',
@@ -34,11 +36,22 @@ export class SewingProductEntity {
   })
   optionType?: number;
 
+  @Column({
+    type: 'varchar',
+    name: 'vendor_code',
+    unique: true,
+    nullable: true,
+  })
+  vendorCode: string;
+
   static getVendorCode() {
     return generateVendorCode();
   }
 
   @OneToMany(() => CategoryEntity, (res: CategoryEntity) => res.sewingProductId)
+  @JoinColumn({
+    name: 'sewingProductId',
+  })
   categories: CategoryEntity[];
 
   @OneToMany(
@@ -92,6 +105,20 @@ export class SewingProductEntity {
     nullable: true,
   })
   price?: number;
+
+  @Column({
+    type: 'int',
+    name: 'count',
+    nullable: true,
+  })
+  count!: number;
+
+  @Column({
+    type: 'numeric',
+    name: 'length',
+    nullable: true,
+  })
+  length!: number;
 
   @Column({
     type: 'varchar',
