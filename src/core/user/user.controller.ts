@@ -42,9 +42,14 @@ export class UserController {
 
   @Put('update/:userId')
   @UseGuards(AuthGuard(), AccountGuard)
-  @Roles(USER_ROLE.ADMIN)
   async updateOne(@Param('userId') userId: number, @Body() body: any) {
     return await this.userService.updateOne(userId, body);
+  }
+
+  @Get('/notification-email')
+  @UseGuards(AuthGuard(), AccountGuard)
+  async getNotificationEmailStatus(@GetAccount() user: UserEntity) {
+    return await this.userService.getUserNotificationEmail(user);
   }
 
   @Put('unsubscribe-notification')

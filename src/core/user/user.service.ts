@@ -31,7 +31,11 @@ export class UserService {
   }
 
   async updateOne(id: number, body: any): Promise<any> {
-    return await this.userRepository.updateOne(id, body);
+    return await this.userRepository.update(id, body);
+  }
+
+  async getUserNotificationEmail(user: UserEntity): Promise<boolean> {
+    return user.notificationEmail;
   }
 
   async unsubscribeNotification(code: string): Promise<any> {

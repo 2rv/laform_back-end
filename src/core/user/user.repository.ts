@@ -126,10 +126,6 @@ export class UserRepository extends Repository<UserEntity> {
       .getMany();
   }
 
-  async updateOne(id: number, body: any): Promise<any> {
-    return await this.update(id, body);
-  }
-
   async changePassword(
     user: UserEntity,
     data: UserChangePasswordDto,
@@ -148,6 +144,7 @@ export class UserRepository extends Repository<UserEntity> {
   async changeEmail(user: UserEntity, email: string): Promise<void> {
     user.email = email;
     user.emailConfirmed = false;
+    user.notificationEmail = false;
     try {
       await user.save();
     } catch (err) {
@@ -161,6 +158,7 @@ export class UserRepository extends Repository<UserEntity> {
 
   async confirmEmailById(user: UserEntity): Promise<UserEntity> {
     user.emailConfirmed = true;
+    user.notificationEmail = true;
     try {
       await user.save();
       return user;
