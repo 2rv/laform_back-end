@@ -105,11 +105,12 @@ export class PostService {
     if (query === 'en') return await this.postRepository.findLikedEn(userId);
   }
 
+  async update(id: string, body: PostDto) {
+    const post = await this.postRepository.findOneOrFail(id);
+    return await this.postRepository.update(post.id, body);
+  }
   async delete(id: string) {
     const post = await this.postRepository.findOneOrFail(id);
     return await this.postRepository.delete(post.id);
-  }
-  async update(id: string, body: PostDto) {
-    return await this.postRepository.update(id, body);
   }
 }

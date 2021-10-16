@@ -61,7 +61,7 @@ export class RecommendationEntity {
     () => RecommendationProductEntity,
     (recommendationProduct: RecommendationProductEntity) =>
       recommendationProduct.recommendation,
-    { cascade: true, onDelete: 'CASCADE' },
+    { cascade: true },
   )
   recommendationProducts: RecommendationProductEntity[];
 

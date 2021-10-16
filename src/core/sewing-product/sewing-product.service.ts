@@ -129,15 +129,14 @@ export class SewingProductService {
       return await this.sewingProductRepository.findLikedEn(userId);
   }
 
+  async update(id: string, body: SewingProductDto) {
+    const sewingProduct = await this.sewingProductRepository.findOneOrFail(id);
+    return await this.sewingProductRepository.update(sewingProduct.id, body);
+  }
   async delete(id: string) {
     const sewingProduct = await this.sewingProductRepository.findOneOrFail(id);
     return await this.sewingProductRepository.delete(sewingProduct.id);
   }
-
-  async update(id: string, body: SewingProductDto) {
-    return await this.sewingProductRepository.update(id, body);
-  }
-
   async getPriceAndDiscount(
     sewingProduct: SewingProductEntity,
     optionId: string,

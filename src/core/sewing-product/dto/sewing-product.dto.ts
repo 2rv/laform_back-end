@@ -18,6 +18,10 @@ import { ProductOptionDto } from 'src/core/product-option/dto/product-option.dto
 import { CreateRecommendationDto } from 'src/core/recommendation/dto/create-recommendation.dto';
 
 export class SewingProductDto {
+  @IsOptional()
+  @IsBoolean()
+  pinned: boolean;
+
   @IsNotEmpty()
   @IsString()
   titleRu: string;

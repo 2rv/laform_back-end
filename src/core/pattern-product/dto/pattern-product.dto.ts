@@ -18,6 +18,10 @@ import { ProductOptionDto } from 'src/core/product-option/dto/product-option.dto
 import { CreateRecommendationDto } from 'src/core/recommendation/dto/create-recommendation.dto';
 
 export class PatternProductDto {
+  @IsOptional()
+  @IsBoolean()
+  pinned: boolean;
+
   @IsNotEmpty()
   @IsNumber()
   @Min(1)
@@ -86,10 +90,6 @@ export class PatternProductDto {
   @IsOptional()
   @IsBoolean()
   deleted: boolean;
-
-  @IsOptional()
-  @IsBoolean()
-  pinned: boolean;
 
   @IsOptional()
   @IsNumber()

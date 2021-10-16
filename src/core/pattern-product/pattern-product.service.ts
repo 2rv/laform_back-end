@@ -152,17 +152,18 @@ export class PatternProductService {
       return await this.patternProductRepository.findLikedEn(userId);
   }
 
+  async update(id: string, body: PatternProductDto) {
+    const patternProduct = await this.patternProductRepository.findOneOrFail(
+      id,
+    );
+    return await this.patternProductRepository.update(patternProduct.id, body);
+  }
   async delete(id: string) {
     const patternProduct = await this.patternProductRepository.findOneOrFail(
       id,
     );
     return await this.patternProductRepository.delete(patternProduct.id);
   }
-
-  async update(id: string, body: PatternProductDto) {
-    return await this.patternProductRepository.update(id, body);
-  }
-
   async getPriceAndDiscount(
     patternProduct: PatternProductEntity,
     optionId: string,

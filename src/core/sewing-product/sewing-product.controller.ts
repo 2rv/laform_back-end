@@ -120,13 +120,16 @@ export class SewingProductController {
   @Put('/update/:sewingProductId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
-  async update(@Request() req, @Body() body: SewingProductDto) {
-    return await this.sewingProductService.update(req.sewingProductId, body);
+  async update(
+    @Param('sewingProductId') sewingProductId: string,
+    @Body() body: SewingProductDto,
+  ) {
+    return await this.sewingProductService.update(sewingProductId, body);
   }
   @Delete('/delete/:sewingProductId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
-  async delete(@Request() req) {
-    return await this.sewingProductService.delete(req.sewingProductId);
+  async delete(@Param('sewingProductId') sewingProductId: string) {
+    return await this.sewingProductService.delete(sewingProductId);
   }
 }

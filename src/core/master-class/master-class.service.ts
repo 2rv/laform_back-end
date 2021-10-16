@@ -1,15 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { MasterClassRepository } from './master-class.repository';
 import { MasterClassEntity } from './master-class.entity';
-import { FileUploadService } from './../file-upload/file-upload.service';
 import { MasterClassDto } from './dto/master-class.dto';
 
 @Injectable()
 export class MasterClassService {
-  constructor(
-    private masterClassRepository: MasterClassRepository,
-    private fileUploadService: FileUploadService,
-  ) {}
+  constructor(private masterClassRepository: MasterClassRepository) {}
 
   async save(body: MasterClassDto): Promise<MasterClassEntity> {
     const result = this.masterClassRepository.create(body);
@@ -121,6 +117,14 @@ export class MasterClassService {
       return await this.masterClassRepository.findLikedEn(userId);
   }
 
+  async update(id: string, body: MasterClassDto) {
+    const masterClass = await this.masterClassRepository.findOneOrFail(id);
+    return await this.masterClassRepository.update(masterClass.id, body);
+  }
+  async delete(id: string) {
+    const masterClass = await this.masterClassRepository.findOneOrFail(id);
+    return await this.masterClassRepository.delete(masterClass.id);
+  }
   async getPriceAndDiscount(
     masterClass: MasterClassEntity,
   ): Promise<{ totalPrice: number; totalDiscount: number }> {
@@ -131,13 +135,5 @@ export class MasterClassService {
       totalPrice: result.price,
       totalDiscount: result.discount,
     };
-  }
-  async update(id: string, body: MasterClassDto) {
-    return await this.masterClassRepository.update(id, body);
-  }
-  async delete(id: string) {
-    const masterClass = await this.masterClassRepository.findOneOrFail(id);
-    await this.fileUploadService.deleteMasterClass(masterClass.id);
-    return await this.masterClassRepository.delete(masterClass.id);
   }
 }
