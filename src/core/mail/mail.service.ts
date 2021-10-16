@@ -56,7 +56,7 @@ export class MailService {
   }
 
   async sendNotification(body: { subject: string; html: string }) {
-    const recipients = await this.notificationRepository.find();
+    const recipients = await this.userRepository.find();
     return recipients.map(async (recipient) => {
       const payload = { email: recipient.email };
       const code = randomUUID();
