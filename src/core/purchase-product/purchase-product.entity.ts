@@ -62,29 +62,37 @@ export class PurchaseProductEntity {
   @ManyToOne(
     () => ProductOptionEntity,
     (res: ProductOptionEntity) => res.purchasedProductId,
+    { nullable: true },
   )
   @JoinColumn({
-    name: 'options',
+    name: 'option_id',
   })
-  options: ProductOptionEntity;
+  optionId: ProductOptionEntity;
 
   @Column({
     type: 'int',
     name: 'type',
-    nullable: true,
   })
   type: number;
 
   @Column({
     type: 'int',
     name: 'total_count',
-    default: 1,
+    nullable: true,
   })
   totalCount: number;
 
   @Column({
+    type: 'numeric',
+    name: 'total_length',
+    nullable: true,
+  })
+  totalLength: number;
+
+  @Column({
     type: 'int',
     name: 'total_discount',
+    nullable: true,
   })
   totalDiscount: number;
 

@@ -2,6 +2,7 @@ import { PatternProductRepository } from './pattern-product.repository';
 import { PatternProductEntity } from './pattern-product.entity';
 import { Injectable } from '@nestjs/common';
 import { PatternProductDto } from './dto/pattern-product.dto';
+import { ProductOptionEntity } from '../product-option/product-option.entity';
 
 @Injectable()
 export class PatternProductService {
@@ -164,20 +165,45 @@ export class PatternProductService {
     );
     return await this.patternProductRepository.delete(patternProduct.id);
   }
+
   async getPriceAndDiscount(
     patternProduct: PatternProductEntity,
-    optionId: string,
-  ): Promise<{ totalPrice: number; totalDiscount: number }> {
-    const result = await this.patternProductRepository.findOne(patternProduct, {
-      relations: ['options'],
-      select: ['id', 'price', 'discount', 'options'],
-      where: {
-        options: { id: optionId },
-      },
-    });
+    option: ProductOptionEntity,
+  ): Promise<{
+    totalPrice: number;
+    totalDiscount: number;
+  }> {
+    const result = await this.patternProductRepository.findOneAndOption(
+      String(patternProduct),
+      String(option),
+    );
     return {
-      totalPrice: (result.price || result.options[0].price) ?? 0,
-      totalDiscount: (result.discount || result.options[0].discount) ?? 0,
+      totalPrice: result.price || result.options[0].price,
+      totalDiscount: result.discount || result.options[0].discount,
+    };
+  }
+
+  async getPriceAndDiscountAndCount(
+    patternProduct: PatternProductEntity,
+    option: ProductOptionEntity,
+  ): Promise<{
+    totalPrice: number;
+    totalDiscount: number;
+    totalCount: number;
+  }> {
+    const result = option
+      ? await this.patternProductRepository.findOneAndOption(
+          String(patternProduct),
+          String(option),
+        )
+      : await this.patternProductRepository.findOne(patternProduct, {
+          select: ['price', 'discount', 'count'],
+        });
+
+    return {
+      totalPrice: result.price || result.options?.[0].price,
+      totalDiscount: result.discount || result.options?.[0].discount,
+      totalCount: result.count || result.options?.[0].count,
     };
   }
 }

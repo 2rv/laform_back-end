@@ -2,6 +2,7 @@ import { SewingProductRepository } from './sewing-product.repository';
 import { SewingProductEntity } from './sewing-product.entity';
 import { Injectable } from '@nestjs/common';
 import { SewingProductDto } from './dto/sewing-product.dto';
+import { ProductOptionEntity } from '../product-option/product-option.entity';
 
 @Injectable()
 export class SewingProductService {
@@ -137,20 +138,28 @@ export class SewingProductService {
     const sewingProduct = await this.sewingProductRepository.findOneOrFail(id);
     return await this.sewingProductRepository.delete(sewingProduct.id);
   }
-  async getPriceAndDiscount(
+  async getPriceAndDiscountAndCountAndLength(
     sewingProduct: SewingProductEntity,
-    optionId: string,
-  ): Promise<{ totalPrice: number; totalDiscount: number }> {
-    const result = await this.sewingProductRepository.findOne(sewingProduct, {
-      relations: ['options'],
-      select: ['id', 'price', 'discount', 'options'],
-      where: {
-        options: { id: optionId },
-      },
-    });
+    option: ProductOptionEntity,
+  ): Promise<{
+    totalPrice: number;
+    totalDiscount: number;
+    totalCount: number;
+    totalLength: number;
+  }> {
+    const result = option
+      ? await this.sewingProductRepository.findOneAndOption(
+          String(sewingProduct),
+          String(option),
+        )
+      : await this.sewingProductRepository.findOne(sewingProduct, {
+          select: ['price', 'discount', 'count', 'length'],
+        });
     return {
-      totalPrice: (result.price || result.options[0].price) ?? 0,
-      totalDiscount: (result.discount || result.options[0].discount) ?? 0,
+      totalPrice: result.price || result.options?.[0].price,
+      totalDiscount: result.discount || result.options?.[0].discount,
+      totalCount: result.count || result.options?.[0].count,
+      totalLength: result.length || result.options?.[0].length,
     };
   }
 }

@@ -22,7 +22,7 @@ export class PurchaseEntity {
   _NID: number;
 
   static async generateOrderNumber(id: number): Promise<string> {
-    const defaultId = '00000000';
+    const defaultId = '0000000000';
     return defaultId.substring(0, defaultId.length - id.toString().length) + id;
   }
 

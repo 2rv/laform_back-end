@@ -729,4 +729,27 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .andWhere('like.userId = :userId', { userId })
       .getMany();
   }
+
+  async findOneAndOption(
+    id: string,
+    option: string,
+  ): Promise<SewingProductEntity> {
+    return await this.createQueryBuilder('sewing_product')
+      .leftJoin('sewing_product.options', 'options')
+      .select([
+        'sewing_product.id',
+        'sewing_product.price',
+        'sewing_product.discount',
+        'sewing_product.count',
+        'sewing_product.length',
+        'options.id',
+        'options.price',
+        'options.discount',
+        'options.count',
+        'options.length',
+      ])
+      .where('sewing_product.id = :id', { id })
+      .where('options.id = :id', { id: option })
+      .getOne();
+  }
 }

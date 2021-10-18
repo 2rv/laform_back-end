@@ -1,6 +1,6 @@
 import { PurchaseProductDto } from './purchase-product.dto';
 
 export class VerifyPurchaseProductsDto {
-  verifiedPurchaseProducts: PurchaseProductDto[];
+  products: PurchaseProductDto[];
   price: number;
 }

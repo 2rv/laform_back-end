@@ -739,4 +739,25 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .andWhere('like.userId = :userId', { userId })
       .getMany();
   }
+
+  async findOneAndOption(
+    id: string,
+    option: string,
+  ): Promise<PatternProductEntity> {
+    return await this.createQueryBuilder('pattern_product')
+      .leftJoin('pattern_product.options', 'options')
+      .select([
+        'pattern_product.id',
+        'pattern_product.price',
+        'pattern_product.discount',
+        'pattern_product.count',
+        'options.id',
+        'options.price',
+        'options.discount',
+        'options.count',
+      ])
+      .where('pattern_product.id = :id', { id })
+      .where('options.id = :id', { id: option })
+      .getOne();
+  }
 }

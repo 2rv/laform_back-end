@@ -82,7 +82,7 @@ export class ProductOptionEntity {
   @ManyToOne(
     () => PatternProductEntity,
     (res: PatternProductEntity) => res.options,
-    { onDelete: 'CASCADE' },
+    { onUpdate: 'CASCADE', onDelete: 'CASCADE' },
   )
   @JoinColumn({
     name: 'pattern_product_id',
@@ -92,7 +92,7 @@ export class ProductOptionEntity {
   @ManyToOne(
     () => SewingProductEntity,
     (res: SewingProductEntity) => res.options,
-    { onDelete: 'CASCADE' },
+    { onUpdate: 'CASCADE', onDelete: 'CASCADE' },
   )
   @JoinColumn({
     name: 'sewing_product_id',
@@ -101,7 +101,7 @@ export class ProductOptionEntity {
 
   @OneToMany(
     () => PurchaseProductEntity,
-    (res: PurchaseProductEntity) => res.options,
+    (res: PurchaseProductEntity) => res.optionId,
   )
   @JoinColumn({
     name: 'purchased_product_id',
