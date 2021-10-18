@@ -1,40 +1,37 @@
-import { IsNumber, IsString, IsOptional, IsNotEmpty } from 'class-validator';
+import { IsNumber, IsOptional, IsNotEmpty, IsUUID } from 'class-validator';
 import { PatternProductEntity } from 'src/core/pattern-product/pattern-product.entity';
 import { SewingProductEntity } from 'src/core/sewing-product/sewing-product.entity';
 import { MasterClassEntity } from 'src/core/master-class/master-class.entity';
-import { ColorsEntity } from 'src/core/colors/colors.entity';
-import { SizesEntity } from 'src/core/sizes/sizes.entity';
-import { ProgramsEntity } from 'src/core/programs/programs.entity';
+import { ProductOptionEntity } from 'src/core/product-option/product-option.entity';
 
 export class PurchaseProductDto {
   @IsOptional()
+  @IsUUID()
   masterClassId: MasterClassEntity;
 
   @IsOptional()
+  @IsUUID()
   patternProductId: PatternProductEntity;
 
   @IsOptional()
+  @IsUUID()
   sewingProductId: SewingProductEntity;
+
+  @IsOptional()
+  @IsUUID()
+  optionId: ProductOptionEntity;
 
   @IsNotEmpty()
   @IsNumber()
   type: number;
 
   @IsOptional()
-  @IsString()
-  color: ColorsEntity;
-
-  @IsOptional()
-  @IsString()
-  size: SizesEntity;
-
-  @IsOptional()
-  @IsString()
-  program: ProgramsEntity;
-
-  @IsNotEmpty()
   @IsNumber()
   totalCount: number;
+
+  @IsOptional()
+  @IsNumber()
+  totalLength: number;
 
   @IsOptional()
   @IsNumber()

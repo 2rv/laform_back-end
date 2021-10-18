@@ -18,7 +18,6 @@ import { MasterClassService } from './master-class.service';
 import { MasterClassGuard } from './guard/master-class.guard';
 import { LangValidationPipe } from 'src/common/guards/lang.guard';
 import { MasterClassDto } from './dto/master-class.dto';
-import { UpdateMasterClassDto } from './dto/update-master-class.dto';
 import { GetAccount } from '../user/decorator/get-account.decorator';
 import { UserEntity } from '../user/user.entity';
 
@@ -125,7 +124,7 @@ export class MasterClassController {
   @UseGuards(AuthGuard('jwt'), AccountGuard, MasterClassGuard)
   async update(
     @Param('masterClassId') masterClassId: string,
-    @Body() body: UpdateMasterClassDto,
+    @Body() body: MasterClassDto,
   ) {
     return await this.masterClassService.update(masterClassId, body);
   }

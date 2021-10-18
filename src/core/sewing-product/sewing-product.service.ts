@@ -1,21 +1,21 @@
-import { FileUploadService } from '../file-upload/file-upload.service';
 import { SewingProductRepository } from './sewing-product.repository';
-import { UpdateSewingProductDto } from './dto/update-sewing-product.dto';
 import { SewingProductEntity } from './sewing-product.entity';
 import { Injectable } from '@nestjs/common';
 import { SewingProductDto } from './dto/sewing-product.dto';
-import { SizesService } from '../sizes/sizes.service';
+import { ProductOptionEntity } from '../product-option/product-option.entity';
 
 @Injectable()
 export class SewingProductService {
-  constructor(
-    private sewingProductRepository: SewingProductRepository,
-    private fileUploadService: FileUploadService,
-    private sizesService: SizesService,
-  ) {}
+  constructor(private sewingProductRepository: SewingProductRepository) {}
 
   async create(body: SewingProductDto): Promise<SewingProductEntity> {
-    await this.sizesService.createMany(body.sizes);
+    body.options = body.options.map((item) => {
+      item.vendorCode = SewingProductEntity.getVendorCode();
+      return item;
+    });
+    if (body.optionType === 0) {
+      body.vendorCode = SewingProductEntity.getVendorCode();
+    }
     return await this.sewingProductRepository.save(body);
   }
 
@@ -130,36 +130,36 @@ export class SewingProductService {
       return await this.sewingProductRepository.findLikedEn(userId);
   }
 
+  async update(id: string, body: SewingProductDto) {
+    const sewingProduct = await this.sewingProductRepository.findOneOrFail(id);
+    return await this.sewingProductRepository.update(sewingProduct.id, body);
+  }
   async delete(id: string) {
     const sewingProduct = await this.sewingProductRepository.findOneOrFail(id);
-    await this.fileUploadService.deleteSewingGoods(sewingProduct.id);
     return await this.sewingProductRepository.delete(sewingProduct.id);
   }
-  async update(id: string, body: UpdateSewingProductDto) {
-    if (body.images) {
-      for (let file of body.images) {
-        await this.fileUploadService.update(file, { sewingProductId: id });
-      }
-    }
-    return await this.sewingProductRepository.update(id, body.sewingProduct);
-  }
-
-  async getDiscount(id): Promise<number> {
-    return await (
-      await this.sewingProductRepository.findOne(id)
-    ).discount;
-  }
-
-  async getPurchaseParams(sewingProductId, sizeId): Promise<any> {
-    const discount = await (
-      await this.sewingProductRepository.findOne(sewingProductId)
-    ).discount;
-
-    const price = await this.sizesService.getSizePrice(sizeId);
-
+  async getPriceAndDiscountAndCountAndLength(
+    sewingProduct: SewingProductEntity,
+    option: ProductOptionEntity,
+  ): Promise<{
+    totalPrice: number;
+    totalDiscount: number;
+    totalCount: number;
+    totalLength: number;
+  }> {
+    const result = option
+      ? await this.sewingProductRepository.findOneAndOption(
+          String(sewingProduct),
+          String(option),
+        )
+      : await this.sewingProductRepository.findOne(sewingProduct, {
+          select: ['price', 'discount', 'count', 'length'],
+        });
     return {
-      totalPrice: price,
-      totalDiscount: discount,
+      totalPrice: result.price || result.options?.[0].price,
+      totalDiscount: result.discount || result.options?.[0].discount,
+      totalCount: result.count || result.options?.[0].count,
+      totalLength: result.length || result.options?.[0].length,
     };
   }
 }

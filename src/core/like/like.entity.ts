@@ -1,6 +1,5 @@
 import { UserEntity } from './../user/user.entity';
 import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
-
 import { PostEntity } from '../post/post.entity';
 import { MasterClassEntity } from '../master-class/master-class.entity';
 import { SewingProductEntity } from 'src/core/sewing-product/sewing-product.entity';

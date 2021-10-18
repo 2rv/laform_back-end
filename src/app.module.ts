@@ -20,9 +20,7 @@ import { SewingProductModule } from './core/sewing-product/sewing-product.module
 import { PatternProductModule } from './core/pattern-product/pattern-product.module';
 import { PromoCodeModule } from './core/promo-code/promo-code.module';
 import { MailModule } from './core/mail/mail.module';
-import { ColorsModule } from './core/colors/colors.module';
-import { SizesModule } from './core/sizes/sizes.module';
-import { ProgramsModule } from './core/programs/programs.module';
+import { ProductOptionModule } from './core/product-option/product-option.module';
 import { CommentModule } from './core/comment/comment.module';
 import { AboutUsModule } from './core/about-us/about-us.module';
 import { DeliveryPriceModule } from './core/delivery-price/delivery-price.module';
@@ -32,9 +30,7 @@ import { DeliveryPriceModule } from './core/delivery-price/delivery-price.module
   imports: [
     TypeOrmModule.forRoot(typeOrmConfig),
     AuthModule,
-    ColorsModule,
-    SizesModule,
-    ProgramsModule,
+    ProductOptionModule,
     UserSettingsModule,
     NotificationModule,
     UserRecoveryModule,

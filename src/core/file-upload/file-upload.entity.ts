@@ -12,7 +12,7 @@ import {
 } from 'typeorm';
 import { SliderEntity } from './../slider/slider.entity';
 import { PostEntity } from './../post/post.entity';
-import { SizesEntity } from '../sizes/sizes.entity';
+import { ProductOptionEntity } from '../product-option/product-option.entity';
 
 @Entity({ name: 'files' })
 export class FileUploadEntity {
@@ -28,10 +28,16 @@ export class FileUploadEntity {
   @OneToMany(() => SliderEntity, (slider: SliderEntity) => slider.imageUrl)
   slider: SliderEntity[];
 
-  @OneToOne(() => SizesEntity, (res: SizesEntity) => res.filePdf)
-  filePdfPatternProductId: SizesEntity;
+  @OneToOne(
+    () => ProductOptionEntity,
+    (res: ProductOptionEntity) => res.filePdf,
+    { onDelete: 'CASCADE' },
+  )
+  filePdf: ProductOptionEntity;
 
-  @OneToOne(() => PostEntity, (res: PostEntity) => res.image)
+  @OneToOne(() => PostEntity, (res: PostEntity) => res.image, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({
     name: 'post_id',
   })
@@ -40,6 +46,7 @@ export class FileUploadEntity {
   @ManyToOne(
     () => MasterClassEntity,
     (masterClass: MasterClassEntity) => masterClass.images,
+    { onDelete: 'CASCADE' },
   )
   @JoinColumn({
     name: 'master_class_id',
@@ -49,6 +56,7 @@ export class FileUploadEntity {
   @ManyToOne(
     () => SewingProductEntity,
     (sewingProduct: SewingProductEntity) => sewingProduct.images,
+    { onDelete: 'CASCADE' },
   )
   @JoinColumn({
     name: 'sewing_product_id',
@@ -58,6 +66,7 @@ export class FileUploadEntity {
   @ManyToOne(
     () => PatternProductEntity,
     (patternProduct: PatternProductEntity) => patternProduct.images,
+    { onDelete: 'CASCADE' },
   )
   @JoinColumn({
     name: 'pattern_product_id',

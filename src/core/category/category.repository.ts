@@ -6,50 +6,29 @@ export class CategoryRepository extends Repository<CategoryEntity> {
   async findOneRu(id: string): Promise<CategoryEntity> {
     return await this.createQueryBuilder('category')
       .where('category.id = :id', { id })
-      .select(['category.id', 'category.textRu'])
-      .getOne()
-      .then((res) => {
-        return res;
-      })
-      .catch((err) => {
-        throw err;
-      });
+      .select(['category.id', 'category.categoryNameRu'])
+      .getOne();
   }
-
-  async findAllRu(): Promise<CategoryEntity[]> {
-    return await this.createQueryBuilder('category')
-      .select(['category.id', 'category.textRu'])
-      .getMany()
-      .then((res) => {
-        return res;
-      })
-      .catch((err) => {
-        throw err;
-      });
-  }
-
   async findOneEn(id: string): Promise<CategoryEntity> {
     return await this.createQueryBuilder('category')
       .where('category.id = :id', { id })
-      .select(['category.id', 'category.textEn'])
+      .select(['category.id', 'category.categoryNameEn'])
       .getOne()
-      .then((res) => {
-        return res;
-      })
       .catch((err) => {
         throw err;
       });
   }
-
-  async findAllEn(): Promise<CategoryEntity[]> {
+  async findAllRu(): Promise<CategoryEntity[]> {
     return await this.createQueryBuilder('category')
-      .select(['category.id', 'category.textEn'])
+      .select(['category.id', 'category.categoryNameRu'])
       .getMany()
-      .then((res) => {
-        return res;
-      })
       .catch((err) => {
         throw err;
       });
+  }
+  async findAllEn(): Promise<CategoryEntity[]> {
+    return await this.createQueryBuilder('category')
+      .select(['category.id', 'category.categoryNameEn'])
+      .getMany();
   }
 }
