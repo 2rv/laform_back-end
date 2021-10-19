@@ -51,21 +51,11 @@ export const ApiEntities = [
   DeliveryPriceEntity,
 ];
 
-// export const typeOrmConfig: TypeOrmModuleOptions = {
-//   type: DATABASE_CONFIG.TYPE,
-//   url: process.env.DATABASE_URL || DATABASE_CONFIG.URL,
-//   entities: ApiEntities,
-//   ssl: { rejectUnauthorized: false },
-//   logging: ['query', 'error'],
-//   synchronize: process.env.TYPEORM_SYNC || DATABASE_CONFIG.SYNCHRONIZE,
-// };
 export const typeOrmConfig: TypeOrmModuleOptions = {
-  type: 'postgres',
-  host: 'localhost',
-  port: 5432,
-  username: 'postgres',
-  password: 'pasha1neo',
-  database: 'laforme',
-  synchronize: true,
+  type: DATABASE_CONFIG.TYPE,
+  url: process.env.DATABASE_URL || DATABASE_CONFIG.URL,
   entities: ApiEntities,
+  ssl: { rejectUnauthorized: false },
+  logging: ['query', 'error'],
+  synchronize: process.env.TYPEORM_SYNC || DATABASE_CONFIG.SYNCHRONIZE,
 };
