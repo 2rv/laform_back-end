@@ -13,9 +13,32 @@
       <div style="line-height: 1.5; font-size: 14px; font-family: 'Golos Text', sans-serif; color: #5F5B5D;">
         <div style="margin-top: 15px">Здравствуйте, благодарим за покупки в интернет магазине <span style="color: #FF005A; font-weight: 600">La`forme Patterns</span></div>
         <div><b>Ваши данные:</b></div>
+        <hr />
         <div>Адрес: <b>!{address}</b></div>
         <div>Телефон: <b>!{phone}</b></div>
         <div>ФИО: <b>!{fullName}</b></div>
+        <div>Полная стоимость заказа: <b>!{totalPrice}</b></div>
+        <hr />
+        <div><b>Список всех купленных товаров:</b></div>
+        <div>
+          each product in purchasedProducts
+            if product.type === 0
+              <div>
+                <b>Мастер-класс:</b> <i>Статус</i> - Доставленно, <a style="color: #2F2A2C; text-decoration: none;" href="https://laform-client.herokuapp.com/auth/verificate-email/confirm?code=#{product.masterClassId}">Ссылка</a>
+              </div>
+            else if product.type === 1
+              <div>
+                <b>Электронная выкройка:</b>
+              </div>
+            else if product.type === 2
+              <div>
+                <b>Печатная выкройка:</b> <i>Статус</i> - Оплачено, Ожидайте доставки товара вы будете проинформированы о любом изменении статуса заказа
+              </div>
+            else if product.type === 3
+              <div>
+                <b>Товар для шитья:</b> <i>Статус</i> - Оплачено, Ожидайте доставки товара вы будете проинформированы о любом изменении статуса заказа
+              </div>
+        </div>
       </div>
     </div>
   </body>

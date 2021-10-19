@@ -17,7 +17,6 @@ import { AccountGuard } from '../user/guard/account.guard';
 import { Roles } from '../user/decorator/role.decorator';
 import { USER_ROLE } from '../user/enum/user-role.enum';
 import { CategoryEntity } from './category.entity';
-import { DeleteManyCategoriesDto } from './dto/delete-many-categories';
 
 @Controller('category')
 export class CategoryController {
@@ -61,12 +60,5 @@ export class CategoryController {
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async delete(@Param('id') id: string) {
     return await this.categoryService.delete(id);
-  }
-
-  @Delete('delete-many')
-  @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async deleteMany(@Body(new ValidationPipe()) body: DeleteManyCategoriesDto) {
-    return await this.categoryService.deleteMany(body);
   }
 }

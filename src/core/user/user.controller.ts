@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Put,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GetAccount } from '../user/decorator/get-account.decorator';
 import { AccountGuard } from '../user/guard/account.guard';
@@ -34,8 +42,19 @@ export class UserController {
 
   @Put('update/:userId')
   @UseGuards(AuthGuard(), AccountGuard)
-  @Roles(USER_ROLE.ADMIN)
   async updateOne(@Param('userId') userId: number, @Body() body: any) {
     return await this.userService.updateOne(userId, body);
+  }
+
+  @Get('/notification-email')
+  @UseGuards(AuthGuard(), AccountGuard)
+  async getNotificationEmailStatus(@GetAccount() user: UserEntity) {
+    return await this.userService.getUserNotificationEmail(user);
+  }
+
+  @Put('unsubscribe-notification')
+  @UseGuards(AuthGuard(), AccountGuard)
+  async unsubscribeNotification(@Query('code') code: string) {
+    return await this.userService.unsubscribeNotification(code);
   }
 }

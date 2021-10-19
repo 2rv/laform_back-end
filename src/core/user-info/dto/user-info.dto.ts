@@ -5,7 +5,7 @@ export interface UserInfoDto {
   fullName: string;
   phone: string;
   location: string;
-  deliveryType: DELIVERY_TYPE;
+  deliveryType: string;
   paymentType: PAYMENT_TYPE;
   googleId: string;
   facebookId: string;

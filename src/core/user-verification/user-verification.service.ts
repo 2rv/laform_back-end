@@ -69,9 +69,9 @@ export class UserVerificationService {
       );
     }
     const updatedUser = await this.userRepository.confirmEmailById(user);
-    await this.notificationService.subscribeAuthtorized(updatedUser, {
-      subscribe: true,
-    });
+    // await this.notificationService.subscribeAuthtorized(updatedUser, {
+    //   subscribe: true,
+    // });
 
     await this.purchaseRepository.connectPurchasesToUser(updatedUser);
 

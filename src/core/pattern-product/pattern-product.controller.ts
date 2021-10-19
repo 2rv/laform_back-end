@@ -17,7 +17,6 @@ import { USER_ROLE } from '../user/enum/user-role.enum';
 import { PatternProductService } from './pattern-product.service';
 import { PatternProductGuard } from './guard/pattern-product.guard';
 import { LangValidationPipe } from 'src/common/guards/lang.guard';
-import { UpdatePatternProductDto } from './dto/update-pattern-product.dto';
 import { PatternProductDto } from './dto/pattern-product.dto';
 import { GetAccount } from '../user/decorator/get-account.decorator';
 import { UserEntity } from '../user/user.entity';
@@ -112,7 +111,7 @@ export class PatternProductController {
   @Put('/update/:patternProductId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, PatternProductGuard)
-  async update(@Request() req, @Body() body: UpdatePatternProductDto) {
+  async update(@Request() req, @Body() body: PatternProductDto) {
     return await this.patternProductService.update(req.patternProductId, body);
   }
 

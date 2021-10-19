@@ -25,9 +25,9 @@ export class PurchaseDto {
   //   @IsString()
   //   typeOfPayment: string;
 
-  //   @IsNotEmpty()
-  //   @IsString()
-  //   typeOfDelivery: string;
+  @IsNotEmpty()
+  @IsString()
+  typeOfDelivery: string;
 
   @IsOptional()
   @IsString()
@@ -38,7 +38,7 @@ export class PurchaseDto {
   price: number;
 
   @IsOptional()
-  //   @IsNumber()
+  @IsNumber()
   promoCodeDiscount: number;
 
   @IsOptional()

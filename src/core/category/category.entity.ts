@@ -17,30 +17,27 @@ export class CategoryEntity {
 
   @Column({
     type: 'varchar',
-    name: 'text_ru',
+    name: 'category_name_ru',
   })
-  textRu!: string;
+  categoryNameRu!: string;
 
   @Column({
     type: 'varchar',
-    name: 'text_en',
+    name: 'category_name_en',
     nullable: true,
   })
-  textEn!: string;
+  categoryNameEn!: string;
 
   @ManyToOne(
     () => MasterClassEntity,
-    (masterClass: MasterClassEntity) => masterClass.categories,
-    { onDelete: 'CASCADE' },
+    (res: MasterClassEntity) => res.categories,
   )
   @JoinColumn({
     name: 'master_class_id',
   })
   masterClassId: MasterClassEntity;
 
-  @ManyToOne(() => PostEntity, (res: PostEntity) => res.categories, {
-    onDelete: 'CASCADE',
-  })
+  @ManyToOne(() => PostEntity, (res: PostEntity) => res.categories)
   @JoinColumn({
     name: 'postId',
   })
@@ -49,9 +46,6 @@ export class CategoryEntity {
   @ManyToOne(
     () => PatternProductEntity,
     (res: PatternProductEntity) => res.categories,
-    {
-      onDelete: 'CASCADE',
-    },
   )
   @JoinColumn({
     name: 'patternProductId',
@@ -61,12 +55,6 @@ export class CategoryEntity {
   @ManyToOne(
     () => SewingProductEntity,
     (res: SewingProductEntity) => res.categories,
-    {
-      onDelete: 'CASCADE',
-    },
   )
-  @JoinColumn({
-    name: 'sewingProductId',
-  })
   sewingProductId: SewingProductEntity;
 }

@@ -100,4 +100,9 @@ export class PurchaseController {
   async delete(@Request() req) {
     return await this.purchaseService.delete(req.purchaseId);
   }
+
+  @Post('/confirm-email-for-order/:code')
+  async confirmEmailForOrder(@Param('code') code: string): Promise<void> {
+    return this.purchaseService.confirmEmailForOrder(code);
+  }
 }

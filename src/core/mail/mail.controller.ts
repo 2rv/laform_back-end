@@ -28,7 +28,7 @@ export class MailController {
     return await this.mailService.sendPdf(user, body);
   }
 
-  @Post('/send-purchased-products-info')
+  @Post('/send-purchase-info')
   @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async sendPurchasedProductsInfo(
@@ -36,5 +36,10 @@ export class MailController {
     @Body() body,
   ): Promise<any> {
     return await this.mailService.sendPurchasedProductsInfo(user, body);
+  }
+
+  @Post('/send-email-code')
+  async confirmEmailForOrder(@Body() body): Promise<any> {
+    return await this.mailService.confirmEmailForOrder(body);
   }
 }

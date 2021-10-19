@@ -1,22 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { MasterClassRepository } from './master-class.repository';
 import { MasterClassEntity } from './master-class.entity';
-import { ProgramsService } from '../programs/programs.service';
-import { FileUploadService } from './../file-upload/file-upload.service';
-import { UpdateMasterClassDto } from './dto/update-master-class.dto';
 import { MasterClassDto } from './dto/master-class.dto';
 
 @Injectable()
 export class MasterClassService {
-  constructor(
-    private masterClassRepository: MasterClassRepository,
-    private fileUploadService: FileUploadService,
-    private programsService: ProgramsService,
-  ) {}
+  constructor(private masterClassRepository: MasterClassRepository) {}
 
   async save(body: MasterClassDto): Promise<MasterClassEntity> {
-    await this.programsService.createMany(body.programs);
-    return await this.masterClassRepository.save(body);
+    const result = this.masterClassRepository.create(body);
+    result.vendorCode = MasterClassEntity.getVendorCode();
+    return await this.masterClassRepository.save(result);
   }
 
   async getAll(
@@ -123,25 +117,23 @@ export class MasterClassService {
       return await this.masterClassRepository.findLikedEn(userId);
   }
 
-  async getPurchaseParams(masterClassId, programId): Promise<any> {
-    const discount = await (
-      await this.masterClassRepository.findOne(masterClassId)
-    ).discount;
-
-    const price = await this.programsService.getProgramPrice(programId);
-
-    return {
-      totalPrice: price,
-      totalDiscount: discount,
-    };
+  async update(id: string, body: MasterClassDto) {
+    const masterClass = await this.masterClassRepository.findOneOrFail(id);
+    return await this.masterClassRepository.update(masterClass.id, body);
   }
   async delete(id: string) {
     const masterClass = await this.masterClassRepository.findOneOrFail(id);
-    await this.fileUploadService.deleteMasterClass(masterClass.id);
     return await this.masterClassRepository.delete(masterClass.id);
   }
-  async update(id: string, body: UpdateMasterClassDto) {
-    // if (body.images)  this.fileUploadService.update(file, { masterClassId: id });
-    return await this.masterClassRepository.update(id, body.masterClass);
+  async getPriceAndDiscount(
+    masterClass: MasterClassEntity,
+  ): Promise<{ totalPrice: number; totalDiscount: number }> {
+    const result = await this.masterClassRepository.findOne(masterClass, {
+      select: ['id', 'price', 'discount'],
+    });
+    return {
+      totalPrice: result.price,
+      totalDiscount: result.discount,
+    };
   }
 }

@@ -1,5 +1,4 @@
-import { IsNotEmpty, IsString, IsOptional } from 'class-validator';
-
+import { IsString, IsOptional } from 'class-validator';
 import { PostEntity } from 'src/core/post/post.entity';
 import { MasterClassEntity } from 'src/core/master-class/master-class.entity';
 import { SewingProductEntity } from 'src/core/sewing-product/sewing-product.entity';

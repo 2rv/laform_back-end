@@ -2,16 +2,13 @@ import { PostEntity } from './post.entity';
 import { Injectable } from '@nestjs/common';
 import { PostDto } from './dto/post.dto';
 import { PostRepository } from './post.repository';
-import { FileUploadService } from '../file-upload/file-upload.service';
 
 @Injectable()
 export class PostService {
-  constructor(
-    private postRepository: PostRepository,
-    private fileUploadService: FileUploadService,
-  ) {}
+  constructor(private postRepository: PostRepository) {}
 
   async create(body: PostDto): Promise<PostEntity> {
+    body.vendorCode = PostEntity.getVendorCode();
     return await this.postRepository.save(body);
   }
 
@@ -108,12 +105,12 @@ export class PostService {
     if (query === 'en') return await this.postRepository.findLikedEn(userId);
   }
 
+  async update(id: string, body: PostDto) {
+    const post = await this.postRepository.findOneOrFail(id);
+    return await this.postRepository.update(post.id, body);
+  }
   async delete(id: string) {
     const post = await this.postRepository.findOneOrFail(id);
-    await this.fileUploadService.deletePost(post.id);
     return await this.postRepository.delete(post.id);
-  }
-  async update(id: any, body: any) {
-    return await this.postRepository.update(id, body);
   }
 }

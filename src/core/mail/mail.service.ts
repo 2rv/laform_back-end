@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
+import { Cache } from 'cache-manager';
 
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -7,13 +8,17 @@ import { NotificationEntity } from '../notification/notification.entity';
 
 import * as path from 'path';
 import { UserEntity } from '../user/user.entity';
+import { randomUUID } from 'src/common/utils/hash';
+import { UserRepository } from '../user/user.repository';
 
 @Injectable()
 export class MailService {
   constructor(
     @InjectRepository(NotificationEntity)
     private notificationRepository: Repository<NotificationEntity>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly mailerService: MailerService,
+    private userRepository: UserRepository,
   ) {}
 
   async sendMessage(body: any, code: string) {
@@ -51,19 +56,30 @@ export class MailService {
   }
 
   async sendNotification(body: { subject: string; html: string }) {
-    const recipients = await this.notificationRepository.find();
-    const mails = recipients.map((e) => e.email);
-    console.log(body.html);
-    return await this.mailerService
-      .sendMail({
-        to: mails,
-        subject: body.subject,
-        template: path.join(path.resolve(), 'src/templates/notification.pug'),
-        context: {
-          htmlContent: body.html,
-        },
-      })
-      .catch((e) => console.log(e));
+    const recipients = await this.userRepository.find();
+    return recipients.map(async (recipient) => {
+      const payload = { email: recipient.email };
+      const code = randomUUID();
+      await this.cacheManager.set(code, JSON.stringify(payload));
+      const findedUser = await this.userRepository.findOne(payload);
+
+      if (findedUser?.notificationEmail === true) {
+        return await this.mailerService
+          .sendMail({
+            to: recipient.email,
+            subject: body.subject,
+            template: path.join(
+              path.resolve(),
+              'src/templates/notification.pug',
+            ),
+            context: {
+              htmlContent: body.html,
+              code,
+            },
+          })
+          .catch((e) => console.log(e));
+      }
+    });
   }
 
   async sendPdf(user: UserEntity, body: any) {
@@ -96,8 +112,32 @@ export class MailService {
         ),
         context: {
           address: body.purchase.city,
-          phone: body.purchase.phoneNumber,
           fullName: body.purchase.fullName,
+          phone: body.purchase.phoneNumber,
+          totalPrice: body.totalPrice,
+          purchasedProducts: body.purchaseProducts,
+        },
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
+  async confirmEmailForOrder(body: any) {
+    const code = randomUUID();
+    await this.cacheManager.set('purchaseEmailConfirmationCode', code);
+
+    return await this.mailerService
+      .sendMail({
+        to: body.email,
+        subject: 'Подтверждение почту для совершения покупок',
+        text: `Подтвердите почту для совершения покупок`,
+        template: path.join(
+          path.resolve(),
+          'src/templates/confirm-email-for-order.pug',
+        ),
+        context: {
+          code,
         },
       })
       .catch((e) => {

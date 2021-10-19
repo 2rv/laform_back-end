@@ -22,7 +22,7 @@ export class PurchaseEntity {
   _NID: number;
 
   static async generateOrderNumber(id: number): Promise<string> {
-    const defaultId = '00000000';
+    const defaultId = '0000000000';
     return defaultId.substring(0, defaultId.length - id.toString().length) + id;
   }
 
@@ -78,6 +78,13 @@ export class PurchaseEntity {
 
   @Column({
     type: 'varchar',
+    name: 'type_of_delivery',
+    nullable: true,
+  })
+  typeOfDelivery!: string;
+
+  @Column({
+    type: 'varchar',
     name: 'comment',
     nullable: true,
   })
@@ -109,22 +116,3 @@ export class PurchaseEntity {
   })
   promoCodeDiscount?: number;
 }
-
-//   @Column({
-//     type: 'varchar',
-//     name: 'type_of_payment',
-//   })
-//   typeOfPayment!: string;
-
-//   @Column({
-//     type: 'varchar',
-//     name: 'type_of_delivery',
-//   })
-//   typeOfDelivery!: string;
-
-//   @Column({
-//     type: 'int',
-//     name: 'delivery_price',
-//     nullable: true,
-//   })
-//   deliveryPrice: number;
