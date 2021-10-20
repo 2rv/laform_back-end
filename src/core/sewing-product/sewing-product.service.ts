@@ -26,6 +26,7 @@ export class SewingProductService {
     sort: string,
     by: string,
     where: string,
+    category: string,
   ): Promise<SewingProductEntity[]> {
     if (sort === 'title') {
       if (query === 'ru') {
@@ -42,6 +43,7 @@ export class SewingProductService {
         sort,
         by,
         where,
+        category,
       );
     if (query === 'en')
       return await this.sewingProductRepository.findAllEn(
@@ -50,6 +52,7 @@ export class SewingProductService {
         sort,
         by,
         where,
+        category,
       );
   }
   async getAllAuth(
@@ -59,6 +62,7 @@ export class SewingProductService {
     sort: string,
     by: string,
     where: string,
+    category: string,
     userId: number,
   ): Promise<SewingProductEntity[]> {
     if (sort === 'title') {
@@ -76,6 +80,7 @@ export class SewingProductService {
         sort,
         by,
         where,
+        category,
         userId,
       );
     if (query === 'en')
@@ -85,6 +90,7 @@ export class SewingProductService {
         sort,
         by,
         where,
+        category,
         userId,
       );
   }

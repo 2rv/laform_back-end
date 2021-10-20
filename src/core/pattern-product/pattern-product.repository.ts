@@ -16,6 +16,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
     by: any = 'ASC',
     where: string,
     type: string,
+    category: string,
   ): Promise<PatternProductEntity[]> {
     return await this.createQueryBuilder('pattern_product')
       .leftJoin('pattern_product.images', 'images')
@@ -58,6 +59,10 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
           } else if (type) {
             qb.where('pattern_product.type = :type', {
               type: type,
+            });
+          } else if (category) {
+            qb.where('categories.categoryNameRu = :category', {
+              category: category,
             });
           } else {
             qb.where('pattern_product.deleted = false');
@@ -74,6 +79,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
     by: any = 'ASC',
     where: string,
     type: string,
+    category: string,
   ): Promise<PatternProductEntity[]> {
     return await this.createQueryBuilder('pattern_product')
       .leftJoin('pattern_product.images', 'images')
@@ -117,6 +123,10 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
             qb.where('pattern_product.type = :type', {
               type: type,
             });
+          } else if (category) {
+            qb.where('categories.categoryNameEn = :category', {
+              category: category,
+            });
           } else {
             qb.where('pattern_product.deleted = false');
           }
@@ -132,6 +142,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
     by: any = 'ASC',
     where: string,
     type: string,
+    category: string,
     userId: number,
   ): Promise<PatternProductEntity[]> {
     return await this.createQueryBuilder('pattern_product')
@@ -180,6 +191,10 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
             qb.where('pattern_product.type = :type', {
               type: type,
             });
+          } else if (category) {
+            qb.where('categories.categoryNameRu = :category', {
+              category: category,
+            });
           } else {
             qb.where('pattern_product.deleted = false');
           }
@@ -195,6 +210,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
     by: any = 'ASC',
     where: string,
     type: string,
+    category: string,
     userId: number,
   ): Promise<PatternProductEntity[]> {
     return await this.createQueryBuilder('pattern_product')
@@ -242,6 +258,10 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
           } else if (type) {
             qb.where('pattern_product.type = :type', {
               type: type,
+            });
+          } else if (category) {
+            qb.where('categories.categoryNameEn = :category', {
+              category: category,
             });
           } else {
             qb.where('pattern_product.deleted = false');

@@ -41,6 +41,7 @@ export class SewingProductController {
     @Query('page') page: number,
     @Query('by') by: any,
     @Query('where') where: string,
+    @Query('category') category: string,
   ) {
     return await this.sewingProductService.getAll(
       query,
@@ -49,6 +50,7 @@ export class SewingProductController {
       sort,
       by,
       where,
+      category,
     );
   }
   @Get('/auth/get/')
@@ -60,6 +62,7 @@ export class SewingProductController {
     @Query('page') page: number,
     @Query('by') by: any,
     @Query('where') where: string,
+    @Query('category') category: string,
     @GetAccount() user: UserEntity,
   ) {
     return await this.sewingProductService.getAllAuth(
@@ -69,6 +72,7 @@ export class SewingProductController {
       sort,
       by,
       where,
+      category,
       user.id,
     );
   }

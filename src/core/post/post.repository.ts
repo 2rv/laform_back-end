@@ -15,6 +15,7 @@ export class PostRepository extends Repository<PostEntity> {
     sort: string,
     by: any = 'ASC',
     where: string,
+    category: string,
   ): Promise<PostEntity[]> {
     return await this.createQueryBuilder('post')
       .leftJoin('post.image', 'image')
@@ -42,6 +43,10 @@ export class PostRepository extends Repository<PostEntity> {
               search: `%${where}%`,
             }).orWhere('categories.textRu ILIKE :search', {
               search: `%${where}%`,
+            });
+          } else if (category) {
+            qb.where('categories.categoryNameRu = :category', {
+              category: category,
             });
           } else {
             qb.where('post.deleted = false');
@@ -57,6 +62,7 @@ export class PostRepository extends Repository<PostEntity> {
     sort: string,
     by: any = 'ASC',
     where: string,
+    category: string,
   ): Promise<PostEntity[]> {
     return await this.createQueryBuilder('post')
       .leftJoin('post.image', 'image')
@@ -85,6 +91,10 @@ export class PostRepository extends Repository<PostEntity> {
             }).orWhere('categories.textEn ILIKE :search', {
               search: `%${where}%`,
             });
+          } else if (category) {
+            qb.where('categories.categoryNameRu = :category', {
+              category: category,
+            });
           } else {
             qb.where('post.deleted = false');
           }
@@ -99,6 +109,7 @@ export class PostRepository extends Repository<PostEntity> {
     sort: string,
     by: any = 'ASC',
     where: string,
+    category: string,
     userId: number,
   ): Promise<PostEntity[]> {
     return await this.createQueryBuilder('post')
@@ -130,6 +141,10 @@ export class PostRepository extends Repository<PostEntity> {
             }).orWhere('categories.textRu ILIKE :search', {
               search: `%${where}%`,
             });
+          } else if (category) {
+            qb.where('categories.categoryNameRu = :category', {
+              category: category,
+            });
           } else {
             qb.where('post.deleted = false');
           }
@@ -144,6 +159,7 @@ export class PostRepository extends Repository<PostEntity> {
     sort: string,
     by: any = 'ASC',
     where: string,
+    category: string,
     userId: number,
   ): Promise<PostEntity[]> {
     return await this.createQueryBuilder('post')
@@ -174,6 +190,10 @@ export class PostRepository extends Repository<PostEntity> {
               search: `%${where}%`,
             }).orWhere('categories.textEn ILIKE :search', {
               search: `%${where}%`,
+            });
+          } else if (category) {
+            qb.where('categories.categoryNameRu = :category', {
+              category: category,
             });
           } else {
             qb.where('post.deleted = false');

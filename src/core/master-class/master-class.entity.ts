@@ -5,6 +5,8 @@ import {
   OneToMany,
   OneToOne,
   CreateDateColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
 import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
@@ -33,6 +35,7 @@ export class MasterClassEntity {
     name: 'vendor_code',
     unique: true,
     readonly: true,
+    nullable: true,
   })
   vendorCode: string;
 
@@ -46,7 +49,10 @@ export class MasterClassEntity {
     return generateVendorCode();
   }
 
-  @OneToMany(() => CategoryEntity, (res: CategoryEntity) => res.masterClassId)
+  // @OneToMany(() => CategoryEntity, (res: CategoryEntity) => res.mast/erClassId)
+  // categories: CategoryEntity[];
+  @ManyToMany(() => CategoryEntity)
+  @JoinTable()
   categories: CategoryEntity[];
 
   @OneToMany(
@@ -137,6 +143,7 @@ export class MasterClassEntity {
   @Column({
     type: 'json',
     name: 'article_ru',
+    nullable: true,
   })
   articleRu: {
     blocks: [];
