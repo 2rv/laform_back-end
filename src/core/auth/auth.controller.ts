@@ -18,6 +18,7 @@ import { AccountGuard } from '../user/guard/account.guard';
 import { LoginInfoDto } from './dto/login-info.dto';
 import { AccountDataDto } from './dto/account-data.dto';
 import { ClientConfig } from '../../config/client.config';
+import { AuthBasketForCodeDto } from './dto/auth-basket-code.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -91,5 +92,9 @@ export class AuthController {
     return res.redirect(
       `${clientUrl}/social-auth-access?data=${token.accessToken}`,
     );
+  }
+  @Post('/verify/code')
+  async authVerifyByCode(@Body() body: AuthBasketForCodeDto): Promise<void> {
+    return this.authService.authVerifyByCode(body);
   }
 }

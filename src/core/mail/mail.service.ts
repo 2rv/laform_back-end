@@ -10,6 +10,8 @@ import * as path from 'path';
 import { UserEntity } from '../user/user.entity';
 import { randomUUID } from 'src/common/utils/hash';
 import { UserRepository } from '../user/user.repository';
+import { generateVendorCode } from 'src/common/utils/vendor-coder';
+import { MailDto } from './dto/mail.dto';
 
 @Injectable()
 export class MailService {
@@ -123,10 +125,9 @@ export class MailService {
       });
   }
 
-  async confirmEmailForOrder(body: any) {
-    const code = randomUUID();
-    await this.cacheManager.set('purchaseEmailConfirmationCode', code);
-
+  async sendVerificationCode(body: MailDto) {
+    const code = generateVendorCode();
+    await this.cacheManager.set(`AuthBasketEmailCodeFor${body.email}`, code);
     return await this.mailerService
       .sendMail({
         to: body.email,

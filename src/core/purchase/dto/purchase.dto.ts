@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsNumber, IsString, IsOptional } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  IsOptional,
+  IsEmail,
+} from 'class-validator';
 
 export class PurchaseDto {
   @IsOptional()
@@ -6,8 +12,12 @@ export class PurchaseDto {
   userId: number;
 
   @IsNotEmpty()
-  @IsString()
+  @IsEmail()
   email: string;
+
+  @IsOptional()
+  @IsString()
+  emailConfirmCode: string;
 
   @IsNotEmpty()
   @IsString()
@@ -20,14 +30,6 @@ export class PurchaseDto {
   @IsNotEmpty()
   @IsString()
   phoneNumber: string;
-
-  //   @IsNotEmpty()
-  //   @IsString()
-  //   typeOfPayment: string;
-
-  @IsNotEmpty()
-  @IsString()
-  typeOfDelivery: string;
 
   @IsOptional()
   @IsString()
@@ -44,4 +46,12 @@ export class PurchaseDto {
   @IsOptional()
   @IsString()
   promoCode: string;
+
+  @IsNotEmpty()
+  @IsString()
+  typeOfDelivery: string;
+
+  @IsOptional()
+  @IsNumber()
+  shippingPrice: number;
 }
