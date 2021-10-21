@@ -98,8 +98,8 @@ export class PurchaseController {
   @Put('update/:purchaseId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, PurchaseGuard)
-  async update(@GetUser() user: UserEntity, @Body() body: any, @Request() req) {
-    return await this.purchaseService.update(req.purchaseId, body, user.email);
+  async update(@Body() body: any, @Request() req) {
+    return await this.purchaseService.update(req.purchaseId, body);
   }
 
   @Delete('delete/:purchaseId')

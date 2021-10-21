@@ -343,10 +343,10 @@ export class PurchaseService {
     return await this.purchaseProductService.getOneMasterClass(id);
   }
 
-  async update(id: any, body: any, email: string) {
+  async update(id: any, body: any) {
     const result = await this.purchaseRepository.findOne({ id });
     if (result) {
-      await this.mailService.sendInfoAboutOrderStatus(body, email);
+      await this.mailService.sendInfoAboutOrderStatus(body);
       await this.purchaseRepository.update(id, body);
     } else {
       throw new BadRequestException(PURCHASE_ERROR.PURCHASE_NOT_FOUND);

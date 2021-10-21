@@ -146,10 +146,10 @@ export class MailService {
       });
   }
 
-  async sendInfoAboutOrderStatus(data: any, email: string) {
+  async sendInfoAboutOrderStatus(data: any) {
     return await this.mailerService
       .sendMail({
-        to: email,
+        to: data.email,
         subject: `Статус заказа ${data.orderNumber} изменен`,
         template: path.join(
           path.resolve(),
