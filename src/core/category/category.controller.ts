@@ -32,8 +32,6 @@ export class CategoryController {
   }
 
   @Get('get/:id')
-  @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getOne(
     @Query('lang') query: string,
     @Param('id') id: string,
@@ -42,8 +40,6 @@ export class CategoryController {
   }
 
   @Get('get/')
-  @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getAll(
     @Query('lang') query: string,
     @Query('type') type: string,
