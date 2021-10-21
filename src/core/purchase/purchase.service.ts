@@ -307,7 +307,7 @@ export class PurchaseService {
     body.purchase.promoCode = promoCode;
     body.purchase.price = Number(price.toFixed(2));
     body.purchase.typeOfDelivery = diliveryName;
-    body.purchase.shippingPrice = diliveryPrice;
+    body.purchase.shippingPrice = diliveryPrice || 0;
 
     const purchase = await this.create(body.purchase, products, userId, email);
     const newOrder = await this.purchaseRepository.save(purchase);
