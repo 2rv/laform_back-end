@@ -53,7 +53,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
           if (where) {
             qb.where('pattern_product.titleRu ILIKE :search', {
               search: `%${where}%`,
-            }).orWhere('categories.textRu ILIKE :search', {
+            }).orWhere('categories.categoryNameRu ILIKE :search', {
               search: `%${where}%`,
             });
           } else if (type) {
@@ -116,7 +116,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
           if (where) {
             qb.where('pattern_product.titleEn ILIKE :search', {
               search: `%${where}%`,
-            }).orWhere('categories.textEn ILIKE :search', {
+            }).orWhere('categories.categoryNameEn ILIKE :search', {
               search: `%${where}%`,
             });
           } else if (type) {
@@ -184,7 +184,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
           if (where) {
             qb.where('pattern_product.titleRu ILIKE :search', {
               search: `%${where}%`,
-            }).orWhere('categories.textRu ILIKE :search', {
+            }).orWhere('categories.categoryNameRu ILIKE :search', {
               search: `%${where}%`,
             });
           } else if (type) {
@@ -252,7 +252,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
           if (where) {
             qb.where('pattern_product.titleEn ILIKE :search', {
               search: `%${where}%`,
-            }).orWhere('categories.textEn ILIKE :search', {
+            }).orWhere('categories.categoryNameEn ILIKE :search', {
               search: `%${where}%`,
             });
           } else if (type) {

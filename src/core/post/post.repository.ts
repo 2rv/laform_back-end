@@ -41,7 +41,7 @@ export class PostRepository extends Repository<PostEntity> {
           if (where) {
             qb.where('post.titleRu ILIKE :search', {
               search: `%${where}%`,
-            }).orWhere('categories.textRu ILIKE :search', {
+            }).orWhere('categories.categoryNameRu ILIKE :search', {
               search: `%${where}%`,
             });
           } else if (category) {
@@ -88,7 +88,7 @@ export class PostRepository extends Repository<PostEntity> {
           if (where) {
             qb.where('post.titleEn ILIKE :search', {
               search: `%${where}%`,
-            }).orWhere('categories.textEn ILIKE :search', {
+            }).orWhere('categories.categoryNameEn ILIKE :search', {
               search: `%${where}%`,
             });
           } else if (category) {
@@ -138,7 +138,7 @@ export class PostRepository extends Repository<PostEntity> {
           if (where) {
             qb.where('post.titleRu ILIKE :search', {
               search: `%${where}%`,
-            }).orWhere('categories.textRu ILIKE :search', {
+            }).orWhere('categories.categoryNameRu ILIKE :search', {
               search: `%${where}%`,
             });
           } else if (category) {
@@ -188,7 +188,7 @@ export class PostRepository extends Repository<PostEntity> {
           if (where) {
             qb.where('post.titleEn ILIKE :search', {
               search: `%${where}%`,
-            }).orWhere('categories.textEn ILIKE :search', {
+            }).orWhere('categories.categoryNameEn ILIKE :search', {
               search: `%${where}%`,
             });
           } else if (category) {
