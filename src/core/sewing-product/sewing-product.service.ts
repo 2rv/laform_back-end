@@ -3,10 +3,14 @@ import { SewingProductEntity } from './sewing-product.entity';
 import { Injectable } from '@nestjs/common';
 import { SewingProductDto } from './dto/sewing-product.dto';
 import { ProductOptionEntity } from '../product-option/product-option.entity';
+import { ProductOptionService } from '../product-option/product-option.service';
 
 @Injectable()
 export class SewingProductService {
-  constructor(private sewingProductRepository: SewingProductRepository) {}
+  constructor(
+    private sewingProductRepository: SewingProductRepository,
+    private productOptionService: ProductOptionService,
+  ) {}
 
   async create(body: SewingProductDto): Promise<SewingProductEntity> {
     body.options = body.options.map((item) => {
@@ -142,6 +146,7 @@ export class SewingProductService {
     sewingProduct: SewingProductEntity,
     option: ProductOptionEntity,
   ): Promise<{
+    title: string;
     totalPrice: number;
     totalDiscount: number;
     totalCount: number;
@@ -153,13 +158,87 @@ export class SewingProductService {
           String(option),
         )
       : await this.sewingProductRepository.findOne(sewingProduct, {
-          select: ['price', 'discount', 'count', 'length'],
+          select: [
+            'price',
+            'discount',
+            'count',
+            'length',
+            'titleRu',
+            'titleEn',
+          ],
         });
     return {
+      title: result.titleRu || result.titleEn,
       totalPrice: result.price || result.options?.[0].price,
       totalDiscount: result.discount || result.options?.[0].discount,
       totalCount: result.count || result.options?.[0].count,
       totalLength: result.length || result.options?.[0].length,
     };
+  }
+
+  async updateCountOrLength(
+    sewingProduct: SewingProductEntity,
+    option: ProductOptionEntity,
+    count?: number,
+    length?: number,
+  ) {
+    if (option) {
+      const result = await this.sewingProductRepository.findOneAndOption(
+        String(sewingProduct),
+        String(option),
+      );
+      if (!Boolean(result.options.length)) return;
+
+      if (
+        Boolean(result.options[0].count) &&
+        count &&
+        Number(result.options[0].count) >= Number(count)
+      ) {
+        const newCount = result.options[0].count - Number(count);
+        await this.productOptionService.update(result.options[0].id, {
+          count: newCount,
+        });
+      }
+
+      if (
+        Boolean(result.options[0].length) &&
+        length &&
+        Number(result.options[0].length) >= Number(length)
+      ) {
+        const newLength = result.options[0].length - Number(length);
+        await this.productOptionService.update(result.options[0].id, {
+          length: newLength,
+        });
+      }
+    } else {
+      const result = await this.sewingProductRepository.findOneOrFail(
+        sewingProduct,
+        {
+          select: ['id', 'count', 'length'],
+        },
+      );
+      if (!Boolean(result)) return;
+      if (
+        Boolean(result.count) &&
+        count &&
+        Number(result.count) >= Number(count)
+      ) {
+        const newCount = result.count - Number(count);
+        await this.sewingProductRepository.update(result.id, {
+          count: newCount,
+        });
+      }
+
+      if (
+        Boolean(result.length) &&
+        length &&
+        Number(result.length) >= Number(length)
+      ) {
+        const newLength = result.length - Number(length);
+        await this.sewingProductRepository.update(result.id, {
+          length: newLength,
+        });
+      }
+    }
   }
 }

@@ -79,6 +79,7 @@ export class PurchaseService {
     option: ProductOptionEntity,
     count: number,
   ): Promise<{
+    title: string;
     totalDiscount: number;
     totalPrice: number;
     totalCount: number;
@@ -89,6 +90,7 @@ export class PurchaseService {
       option,
     );
     return {
+      title: result.title,
       totalDiscount: result.totalDiscount,
       totalPrice: result.totalPrice,
       price: this.getPrice(result.totalPrice, result.totalDiscount, count),
@@ -101,6 +103,7 @@ export class PurchaseService {
     count: number,
     length: number,
   ): Promise<{
+    title: string;
     totalDiscount: number;
     totalPrice: number;
     totalCount: number;
@@ -113,6 +116,7 @@ export class PurchaseService {
         option,
       );
     return {
+      title: result.title,
       totalDiscount: result.totalDiscount,
       totalPrice: result.totalPrice,
       price: this.getPrice(
@@ -144,6 +148,25 @@ export class PurchaseService {
       return true;
     } else {
       throw new BadRequestException(PURCHASE_ERROR.AUTH_CODE_IS_INCORRECT);
+    }
+  }
+  async productUpdateData(purchaseProducts: any) {
+    for (const item of purchaseProducts) {
+      if (item.type === 2) {
+        await this.patternProductService.updateCount(
+          item.patternProductId,
+          item.optionId,
+          item.totalCount,
+        );
+      }
+      if (item.type === 3) {
+        await this.sewingProductService.updateCountOrLength(
+          item.sewingProductId,
+          item.optionId,
+          item.totalCount,
+          item.totalLength,
+        );
+      }
     }
   }
 
@@ -186,13 +209,17 @@ export class PurchaseService {
         const { totalDiscount, totalPrice, totalCount, price } = result;
         item.totalDiscount = totalDiscount;
         item.totalPrice = totalPrice;
-        if (item.totalCount <= totalCount) {
-          totalResult.products.push(item);
-          totalResult.price += price;
-        } else {
-          totalResult.products.push(item);
-          totalResult.price += price;
+        if (
+          totalCount !== undefined &&
+          Number(totalCount) < Number(item.totalCount)
+        ) {
+          throw new BadRequestException(
+            `${result.title} - ${PURCHASE_ERROR.COUNT_GREATER_MAXIMUM} - ${totalCount}`,
+          );
         }
+        if (totalCount === undefined) item.totalCount = 1;
+        totalResult.products.push(item);
+        totalResult.price += price;
       }
       if (item.type === 3) {
         const result = await this.getSewingProduct(
@@ -206,16 +233,22 @@ export class PurchaseService {
         item.totalDiscount = totalDiscount;
         item.totalPrice = totalPrice;
 
-        if (Boolean(totalCount) && item.totalCount <= totalCount) {
-          totalResult.products.push(item);
-          totalResult.price += price;
+        if (Boolean(totalCount) && item.totalCount > totalCount) {
+          throw new BadRequestException(
+            `${result.title} - ${PURCHASE_ERROR.COUNT_GREATER_MAXIMUM} - ${totalCount}`,
+          );
         } else if (
           Boolean(totalLength) &&
-          Math.ceil(item.totalLength * 100) <= Math.ceil(totalLength * 100)
+          Math.ceil(item.totalLength * 100) > Math.ceil(totalLength * 100)
         ) {
-          totalResult.products.push(item);
-          totalResult.price += price;
+          throw new BadRequestException(
+            `${result.title} - ${PURCHASE_ERROR.LENGTH_GREATER_MAXIMUM} - ${totalLength}`,
+          );
         } else {
+          if (!Boolean(totalCount) && !Boolean(totalLength)) {
+            item.totalCount = 1;
+          }
+
           totalResult.products.push(item);
           totalResult.price += price;
         }
@@ -278,9 +311,11 @@ export class PurchaseService {
 
     const purchase = await this.create(body.purchase, products, userId, email);
     const newOrder = await this.purchaseRepository.save(purchase);
+    await this.productUpdateData(purchase.purchaseProducts);
     this.purchaseRepository.update(newOrder.id, {
       orderNumber: await PurchaseEntity.generateOrderNumber(newOrder._NID),
     });
+
     return newOrder;
   }
 

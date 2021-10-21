@@ -748,6 +748,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .leftJoin('pattern_product.options', 'options')
       .select([
         'pattern_product.id',
+        'pattern_product.titleRu',
+        'pattern_product.titleEn',
         'pattern_product.price',
         'pattern_product.discount',
         'pattern_product.count',

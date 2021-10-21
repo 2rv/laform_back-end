@@ -738,6 +738,8 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .leftJoin('sewing_product.options', 'options')
       .select([
         'sewing_product.id',
+        'sewing_product.titleRu',
+        'sewing_product.titleEn',
         'sewing_product.price',
         'sewing_product.discount',
         'sewing_product.count',
