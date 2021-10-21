@@ -107,6 +107,7 @@ export class PurchaseEntity {
   @Column({
     type: 'numeric',
     name: 'shipping_price',
+    nullable: true,
   })
   shippingPrice!: number;
 
