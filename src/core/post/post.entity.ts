@@ -5,6 +5,8 @@ import {
   CreateDateColumn,
   OneToMany,
   OneToOne,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { LikeEntity } from './../like/like.entity';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
@@ -48,7 +50,10 @@ export class PostEntity {
   @OneToOne(() => FileUploadEntity, (res: FileUploadEntity) => res.postId)
   image: FileUploadEntity;
 
-  @OneToMany(() => CategoryEntity, (res: CategoryEntity) => res.postId)
+  // @OneToMany(() => CategoryEntity, (res: CategoryEntity) => res.postId)
+  // categories: CategoryEntity[];
+  @ManyToMany(() => CategoryEntity)
+  @JoinTable()
   categories: CategoryEntity[];
 
   @OneToOne(

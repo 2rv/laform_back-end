@@ -5,6 +5,8 @@ import {
   OneToMany,
   OneToOne,
   JoinColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { CategoryEntity } from '../category/category.entity';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
@@ -47,10 +49,13 @@ export class PatternProductEntity {
     return generateVendorCode();
   }
 
-  @OneToMany(
-    () => CategoryEntity,
-    (res: CategoryEntity) => res.patternProductId,
-  )
+  // @OneToMany(
+  //   () => CategoryEntity,
+  //   (res: CategoryEntity) => res.patternProductId,
+  // )
+  // categories: CategoryEntity[];
+  @ManyToMany(() => CategoryEntity)
+  @JoinTable()
   categories: CategoryEntity[];
 
   @OneToMany(

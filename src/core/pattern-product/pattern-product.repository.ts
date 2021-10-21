@@ -16,6 +16,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
     by: any = 'ASC',
     where: string,
     type: string,
+    category: string,
   ): Promise<PatternProductEntity[]> {
     return await this.createQueryBuilder('pattern_product')
       .leftJoin('pattern_product.images', 'images')
@@ -52,12 +53,16 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
           if (where) {
             qb.where('pattern_product.titleRu ILIKE :search', {
               search: `%${where}%`,
-            }).orWhere('categories.textRu ILIKE :search', {
+            }).orWhere('categories.categoryNameRu ILIKE :search', {
               search: `%${where}%`,
             });
           } else if (type) {
             qb.where('pattern_product.type = :type', {
               type: type,
+            });
+          } else if (category) {
+            qb.where('categories.categoryNameRu = :category', {
+              category: category,
             });
           } else {
             qb.where('pattern_product.deleted = false');
@@ -74,6 +79,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
     by: any = 'ASC',
     where: string,
     type: string,
+    category: string,
   ): Promise<PatternProductEntity[]> {
     return await this.createQueryBuilder('pattern_product')
       .leftJoin('pattern_product.images', 'images')
@@ -110,12 +116,16 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
           if (where) {
             qb.where('pattern_product.titleEn ILIKE :search', {
               search: `%${where}%`,
-            }).orWhere('categories.textEn ILIKE :search', {
+            }).orWhere('categories.categoryNameEn ILIKE :search', {
               search: `%${where}%`,
             });
           } else if (type) {
             qb.where('pattern_product.type = :type', {
               type: type,
+            });
+          } else if (category) {
+            qb.where('categories.categoryNameEn = :category', {
+              category: category,
             });
           } else {
             qb.where('pattern_product.deleted = false');
@@ -132,6 +142,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
     by: any = 'ASC',
     where: string,
     type: string,
+    category: string,
     userId: number,
   ): Promise<PatternProductEntity[]> {
     return await this.createQueryBuilder('pattern_product')
@@ -173,12 +184,16 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
           if (where) {
             qb.where('pattern_product.titleRu ILIKE :search', {
               search: `%${where}%`,
-            }).orWhere('categories.textRu ILIKE :search', {
+            }).orWhere('categories.categoryNameRu ILIKE :search', {
               search: `%${where}%`,
             });
           } else if (type) {
             qb.where('pattern_product.type = :type', {
               type: type,
+            });
+          } else if (category) {
+            qb.where('categories.categoryNameRu = :category', {
+              category: category,
             });
           } else {
             qb.where('pattern_product.deleted = false');
@@ -195,6 +210,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
     by: any = 'ASC',
     where: string,
     type: string,
+    category: string,
     userId: number,
   ): Promise<PatternProductEntity[]> {
     return await this.createQueryBuilder('pattern_product')
@@ -236,12 +252,16 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
           if (where) {
             qb.where('pattern_product.titleEn ILIKE :search', {
               search: `%${where}%`,
-            }).orWhere('categories.textEn ILIKE :search', {
+            }).orWhere('categories.categoryNameEn ILIKE :search', {
               search: `%${where}%`,
             });
           } else if (type) {
             qb.where('pattern_product.type = :type', {
               type: type,
+            });
+          } else if (category) {
+            qb.where('categories.categoryNameEn = :category', {
+              category: category,
             });
           } else {
             qb.where('pattern_product.deleted = false');

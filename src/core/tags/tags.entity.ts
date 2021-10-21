@@ -18,6 +18,7 @@ export class CategoryEntity {
   @Column({
     type: 'varchar',
     name: 'text_ru',
+    nullable: true,
   })
   textRu!: string;
 

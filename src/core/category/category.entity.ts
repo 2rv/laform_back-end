@@ -28,33 +28,42 @@ export class CategoryEntity {
   })
   categoryNameEn!: string;
 
-  @ManyToOne(
-    () => MasterClassEntity,
-    (res: MasterClassEntity) => res.categories,
-  )
-  @JoinColumn({
-    name: 'master_class_id',
+  @Column({
+    type: 'varchar',
+    name: 'type',
   })
-  masterClassId: MasterClassEntity;
+  type!: string;
 
-  @ManyToOne(() => PostEntity, (res: PostEntity) => res.categories)
-  @JoinColumn({
-    name: 'postId',
-  })
-  postId: PostEntity;
+  // @ManyToOne(
+  //   () => MasterClassEntity,
+  //   (res: MasterClassEntity) => res.categories,
+  // )
+  // @JoinColumn({
+  //   name: 'master_class_id',
+  // })
+  // masterClassId: MasterClassEntity;
 
-  @ManyToOne(
-    () => PatternProductEntity,
-    (res: PatternProductEntity) => res.categories,
-  )
-  @JoinColumn({
-    name: 'patternProductId',
-  })
-  patternProductId: PatternProductEntity;
+  // @ManyToOne(() => PostEntity, (res: PostEntity) => res.categories)
+  // @JoinColumn({
+  //   name: 'postId',
+  // })
+  // postId: PostEntity;
 
-  @ManyToOne(
-    () => SewingProductEntity,
-    (res: SewingProductEntity) => res.categories,
-  )
-  sewingProductId: SewingProductEntity;
+  // @ManyToOne(
+  //   () => PatternProductEntity,
+  //   (res: PatternProductEntity) => res.categories,
+  // )
+  // @JoinColumn({
+  //   name: 'patternProductId',
+  // })
+  // patternProductId: PatternProductEntity;
+
+  // @ManyToOne(
+  //   () => SewingProductEntity,
+  //   (res: SewingProductEntity) => res.categories,
+  // )
+  // @JoinColumn({
+  //   name: 'sewingProductId',
+  // })
+  // sewingProductId: SewingProductEntity;
 }
