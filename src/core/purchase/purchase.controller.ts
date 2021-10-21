@@ -40,11 +40,19 @@ export class PurchaseController {
   async saveForNotAuthUser(
     @Body(new ValidationPipe()) body: CreatePurchaseDto,
   ) {
-    return await this.purchaseService.save(
-      body,
-      undefined,
-      body.purchase.email,
+    const verified = await this.purchaseService.verifyUserByCodeAndEmail(
+      body.purchase,
     );
+
+    if (verified) {
+      return await this.purchaseService.save(
+        body,
+        undefined,
+        body.purchase.email,
+      );
+    } else {
+      return verified;
+    }
   }
 
   @Get('get/:purchaseId')
@@ -99,10 +107,5 @@ export class PurchaseController {
   @UseGuards(AuthGuard('jwt'), AccountGuard, PurchaseGuard)
   async delete(@Request() req) {
     return await this.purchaseService.delete(req.purchaseId);
-  }
-
-  @Post('/confirm-email-for-order/:code')
-  async confirmEmailForOrder(@Param('code') code: string): Promise<void> {
-    return this.purchaseService.confirmEmailForOrder(code);
   }
 }

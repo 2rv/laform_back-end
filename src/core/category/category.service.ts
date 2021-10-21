@@ -22,9 +22,9 @@ export class CategoryService {
     if (query === 'en') return await this.categoryRepository.findOneEn(id);
   }
 
-  async getAll(query: string): Promise<CategoryEntity[]> {
-    if (query === 'ru') return await this.categoryRepository.findAllRu();
-    if (query === 'en') return await this.categoryRepository.findAllEn();
+  async getAll(query: string, type: string): Promise<CategoryEntity[]> {
+    if (query === 'ru') return await this.categoryRepository.findAllRu(type);
+    if (query === 'en') return await this.categoryRepository.findAllEn(type);
   }
 
   async update(id: string, body) {

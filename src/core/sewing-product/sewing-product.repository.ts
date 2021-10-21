@@ -15,6 +15,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
     sort: string,
     by: any = 'ASC',
     where: string,
+    category: string,
   ): Promise<SewingProductEntity[]> {
     return await this.createQueryBuilder('sewing_product')
       .leftJoin('sewing_product.images', 'images')
@@ -54,6 +55,10 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
               search: `%${where}%`,
             }).orWhere('categories.categoryNameRu ILIKE :search', {
               search: `%${where}%`,
+            });
+          } else if (category) {
+            qb.where('categories.categoryNameRu = :category', {
+              category: category,
             });
           } else {
             qb.where('sewing_product.deleted = false');
@@ -69,6 +74,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
     sort: string,
     by: any = 'ASC',
     where: string,
+    category: string,
   ): Promise<SewingProductEntity[]> {
     return await this.createQueryBuilder('sewing_product')
       .leftJoin('sewing_product.images', 'images')
@@ -109,6 +115,10 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
             }).orWhere('categories.categoryNameEn ILIKE :search', {
               search: `%${where}%`,
             });
+          } else if (category) {
+            qb.where('categories.categoryNameRu = :category', {
+              category: category,
+            });
           } else {
             qb.where('sewing_product.deleted = false');
           }
@@ -123,6 +133,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
     sort: string,
     by: any = 'ASC',
     where: string,
+    category: string,
     userId: number,
   ): Promise<SewingProductEntity[]> {
     return await this.createQueryBuilder('sewing_product')
@@ -168,6 +179,10 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
             }).orWhere('categories.categoryNameRu ILIKE :search', {
               search: `%${where}%`,
             });
+          } else if (category) {
+            qb.where('categories.categoryNameRu = :category', {
+              category: category,
+            });
           } else {
             qb.where('sewing_product.deleted = false');
           }
@@ -182,6 +197,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
     sort: string,
     by: any = 'ASC',
     where: string,
+    category: string,
     userId: number,
   ): Promise<SewingProductEntity[]> {
     return await this.createQueryBuilder('sewing_product')
@@ -226,6 +242,10 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
               search: `%${where}%`,
             }).orWhere('categories.categoryNameEn ILIKE :search', {
               search: `%${where}%`,
+            });
+          } else if (category) {
+            qb.where('categories.categoryNameRu = :category', {
+              category: category,
             });
           } else {
             qb.where('sewing_product.deleted = false');
@@ -738,6 +758,8 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .leftJoin('sewing_product.options', 'options')
       .select([
         'sewing_product.id',
+        'sewing_product.titleRu',
+        'sewing_product.titleEn',
         'sewing_product.price',
         'sewing_product.discount',
         'sewing_product.count',

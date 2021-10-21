@@ -40,6 +40,7 @@ export class MasterClassController {
     @Query('page') page: number,
     @Query('by') by: any,
     @Query('where') where: string,
+    @Query('category') category: string,
   ) {
     return await this.masterClassService.getAll(
       query,
@@ -48,6 +49,7 @@ export class MasterClassController {
       sort,
       by,
       where,
+      category,
     );
   }
 
@@ -60,6 +62,7 @@ export class MasterClassController {
     @Query('page') page: number,
     @Query('by') by: any,
     @Query('where') where: string,
+    @Query('category') category: string,
     @GetAccount() user: UserEntity,
   ) {
     return await this.masterClassService.getAllAuth(
@@ -69,6 +72,7 @@ export class MasterClassController {
       sort,
       by,
       where,
+      category,
       user.id,
     );
   }

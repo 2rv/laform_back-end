@@ -8,6 +8,7 @@ import { MasterClassModule } from '../master-class/master-class.module';
 import { SewingProductModule } from '../sewing-product/sewing-product.module';
 import { PromoCodeModule } from '../promo-code/promo-code.module';
 import { PurchaseProductModule } from '../purchase-product/purchase-product.module';
+import { DeliveryPriceModule } from '../delivery-price/delivery-price.module';
 import { CacheModuleConfig } from 'src/config/cache.config';
 
 @Module({
@@ -18,6 +19,7 @@ import { CacheModuleConfig } from 'src/config/cache.config';
     MasterClassModule,
     SewingProductModule,
     PurchaseProductModule,
+    DeliveryPriceModule,
     TypeOrmModule.forFeature([PurchaseRepository]),
   ],
   providers: [PurchaseService],

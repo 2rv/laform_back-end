@@ -11,6 +11,7 @@ import {
 import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
 import { UserEntity } from '../user/user.entity';
 import { IsEmail } from 'class-validator';
+import { DeliveryPriceEntity } from '../delivery-price/delivery-price.entity';
 
 @Entity({ name: 'purchase' })
 export class PurchaseEntity {
@@ -78,13 +79,6 @@ export class PurchaseEntity {
 
   @Column({
     type: 'varchar',
-    name: 'type_of_delivery',
-    nullable: true,
-  })
-  typeOfDelivery!: string;
-
-  @Column({
-    type: 'varchar',
     name: 'comment',
     nullable: true,
   })
@@ -98,16 +92,30 @@ export class PurchaseEntity {
   purchaseProducts: PurchaseProductEntity[];
 
   @Column({
-    type: 'numeric',
-    name: 'price',
-  })
-  price!: number;
-
-  @Column({
     type: 'varchar',
     nullable: true,
   })
   promoCode?: string;
+
+  @Column({
+    type: 'varchar',
+    name: 'type_of_delivery',
+    nullable: true,
+  })
+  typeOfDelivery!: string;
+
+  @Column({
+    type: 'numeric',
+    name: 'shipping_price',
+    nullable: true,
+  })
+  shippingPrice!: number;
+
+  @Column({
+    type: 'numeric',
+    name: 'price',
+  })
+  price!: number;
 
   @Column({
     type: 'int',

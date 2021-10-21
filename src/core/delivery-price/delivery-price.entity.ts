@@ -12,7 +12,7 @@ export class DeliveryPriceEntity {
   deliveryType: string;
 
   @Column({
-    type: 'int',
+    type: 'numeric',
     name: 'delivery_type_price',
     default: 0,
   })

@@ -41,6 +41,7 @@ export class PatternProductController {
     @Query('by') by: any,
     @Query('where') where: string,
     @Query('type') type: string,
+    @Query('category') category: string,
   ) {
     return await this.patternProductService.getAll(
       query,
@@ -50,6 +51,7 @@ export class PatternProductController {
       by,
       where,
       type,
+      category,
     );
   }
   @Get('/auth/get/')
@@ -62,6 +64,7 @@ export class PatternProductController {
     @Query('by') by: any,
     @Query('where') where: string,
     @Query('type') type: string,
+    @Query('category') category: string,
     @GetAccount() user: UserEntity,
   ) {
     return await this.patternProductService.getAllAuth(
@@ -72,6 +75,7 @@ export class PatternProductController {
       by,
       where,
       type,
+      category,
       user.id,
     );
   }
