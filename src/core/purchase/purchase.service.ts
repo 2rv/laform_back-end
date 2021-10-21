@@ -23,6 +23,7 @@ import { SewingProductEntity } from '../sewing-product/sewing-product.entity';
 import { DeliveryPriceService } from '../delivery-price/delivery-price.service';
 import { PURCHASE_ERROR } from './enum/purchase.enum';
 import { VerifyByCodeDto } from './dto/verify-by-code.dto';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class PurchaseService {
@@ -35,6 +36,7 @@ export class PurchaseService {
     private patternProductService: PatternProductService,
     private sewingProductService: SewingProductService,
     private masterClassService: MasterClassService,
+    private mailService: MailService,
   ) {}
 
   getPrice(price = 0, discount = 0, count = null, length = null): number {
@@ -341,8 +343,14 @@ export class PurchaseService {
     return await this.purchaseProductService.getOneMasterClass(id);
   }
 
-  async update(id: any, body: any) {
-    return await this.purchaseRepository.update(id, body);
+  async update(id: any, body: any, email: string) {
+    const result = await this.purchaseRepository.findOne({ id });
+    if (result) {
+      await this.mailService.sendInfoAboutOrderStatus(body, email);
+      await this.purchaseRepository.update(id, body);
+    } else {
+      throw new BadRequestException(PURCHASE_ERROR.PURCHASE_NOT_FOUND);
+    }
   }
 
   async delete(id: string) {

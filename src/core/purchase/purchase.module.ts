@@ -10,6 +10,7 @@ import { PromoCodeModule } from '../promo-code/promo-code.module';
 import { PurchaseProductModule } from '../purchase-product/purchase-product.module';
 import { DeliveryPriceModule } from '../delivery-price/delivery-price.module';
 import { CacheModuleConfig } from 'src/config/cache.config';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { CacheModuleConfig } from 'src/config/cache.config';
     SewingProductModule,
     PurchaseProductModule,
     DeliveryPriceModule,
+    MailModule,
     TypeOrmModule.forFeature([PurchaseRepository]),
   ],
   providers: [PurchaseService],
