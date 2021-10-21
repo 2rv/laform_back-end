@@ -5,6 +5,8 @@ import {
   OneToMany,
   OneToOne,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
 } from 'typeorm';
 import { CategoryEntity } from '../category/category.entity';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
@@ -48,10 +50,10 @@ export class SewingProductEntity {
     return generateVendorCode();
   }
 
-  @OneToMany(() => CategoryEntity, (res: CategoryEntity) => res.sewingProductId)
-  @JoinColumn({
-    name: 'sewingProductId',
-  })
+  // @OneToMany(() => CategoryEntity, (res: CategoryEntity) => res.sewingProductId)
+  // categories: CategoryEntity[];
+  @ManyToMany(() => CategoryEntity)
+  @JoinTable()
   categories: CategoryEntity[];
 
   @OneToMany(

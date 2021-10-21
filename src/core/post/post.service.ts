@@ -19,6 +19,7 @@ export class PostService {
     sort: string,
     by: string,
     where: string,
+    category: string,
   ): Promise<PostEntity[]> {
     if (sort === 'title') {
       if (query === 'ru') {
@@ -31,9 +32,23 @@ export class PostService {
     } else sort = '';
 
     if (query === 'ru')
-      return await this.postRepository.findAllRu(size, page, sort, by, where);
+      return await this.postRepository.findAllRu(
+        size,
+        page,
+        sort,
+        by,
+        where,
+        category,
+      );
     if (query === 'en')
-      return await this.postRepository.findAllEn(size, page, sort, by, where);
+      return await this.postRepository.findAllEn(
+        size,
+        page,
+        sort,
+        by,
+        where,
+        category,
+      );
   }
   async getAllAuth(
     query: string,
@@ -42,6 +57,7 @@ export class PostService {
     sort: string,
     by: string,
     where: string,
+    category: string,
     userId: number,
   ): Promise<PostEntity[]> {
     if (sort === 'title') {
@@ -61,6 +77,7 @@ export class PostService {
         sort,
         by,
         where,
+        category,
         userId,
       );
     if (query === 'en')
@@ -70,6 +87,7 @@ export class PostService {
         sort,
         by,
         where,
+        category,
         userId,
       );
   }

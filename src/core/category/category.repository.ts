@@ -9,6 +9,7 @@ export class CategoryRepository extends Repository<CategoryEntity> {
       .select(['category.id', 'category.categoryNameRu'])
       .getOne();
   }
+
   async findOneEn(id: string): Promise<CategoryEntity> {
     return await this.createQueryBuilder('category')
       .where('category.id = :id', { id })
@@ -18,17 +19,18 @@ export class CategoryRepository extends Repository<CategoryEntity> {
         throw err;
       });
   }
-  async findAllRu(): Promise<CategoryEntity[]> {
+
+  async findAllRu(type: string): Promise<CategoryEntity[]> {
     return await this.createQueryBuilder('category')
       .select(['category.id', 'category.categoryNameRu'])
-      .getMany()
-      .catch((err) => {
-        throw err;
-      });
+      .where('category.type = :type', { type })
+      .getMany();
   }
-  async findAllEn(): Promise<CategoryEntity[]> {
+
+  async findAllEn(type: string): Promise<CategoryEntity[]> {
     return await this.createQueryBuilder('category')
-      .select(['category.id', 'category.categoryNameEn'])
+      .select(['category.id', 'category.categoryNameRu'])
+      .where('category.type = :type', { type })
       .getMany();
   }
 }

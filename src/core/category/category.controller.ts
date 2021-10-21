@@ -44,8 +44,11 @@ export class CategoryController {
   @Get('get/')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async getAll(@Query('lang') query: string): Promise<CategoryEntity[]> {
-    return await this.categoryService.getAll(query);
+  async getAll(
+    @Query('lang') query: string,
+    @Query('type') type: string,
+  ): Promise<CategoryEntity[]> {
+    return await this.categoryService.getAll(query, type);
   }
 
   @Patch('update/:id')

@@ -15,6 +15,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
     sort: string,
     by: any = 'ASC',
     where: string,
+    category: string,
   ): Promise<MasterClassEntity[]> {
     return await this.createQueryBuilder('master_class')
       .leftJoin('master_class.images', 'images')
@@ -45,6 +46,10 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
             }).orWhere('categories.categoryNameRu ILIKE :search', {
               search: `%${where}%`,
             });
+          } else if (category) {
+            qb.where('categories.categoryNameRu = :category', {
+              category: category,
+            });
           } else {
             qb.where('master_class.deleted = false');
           }
@@ -59,6 +64,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
     sort: string,
     by: any = 'ASC',
     where: string,
+    category: string,
   ): Promise<MasterClassEntity[]> {
     return await this.createQueryBuilder('master_class')
       .leftJoin('master_class.images', 'images')
@@ -89,6 +95,10 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
             }).orWhere('categories.categoryNameEn ILIKE :search', {
               search: `%${where}%`,
             });
+          } else if (category) {
+            qb.where('categories.categoryNameRu = :category', {
+              category: category,
+            });
           } else {
             qb.where('master_class.deleted = false');
           }
@@ -103,6 +113,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
     sort: string,
     by: any,
     where: string,
+    category: string,
     userId: number,
   ): Promise<MasterClassEntity[]> {
     return await this.createQueryBuilder('master_class')
@@ -138,6 +149,10 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
             }).orWhere('categories.categoryNameRu ILIKE :search', {
               search: `%${where}%`,
             });
+          } else if (category) {
+            qb.where('categories.categoryNameRu = :category', {
+              category: category,
+            });
           } else {
             qb.where('master_class.deleted = false');
           }
@@ -152,6 +167,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
     sort: string,
     by: any = 'ASC',
     where: string,
+    category: string,
     userId: number,
   ): Promise<MasterClassEntity[]> {
     return await this.createQueryBuilder('master_class')
@@ -186,6 +202,10 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
               search: `%${where}%`,
             }).orWhere('categories.categoryNameEn ILIKE :search', {
               search: `%${where}%`,
+            });
+          } else if (category) {
+            qb.where('categories.categoryNameRu = :category', {
+              category: category,
             });
           } else {
             qb.where('master_class.deleted = false');

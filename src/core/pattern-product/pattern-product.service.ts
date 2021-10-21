@@ -31,6 +31,7 @@ export class PatternProductService {
     by: string,
     where: string,
     type: string,
+    category: string,
   ): Promise<PatternProductEntity[]> {
     if (sort === 'title') {
       if (query === 'ru') {
@@ -55,6 +56,7 @@ export class PatternProductService {
         by,
         where,
         type,
+        category,
       );
     if (query === 'en')
       return await this.patternProductRepository.findAllEn(
@@ -64,6 +66,7 @@ export class PatternProductService {
         by,
         where,
         type,
+        category,
       );
   }
   async getAllAuth(
@@ -74,6 +77,7 @@ export class PatternProductService {
     by: string,
     where: string,
     type: string,
+    category: string,
     userId: number,
   ): Promise<PatternProductEntity[]> {
     if (sort === 'title') {
@@ -99,6 +103,7 @@ export class PatternProductService {
         by,
         where,
         type,
+        category,
         userId,
       );
     if (query === 'en')
@@ -109,6 +114,7 @@ export class PatternProductService {
         by,
         where,
         type,
+        category,
         userId,
       );
   }

@@ -20,6 +20,7 @@ export class MasterClassService {
     sort: string,
     by: string,
     where: string,
+    category: string,
   ): Promise<MasterClassEntity[]> {
     if (sort === 'title') {
       if (query === 'ru') {
@@ -35,6 +36,7 @@ export class MasterClassService {
         sort,
         by,
         where,
+        category,
       );
     if (query === 'en')
       return await this.masterClassRepository.findAllEn(
@@ -43,6 +45,7 @@ export class MasterClassService {
         sort,
         by,
         where,
+        category,
       );
   }
   async getAllAuth(
@@ -52,6 +55,7 @@ export class MasterClassService {
     sort: string,
     by: string,
     where: string,
+    category: string,
     userId: number,
   ): Promise<MasterClassEntity[]> {
     if (sort === 'title') {
@@ -68,6 +72,7 @@ export class MasterClassService {
         sort,
         by,
         where,
+        category,
         userId,
       );
     if (query === 'en')
@@ -77,6 +82,7 @@ export class MasterClassService {
         sort,
         by,
         where,
+        category,
         userId,
       );
   }
