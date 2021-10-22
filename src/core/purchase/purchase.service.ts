@@ -350,7 +350,10 @@ export class PurchaseService {
   async update(id: any, body: any) {
     const result = await this.purchaseRepository.findOne({ id });
     if (result) {
-      await this.mailService.sendInfoAboutOrderStatus(body);
+      const getOrderProducts = await this.purchaseRepository.getAllForEmail(
+        body.id,
+      );
+      await this.mailService.sendInfoAboutOrderStatus(getOrderProducts);
       await this.purchaseRepository.update(id, body);
     } else {
       throw new BadRequestException(PURCHASE_ERROR.PURCHASE_NOT_FOUND);
