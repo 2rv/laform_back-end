@@ -145,4 +145,23 @@ export class MailService {
         console.log(e);
       });
   }
+
+  async sendInfoAboutOrderStatus(data: any) {
+    return await this.mailerService
+      .sendMail({
+        to: data.email,
+        subject: `Статус заказа ${data.orderNumber} изменен`,
+        template: path.join(
+          path.resolve(),
+          'src/templates/info-about-order-status.pug',
+        ),
+        context: {
+          fullName: data.fullName,
+          orderStatus: data.orderStatus,
+        },
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
 }
