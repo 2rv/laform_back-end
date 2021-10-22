@@ -12,6 +12,7 @@ import { randomUUID } from 'src/common/utils/hash';
 import { UserRepository } from '../user/user.repository';
 import { generateVendorCode } from 'src/common/utils/vendor-coder';
 import { MailDto } from './dto/mail.dto';
+import { PurchaseEntity } from '../purchase/purchase.entity';
 
 @Injectable()
 export class MailService {
@@ -118,6 +119,27 @@ export class MailService {
           phone: body.purchase.phoneNumber,
           totalPrice: body.totalPrice,
           purchasedProducts: body.purchaseProducts,
+        },
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
+  async sendPurchaseInfo(email: string, body: PurchaseEntity) {
+    return await this.mailerService
+      .sendMail({
+        to: email,
+        subject: 'La`forme Patterns, информация о купленных продуктах',
+        template: path.join(path.resolve(), 'src/templates/purchase-info.pug'),
+        context: {
+          address: body.city,
+          fullName: body.fullName,
+          phone: body.phoneNumber,
+          price: body.price,
+          purchasedProducts: body.purchaseProducts,
+          orderNumber: body.orderNumber,
+          status: body.orderStatus,
         },
       })
       .catch((e) => {

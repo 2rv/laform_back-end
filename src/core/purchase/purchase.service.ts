@@ -179,7 +179,6 @@ export class PurchaseService {
       products: [],
       price: 0,
     };
-
     for (const item of purchaseProducts) {
       if (item.type === 0) {
         const result = await this.getMasterProduct(item.masterClassId);
@@ -317,7 +316,12 @@ export class PurchaseService {
     this.purchaseRepository.update(newOrder.id, {
       orderNumber: await PurchaseEntity.generateOrderNumber(newOrder._NID),
     });
-
+    const purchasedProductsResult =
+      await this.purchaseRepository.getAllForEmail(newOrder.id);
+    const emailResult = await this.mailService.sendPurchaseInfo(
+      email,
+      purchasedProductsResult,
+    );
     return newOrder;
   }
 
