@@ -23,6 +23,7 @@ import { SewingProductEntity } from '../sewing-product/sewing-product.entity';
 import { DeliveryPriceService } from '../delivery-price/delivery-price.service';
 import { PURCHASE_ERROR } from './enum/purchase.enum';
 import { VerifyByCodeDto } from './dto/verify-by-code.dto';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class PurchaseService {
@@ -35,6 +36,7 @@ export class PurchaseService {
     private patternProductService: PatternProductService,
     private sewingProductService: SewingProductService,
     private masterClassService: MasterClassService,
+    private mailService: MailService,
   ) {}
 
   getPrice(price = 0, discount = 0, count = null, length = null): number {
@@ -177,7 +179,6 @@ export class PurchaseService {
       products: [],
       price: 0,
     };
-
     for (const item of purchaseProducts) {
       if (item.type === 0) {
         const result = await this.getMasterProduct(item.masterClassId);
@@ -315,7 +316,12 @@ export class PurchaseService {
     this.purchaseRepository.update(newOrder.id, {
       orderNumber: await PurchaseEntity.generateOrderNumber(newOrder._NID),
     });
-
+    const purchasedProductsResult =
+      await this.purchaseRepository.getAllForEmail(newOrder.id);
+    const emailResult = await this.mailService.sendPurchaseInfo(
+      email,
+      purchasedProductsResult,
+    );
     return newOrder;
   }
 
@@ -342,7 +348,13 @@ export class PurchaseService {
   }
 
   async update(id: any, body: any) {
-    return await this.purchaseRepository.update(id, body);
+    const result = await this.purchaseRepository.findOne({ id });
+    if (result) {
+      await this.mailService.sendInfoAboutOrderStatus(body);
+      await this.purchaseRepository.update(id, body);
+    } else {
+      throw new BadRequestException(PURCHASE_ERROR.PURCHASE_NOT_FOUND);
+    }
   }
 
   async delete(id: string) {

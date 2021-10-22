@@ -183,10 +183,14 @@ export class PatternProductService {
     totalPrice: number;
     totalDiscount: number;
   }> {
-    const result = await this.patternProductRepository.findOneAndOption(
-      String(patternProduct),
-      String(option),
-    );
+    const result = option
+      ? await this.patternProductRepository.findOneAndOption(
+          String(patternProduct),
+          String(option),
+        )
+      : await this.patternProductRepository.findOne(patternProduct, {
+          select: ['price', 'discount'],
+        });
     return {
       totalPrice: result.price || result.options[0].price,
       totalDiscount: result.discount || result.options[0].discount,
@@ -230,8 +234,6 @@ export class PatternProductService {
         String(option),
       );
       if (!Boolean(result.options.length)) return;
-      console.log(count, 'нужное');
-      console.log(result.options[0].count, 'всего');
       if (
         Boolean(result.options[0].count) &&
         count &&
@@ -241,7 +243,6 @@ export class PatternProductService {
         await this.productOptionService.update(result.options[0].id, {
           count: newCount,
         });
-        console.log(newCount);
       }
     } else {
       const result = await this.patternProductRepository.findOneOrFail(
