@@ -96,6 +96,14 @@ export class SewingProductDto {
 
   @IsOptional()
   @IsBoolean()
+  isCount: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  isLength: boolean;
+
+  @IsOptional()
+  @IsBoolean()
   deleted: boolean;
 
   @IsOptional()

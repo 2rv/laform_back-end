@@ -49,11 +49,6 @@ export class PatternProductEntity {
     return generateVendorCode();
   }
 
-  // @OneToMany(
-  //   () => CategoryEntity,
-  //   (res: CategoryEntity) => res.patternProductId,
-  // )
-  // categories: CategoryEntity[];
   @ManyToMany(() => CategoryEntity)
   @JoinTable()
   categories: CategoryEntity[];
@@ -189,6 +184,13 @@ export class PatternProductEntity {
     nullable: true,
   })
   count!: number;
+
+  @Column({
+    type: 'bool',
+    name: 'is_count',
+    default: false,
+  })
+  isCount?: boolean;
 
   @Column({
     type: 'bool',
