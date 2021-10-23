@@ -9,7 +9,15 @@ export class CategoryService {
   constructor(private categoryRepository: CategoryRepository) {}
 
   async create(body: CategoryDto): Promise<CategoryEntity> {
-    return await this.categoryRepository.save(body);
+    const result = await this.categoryRepository.findOne({
+      categoryNameRu: body.categoryNameRu,
+    });
+
+    if (result) {
+      throw new BadRequestException(CATEGORY_ERROR.CATEGORY_ALREADY_EXISTS);
+    } else {
+      return await this.categoryRepository.save(body);
+    }
   }
 
   async createMany(categories: CategoryDto[]): Promise<CategoryEntity> {
