@@ -192,7 +192,7 @@ export class PatternProductService {
           select: ['price', 'discount'],
         });
     return {
-      totalPrice: result.price || result.options[0].price,
+      totalPrice: result.price || result.options[0].price || 0,
       totalDiscount: result.discount || result.options[0].discount,
     };
   }
@@ -205,6 +205,7 @@ export class PatternProductService {
     totalPrice: number;
     totalDiscount: number;
     totalCount: number;
+    isCount: boolean;
   }> {
     const result = option
       ? await this.patternProductRepository.findOneAndOption(
@@ -212,34 +213,41 @@ export class PatternProductService {
           String(option),
         )
       : await this.patternProductRepository.findOne(patternProduct, {
-          select: ['price', 'discount', 'count', 'titleEn', 'titleRu'],
+          select: [
+            'price',
+            'discount',
+            'count',
+            'titleEn',
+            'titleRu',
+            'isCount',
+          ],
         });
+    console.log(result);
 
     return {
       title: result.titleRu || result.titleEn,
-      totalPrice: result.price || result.options?.[0].price,
+      totalPrice: result.price || result.options?.[0].price || 0,
       totalDiscount: result.discount || result.options?.[0].discount,
-      totalCount: result.count || result.options?.[0].count,
+      totalCount: result.count || result.options?.[0].count || 0,
+      isCount: result.isCount,
     };
   }
 
   async updateCount(
     patternProduct: PatternProductEntity,
     option: ProductOptionEntity,
-    count?: number,
+    count: number = 0,
   ) {
     if (option) {
       const result = await this.patternProductRepository.findOneAndOption(
         String(patternProduct),
         String(option),
       );
+      console.log('option');
+
       if (!Boolean(result.options.length)) return;
-      if (
-        Boolean(result.options[0].count) &&
-        count &&
-        Number(result.options[0].count) >= Number(count)
-      ) {
-        const newCount = result.options[0].count - Number(count);
+      if (result.isCount && Number(result.options[0].count) >= Number(count)) {
+        const newCount = Number(result.options[0].count) - Number(count);
         await this.productOptionService.update(result.options[0].id, {
           count: newCount,
         });
@@ -248,16 +256,13 @@ export class PatternProductService {
       const result = await this.patternProductRepository.findOneOrFail(
         patternProduct,
         {
-          select: ['id', 'count'],
+          select: ['id', 'count', 'isCount'],
         },
       );
+      console.log(result);
       if (!Boolean(result)) return;
-      if (
-        Boolean(result.count) &&
-        count &&
-        Number(result.count) >= Number(count)
-      ) {
-        const newCount = result.count - Number(count);
+      if (result.isCount && Number(result.count) >= Number(count)) {
+        const newCount = Number(result.count) - Number(count);
         await this.patternProductRepository.update(result.id, {
           count: newCount,
         });

@@ -138,7 +138,7 @@ export class MasterClassService {
       select: ['id', 'price', 'discount'],
     });
     return {
-      totalPrice: result.price,
+      totalPrice: result.price || 0,
       totalDiscount: result.discount,
     };
   }
