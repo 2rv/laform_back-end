@@ -11,12 +11,32 @@
 		<span style=" color:#2f2a2c; font-size:24px; font-weight:600;  vertical-align: 15px;">La`forme Patterns</span>
 		</a>
 		<div style=" margin-top: 20px; line-height: 1.5; font-size: 14px; font-family: 'Golos Text' , sans-serif; color: #5F5B5D;">
-		<div style="color: #2F2A2C; font-size: 20px; font-weight:600;">Заказ !{orderNumber} сформирован</div>
+		<div style="color: #2F2A2C; font-size: 20px; font-weight:600;">Заказ !{orderNumber}</div>
 		<div>Адрес доставки: <b>!{address}</b></div>
 		<div>Контактый телефон: <b>!{phone}</b></div>
 		<div>ФИО: <b>!{fullName}</b></div>
-		<div>Статус заказа: <b><span style="color: green;">!{status}</span></b></div>
+		case orderStatusNum 
+			when 0
+				<div>Статус заказа: <b><span style="color: #2F80ED;">!{orderStatus}</span></b></div>
+			when 1
+				<div>Статус заказа: <b><span style="color: #F2994A;">!{orderStatus}</span></b></div>
+			when 2
+				<div>Статус заказа: <b><span style="color: #219653;">!{orderStatus}</span></b></div>
+			when 3
+				<div>Статус заказа: <b><span style="color: #2F80ED;">!{orderStatus}</span></b></div>
+			when 4
+				<div>Статус заказа: <b><span style="color: #2F80ED;">!{orderStatus}</span></b></div>
+			when 5
+				<div>Статус заказа: <b><span style="color: #219653;">!{orderStatus}</span></b></div>
+			when 6
+				<div>Статус заказа: <b><span style="color: #EB5757;">!{orderStatus}</span></b></div>
+			when 7
+				<div>Статус заказа: <b><span style="color: #EB5757;">!{orderStatus}</span></b></div>
+			when 8
+				<div>Статус заказа: <b><span style="color: #EB5757;">!{orderStatus}</span></b></div>
 		<div>Стоимость заказа: <b>!{price}</b></div>
+		<div>Стоимость доставки: <b>!{shippingPrice}</b></div>
+		<div>Метод доставки: <b>!{deliveryMethod}</b></div>
 		<hr />
 		<span style="color: #2F2A2C; font-size: 16px; font-weight:600;">Товары:</span>
 		<div style="margin-top: 20px;">
@@ -68,7 +88,8 @@
 						<div>Количество: <b>!{product.totalCount}</b></div>
 						<div>Категория товара: <b>Печатная выкройка</b></div>
 						<div>Тип товара: <b>Печатный</b></div>
-						<div>Статус товара: <b><span style="color: green;">!{status}</span></b></div>
+						if product.optionId
+							<div>Размер: <b>!{product.optionId.size}</b></div>
 						<hr />
 					</div>
 				when 3
@@ -79,7 +100,10 @@
 						</a>
 						<div>Количество: <b>!{product.totalCount} !{product.totalLength}</b></div>
 						<div>Категория товара: <b>Товар для шитья</b></div>
-						<div>Статус товара: <b><span style="color: green;">!{status}</span></b></div>
+						if product.optionId && product.optionId.size
+							<div>Размер: <b>!{product.optionId.size}</b></div>
+						if product.optionId && product.optionId.colorRu
+							<div>Цвет: <b>!{product.optionId.colorRu}</b></div>
 						<hr />
 					</div>
 		</div>

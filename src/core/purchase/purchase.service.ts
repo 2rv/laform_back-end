@@ -24,6 +24,8 @@ import { DeliveryPriceService } from '../delivery-price/delivery-price.service';
 import { PURCHASE_ERROR } from './enum/purchase.enum';
 import { VerifyByCodeDto } from './dto/verify-by-code.dto';
 import { MailService } from '../mail/mail.service';
+import { PURCHASE_STATUS } from './enum/purchase.status';
+import { UpdatePurchaseStatusDto } from './dto/update-purchase-status.dto';
 
 interface ProductParamsInfoType {
   title?: string;
@@ -72,7 +74,7 @@ export class PurchaseService {
     } else if (isLength) {
       return (price - price * (discount / 100)) * length;
     } else {
-      return (price - price * (discount / 100)) * count;
+      return (price - price * (discount / 100)) * 1;
     }
   }
 
@@ -215,7 +217,7 @@ export class PurchaseService {
         item.totalDiscount = discount;
         item.totalPrice = price;
         item.totalCount = 1;
-        totalResult.price += totalPrice;
+        totalResult.price = totalResult.price + totalPrice;
         totalResult.products.push(item);
       }
       if (item.type === 1) {
@@ -227,7 +229,7 @@ export class PurchaseService {
         item.totalDiscount = discount;
         item.totalPrice = price;
         item.totalCount = 1;
-        totalResult.price += totalPrice;
+        totalResult.price = totalResult.price + totalPrice;
         totalResult.products.push(item);
       }
       if (item.type === 2) {
@@ -252,7 +254,7 @@ export class PurchaseService {
         }
         if (!isCount) item.totalCount = 1;
         totalResult.products.push(item);
-        totalResult.price += totalPrice;
+        totalResult.price = totalResult.price + totalPrice;
       }
       if (item.type === 3) {
         const result = await this.getSewingProduct(
@@ -271,6 +273,7 @@ export class PurchaseService {
           isLength,
           totalLength,
         } = result;
+
         item.totalDiscount = discount;
         item.totalPrice = price;
 
@@ -300,10 +303,9 @@ export class PurchaseService {
         }
         if (!isCount && !isLength) item.totalCount = 1;
         totalResult.products.push(item);
-        totalResult.price += totalPrice;
+        totalResult.price = totalResult.price + totalPrice;
       }
     }
-
     return totalResult;
   }
   async verifyPromo(promoCode: string) {
@@ -317,6 +319,7 @@ export class PurchaseService {
     const result = await this.deliveryPriceService.getOneForPurchase(
       diliveryId,
     );
+
     return {
       diliveryName: result?.deliveryType,
       diliveryPrice: result?.deliveryTypePrice,
@@ -359,18 +362,50 @@ export class PurchaseService {
     body.purchase.shippingPrice = diliveryPrice || 0;
 
     const purchase = await this.create(body.purchase, products, userId, email);
-    const newOrder = await this.purchaseRepository.save(purchase);
+    const newPurchase = await this.purchaseRepository.save(purchase);
     await this.productUpdateData(purchase.purchaseProducts);
-    this.purchaseRepository.update(newOrder.id, {
-      orderNumber: await PurchaseEntity.generateOrderNumber(newOrder._NID),
+    await this.purchaseRepository.update(newPurchase.id, {
+      orderNumber: await PurchaseEntity.generateOrderNumber(newPurchase._NID),
     });
-    const purchasedProductsResult =
-      await this.purchaseRepository.getAllForEmail(newOrder.id);
-    const emailResult = await this.mailService.sendPurchaseInfo(
-      email,
-      purchasedProductsResult,
-    );
-    return newOrder;
+    await this.purchaseAwaitingPayment(newPurchase.id);
+    return newPurchase;
+  }
+
+  async purchaseAwaitingPayment(purchaseId: string) {
+    await this.purchaseRepository.update(purchaseId, {
+      orderStatus: PURCHASE_STATUS.AWAITING_PAYMENT,
+    });
+    await this.sendPurchaseInfo(purchaseId);
+  }
+
+  async purchasePaid(purchaseId: string) {
+    await this.purchaseRepository.update(purchaseId, {
+      orderStatus: PURCHASE_STATUS.PAID,
+    });
+    await this.sendPurchaseInfo(purchaseId);
+  }
+
+  async purchaseAwaitinSend(purchaseId: string) {
+    await this.purchaseRepository.update(purchaseId, {
+      orderStatus: PURCHASE_STATUS.AWAITING_SEND,
+    });
+    await this.sendPurchaseInfo(purchaseId);
+  }
+
+  async purchaseSent(purchaseId: string) {
+    await this.purchaseRepository.update(purchaseId, {
+      orderStatus: PURCHASE_STATUS.SENT,
+    });
+    await this.sendPurchaseInfo(purchaseId);
+  }
+
+  async sendPurchaseInfo(purchaseId) {
+    const purchase = await this.purchaseRepository.getAllForEmail(purchaseId);
+    await this.mailService.sendPurchaseInfo(purchase.email, purchase);
+  }
+  async sendUpdatedPurchaseInfo(purchaseId) {
+    const purchase = await this.purchaseRepository.getAllForEmail(purchaseId);
+    await this.mailService.sendUpdatedPurchaseInfo(purchase.email, purchase);
   }
 
   async getAll(size: number, page: number): Promise<PurchaseEntity[]> {
@@ -393,6 +428,19 @@ export class PurchaseService {
 
   async getOneMasterClass(id: string) {
     return await this.purchaseProductService.getOneMasterClass(id);
+  }
+
+  async updatePurchaseStatus(id: any, body: UpdatePurchaseStatusDto) {
+    const result = await this.purchaseRepository.findOne({ id });
+
+    if (!result) {
+      throw new BadRequestException(PURCHASE_ERROR.PURCHASE_NOT_FOUND);
+    }
+
+    await this.purchaseRepository.update(result.id, {
+      orderStatus: body.orderStatus,
+    });
+    await this.sendUpdatedPurchaseInfo(result.id);
   }
 
   async update(id: any, body: any) {

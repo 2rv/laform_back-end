@@ -1,11 +1,6 @@
 import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Cache } from 'cache-manager';
-
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
-import { NotificationEntity } from '../notification/notification.entity';
-
 import * as path from 'path';
 import { UserEntity } from '../user/user.entity';
 import { randomUUID } from 'src/common/utils/hash';
@@ -13,12 +8,11 @@ import { UserRepository } from '../user/user.repository';
 import { generateVendorCode } from 'src/common/utils/vendor-coder';
 import { MailDto } from './dto/mail.dto';
 import { PurchaseEntity } from '../purchase/purchase.entity';
+import { PURCHASE_STATUS_INFO } from '../purchase/enum/purchase.status';
 
 @Injectable()
 export class MailService {
   constructor(
-    @InjectRepository(NotificationEntity)
-    private notificationRepository: Repository<NotificationEntity>,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly mailerService: MailerService,
     private userRepository: UserRepository,
@@ -40,7 +34,6 @@ export class MailService {
         console.log(e);
       });
   }
-
   async sendRecoveryMessage(body: any, code: string) {
     return await this.mailerService
       .sendMail({
@@ -57,7 +50,6 @@ export class MailService {
         console.log(e);
       });
   }
-
   async sendNotification(body: { subject: string; html: string }) {
     const recipients = await this.userRepository.find();
     return recipients.map(async (recipient) => {
@@ -84,7 +76,6 @@ export class MailService {
       }
     });
   }
-
   async sendPdf(user: UserEntity, body: any) {
     return await this.mailerService
       .sendMail({
@@ -103,50 +94,6 @@ export class MailService {
         console.log(e);
       });
   }
-
-  async sendPurchasedProductsInfo(user: UserEntity, body: any) {
-    return await this.mailerService
-      .sendMail({
-        to: user.email,
-        subject: 'La`forme Patterns, информация о купленных продуктах',
-        template: path.join(
-          path.resolve(),
-          'src/templates/purchased-products-info.pug',
-        ),
-        context: {
-          address: body.purchase.city,
-          fullName: body.purchase.fullName,
-          phone: body.purchase.phoneNumber,
-          totalPrice: body.totalPrice,
-          purchasedProducts: body.purchaseProducts,
-        },
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
-
-  async sendPurchaseInfo(email: string, body: PurchaseEntity) {
-    return await this.mailerService
-      .sendMail({
-        to: email,
-        subject: 'La`forme Patterns, информация о купленных продуктах',
-        template: path.join(path.resolve(), 'src/templates/purchase-info.pug'),
-        context: {
-          address: body.city,
-          fullName: body.fullName,
-          phone: body.phoneNumber,
-          price: body.price,
-          purchasedProducts: body.purchaseProducts,
-          orderNumber: body.orderNumber,
-          status: body.orderStatus,
-        },
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
-
   async sendVerificationCode(body: MailDto) {
     const code = generateVendorCode();
     await this.cacheManager.set(`AuthBasketEmailCodeFor${body.email}`, code);
@@ -167,6 +114,52 @@ export class MailService {
         console.log(e);
       });
   }
+  async sendPurchaseInfo(email: string, body: PurchaseEntity) {
+    return await this.mailerService
+      .sendMail({
+        to: email,
+        subject: 'La`forme Patterns, информация о купленных продуктах',
+        template: path.join(path.resolve(), 'src/templates/purchase-info.pug'),
+        context: {
+          address: body.city,
+          fullName: body.fullName,
+          phone: body.phoneNumber,
+          price: Number(body.price) + (Number(body.shippingPrice) || 0),
+          shippingPrice: body.shippingPrice,
+          deliveryMethod: body.typeOfDelivery,
+          purchasedProducts: body.purchaseProducts,
+          orderNumber: body.orderNumber,
+          orderStatus: PURCHASE_STATUS_INFO[body.orderStatus || 0],
+          orderStatusNum: body.orderStatus || 0,
+        },
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+  async sendUpdatedPurchaseInfo(email: string, body: PurchaseEntity) {
+    return await this.mailerService
+      .sendMail({
+        to: email,
+        subject: 'La`forme Patterns, статус покупки был обновлен',
+        template: path.join(path.resolve(), 'src/templates/purchase-info.pug'),
+        context: {
+          address: body.city,
+          fullName: body.fullName,
+          phone: body.phoneNumber,
+          price: Number(body.price) + (Number(body.shippingPrice) || 0),
+          shippingPrice: body.shippingPrice,
+          deliveryMethod: body.typeOfDelivery,
+          purchasedProducts: body.purchaseProducts,
+          orderNumber: body.orderNumber,
+          orderStatus: PURCHASE_STATUS_INFO[body.orderStatus || 0],
+          orderStatusNum: body.orderStatus || 0,
+        },
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
 
   async sendInfoAboutOrderStatus(orderProducts: PurchaseEntity) {
     return await this.mailerService
@@ -181,6 +174,27 @@ export class MailService {
           fullName: orderProducts.fullName,
           purchasedProducts: orderProducts.purchaseProducts,
           status: orderProducts.orderStatus,
+        },
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+  async sendPurchasedProductsInfo(user: UserEntity, body: any) {
+    return await this.mailerService
+      .sendMail({
+        to: user.email,
+        subject: 'La`forme Patterns, информация о купленных продуктах',
+        template: path.join(
+          path.resolve(),
+          'src/templates/purchased-products-info.pug',
+        ),
+        context: {
+          address: body.purchase.city,
+          fullName: body.purchase.fullName,
+          phone: body.purchase.phoneNumber,
+          totalPrice: body.totalPrice,
+          purchasedProducts: body.purchaseProducts,
         },
       })
       .catch((e) => {
