@@ -18,6 +18,7 @@ export class CategoryEntity {
   @Column({
     type: 'varchar',
     name: 'category_name_ru',
+    unique: true,
   })
   categoryNameRu!: string;
 
@@ -25,6 +26,7 @@ export class CategoryEntity {
     type: 'varchar',
     name: 'category_name_en',
     nullable: true,
+    unique: true,
   })
   categoryNameEn!: string;
 

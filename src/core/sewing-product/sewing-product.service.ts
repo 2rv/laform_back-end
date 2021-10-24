@@ -157,6 +157,8 @@ export class SewingProductService {
     totalDiscount: number;
     totalCount: number;
     totalLength: number;
+    isCount: boolean;
+    isLength: boolean;
   }> {
     const result = option
       ? await this.sewingProductRepository.findOneAndOption(
@@ -171,22 +173,26 @@ export class SewingProductService {
             'length',
             'titleRu',
             'titleEn',
+            'isCount',
+            'isLength',
           ],
         });
     return {
       title: result.titleRu || result.titleEn,
-      totalPrice: result.price || result.options?.[0].price,
+      totalPrice: result.price || result.options?.[0].price || 0,
       totalDiscount: result.discount || result.options?.[0].discount,
-      totalCount: result.count || result.options?.[0].count,
-      totalLength: result.length || result.options?.[0].length,
+      totalCount: result.count || result.options?.[0].count || 0,
+      totalLength: result.length || result.options?.[0].length || 0,
+      isCount: result.isCount,
+      isLength: result.isLength,
     };
   }
 
   async updateCountOrLength(
     sewingProduct: SewingProductEntity,
     option: ProductOptionEntity,
-    count?: number,
-    length?: number,
+    count: number = 0,
+    length: number = 0,
   ) {
     if (option) {
       const result = await this.sewingProductRepository.findOneAndOption(
@@ -220,27 +226,23 @@ export class SewingProductService {
       const result = await this.sewingProductRepository.findOneOrFail(
         sewingProduct,
         {
-          select: ['id', 'count', 'length'],
+          select: ['id', 'count', 'length', 'isCount', 'isLength'],
         },
       );
       if (!Boolean(result)) return;
-      if (
-        Boolean(result.count) &&
-        count &&
-        Number(result.count) >= Number(count)
-      ) {
+      if (result.isCount && Number(result.count) >= Number(count)) {
         const newCount = result.count - Number(count);
         await this.sewingProductRepository.update(result.id, {
           count: newCount,
         });
-      }
-
-      if (
-        Boolean(result.length) &&
-        length &&
-        Number(result.length) >= Number(length)
+      } else if (
+        result.isLength &&
+        Math.ceil(Number(result.length) * 100) >=
+          Math.ceil(Number(length) * 100)
       ) {
-        const newLength = result.length - Number(length);
+        const newLength = Number(
+          (Number(result.length) - Number(length)).toFixed(2),
+        );
         await this.sewingProductRepository.update(result.id, {
           length: newLength,
         });

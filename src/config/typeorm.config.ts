@@ -24,6 +24,7 @@ import {
 import { AboutUsEntity } from 'src/core/about-us/about-us.entity';
 import { DeliveryPriceEntity } from 'src/core/delivery-price/delivery-price.entity';
 import { ProductOptionEntity } from 'src/core/product-option/product-option.entity';
+import { FaqEntity } from 'src/core/faq/faq.entity';
 
 const DATABASE_CONFIG = config.get('DATABASE');
 export const ApiEntities = [
@@ -49,6 +50,7 @@ export const ApiEntities = [
   RecommendationProductEntity,
   AboutUsEntity,
   DeliveryPriceEntity,
+  FaqEntity,
 ];
 
 export const typeOrmConfig: TypeOrmModuleOptions = {

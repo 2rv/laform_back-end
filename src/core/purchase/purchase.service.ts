@@ -25,6 +25,25 @@ import { PURCHASE_ERROR } from './enum/purchase.enum';
 import { VerifyByCodeDto } from './dto/verify-by-code.dto';
 import { MailService } from '../mail/mail.service';
 
+interface ProductParamsInfoType {
+  title?: string;
+  discount: number;
+  price: number;
+  totalPrice: number;
+  isCount?: boolean;
+  totalCount?: number;
+  isLength?: boolean;
+  totalLength?: number;
+}
+interface getPriceProps {
+  price: number;
+  discount: number;
+  isCount: boolean;
+  count: number;
+  isLength: boolean;
+  length: number;
+}
+
 @Injectable()
 export class PurchaseService {
   constructor(
@@ -39,63 +58,84 @@ export class PurchaseService {
     private mailService: MailService,
   ) {}
 
-  getPrice(price = 0, discount = 0, count = null, length = null): number {
-    if (count) {
+  getPrice(props: getPriceProps): number {
+    const {
+      price = 0,
+      discount = 0,
+      isCount = false,
+      count = 0,
+      isLength = false,
+      length = 0,
+    } = props;
+    if (isCount) {
+      return (price - price * (discount / 100)) * count;
+    } else if (isLength) {
+      return (price - price * (discount / 100)) * length;
+    } else {
       return (price - price * (discount / 100)) * count;
     }
-    if (length) {
-      return (price - price * (discount / 100)) * length;
-    }
-    return (price - price * (discount / 100)) * 1;
   }
+
   async getMasterProduct(
     id: MasterClassEntity,
-  ): Promise<{ totalDiscount: number; totalPrice: number; price: number }> {
+  ): Promise<ProductParamsInfoType> {
     const result = await this.masterClassService.getPriceAndDiscount(id);
     return {
-      totalDiscount: result.totalDiscount,
-      totalPrice: result.totalPrice,
-      price: this.getPrice(result.totalPrice, result.totalDiscount),
+      discount: result.totalDiscount,
+      price: result.totalPrice,
+      totalPrice: this.getPrice({
+        price: result.totalPrice,
+        discount: result.totalDiscount,
+        isCount: false,
+        count: 1,
+        isLength: false,
+        length: 0,
+      }),
     };
   }
   async getElectronicPatternProduct(
     id: PatternProductEntity,
     option: ProductOptionEntity,
-  ): Promise<{
-    totalDiscount: number;
-    totalPrice: number;
-    price: number;
-  }> {
+  ): Promise<ProductParamsInfoType> {
     const result = await this.patternProductService.getPriceAndDiscount(
       id,
       option,
     );
     return {
-      totalDiscount: result.totalDiscount,
-      totalPrice: result.totalPrice,
-      price: this.getPrice(result.totalPrice, result.totalDiscount),
+      discount: result.totalDiscount,
+      price: result.totalPrice,
+      totalPrice: this.getPrice({
+        price: result.totalPrice,
+        discount: result.totalDiscount,
+        isCount: false,
+        count: 1,
+        isLength: false,
+        length: 0,
+      }),
     };
   }
   async getPrintPatternProduct(
     id: PatternProductEntity,
     option: ProductOptionEntity,
     count: number,
-  ): Promise<{
-    title: string;
-    totalDiscount: number;
-    totalPrice: number;
-    totalCount: number;
-    price: number;
-  }> {
+  ): Promise<ProductParamsInfoType> {
     const result = await this.patternProductService.getPriceAndDiscountAndCount(
       id,
       option,
     );
     return {
       title: result.title,
-      totalDiscount: result.totalDiscount,
-      totalPrice: result.totalPrice,
-      price: this.getPrice(result.totalPrice, result.totalDiscount, count),
+      discount: result.totalDiscount,
+      price: result.totalPrice,
+      totalPrice: this.getPrice({
+        price: result.totalPrice,
+        discount: result.totalDiscount,
+        isCount: result.isCount,
+        count: count,
+        isLength: false,
+        length: 0,
+      }),
+      isCount: result.isCount,
       totalCount: result.totalCount,
     };
   }
@@ -104,14 +144,7 @@ export class PurchaseService {
     option: ProductOptionEntity,
     count: number,
     length: number,
-  ): Promise<{
-    title: string;
-    totalDiscount: number;
-    totalPrice: number;
-    totalCount: number;
-    totalLength: number;
-    price: number;
-  }> {
+  ): Promise<ProductParamsInfoType> {
     const result =
       await this.sewingProductService.getPriceAndDiscountAndCountAndLength(
         id,
@@ -119,24 +152,20 @@ export class PurchaseService {
       );
     return {
       title: result.title,
-      totalDiscount: result.totalDiscount,
-      totalPrice: result.totalPrice,
-      price: this.getPrice(
-        result.totalPrice,
-        result.totalDiscount,
-        count,
-        length,
-      ),
-      totalCount: result.totalCount
-        ? result.totalCount
-        : result.totalLength
-        ? undefined
-        : 1,
-      totalLength: result.totalLength
-        ? result.totalLength
-        : result.totalCount
-        ? undefined
-        : 1,
+      discount: result.totalDiscount,
+      price: result.totalPrice,
+      totalPrice: this.getPrice({
+        price: result.totalPrice,
+        discount: result.totalDiscount,
+        isCount: result.isCount,
+        count: count,
+        isLength: result.isLength,
+        length: length,
+      }),
+      isCount: result.isCount,
+      totalCount: result.totalCount,
+      isLength: result.isLength,
+      totalLength: result.totalLength,
     };
   }
 
@@ -182,11 +211,11 @@ export class PurchaseService {
     for (const item of purchaseProducts) {
       if (item.type === 0) {
         const result = await this.getMasterProduct(item.masterClassId);
-        const { totalDiscount, totalPrice, price } = result;
-        item.totalDiscount = totalDiscount;
-        item.totalPrice = totalPrice;
+        const { discount, price, totalPrice } = result;
+        item.totalDiscount = discount;
+        item.totalPrice = price;
         item.totalCount = 1;
-        totalResult.price += price;
+        totalResult.price += totalPrice;
         totalResult.products.push(item);
       }
       if (item.type === 1) {
@@ -194,11 +223,11 @@ export class PurchaseService {
           item.patternProductId,
           item.optionId,
         );
-        const { totalDiscount, totalPrice, price } = result;
-        item.totalDiscount = totalDiscount;
-        item.totalPrice = totalPrice;
+        const { discount, price, totalPrice } = result;
+        item.totalDiscount = discount;
+        item.totalPrice = price;
         item.totalCount = 1;
-        totalResult.price += price;
+        totalResult.price += totalPrice;
         totalResult.products.push(item);
       }
       if (item.type === 2) {
@@ -207,20 +236,23 @@ export class PurchaseService {
           item.optionId,
           item.totalCount,
         );
-        const { totalDiscount, totalPrice, totalCount, price } = result;
-        item.totalDiscount = totalDiscount;
-        item.totalPrice = totalPrice;
-        if (
-          totalCount !== undefined &&
-          Number(totalCount) < Number(item.totalCount)
-        ) {
+        const { title, discount, price, totalPrice, isCount, totalCount } =
+          result;
+        item.totalDiscount = discount;
+        item.totalPrice = price;
+        if (isCount && item.totalCount < 1) {
           throw new BadRequestException(
-            `${result.title} - ${PURCHASE_ERROR.COUNT_GREATER_MAXIMUM} - ${totalCount}`,
+            `${title} - ${PURCHASE_ERROR.MINIMUM_COUNT_IS} - 1`,
           );
         }
-        if (totalCount === undefined) item.totalCount = 1;
+        if (isCount && Number(totalCount) < Number(item.totalCount)) {
+          throw new BadRequestException(
+            `${title} - ${PURCHASE_ERROR.COUNT_GREATER_MAXIMUM} - ${totalCount}`,
+          );
+        }
+        if (!isCount) item.totalCount = 1;
         totalResult.products.push(item);
-        totalResult.price += price;
+        totalResult.price += totalPrice;
       }
       if (item.type === 3) {
         const result = await this.getSewingProduct(
@@ -229,30 +261,46 @@ export class PurchaseService {
           item.totalCount,
           item.totalLength,
         );
-        const { totalDiscount, totalPrice, totalCount, totalLength, price } =
-          result;
-        item.totalDiscount = totalDiscount;
-        item.totalPrice = totalPrice;
+        const {
+          title,
+          discount,
+          price,
+          totalPrice,
+          isCount,
+          totalCount,
+          isLength,
+          totalLength,
+        } = result;
+        item.totalDiscount = discount;
+        item.totalPrice = price;
 
-        if (Boolean(totalCount) && item.totalCount > totalCount) {
+        if (isCount && item.totalCount < 1) {
           throw new BadRequestException(
-            `${result.title} - ${PURCHASE_ERROR.COUNT_GREATER_MAXIMUM} - ${totalCount}`,
+            `${title} - ${PURCHASE_ERROR.MINIMUM_COUNT_IS} - 1`,
           );
-        } else if (
-          Boolean(totalLength) &&
-          Math.ceil(item.totalLength * 100) > Math.ceil(totalLength * 100)
+        }
+        if (isLength && Number(item.totalLength) < 0.1) {
+          throw new BadRequestException(
+            `${title} - ${PURCHASE_ERROR.MINIMUM_LENGTH_IS} - 0.1`,
+          );
+        }
+        if (isCount && Number(item.totalCount) > Number(totalCount)) {
+          throw new BadRequestException(
+            `${title} - ${PURCHASE_ERROR.COUNT_GREATER_MAXIMUM} - ${totalCount}`,
+          );
+        }
+        if (
+          isLength &&
+          Math.ceil(Number(item.totalLength) * 100) >
+            Math.ceil(Number(totalLength) * 100)
         ) {
           throw new BadRequestException(
-            `${result.title} - ${PURCHASE_ERROR.LENGTH_GREATER_MAXIMUM} - ${totalLength}`,
+            `${title} - ${PURCHASE_ERROR.LENGTH_GREATER_MAXIMUM} - ${totalLength}`,
           );
-        } else {
-          if (!Boolean(totalCount) && !Boolean(totalLength)) {
-            item.totalCount = 1;
-          }
-
-          totalResult.products.push(item);
-          totalResult.price += price;
         }
+        if (!isCount && !isLength) item.totalCount = 1;
+        totalResult.products.push(item);
+        totalResult.price += totalPrice;
       }
     }
 
@@ -350,7 +398,10 @@ export class PurchaseService {
   async update(id: any, body: any) {
     const result = await this.purchaseRepository.findOne({ id });
     if (result) {
-      await this.mailService.sendInfoAboutOrderStatus(body);
+      const getOrderProducts = await this.purchaseRepository.getAllForEmail(
+        body.id,
+      );
+      await this.mailService.sendInfoAboutOrderStatus(getOrderProducts);
       await this.purchaseRepository.update(id, body);
     } else {
       throw new BadRequestException(PURCHASE_ERROR.PURCHASE_NOT_FOUND);

@@ -119,4 +119,8 @@ export class PatternProductDto {
 
   @IsOptional()
   filePdf: FileDto;
+
+  @IsOptional()
+  @IsBoolean()
+  isCount: boolean;
 }

@@ -50,8 +50,6 @@ export class SewingProductEntity {
     return generateVendorCode();
   }
 
-  // @OneToMany(() => CategoryEntity, (res: CategoryEntity) => res.sewingProductId)
-  // categories: CategoryEntity[];
   @ManyToMany(() => CategoryEntity)
   @JoinTable()
   categories: CategoryEntity[];
@@ -159,6 +157,18 @@ export class SewingProductEntity {
   })
   modifierEn!: string;
 
+  @Column({
+    type: 'bool',
+    name: 'is_count',
+    default: false,
+  })
+  isCount?: boolean;
+  @Column({
+    type: 'bool',
+    name: 'is_length',
+    default: false,
+  })
+  isLength?: boolean;
   @Column({
     type: 'bool',
     name: 'pinned',

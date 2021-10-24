@@ -168,18 +168,19 @@ export class MailService {
       });
   }
 
-  async sendInfoAboutOrderStatus(data: any) {
+  async sendInfoAboutOrderStatus(orderProducts: PurchaseEntity) {
     return await this.mailerService
       .sendMail({
-        to: data.email,
-        subject: `Статус заказа ${data.orderNumber} изменен`,
+        to: orderProducts.email,
+        subject: `Статус заказа ${orderProducts.orderNumber} изменен`,
         template: path.join(
           path.resolve(),
           'src/templates/info-about-order-status.pug',
         ),
         context: {
-          fullName: data.fullName,
-          orderStatus: data.orderStatus,
+          fullName: orderProducts.fullName,
+          purchasedProducts: orderProducts.purchaseProducts,
+          status: orderProducts.orderStatus,
         },
       })
       .catch((e) => {
