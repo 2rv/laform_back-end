@@ -32,13 +32,16 @@ export class PatternProductService {
     where: string,
     type: string,
     category: string,
-  ): Promise<PatternProductEntity[]> {
+  ): Promise<[PatternProductEntity[], number]> {
     if (sort === 'title') {
       if (query === 'ru') {
         sort = 'pattern_product.titleRu';
       } else if (query === 'en') {
         sort = 'pattern_product.titleEn';
       }
+    } else if (sort === 'date') {
+      sort = 'pattern_product.createdDate';
+      by = 'ASC';
     } else sort = '';
     if (type === 'printed') {
       type = '2';
@@ -79,13 +82,16 @@ export class PatternProductService {
     type: string,
     category: string,
     userId: number,
-  ): Promise<PatternProductEntity[]> {
+  ): Promise<[PatternProductEntity[], number]> {
     if (sort === 'title') {
       if (query === 'ru') {
         sort = 'pattern_product.titleRu';
       } else if (query === 'en') {
         sort = 'pattern_product.titleEn';
       }
+    } else if (sort === 'date') {
+      sort = 'pattern_product.createdDate';
+      by = 'ASC';
     } else sort = '';
     if (type === 'printed') {
       type = '2';
