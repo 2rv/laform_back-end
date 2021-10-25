@@ -21,13 +21,16 @@ export class MasterClassService {
     by: string,
     where: string,
     category: string,
-  ): Promise<MasterClassEntity[]> {
+  ): Promise<[MasterClassEntity[], number]> {
     if (sort === 'title') {
       if (query === 'ru') {
         sort = 'master_class.titleRu';
       } else if (query === 'en') {
         sort = 'master_class.titleEn';
       }
+    } else if (sort === 'date') {
+      sort = 'master_class.createdDate';
+      by = 'ASC';
     } else sort = '';
     if (query === 'ru')
       return await this.masterClassRepository.findAllRu(
@@ -57,13 +60,16 @@ export class MasterClassService {
     where: string,
     category: string,
     userId: number,
-  ): Promise<MasterClassEntity[]> {
+  ): Promise<[MasterClassEntity[], number]> {
     if (sort === 'title') {
       if (query === 'ru') {
         sort = 'master_class.titleRu';
       } else if (query === 'en') {
         sort = 'master_class.titleEn';
       }
+    } else if (sort === 'date') {
+      sort = 'master_class.createdDate';
+      by = 'ASC';
     } else sort = '';
     if (query === 'ru')
       return await this.masterClassRepository.findAllRuAuth(
