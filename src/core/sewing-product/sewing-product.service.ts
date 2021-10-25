@@ -31,13 +31,16 @@ export class SewingProductService {
     by: string,
     where: string,
     category: string,
-  ): Promise<SewingProductEntity[]> {
+  ): Promise<[SewingProductEntity[], number]> {
     if (sort === 'title') {
       if (query === 'ru') {
         sort = 'sewing_product.titleRu';
       } else if (query === 'en') {
         sort = 'sewing_product.titleEn';
       }
+    } else if (sort === 'date') {
+      sort = 'sewing_product.createdDate';
+      by = 'ASC';
     } else sort = '';
 
     if (query === 'ru')
@@ -68,13 +71,16 @@ export class SewingProductService {
     where: string,
     category: string,
     userId: number,
-  ): Promise<SewingProductEntity[]> {
+  ): Promise<[SewingProductEntity[], number]> {
     if (sort === 'title') {
       if (query === 'ru') {
         sort = 'sewing_product.titleRu';
       } else if (query === 'en') {
         sort = 'sewing_product.titleEn';
       }
+    } else if (sort === 'date') {
+      sort = 'sewing_product.createdDate';
+      by = 'ASC';
     } else sort = '';
 
     if (query === 'ru')
