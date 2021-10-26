@@ -408,14 +408,17 @@ export class PurchaseService {
     await this.mailService.sendUpdatedPurchaseInfo(purchase.email, purchase);
   }
 
-  async getAll(size: number, page: number): Promise<PurchaseEntity[]> {
+  async getAll(
+    size: number,
+    page: number,
+  ): Promise<[PurchaseEntity[], number]> {
     return await this.purchaseRepository.getAll(size, page);
   }
   async getAllForUser(
     size: number,
     page: number,
     userId,
-  ): Promise<PurchaseEntity[]> {
+  ): Promise<[PurchaseEntity[], number]> {
     return await this.purchaseRepository.getAllForUser(size, page, userId);
   }
   async getOne(id: string): Promise<PurchaseEntity> {
