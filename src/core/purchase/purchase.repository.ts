@@ -4,27 +4,28 @@ import { UserEntity } from '../user/user.entity';
 
 @EntityRepository(PurchaseEntity)
 export class PurchaseRepository extends Repository<PurchaseEntity> {
-  async getAll(size: number, page: number): Promise<PurchaseEntity[]> {
-    // const take = size || 10;
-    // const skip = (page - 1) * size || 0;
-    // .limit(take)
-    // .offset(skip)
-
+  async getAll(
+    size: number = 1,
+    page: number = 1,
+  ): Promise<[PurchaseEntity[], number]> {
     return await this.createQueryBuilder('purchase')
       .leftJoin('purchase.userId', 'user')
       .loadRelationCountAndMap(
         'purchase.purchaseProductsCount',
         'purchase.purchaseProducts',
       )
+      .orderBy('purchase.orderNumber', 'ASC')
+      .take(size)
+      .skip((page - 1) * size || 0)
       .select(['purchase', 'user.id'])
-      .getMany();
+      .getManyAndCount();
   }
 
   async getAllForUser(
-    size: number,
-    page: number,
+    size: number = 30,
+    page: number = 1,
     userId,
-  ): Promise<PurchaseEntity[]> {
+  ): Promise<[PurchaseEntity[], number]> {
     // const take = size || 10;
     // const skip = (page - 1) * size || 0;
     // .limit(take)
@@ -56,6 +57,7 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
         'purchase.fullName',
         'purchase.phoneNumber',
         'purchase.email',
+        'purchase.orderNumber',
 
         'purchase_products',
 
@@ -111,8 +113,11 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
         'option.price',
         'option.discount',
       ])
+      .orderBy('purchase.orderNumber', 'ASC')
+      .take(size)
+      .skip((page - 1) * size || 0)
       .where('purchase.userId = :userId', { userId })
-      .getMany();
+      .getManyAndCount();
   }
 
   async getAllForEmail(id): Promise<PurchaseEntity> {
