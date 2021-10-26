@@ -551,7 +551,11 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
       .getMany();
   }
 
-  async findLikedRu(userId: number): Promise<MasterClassEntity[]> {
+  async findLikedRu(
+    userId: number,
+    size: number = 30,
+    page: number = 1,
+  ): Promise<[MasterClassEntity[], number]> {
     return await this.createQueryBuilder('master_class')
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.categories', 'categories')
@@ -571,11 +575,17 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'categories.categoryNameRu',
         'like',
       ])
+      .take(size)
+      .skip((page - 1) * size || 0)
       .where('master_class.deleted = false')
       .andWhere('like.userId = :userId', { userId })
-      .getMany();
+      .getManyAndCount();
   }
-  async findLikedEn(userId: number): Promise<MasterClassEntity[]> {
+  async findLikedEn(
+    userId: number,
+    size: number = 30,
+    page: number = 1,
+  ): Promise<[MasterClassEntity[], number]> {
     return await this.createQueryBuilder('master_class')
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.categories', 'categories')
@@ -595,8 +605,10 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'categories.categoryNameEn',
         'like',
       ])
+      .take(size)
+      .skip((page - 1) * size || 0)
       .where('master_class.deleted = false')
       .andWhere('like.userId = :userId', { userId })
-      .getMany();
+      .getManyAndCount();
   }
 }

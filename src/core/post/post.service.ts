@@ -120,9 +120,14 @@ export class PostService {
       return await this.postRepository.findPinnedEnAuth(userId);
   }
 
-  async getLiked(userId: number, query: string): Promise<PostEntity[]> {
-    if (query === 'ru') return await this.postRepository.findLikedRu(userId);
-    if (query === 'en') return await this.postRepository.findLikedEn(userId);
+  async getLiked(
+    userId: number,
+    query: string,
+    size: number,
+    page: number,
+  ): Promise<[PostEntity[], number]> {
+    if (query === 'ru') return await this.postRepository.findLikedRu(userId, size, page);
+    if (query === 'en') return await this.postRepository.findLikedEn(userId, size, page);
   }
 
   async update(id: string, body: PostDto) {

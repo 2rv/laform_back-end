@@ -162,11 +162,21 @@ export class PatternProductService {
   async getLiked(
     userId: number,
     query: string,
-  ): Promise<PatternProductEntity[]> {
+    size: number,
+    page: number,
+  ): Promise<[PatternProductEntity[], number]> {
     if (query === 'ru')
-      return await this.patternProductRepository.findLikedRu(userId);
+      return await this.patternProductRepository.findLikedRu(
+        userId,
+        size,
+        page,
+      );
     if (query === 'en')
-      return await this.patternProductRepository.findLikedEn(userId);
+      return await this.patternProductRepository.findLikedEn(
+        userId,
+        size,
+        page,
+      );
   }
 
   async update(id: string, body: PatternProductDto) {
