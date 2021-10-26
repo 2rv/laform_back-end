@@ -112,7 +112,7 @@ export class UserRepository extends Repository<UserEntity> {
       .getOne();
   }
 
-  async getAll(size = 3, page = 1): Promise<[UserEntity[], number]> {
+  async getAll(size = 30, page = 1): Promise<[UserEntity[], number]> {
     return await this.createQueryBuilder('user')
       .select([
         'user.id',
