@@ -122,11 +122,16 @@ export class MasterClassService {
       return await this.masterClassRepository.findPinnedEnAuth(userId);
   }
 
-  async getLiked(userId: number, query: string): Promise<MasterClassEntity[]> {
+  async getLiked(
+    userId: number,
+    query: string,
+    size: number,
+    page: number,
+  ): Promise<[MasterClassEntity[], number]> {
     if (query === 'ru')
-      return await this.masterClassRepository.findLikedRu(userId);
+      return await this.masterClassRepository.findLikedRu(userId, size, page);
     if (query === 'en')
-      return await this.masterClassRepository.findLikedEn(userId);
+      return await this.masterClassRepository.findLikedEn(userId, size, page);
   }
 
   async update(id: string, body: MasterClassDto) {

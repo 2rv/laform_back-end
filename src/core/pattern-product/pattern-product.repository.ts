@@ -708,7 +708,11 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .getMany();
   }
 
-  async findLikedRu(userId: number): Promise<PatternProductEntity[]> {
+  async findLikedRu(
+    userId: number,
+    size: number = 30,
+    page: number = 1,
+  ): Promise<[PatternProductEntity[], number]> {
     return await this.createQueryBuilder('pattern_product')
       .leftJoin('pattern_product.images', 'images')
       .leftJoin('pattern_product.categories', 'categories')
@@ -738,11 +742,17 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'options.vendorCode',
         'like',
       ])
+      .take(size)
+      .skip((page - 1) * size || 0)
       .where('pattern_product.deleted = false')
       .andWhere('like.userId = :userId', { userId })
-      .getMany();
+      .getManyAndCount();
   }
-  async findLikedEn(userId: number): Promise<PatternProductEntity[]> {
+  async findLikedEn(
+    userId: number,
+    size: number = 30,
+    page: number = 1,
+  ): Promise<[PatternProductEntity[], number]> {
     return await this.createQueryBuilder('pattern_product')
       .leftJoin('pattern_product.images', 'images')
       .leftJoin('pattern_product.categories', 'categories')
@@ -772,9 +782,11 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'options.vendorCode',
         'like',
       ])
+      .take(size)
+      .skip((page - 1) * size || 0)
       .where('pattern_product.deleted = false')
       .andWhere('like.userId = :userId', { userId })
-      .getMany();
+      .getManyAndCount();
   }
 
   async findOneAndOption(

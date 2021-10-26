@@ -139,11 +139,13 @@ export class SewingProductService {
   async getLiked(
     userId: number,
     query: string,
-  ): Promise<SewingProductEntity[]> {
+    size: number,
+    page: number,
+  ): Promise<[SewingProductEntity[], number]> {
     if (query === 'ru')
-      return await this.sewingProductRepository.findLikedRu(userId);
+      return await this.sewingProductRepository.findLikedRu(userId, size, page);
     if (query === 'en')
-      return await this.sewingProductRepository.findLikedEn(userId);
+      return await this.sewingProductRepository.findLikedEn(userId, size, page);
   }
 
   async update(id: string, body: SewingProductDto) {

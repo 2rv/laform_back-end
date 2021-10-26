@@ -513,7 +513,11 @@ export class PostRepository extends Repository<PostEntity> {
       .getMany();
   }
 
-  async findLikedRu(userId: number): Promise<PostEntity[]> {
+  async findLikedRu(
+    userId: number,
+    size: number = 30,
+    page: number = 1,
+  ): Promise<[PostEntity[], number]> {
     return await this.createQueryBuilder('post')
       .leftJoin('post.image', 'image')
       .leftJoin('post.categories', 'categories')
@@ -531,11 +535,17 @@ export class PostRepository extends Repository<PostEntity> {
         'categories.categoryNameRu',
         'like',
       ])
+      .take(size)
+      .skip((page - 1) * size || 0)
       .where('post.deleted = false')
       .andWhere('like.userId = :userId', { userId })
-      .getMany();
+      .getManyAndCount();
   }
-  async findLikedEn(userId: number): Promise<PostEntity[]> {
+  async findLikedEn(
+    userId: number,
+    size: number = 30,
+    page: number = 1,
+  ): Promise<[PostEntity[], number]> {
     return await this.createQueryBuilder('post')
       .leftJoin('post.image', 'image')
       .leftJoin('post.categories', 'categories')
@@ -553,8 +563,10 @@ export class PostRepository extends Repository<PostEntity> {
         'categories.categoryNameEn',
         'like',
       ])
+      .take(size)
+      .skip((page - 1) * size || 0)
       .where('post.deleted = false')
       .andWhere('like.userId = :userId', { userId })
-      .getMany();
+      .getManyAndCount();
   }
 }

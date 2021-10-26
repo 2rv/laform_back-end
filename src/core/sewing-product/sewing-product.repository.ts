@@ -705,7 +705,11 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .getMany();
   }
 
-  async findLikedRu(userId: number): Promise<SewingProductEntity[]> {
+  async findLikedRu(
+    userId: number,
+    size: number = 30,
+    page: number = 1,
+  ): Promise<[SewingProductEntity[], number]> {
     return await this.createQueryBuilder('sewing_product')
       .leftJoin('sewing_product.images', 'images')
       .leftJoin('sewing_product.categories', 'categories')
@@ -737,11 +741,17 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'options.vendorCode',
         'like',
       ])
+      .take(size)
+      .skip((page - 1) * size || 0)
       .where('sewing_product.deleted = false')
       .andWhere('like.userId = :userId', { userId })
-      .getMany();
+      .getManyAndCount();
   }
-  async findLikedEn(userId: number): Promise<SewingProductEntity[]> {
+  async findLikedEn(
+    userId: number,
+    size: number = 30,
+    page: number = 1,
+  ): Promise<[SewingProductEntity[], number]> {
     return await this.createQueryBuilder('sewing_product')
       .leftJoin('sewing_product.images', 'images')
       .leftJoin('sewing_product.categories', 'categories')
@@ -773,9 +783,11 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'options.vendorCode',
         'like',
       ])
+      .take(size)
+      .skip((page - 1) * size || 0)
       .where('sewing_product.deleted = false')
       .andWhere('like.userId = :userId', { userId })
-      .getMany();
+      .getManyAndCount();
   }
 
   async findOneAndOption(
