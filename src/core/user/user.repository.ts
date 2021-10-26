@@ -112,7 +112,7 @@ export class UserRepository extends Repository<UserEntity> {
       .getOne();
   }
 
-  async getAll() {
+  async getAll(size = 3, page = 1): Promise<[UserEntity[], number]> {
     return await this.createQueryBuilder('user')
       .select([
         'user.id',
@@ -122,8 +122,12 @@ export class UserRepository extends Repository<UserEntity> {
         'user.notificationEmail',
         'user.googleId',
         'user.facebookId',
+        'user.createDate',
       ])
-      .getMany();
+      .orderBy('user.createDate', 'ASC')
+      .take(size)
+      .skip((page - 1) * size || 0)
+      .getManyAndCount();
   }
 
   async changePassword(
