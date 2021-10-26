@@ -26,8 +26,8 @@ export class UserService {
     return await this.userRepository.getProfile(userId);
   }
 
-  async getAll(): Promise<any> {
-    return await this.userRepository.getAll();
+  async getAll(size: number, page: number): Promise<[UserEntity[], number]> {
+    return await this.userRepository.getAll(size, page);
   }
 
   async updateOne(id: number, body: any): Promise<any> {
