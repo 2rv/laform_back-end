@@ -32,13 +32,16 @@ export class PatternProductService {
     where: string,
     type: string,
     category: string,
-  ): Promise<PatternProductEntity[]> {
+  ): Promise<[PatternProductEntity[], number]> {
     if (sort === 'title') {
       if (query === 'ru') {
         sort = 'pattern_product.titleRu';
       } else if (query === 'en') {
         sort = 'pattern_product.titleEn';
       }
+    } else if (sort === 'date') {
+      sort = 'pattern_product.createdDate';
+      by = 'ASC';
     } else sort = '';
     if (type === 'printed') {
       type = '2';
@@ -79,13 +82,16 @@ export class PatternProductService {
     type: string,
     category: string,
     userId: number,
-  ): Promise<PatternProductEntity[]> {
+  ): Promise<[PatternProductEntity[], number]> {
     if (sort === 'title') {
       if (query === 'ru') {
         sort = 'pattern_product.titleRu';
       } else if (query === 'en') {
         sort = 'pattern_product.titleEn';
       }
+    } else if (sort === 'date') {
+      sort = 'pattern_product.createdDate';
+      by = 'ASC';
     } else sort = '';
     if (type === 'printed') {
       type = '2';
@@ -156,19 +162,37 @@ export class PatternProductService {
   async getLiked(
     userId: number,
     query: string,
-  ): Promise<PatternProductEntity[]> {
+    size: number,
+    page: number,
+  ): Promise<[PatternProductEntity[], number]> {
     if (query === 'ru')
-      return await this.patternProductRepository.findLikedRu(userId);
+      return await this.patternProductRepository.findLikedRu(
+        userId,
+        size,
+        page,
+      );
     if (query === 'en')
-      return await this.patternProductRepository.findLikedEn(userId);
+      return await this.patternProductRepository.findLikedEn(
+        userId,
+        size,
+        page,
+      );
   }
 
   async update(id: string, body: PatternProductDto) {
-    const patternProduct = await this.patternProductRepository.findOneOrFail(
-      id,
-    );
-    return await this.patternProductRepository.update(patternProduct.id, body);
+    body.options = body.options.map((item) => {
+      if (!item.vendorCode) {
+        item.vendorCode = PatternProductEntity.getVendorCode();
+      }
+      return item;
+    });
+    const patternProduct: PatternProductEntity =
+      await this.patternProductRepository.findOneOrFail(id);
+
+    Object.assign(patternProduct, { ...body });
+    return await this.patternProductRepository.save(patternProduct);
   }
+
   async delete(id: string) {
     const patternProduct = await this.patternProductRepository.findOneOrFail(
       id,

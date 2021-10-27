@@ -16,7 +16,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
     by: any = 'ASC',
     where: string,
     category: string,
-  ): Promise<MasterClassEntity[]> {
+  ): Promise<[MasterClassEntity[], number]> {
     return await this.createQueryBuilder('master_class')
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.categories', 'categories')
@@ -35,8 +35,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'categories.categoryNameRu',
       ])
       .orderBy(sort, by)
-      //   .take(size)
-      //   .skip(page > 0 ? page - 1 : 0)
+      .take(size)
+      .skip((page - 1) * size || 0)
       .where('master_class.deleted = false')
       .andWhere(
         new Brackets((qb) => {
@@ -55,8 +55,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
           }
         }),
       )
-      //   .getManyAndCount();
-      .getMany();
+      .getManyAndCount();
   }
   async findAllEn(
     size: number = 30,
@@ -65,7 +64,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
     by: any = 'ASC',
     where: string,
     category: string,
-  ): Promise<MasterClassEntity[]> {
+  ): Promise<[MasterClassEntity[], number]> {
     return await this.createQueryBuilder('master_class')
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.categories', 'categories')
@@ -84,8 +83,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'categories.categoryNameEn',
       ])
       .orderBy(sort, by)
-      //   .take(size)
-      //   .skip(page > 0 ? page - 1 : 0)
+      .take(size)
+      .skip((page - 1) * size || 0)
       .where('master_class.deleted = false')
       .andWhere(
         new Brackets((qb) => {
@@ -104,18 +103,17 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
           }
         }),
       )
-      //   .getManyAndCount();
-      .getMany();
+      .getManyAndCount();
   }
   async findAllRuAuth(
-    size: number = 2,
+    size: number = 30,
     page: number = 1,
     sort: string,
     by: any,
     where: string,
     category: string,
     userId: number,
-  ): Promise<MasterClassEntity[]> {
+  ): Promise<[MasterClassEntity[], number]> {
     return await this.createQueryBuilder('master_class')
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.categories', 'categories')
@@ -138,8 +136,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'like',
       ])
       .orderBy(sort, by)
-      //   .take(page * size)
-      //   .skip(page)
+      .take(size)
+      .skip((page - 1) * size || 0)
       .where('master_class.deleted = false')
       .andWhere(
         new Brackets((qb) => {
@@ -158,8 +156,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
           }
         }),
       )
-      //   .getManyAndCount();
-      .getMany();
+      .getManyAndCount();
   }
   async findAllEnAuth(
     size: number = 30,
@@ -169,7 +166,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
     where: string,
     category: string,
     userId: number,
-  ): Promise<MasterClassEntity[]> {
+  ): Promise<[MasterClassEntity[], number]> {
     return await this.createQueryBuilder('master_class')
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.categories', 'categories')
@@ -192,8 +189,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'like',
       ])
       .orderBy(sort, by)
-      //   .take(size)
-      //   .skip(page > 0 ? page - 1 : 0)
+      .take(size)
+      .skip((page - 1) * size || 0)
       .where('master_class.deleted = false')
       .andWhere(
         new Brackets((qb) => {
@@ -212,8 +209,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
           }
         }),
       )
-      //    .getManyAndCount();
-      .getMany();
+      .getManyAndCount();
   }
 
   async findOneRu(id: string): Promise<MasterClassEntity> {
@@ -555,7 +551,11 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
       .getMany();
   }
 
-  async findLikedRu(userId: number): Promise<MasterClassEntity[]> {
+  async findLikedRu(
+    userId: number,
+    size: number = 30,
+    page: number = 1,
+  ): Promise<[MasterClassEntity[], number]> {
     return await this.createQueryBuilder('master_class')
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.categories', 'categories')
@@ -575,11 +575,17 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'categories.categoryNameRu',
         'like',
       ])
+      .take(size)
+      .skip((page - 1) * size || 0)
       .where('master_class.deleted = false')
       .andWhere('like.userId = :userId', { userId })
-      .getMany();
+      .getManyAndCount();
   }
-  async findLikedEn(userId: number): Promise<MasterClassEntity[]> {
+  async findLikedEn(
+    userId: number,
+    size: number = 30,
+    page: number = 1,
+  ): Promise<[MasterClassEntity[], number]> {
     return await this.createQueryBuilder('master_class')
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.categories', 'categories')
@@ -599,8 +605,10 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'categories.categoryNameEn',
         'like',
       ])
+      .take(size)
+      .skip((page - 1) * size || 0)
       .where('master_class.deleted = false')
       .andWhere('like.userId = :userId', { userId })
-      .getMany();
+      .getManyAndCount();
   }
 }

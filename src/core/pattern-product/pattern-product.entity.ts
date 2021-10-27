@@ -7,6 +7,7 @@ import {
   JoinColumn,
   ManyToMany,
   JoinTable,
+  CreateDateColumn,
 } from 'typeorm';
 import { CategoryEntity } from '../category/category.entity';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
@@ -45,6 +46,12 @@ export class PatternProductEntity {
   })
   vendorCode: string;
 
+  @CreateDateColumn({
+    name: 'created_date',
+    readonly: true,
+  })
+  createdDate: Date;
+
   static getVendorCode() {
     return generateVendorCode();
   }
@@ -62,9 +69,7 @@ export class PatternProductEntity {
   @OneToMany(
     () => ProductOptionEntity,
     (res: ProductOptionEntity) => res.patternProductId,
-    {
-      cascade: true,
-    },
+    { cascade: true, onUpdate: 'CASCADE', onDelete: 'CASCADE' },
   )
   options: ProductOptionEntity[];
 

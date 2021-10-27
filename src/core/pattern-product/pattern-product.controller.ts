@@ -130,8 +130,15 @@ export class PatternProductController {
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getLiked(
     @Query(new LangValidationPipe()) query: string,
+    @Query('size') size: number,
+    @Query('page') page: number,
     @GetAccount() user: UserEntity,
   ) {
-    return await this.patternProductService.getLiked(user.id, query);
+    return await this.patternProductService.getLiked(
+      user.id,
+      query,
+      size,
+      page,
+    );
   }
 }

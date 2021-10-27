@@ -116,9 +116,11 @@ export class SewingProductController {
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getLiked(
     @Query(new LangValidationPipe()) query: string,
+    @Query('size') size: number,
+    @Query('page') page: number,
     @GetAccount() user: UserEntity,
   ) {
-    return await this.sewingProductService.getLiked(user.id, query);
+    return await this.sewingProductService.getLiked(user.id, query, size, page);
   }
 
   @Put('/update/:sewingProductId')

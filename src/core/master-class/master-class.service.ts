@@ -21,13 +21,16 @@ export class MasterClassService {
     by: string,
     where: string,
     category: string,
-  ): Promise<MasterClassEntity[]> {
+  ): Promise<[MasterClassEntity[], number]> {
     if (sort === 'title') {
       if (query === 'ru') {
         sort = 'master_class.titleRu';
       } else if (query === 'en') {
         sort = 'master_class.titleEn';
       }
+    } else if (sort === 'date') {
+      sort = 'master_class.createdDate';
+      by = 'ASC';
     } else sort = '';
     if (query === 'ru')
       return await this.masterClassRepository.findAllRu(
@@ -57,13 +60,16 @@ export class MasterClassService {
     where: string,
     category: string,
     userId: number,
-  ): Promise<MasterClassEntity[]> {
+  ): Promise<[MasterClassEntity[], number]> {
     if (sort === 'title') {
       if (query === 'ru') {
         sort = 'master_class.titleRu';
       } else if (query === 'en') {
         sort = 'master_class.titleEn';
       }
+    } else if (sort === 'date') {
+      sort = 'master_class.createdDate';
+      by = 'ASC';
     } else sort = '';
     if (query === 'ru')
       return await this.masterClassRepository.findAllRuAuth(
@@ -116,21 +122,30 @@ export class MasterClassService {
       return await this.masterClassRepository.findPinnedEnAuth(userId);
   }
 
-  async getLiked(userId: number, query: string): Promise<MasterClassEntity[]> {
+  async getLiked(
+    userId: number,
+    query: string,
+    size: number,
+    page: number,
+  ): Promise<[MasterClassEntity[], number]> {
     if (query === 'ru')
-      return await this.masterClassRepository.findLikedRu(userId);
+      return await this.masterClassRepository.findLikedRu(userId, size, page);
     if (query === 'en')
-      return await this.masterClassRepository.findLikedEn(userId);
+      return await this.masterClassRepository.findLikedEn(userId, size, page);
   }
 
   async update(id: string, body: MasterClassDto) {
-    const masterClass = await this.masterClassRepository.findOneOrFail(id);
-    return await this.masterClassRepository.update(masterClass.id, body);
+    const masterClass: MasterClassEntity =
+      await this.masterClassRepository.findOneOrFail(id);
+    Object.assign(masterClass, { ...body });
+    return await this.masterClassRepository.save(masterClass);
   }
+
   async delete(id: string) {
     const masterClass = await this.masterClassRepository.findOneOrFail(id);
     return await this.masterClassRepository.delete(masterClass.id);
   }
+
   async getPriceAndDiscount(
     masterClass: MasterClassEntity,
   ): Promise<{ totalPrice: number; totalDiscount: number }> {

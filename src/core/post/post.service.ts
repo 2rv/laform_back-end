@@ -20,7 +20,7 @@ export class PostService {
     by: string,
     where: string,
     category: string,
-  ): Promise<PostEntity[]> {
+  ): Promise<[PostEntity[], number]> {
     if (sort === 'title') {
       if (query === 'ru') {
         sort = 'post.titleRu';
@@ -29,6 +29,7 @@ export class PostService {
       }
     } else if (sort === 'date') {
       sort = 'post.createdDate';
+      by = 'ASC';
     } else sort = '';
 
     if (query === 'ru')
@@ -59,7 +60,7 @@ export class PostService {
     where: string,
     category: string,
     userId: number,
-  ): Promise<PostEntity[]> {
+  ): Promise<[PostEntity[], number]> {
     if (sort === 'title') {
       if (query === 'ru') {
         sort = 'post.titleRu';
@@ -68,6 +69,7 @@ export class PostService {
       }
     } else if (sort === 'date') {
       sort = 'post.createdDate';
+      by = 'ASC';
     } else sort = '';
 
     if (query === 'ru')
@@ -118,15 +120,22 @@ export class PostService {
       return await this.postRepository.findPinnedEnAuth(userId);
   }
 
-  async getLiked(userId: number, query: string): Promise<PostEntity[]> {
-    if (query === 'ru') return await this.postRepository.findLikedRu(userId);
-    if (query === 'en') return await this.postRepository.findLikedEn(userId);
+  async getLiked(
+    userId: number,
+    query: string,
+    size: number,
+    page: number,
+  ): Promise<[PostEntity[], number]> {
+    if (query === 'ru') return await this.postRepository.findLikedRu(userId, size, page);
+    if (query === 'en') return await this.postRepository.findLikedEn(userId, size, page);
   }
 
   async update(id: string, body: PostDto) {
-    const post = await this.postRepository.findOneOrFail(id);
-    return await this.postRepository.update(post.id, body);
+    const post: PostEntity = await this.postRepository.findOneOrFail(id);
+    Object.assign(post, { ...body });
+    return await this.postRepository.save(post);
   }
+
   async delete(id: string) {
     const post = await this.postRepository.findOneOrFail(id);
     return await this.postRepository.delete(post.id);

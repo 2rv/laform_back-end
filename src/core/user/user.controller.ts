@@ -29,8 +29,8 @@ export class UserController {
   @Get('get/')
   @UseGuards(AuthGuard(), AccountGuard)
   @Roles(USER_ROLE.ADMIN)
-  async getAll() {
-    return await this.userService.getAll();
+  async getAll(@Query('size') size: number, @Query('page') page: number) {
+    return await this.userService.getAll(size, page);
   }
 
   @Get('get/:userId')
