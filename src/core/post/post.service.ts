@@ -124,9 +124,11 @@ export class PostService {
   }
 
   async update(id: string, body: PostDto) {
-    const post = await this.postRepository.findOneOrFail(id);
-    return await this.postRepository.update(post.id, body);
+    const post: PostEntity = await this.postRepository.findOneOrFail(id);
+    Object.assign(post, { ...body });
+    return await this.postRepository.save(post);
   }
+
   async delete(id: string) {
     const post = await this.postRepository.findOneOrFail(id);
     return await this.postRepository.delete(post.id);

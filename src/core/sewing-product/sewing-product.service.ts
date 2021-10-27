@@ -4,12 +4,14 @@ import { Injectable } from '@nestjs/common';
 import { SewingProductDto } from './dto/sewing-product.dto';
 import { ProductOptionEntity } from '../product-option/product-option.entity';
 import { ProductOptionService } from '../product-option/product-option.service';
+import { RecommendationService } from '../recommendation/recommendation.service';
 
 @Injectable()
 export class SewingProductService {
   constructor(
     private sewingProductRepository: SewingProductRepository,
     private productOptionService: ProductOptionService,
+    private recommendationService: RecommendationService,
   ) {}
 
   async create(body: SewingProductDto): Promise<SewingProductEntity> {
@@ -141,8 +143,17 @@ export class SewingProductService {
   }
 
   async update(id: string, body: SewingProductDto) {
-    const sewingProduct = await this.sewingProductRepository.findOneOrFail(id);
-    return await this.sewingProductRepository.update(sewingProduct.id, body);
+    body.options = body.options.map((item) => {
+      if (!item.vendorCode) {
+        item.vendorCode = SewingProductEntity.getVendorCode();
+      }
+      return item;
+    });
+    const sewingProduct: SewingProductEntity =
+      await this.sewingProductRepository.findOneOrFail(id);
+
+    Object.assign(sewingProduct, { ...body });
+    return await this.sewingProductRepository.save(sewingProduct);
   }
   async delete(id: string) {
     const sewingProduct = await this.sewingProductRepository.findOneOrFail(id);
