@@ -180,11 +180,19 @@ export class PatternProductService {
   }
 
   async update(id: string, body: PatternProductDto) {
-    const patternProduct = await this.patternProductRepository.findOneOrFail(
-      id,
-    );
-    return await this.patternProductRepository.update(patternProduct.id, body);
+    body.options = body.options.map((item) => {
+      if (!item.vendorCode) {
+        item.vendorCode = PatternProductEntity.getVendorCode();
+      }
+      return item;
+    });
+    const patternProduct: PatternProductEntity =
+      await this.patternProductRepository.findOneOrFail(id);
+
+    Object.assign(patternProduct, { ...body });
+    return await this.patternProductRepository.save(patternProduct);
   }
+
   async delete(id: string) {
     const patternProduct = await this.patternProductRepository.findOneOrFail(
       id,

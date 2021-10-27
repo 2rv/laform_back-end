@@ -135,13 +135,17 @@ export class MasterClassService {
   }
 
   async update(id: string, body: MasterClassDto) {
-    const masterClass = await this.masterClassRepository.findOneOrFail(id);
-    return await this.masterClassRepository.update(masterClass.id, body);
+    const masterClass: MasterClassEntity =
+      await this.masterClassRepository.findOneOrFail(id);
+    Object.assign(masterClass, { ...body });
+    return await this.masterClassRepository.save(masterClass);
   }
+
   async delete(id: string) {
     const masterClass = await this.masterClassRepository.findOneOrFail(id);
     return await this.masterClassRepository.delete(masterClass.id);
   }
+
   async getPriceAndDiscount(
     masterClass: MasterClassEntity,
   ): Promise<{ totalPrice: number; totalDiscount: number }> {

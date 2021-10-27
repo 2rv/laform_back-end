@@ -69,9 +69,7 @@ export class PatternProductEntity {
   @OneToMany(
     () => ProductOptionEntity,
     (res: ProductOptionEntity) => res.patternProductId,
-    {
-      cascade: true,
-    },
+    { cascade: true, onUpdate: 'CASCADE', onDelete: 'CASCADE' },
   )
   options: ProductOptionEntity[];
 

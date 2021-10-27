@@ -70,7 +70,7 @@ export class SewingProductEntity {
   @OneToMany(
     () => ProductOptionEntity,
     (res: ProductOptionEntity) => res.sewingProductId,
-    { cascade: true },
+    { cascade: true, onUpdate: 'CASCADE', onDelete: 'CASCADE' },
   )
   options: ProductOptionEntity[];
 
