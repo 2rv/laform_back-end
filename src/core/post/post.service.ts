@@ -2,10 +2,16 @@ import { PostEntity } from './post.entity';
 import { Injectable } from '@nestjs/common';
 import { PostDto } from './dto/post.dto';
 import { PostRepository } from './post.repository';
+import { FileUploadService } from '../file-upload/file-upload.service';
+import { RecommendationService } from '../recommendation/recommendation.service';
 
 @Injectable()
 export class PostService {
-  constructor(private postRepository: PostRepository) {}
+  constructor(
+    private postRepository: PostRepository,
+    private fileUploadService: FileUploadService,
+    private recommendationService: RecommendationService,
+  ) {}
 
   async create(body: PostDto): Promise<PostEntity> {
     body.vendorCode = PostEntity.getVendorCode();
@@ -126,12 +132,22 @@ export class PostService {
     size: number,
     page: number,
   ): Promise<[PostEntity[], number]> {
-    if (query === 'ru') return await this.postRepository.findLikedRu(userId, size, page);
-    if (query === 'en') return await this.postRepository.findLikedEn(userId, size, page);
+    if (query === 'ru')
+      return await this.postRepository.findLikedRu(userId, size, page);
+    if (query === 'en')
+      return await this.postRepository.findLikedEn(userId, size, page);
   }
 
   async update(id: string, body: PostDto) {
-    const post: PostEntity = await this.postRepository.findOneOrFail(id);
+    const post: PostEntity = await this.postRepository.findOneOrFail(id, {
+      relations: ['image'],
+    });
+    if (body.image.id !== post.image.id) {
+      await this.fileUploadService.delete(post.image.id);
+    }
+    if (post.recommendation?.id) {
+      await this.recommendationService.delete(post.recommendation.id);
+    }
     Object.assign(post, { ...body });
     return await this.postRepository.save(post);
   }

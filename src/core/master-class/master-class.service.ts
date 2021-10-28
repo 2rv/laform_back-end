@@ -2,10 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { MasterClassRepository } from './master-class.repository';
 import { MasterClassEntity } from './master-class.entity';
 import { MasterClassDto } from './dto/master-class.dto';
+import { RecommendationService } from '../recommendation/recommendation.service';
 
 @Injectable()
 export class MasterClassService {
-  constructor(private masterClassRepository: MasterClassRepository) {}
+  constructor(
+    private masterClassRepository: MasterClassRepository,
+    private recommendationService: RecommendationService,
+  ) {}
 
   async save(body: MasterClassDto): Promise<MasterClassEntity> {
     const result = this.masterClassRepository.create(body);
@@ -97,6 +101,11 @@ export class MasterClassService {
     if (query === 'ru') return await this.masterClassRepository.findOneRu(id);
     if (query === 'en') return await this.masterClassRepository.findOneEn(id);
   }
+  async getOneForUpdate(id: string, query: string): Promise<MasterClassEntity> {
+    if (query === 'ru') {
+      return await this.masterClassRepository.findOneRuForUpdate(id);
+    }
+  }
   async getOneAuth(
     id: string,
     query: string,
@@ -136,7 +145,13 @@ export class MasterClassService {
 
   async update(id: string, body: MasterClassDto) {
     const masterClass: MasterClassEntity =
-      await this.masterClassRepository.findOneOrFail(id);
+      await this.masterClassRepository.findOneOrFail(id, {
+        relations: ['recommendation'],
+      });
+    if (masterClass.recommendation?.id) {
+      await this.recommendationService.delete(masterClass.recommendation.id);
+    }
+
     Object.assign(masterClass, { ...body });
     return await this.masterClassRepository.save(masterClass);
   }

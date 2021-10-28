@@ -86,6 +86,15 @@ export class MasterClassController {
     return await this.masterClassService.getOne(masterClassId, query);
   }
 
+  @Get('/get/for-update/:masterClassId')
+  @UseGuards(MasterClassGuard)
+  async getOneForUpdate(
+    @Query(new LangValidationPipe()) query,
+    @Param('masterClassId') masterClassId: string,
+  ) {
+    return await this.masterClassService.getOneForUpdate(masterClassId, query);
+  }
+
   @Get('/auth/get/:masterClassId')
   @UseGuards(AuthGuard('jwt'), AccountGuard, MasterClassGuard)
   async getOneAuth(

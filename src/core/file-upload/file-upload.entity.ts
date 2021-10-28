@@ -37,7 +37,7 @@ export class FileUploadEntity {
 
   @OneToOne(() => PostEntity, (res: PostEntity) => res.image, {
     onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
+    onUpdate: 'SET NULL',
   })
   @JoinColumn({
     name: 'post_id',

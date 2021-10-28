@@ -159,7 +159,9 @@ export class SewingProductService {
     });
     const sewingProduct: SewingProductEntity =
       await this.sewingProductRepository.findOneOrFail(id);
-
+    if (sewingProduct.recommendation?.id) {
+      await this.recommendationService.delete(sewingProduct.recommendation.id);
+    }
     Object.assign(sewingProduct, { ...body });
     return await this.sewingProductRepository.save(sewingProduct);
   }

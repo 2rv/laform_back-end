@@ -14,4 +14,8 @@ export class RecommendationService {
 
     return await this.recommendationRepository.save(recommendations);
   }
+
+  async delete(id: string): Promise<any> {
+    return await this.recommendationRepository.delete(id);
+  }
 }
