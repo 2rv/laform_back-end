@@ -4,12 +4,14 @@ import { Injectable } from '@nestjs/common';
 import { PatternProductDto } from './dto/pattern-product.dto';
 import { ProductOptionEntity } from '../product-option/product-option.entity';
 import { ProductOptionService } from '../product-option/product-option.service';
+import { RecommendationService } from '../recommendation/recommendation.service';
 
 @Injectable()
 export class PatternProductService {
   constructor(
     private patternProductRepository: PatternProductRepository,
     private productOptionService: ProductOptionService,
+    private recommendationService: RecommendationService,
   ) {}
 
   async create(body: PatternProductDto): Promise<PatternProductEntity> {
@@ -188,7 +190,9 @@ export class PatternProductService {
     });
     const patternProduct: PatternProductEntity =
       await this.patternProductRepository.findOneOrFail(id);
-
+    if (patternProduct.recommendation?.id) {
+      await this.recommendationService.delete(patternProduct.recommendation.id);
+    }
     Object.assign(patternProduct, { ...body });
     return await this.patternProductRepository.save(patternProduct);
   }
@@ -246,7 +250,6 @@ export class PatternProductService {
             'isCount',
           ],
         });
-    console.log(result);
 
     return {
       title: result.titleRu || result.titleEn,
@@ -267,7 +270,6 @@ export class PatternProductService {
         String(patternProduct),
         String(option),
       );
-      console.log('option');
 
       if (!Boolean(result.options.length)) return;
       if (result.isCount && Number(result.options[0].count) >= Number(count)) {

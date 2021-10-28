@@ -3,12 +3,14 @@ import { Injectable } from '@nestjs/common';
 import { PostDto } from './dto/post.dto';
 import { PostRepository } from './post.repository';
 import { FileUploadService } from '../file-upload/file-upload.service';
+import { RecommendationService } from '../recommendation/recommendation.service';
 
 @Injectable()
 export class PostService {
   constructor(
     private postRepository: PostRepository,
     private fileUploadService: FileUploadService,
+    private recommendationService: RecommendationService,
   ) {}
 
   async create(body: PostDto): Promise<PostEntity> {
@@ -142,6 +144,9 @@ export class PostService {
     });
     if (body.image.id !== post.image.id) {
       await this.fileUploadService.delete(post.image.id);
+    }
+    if (post.recommendation?.id) {
+      await this.recommendationService.delete(post.recommendation.id);
     }
     Object.assign(post, { ...body });
     return await this.postRepository.save(post);
