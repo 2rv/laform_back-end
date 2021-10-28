@@ -611,4 +611,49 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
       .andWhere('like.userId = :userId', { userId })
       .getManyAndCount();
   }
+
+  async findOneRuForUpdate(id: string): Promise<MasterClassEntity> {
+    return await this.createQueryBuilder('master_class')
+      .leftJoin('master_class.images', 'images')
+      .leftJoin('master_class.categories', 'categories')
+      .leftJoin('master_class.recommendation', 'recommendation')
+      .leftJoin('recommendation.recommendationProducts', 'recommendations')
+
+      .leftJoin('recommendations.masterClassId', 'rec_master_class')
+      .leftJoin('recommendations.postId', 'rec_post')
+      .leftJoin('recommendations.patternProductId', 'rec_pattern_product')
+      .leftJoin('recommendations.sewingProductId', 'rec_sewing_product')
+
+      .leftJoin('rec_master_class.images', 'rec_master_class_images')
+      .leftJoin('rec_pattern_product.images', 'rec_pattern_product_images')
+      .leftJoin('rec_sewing_product.images', 'rec_sewing_product_images')
+      .leftJoin('rec_post.image', 'rec_post_image')
+
+      .leftJoin('rec_pattern_product.options', 'rec_pattern_product_options')
+      .leftJoin('rec_sewing_product.options', 'rec_sewing_product_options')
+
+      .select([
+        'master_class.id',
+        'master_class.type',
+        'master_class.vendorCode',
+        'master_class.createdDate',
+        'master_class.titleRu',
+        'master_class.modifierRu',
+        'master_class.descriptionRu',
+        'master_class.articleRu',
+        'master_class.discount',
+        'master_class.price',
+        'master_class.pinned',
+        'images',
+        'categories.id',
+        'categories.categoryNameRu',
+        ...recommendationsRu,
+      ])
+      .where('recommendations_sewing_product.deleted = false')
+      .where('recommendations_master_class.deleted = false')
+      .where('recommendations_pattern_product.deleted = false')
+      .where('recommendations_post.deleted = false')
+      .where('master_class.id = :id', { id })
+      .getOne();
+  }
 }

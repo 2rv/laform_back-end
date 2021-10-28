@@ -50,8 +50,6 @@ export class PostEntity {
   @OneToOne(() => FileUploadEntity, (res: FileUploadEntity) => res.postId)
   image: FileUploadEntity;
 
-  // @OneToMany(() => CategoryEntity, (res: CategoryEntity) => res.postId)
-  // categories: CategoryEntity[];
   @ManyToMany(() => CategoryEntity)
   @JoinTable()
   categories: CategoryEntity[];

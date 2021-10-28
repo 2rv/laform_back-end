@@ -49,8 +49,6 @@ export class MasterClassEntity {
     return generateVendorCode();
   }
 
-  // @OneToMany(() => CategoryEntity, (res: CategoryEntity) => res.mast/erClassId)
-  // categories: CategoryEntity[];
   @ManyToMany(() => CategoryEntity)
   @JoinTable()
   categories: CategoryEntity[];
