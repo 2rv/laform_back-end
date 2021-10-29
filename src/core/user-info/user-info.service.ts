@@ -19,6 +19,7 @@ export class UserInfoService {
     return await this.userInfoRepository.save({
       userId: user.id,
       googleId: user?.googleId,
+      appleId: user?.appleId,
       facebookId: user?.facebookId,
     });
   }

@@ -8,5 +8,6 @@ export interface UserInfoDto {
   deliveryType: string;
   paymentType: PAYMENT_TYPE;
   googleId: string;
+  appleId: string;
   facebookId: string;
 }

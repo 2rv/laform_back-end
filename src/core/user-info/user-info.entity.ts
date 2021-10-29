@@ -66,6 +66,9 @@ export class UserInfoEntity extends BaseEntity {
   @Column({ name: 'google_id', nullable: true })
   googleId: string;
 
+  @Column({ name: 'apple_id', nullable: true })
+  appleId: string;
+
   @Column({ name: 'facebook_id', nullable: true })
   facebookId: string;
 }
