@@ -14,6 +14,8 @@ import { AuthRepository } from './auth.repository';
 import { JwtStrategy } from './jwt.strategy';
 import { GoogleStrategy } from './google.strategy';
 import { FacebookStrategy } from './facebook.strategy';
+
+import { AppleStrategy } from './apple.strategy';
 import { CacheModuleConfig } from 'src/config/cache.config';
 
 @Module({
@@ -25,7 +27,13 @@ import { CacheModuleConfig } from 'src/config/cache.config';
     UserInfoModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, GoogleStrategy, FacebookStrategy],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    GoogleStrategy,
+    FacebookStrategy,
+    AppleStrategy,
+  ],
   exports: [JwtStrategy, PassportModule, AuthService],
 })
 export class AuthModule {}
