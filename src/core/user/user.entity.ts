@@ -58,6 +58,9 @@ export class UserEntity extends BaseEntity {
   @Column({ name: 'facebook_id', nullable: true })
   facebookId?: string;
 
+  @Column({ name: 'apple_id', nullable: true })
+  appleId?: string;
+
   @CreateDateColumn()
   createDate: string;
 

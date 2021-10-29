@@ -92,4 +92,16 @@ export class AuthController {
       `${clientUrl}/social-auth-access?data=${token.accessToken}`,
     );
   }
+
+  @Get('/apple')
+  @UseGuards(AuthGuard('apple'))
+  async appleAuth() {
+    return { ok: 'ok' };
+  }
+
+  @Get('/apple/redirect')
+  @UseGuards(AuthGuard('apple'))
+  async appleAuthRedirect(@Req() req, @Res() res) {
+    return { ok: 'ok' };
+  }
 }
