@@ -93,6 +93,19 @@ export class AuthController {
       `${clientUrl}/social-auth-access?data=${token.accessToken}`,
     );
   }
+
+  @Get('/apple')
+  @UseGuards(AuthGuard('apple'))
+  async appleAuth() {
+    return { ok: 'ok' };
+  }
+
+  @Get('/apple/redirect')
+  @UseGuards(AuthGuard('apple'))
+  async appleAuthRedirect(@Req() req) {
+    return { ok: 'ok' };
+  }
+  
   @Post('/verify/code')
   async authVerifyByCode(@Body() body: AuthBasketForCodeDto): Promise<void> {
     return this.authService.authVerifyByCode(body);

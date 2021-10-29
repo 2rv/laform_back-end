@@ -39,5 +39,11 @@ GOOGLE:
   CLIENT_SECRET: 'ENwlRXt3vnRohU8hFNbAcQjf'
   CALLBACK_URL: 'https://laform-api.herokuapp.com/auth/google/redirect'
 
+APPLE:
+  CLIENT_ID: 'com.laform-api.herokuapp.test'
+  KEY_ID: 'NWKUX58DQR'
+  TEAM_ID: '59862PVTZ2'
+  CALLBACK_URL: 'https://laform-api.herokuapp.com/auth/apple/redirect'
+
 CLIENT:
   URL: 'https://laform-client.herokuapp.com'

@@ -12,6 +12,7 @@ import { UserChangeEmailDto } from './dto/user-change-email.dto';
 import { UserEntity } from './user.entity';
 import { CreateGoogleUseDto } from './dto/create-user-google.dto';
 import { CreateFacebookUseDto } from './dto/create-user-facebook.dto';
+import { CreateAppleUseDto } from './dto/create-user-apple.dto';
 
 @EntityRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {
@@ -174,6 +175,24 @@ export class UserRepository extends Repository<UserEntity> {
   async saveGoogleUser(body: CreateGoogleUseDto): Promise<UserEntity> {
     const user: UserEntity = new UserEntity();
     user.googleId = body.googleId;
+    user.login = body.login;
+    user.email = body.email;
+
+    try {
+      await user.save();
+      return user;
+    } catch (err) {
+      if (err.code === '23505') {
+        throw new ConflictException(USER_ERROR.USER_ALREADY_EXISTS);
+      } else {
+        throw new InternalServerErrorException();
+      }
+    }
+  }
+
+  async saveAppleUser(body: CreateAppleUseDto): Promise<UserEntity> {
+    const user: UserEntity = new UserEntity();
+    user.appleId = body.appleId;
     user.login = body.login;
     user.email = body.email;
 
