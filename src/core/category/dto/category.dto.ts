@@ -1,11 +1,15 @@
-import { IsNotEmpty, IsString, IsOptional } from 'class-validator';
+import { IsString, IsOptional, IsNotEmpty, IsUUID } from 'class-validator';
 
 export class CategoryDto {
+  @IsOptional()
+  @IsUUID('all')
+  id: string;
+
   @IsNotEmpty()
   @IsString()
-  textRu: string;
+  categoryNameRu: string;
 
   @IsOptional()
   @IsString()
-  textEn: string;
+  categoryNameEn: string;
 }

@@ -4,67 +4,84 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   OneToOne,
+  CreateDateColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
 import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
-import { ProgramsEntity } from '../programs/programs.entity';
 import { CategoryEntity } from '../category/category.entity';
 import { LikeEntity } from '../like/like.entity';
 import { CommentEntity } from '../comment/comment.entity';
 import { RecommendationProductEntity } from '../recommendation-product/recommendation-product.entity';
 import { RecommendationEntity } from '../recommendation/recommendation.entity';
+import { generateVendorCode } from 'src/common/utils/vendor-coder';
 
 @Entity({ name: 'master_class' })
 export class MasterClassEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToMany(
-    () => CategoryEntity,
-    (category: CategoryEntity) => category.masterClassId,
-    { cascade: true },
-  )
+  @Column({
+    type: 'int',
+    name: 'type',
+    default: 0,
+    readonly: true,
+  })
+  type: number;
+
+  @Column({
+    type: 'varchar',
+    name: 'vendor_code',
+    unique: true,
+    readonly: true,
+    nullable: true,
+  })
+  vendorCode: string;
+
+  @CreateDateColumn({
+    name: 'created_date',
+    readonly: true,
+  })
+  createdDate: Date;
+
+  static getVendorCode() {
+    return generateVendorCode();
+  }
+
+  @ManyToMany(() => CategoryEntity)
+  @JoinTable()
   categories: CategoryEntity[];
 
   @OneToMany(
     () => FileUploadEntity,
-    (file: FileUploadEntity) => file.masterClassId,
+    (res: FileUploadEntity) => res.masterClassId,
   )
   images: FileUploadEntity[];
 
-  @OneToMany(
-    () => ProgramsEntity,
-    (programNameRu: ProgramsEntity) => programNameRu.masterClassId,
-  )
-  programs: ProgramsEntity[];
-
-  @OneToMany(
-    () => PurchaseProductEntity,
-    (purchaseProduct: PurchaseProductEntity) => purchaseProduct.masterClassId,
-  )
-  purchaseProduct: PurchaseProductEntity[];
-
-  @OneToMany(
-    () => RecommendationProductEntity,
-    (purchaseProduct: RecommendationProductEntity) =>
-      purchaseProduct.masterClassId,
-  )
-  recommendationProduct: RecommendationProductEntity[];
-
   @OneToOne(
     () => RecommendationEntity,
-    (recommendation: RecommendationEntity) => recommendation.masterClassId,
+    (res: RecommendationEntity) => res.masterClassId,
     { cascade: true },
   )
   recommendation: RecommendationEntity;
 
-  @OneToMany(() => LikeEntity, (like: LikeEntity) => like.masterClassId, {})
-  like: LikeEntity[];
+  @OneToMany(
+    () => RecommendationProductEntity,
+    (res: RecommendationProductEntity) => res.masterClassId,
+  )
+  recommendationProduct: RecommendationProductEntity[];
 
   @OneToMany(
-    () => CommentEntity,
-    (comment: CommentEntity) => comment.masterClassId,
+    () => PurchaseProductEntity,
+    (res: PurchaseProductEntity) => res.masterClassId,
   )
+  purchaseProduct: PurchaseProductEntity[];
+
+  @OneToMany(() => LikeEntity, (res: LikeEntity) => res.masterClassId, {})
+  like: LikeEntity[];
+
+  @OneToMany(() => CommentEntity, (res: CommentEntity) => res.masterClassId)
   comment: CommentEntity[];
 
   @Column({
@@ -95,10 +112,24 @@ export class MasterClassEntity {
 
   @Column({
     type: 'varchar',
-    name: 'modifier',
+    name: 'modifier_ru',
     nullable: true,
   })
-  modifier!: string;
+  modifierRu!: string;
+
+  @Column({
+    type: 'varchar',
+    name: 'modifier_en',
+    nullable: true,
+  })
+  modifierEn!: string;
+
+  @Column({
+    type: 'numeric',
+    name: 'price',
+    default: 0,
+  })
+  price!: number;
 
   @Column({
     type: 'int',
@@ -108,18 +139,26 @@ export class MasterClassEntity {
   discount!: number;
 
   @Column({
-    type: 'int',
-    name: 'type',
-    default: 0,
-  })
-  type: number;
-
-  @Column({
-    type: 'int',
-    name: 'like_count',
+    type: 'json',
+    name: 'article_ru',
     nullable: true,
   })
-  likeCount?: number;
+  articleRu: {
+    blocks: [];
+    time: number;
+    version: string;
+  };
+
+  @Column({
+    type: 'json',
+    name: 'article_en',
+    nullable: true,
+  })
+  articleEn: {
+    blocks: [];
+    time: number;
+    version: string;
+  };
 
   @Column({
     type: 'bool',

@@ -4,71 +4,104 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   OneToOne,
+  JoinColumn,
+  ManyToMany,
+  JoinTable,
+  CreateDateColumn,
 } from 'typeorm';
 import { CategoryEntity } from '../category/category.entity';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
-import { SizesEntity } from '../sizes/sizes.entity';
+import { ProductOptionEntity } from '../product-option/product-option.entity';
 import { LikeEntity } from '../like/like.entity';
 import { CommentEntity } from '../comment/comment.entity';
 import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
 import { RecommendationProductEntity } from '../recommendation-product/recommendation-product.entity';
 import { RecommendationEntity } from '../recommendation/recommendation.entity';
+import { generateVendorCode } from 'src/common/utils/vendor-coder';
 
 @Entity({ name: 'pattern_product' })
 export class PatternProductEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToMany(
-    () => CategoryEntity,
-    (category: CategoryEntity) => category.patternProductId,
-    { cascade: true },
-  )
+  @Column({
+    type: 'int',
+    name: 'type',
+    readonly: true,
+  })
+  type!: number;
+
+  @Column({
+    type: 'int',
+    name: 'option_type',
+    default: 0,
+  })
+  optionType?: number;
+
+  @Column({
+    type: 'varchar',
+    name: 'vendor_code',
+    unique: true,
+    nullable: true,
+  })
+  vendorCode: string;
+
+  @CreateDateColumn({
+    name: 'created_date',
+    readonly: true,
+  })
+  createdDate: Date;
+
+  static getVendorCode() {
+    return generateVendorCode();
+  }
+
+  @ManyToMany(() => CategoryEntity)
+  @JoinTable()
   categories: CategoryEntity[];
 
   @OneToMany(
     () => FileUploadEntity,
-    (file: FileUploadEntity) => file.patternProductId,
+    (res: FileUploadEntity) => res.patternProductId,
   )
   images: FileUploadEntity[];
 
-  @OneToMany(() => SizesEntity, (sizes: SizesEntity) => sizes.patternProductId)
-  sizes: SizesEntity[];
-
-  @OneToMany(() => LikeEntity, (like: LikeEntity) => like.patternProductId)
-  like: LikeEntity[];
-
   @OneToMany(
-    () => CommentEntity,
-    (comment: CommentEntity) => comment.patternProductId,
+    () => ProductOptionEntity,
+    (res: ProductOptionEntity) => res.patternProductId,
+    { cascade: true, onUpdate: 'CASCADE', onDelete: 'CASCADE' },
   )
-  comment: CommentEntity[];
-
-  @OneToMany(
-    () => PurchaseProductEntity,
-    (purchaseProduct: PurchaseProductEntity) =>
-      purchaseProduct.patternProductId,
-  )
-  purchaseProduct: PurchaseProductEntity[];
-
-  @OneToMany(
-    () => RecommendationProductEntity,
-    (purchaseProduct: RecommendationProductEntity) =>
-      purchaseProduct.patternProductId,
-  )
-  recommendationProduct: RecommendationProductEntity[];
+  options: ProductOptionEntity[];
 
   @OneToOne(
     () => RecommendationEntity,
-    (recommendation: RecommendationEntity) => recommendation.patternProductId,
+    (res: RecommendationEntity) => res.patternProductId,
     { cascade: true },
   )
   recommendation: RecommendationEntity;
 
-  @OneToOne(
-    () => FileUploadEntity,
-    (res: FileUploadEntity) => res.filePdfPatternProductId,
+  @OneToMany(
+    () => RecommendationProductEntity,
+    (res: RecommendationProductEntity) => res.patternProductId,
   )
+  recommendationProduct: RecommendationProductEntity[];
+
+  @OneToMany(
+    () => PurchaseProductEntity,
+    (res: PurchaseProductEntity) => res.patternProductId,
+  )
+  purchaseProduct: PurchaseProductEntity[];
+
+  @OneToMany(() => LikeEntity, (res: LikeEntity) => res.patternProductId)
+  like: LikeEntity[];
+
+  @OneToMany(() => CommentEntity, (res: CommentEntity) => res.patternProductId)
+  comment: CommentEntity[];
+
+  @OneToOne(() => FileUploadEntity, (res: FileUploadEntity) => res.filePdf)
+  @JoinColumn({
+    name: 'file_pdf',
+  })
   filePdf: FileUploadEntity;
 
   @Column({
@@ -76,7 +109,6 @@ export class PatternProductEntity {
     name: 'title_ru',
   })
   titleRu!: string;
-
   @Column({
     type: 'varchar',
     name: 'title_en',
@@ -85,18 +117,31 @@ export class PatternProductEntity {
   titleEn!: string;
 
   @Column({
-    type: 'varchar',
-    name: 'description_ru',
-  })
-  descriptionRu!: string;
-
-  @Column({
     type: 'json',
     name: ' material_ru',
     nullable: true,
   })
-  materialRu: object;
+  materialRu: {
+    blocks: [];
+    time: number;
+    version: string;
+  };
+  @Column({
+    type: 'json',
+    name: ' material_en',
+    nullable: true,
+  })
+  materialEn: {
+    blocks: [];
+    time: number;
+    version: string;
+  };
 
+  @Column({
+    type: 'varchar',
+    name: 'description_ru',
+  })
+  descriptionRu!: string;
   @Column({
     type: 'varchar',
     name: 'description_en',
@@ -105,29 +150,52 @@ export class PatternProductEntity {
   descriptionEn!: string;
 
   @Column({
-    type: 'int',
-    name: 'discount',
-  })
-  discount!: number;
-
-  @Column({
     type: 'varchar',
-    name: 'modifier',
+    name: 'modifier_ru',
     nullable: true,
   })
-  modifier!: string;
-
+  modifierRu!: string;
   @Column({
-    type: 'int',
-    name: 'type',
+    type: 'varchar',
+    name: 'modifier_en',
+    nullable: true,
   })
-  type!: number;
+  modifierEn!: string;
 
   @Column({
     type: 'int',
     name: 'complexity',
+    default: 0,
   })
   complexity!: number;
+
+  @Column({
+    type: 'int',
+    name: 'discount',
+    nullable: true,
+  })
+  discount?: number;
+
+  @Column({
+    type: 'numeric',
+    name: 'price',
+    nullable: true,
+  })
+  price?: number;
+
+  @Column({
+    type: 'int',
+    name: 'count',
+    nullable: true,
+  })
+  count!: number;
+
+  @Column({
+    type: 'bool',
+    name: 'is_count',
+    default: false,
+  })
+  isCount?: boolean;
 
   @Column({
     type: 'bool',
@@ -135,18 +203,10 @@ export class PatternProductEntity {
     default: false,
   })
   pinned?: boolean;
-
   @Column({
     type: 'bool',
     name: 'deleted',
     default: false,
   })
   deleted?: boolean;
-
-  @Column({
-    type: 'int',
-    name: 'like_count',
-    nullable: true,
-  })
-  likeCount?: number;
 }

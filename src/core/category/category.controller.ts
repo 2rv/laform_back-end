@@ -17,7 +17,6 @@ import { AccountGuard } from '../user/guard/account.guard';
 import { Roles } from '../user/decorator/role.decorator';
 import { USER_ROLE } from '../user/enum/user-role.enum';
 import { CategoryEntity } from './category.entity';
-import { DeleteManyCategoriesDto } from './dto/delete-many-categories';
 
 @Controller('category')
 export class CategoryController {
@@ -33,8 +32,6 @@ export class CategoryController {
   }
 
   @Get('get/:id')
-  @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getOne(
     @Query('lang') query: string,
     @Param('id') id: string,
@@ -43,10 +40,11 @@ export class CategoryController {
   }
 
   @Get('get/')
-  @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async getAll(@Query('lang') query: string): Promise<CategoryEntity[]> {
-    return await this.categoryService.getAll(query);
+  async getAll(
+    @Query('lang') query: string,
+    @Query('type') type: string,
+  ): Promise<CategoryEntity[]> {
+    return await this.categoryService.getAll(query, type);
   }
 
   @Patch('update/:id')
@@ -61,12 +59,5 @@ export class CategoryController {
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async delete(@Param('id') id: string) {
     return await this.categoryService.delete(id);
-  }
-
-  @Delete('delete-many')
-  @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async deleteMany(@Body(new ValidationPipe()) body: DeleteManyCategoriesDto) {
-    return await this.categoryService.deleteMany(body);
   }
 }

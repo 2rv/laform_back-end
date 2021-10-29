@@ -1,6 +1,6 @@
 import { MailerModule } from '@nestjs-modules/mailer';
 
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { MailController } from './mail.controller';
 import { MailService } from './mail.service';
 import { MailConfig } from '../../config/mail.config';
@@ -10,9 +10,12 @@ import * as path from 'path';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { NotificationEntity } from '../notification/notification.entity';
+import { CacheModuleConfig } from 'src/config/cache.config';
+import { UserRepository } from '../user/user.repository';
 
 @Module({
   imports: [
+    CacheModule.register(CacheModuleConfig),
     MailerModule.forRoot({
       transport: {
         host: MailConfig.host,
@@ -33,7 +36,7 @@ import { NotificationEntity } from '../notification/notification.entity';
         },
       },
     }),
-    TypeOrmModule.forFeature([NotificationEntity]),
+    TypeOrmModule.forFeature([NotificationEntity, UserRepository]),
   ],
   providers: [MailService],
   controllers: [MailController],

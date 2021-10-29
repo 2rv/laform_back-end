@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
@@ -14,10 +14,13 @@ import { AuthRepository } from './auth.repository';
 import { JwtStrategy } from './jwt.strategy';
 import { GoogleStrategy } from './google.strategy';
 import { FacebookStrategy } from './facebook.strategy';
+
 import { AppleStrategy } from './apple.strategy';
+import { CacheModuleConfig } from 'src/config/cache.config';
 
 @Module({
   imports: [
+    CacheModule.register(CacheModuleConfig),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register(JwtConfig),
     TypeOrmModule.forFeature([UserEntity, UserRepository, AuthRepository]),

@@ -2,7 +2,10 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
+  CACHE_MANAGER,
+  Inject,
 } from '@nestjs/common';
+import { Cache } from 'cache-manager';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 
@@ -17,10 +20,12 @@ import { AccountDataDto } from './dto/account-data.dto';
 import { JwtPayload } from './interface/jwt-payload.interface';
 import { AuthRepository } from './auth.repository';
 import { UserInfoService } from '../user-info/user-info.service';
+import { AuthBasketForCodeDto } from './dto/auth-basket-code.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     @InjectRepository(AuthRepository)
     private authRepository: AuthRepository,
     private userRepository: UserRepository,
@@ -48,7 +53,7 @@ export class AuthService {
   }
 
   async createJwt(user: UserEntity): Promise<string> {
-    const { id, login, email, role, emailConfirmed } = user;
+    const { id, login, email, role, emailConfirmed, notificationEmail } = user;
 
     const payload: JwtPayload = {
       id,
@@ -56,6 +61,7 @@ export class AuthService {
       email,
       role,
       emailConfirmed,
+      notificationEmail,
     };
 
     return this.jwtService.sign(payload);
@@ -158,6 +164,7 @@ export class AuthService {
     return { accessToken };
   }
 
+
   async signUpWithApple(body: any): Promise<LoginInfoDto> {
     let accessToken;
     const findUserByEmail: UserEntity = await this.userRepository.findOne({
@@ -186,5 +193,18 @@ export class AuthService {
     }
 
     return { accessToken };
+  }
+  
+  async authVerifyByCode(body: AuthBasketForCodeDto): Promise<any> {
+    const codeResult: string = await this.cacheManager.get(
+      `AuthBasketEmailCodeFor${body.email}`,
+    );
+
+    if (codeResult === body.code) {
+      return true;
+    } else {
+      throw new BadRequestException(AUTH_ERROR.AUTH_CODE_IS_INCORRECT);
+    }
+
   }
 }

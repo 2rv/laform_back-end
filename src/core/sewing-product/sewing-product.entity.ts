@@ -4,80 +4,134 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   OneToOne,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  CreateDateColumn,
 } from 'typeorm';
 import { CategoryEntity } from '../category/category.entity';
-import { ColorsEntity } from '../colors/colors.entity';
 import { FileUploadEntity } from '../file-upload/file-upload.entity';
-import { SizesEntity } from '../sizes/sizes.entity';
+import { ProductOptionEntity } from '../product-option/product-option.entity';
 import { LikeEntity } from '../like/like.entity';
 import { CommentEntity } from '../comment/comment.entity';
 import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
 import { RecommendationProductEntity } from '../recommendation-product/recommendation-product.entity';
 import { RecommendationEntity } from '../recommendation/recommendation.entity';
+import { generateVendorCode } from 'src/common/utils/vendor-coder';
 
 @Entity({ name: 'sewing_product' })
 export class SewingProductEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToMany(
-    () => CategoryEntity,
-    (category: CategoryEntity) => category.sewingProductId,
-    { cascade: true },
-  )
+  @Column({
+    type: 'int',
+    name: 'type',
+    default: 3,
+    readonly: true,
+  })
+  type!: number;
+
+  @Column({
+    type: 'int',
+    name: 'option_type',
+    default: 0,
+  })
+  optionType?: number;
+
+  @Column({
+    type: 'varchar',
+    name: 'vendor_code',
+    unique: true,
+    nullable: true,
+  })
+  vendorCode: string;
+
+  @CreateDateColumn({
+    name: 'created_date',
+    readonly: true,
+  })
+  createdDate: Date;
+
+  static getVendorCode() {
+    return generateVendorCode();
+  }
+
+  @ManyToMany(() => CategoryEntity)
+  @JoinTable()
   categories: CategoryEntity[];
-
-  @OneToMany(() => SizesEntity, (sizes: SizesEntity) => sizes.sewingProductId)
-  sizes: SizesEntity[];
-
-  @OneToMany(
-    () => ColorsEntity,
-    (colors: ColorsEntity) => colors.sewingProductId,
-    { cascade: true },
-  )
-  colors: ColorsEntity[];
 
   @OneToMany(
     () => FileUploadEntity,
-    (file: FileUploadEntity) => file.sewingProductId,
+    (res: FileUploadEntity) => res.sewingProductId,
   )
   images: FileUploadEntity[];
 
-  @OneToMany(() => LikeEntity, (like: LikeEntity) => like.sewingProductId)
-  like: LikeEntity[];
-
   @OneToMany(
-    () => CommentEntity,
-    (comment: CommentEntity) => comment.sewingProductId,
+    () => ProductOptionEntity,
+    (res: ProductOptionEntity) => res.sewingProductId,
+    { cascade: true, onUpdate: 'CASCADE', onDelete: 'CASCADE' },
   )
-  comment: CommentEntity[];
-
-  @OneToMany(
-    () => PurchaseProductEntity,
-    (purchaseProduct: PurchaseProductEntity) => purchaseProduct.sewingProductId,
-  )
-  purchaseProduct: PurchaseProductEntity[];
-
-  @OneToMany(
-    () => RecommendationProductEntity,
-    (purchaseProduct: RecommendationProductEntity) =>
-      purchaseProduct.sewingProductId,
-  )
-  recommendationProduct: RecommendationProductEntity[];
+  options: ProductOptionEntity[];
 
   @OneToOne(
     () => RecommendationEntity,
-    (recommendation: RecommendationEntity) => recommendation.sewingProductId,
+    (res: RecommendationEntity) => res.sewingProductId,
     { cascade: true },
   )
   recommendation: RecommendationEntity;
+
+  @OneToMany(
+    () => RecommendationProductEntity,
+    (res: RecommendationProductEntity) => res.sewingProductId,
+  )
+  recommendationProduct: RecommendationProductEntity[];
+
+  @OneToMany(
+    () => PurchaseProductEntity,
+    (res: PurchaseProductEntity) => res.sewingProductId,
+  )
+  purchaseProduct: PurchaseProductEntity[];
+
+  @OneToMany(() => LikeEntity, (res: LikeEntity) => res.sewingProductId)
+  like: LikeEntity[];
+
+  @OneToMany(() => CommentEntity, (res: CommentEntity) => res.sewingProductId)
+  comment: CommentEntity[];
+
+  @Column({
+    type: 'int',
+    name: 'discount',
+    nullable: true,
+  })
+  discount?: number;
+
+  @Column({
+    type: 'numeric',
+    name: 'price',
+    nullable: true,
+  })
+  price?: number;
+
+  @Column({
+    type: 'int',
+    name: 'count',
+    nullable: true,
+  })
+  count!: number;
+
+  @Column({
+    type: 'numeric',
+    name: 'length',
+    nullable: true,
+  })
+  length!: number;
 
   @Column({
     type: 'varchar',
     name: 'title_ru',
   })
   titleRu!: string;
-
   @Column({
     type: 'varchar',
     name: 'title_en',
@@ -90,7 +144,6 @@ export class SewingProductEntity {
     name: 'description_ru',
   })
   descriptionRu!: string;
-
   @Column({
     type: 'varchar',
     name: 'description_en',
@@ -100,43 +153,39 @@ export class SewingProductEntity {
 
   @Column({
     type: 'varchar',
-    name: 'modifier',
+    name: 'modifier_ru',
     nullable: true,
   })
-  modifier!: string;
+  modifierRu!: string;
+  @Column({
+    type: 'varchar',
+    name: 'modifier_en',
+    nullable: true,
+  })
+  modifierEn!: string;
 
   @Column({
-    type: 'int',
-    name: 'type',
-    default: 3,
+    type: 'bool',
+    name: 'is_count',
+    default: false,
   })
-  type!: number;
-
+  isCount?: boolean;
   @Column({
-    type: 'int',
-    name: 'discount',
-    default: 0,
+    type: 'bool',
+    name: 'is_length',
+    default: false,
   })
-  discount!: number;
-
+  isLength?: boolean;
   @Column({
     type: 'bool',
     name: 'pinned',
     default: false,
   })
   pinned?: boolean;
-
   @Column({
     type: 'bool',
     name: 'deleted',
     default: false,
   })
   deleted?: boolean;
-
-  @Column({
-    type: 'int',
-    name: 'like_count',
-    nullable: true,
-  })
-  likeCount?: number;
 }

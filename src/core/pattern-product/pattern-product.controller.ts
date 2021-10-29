@@ -17,7 +17,6 @@ import { USER_ROLE } from '../user/enum/user-role.enum';
 import { PatternProductService } from './pattern-product.service';
 import { PatternProductGuard } from './guard/pattern-product.guard';
 import { LangValidationPipe } from 'src/common/guards/lang.guard';
-import { UpdatePatternProductDto } from './dto/update-pattern-product.dto';
 import { PatternProductDto } from './dto/pattern-product.dto';
 import { GetAccount } from '../user/decorator/get-account.decorator';
 import { UserEntity } from '../user/user.entity';
@@ -42,6 +41,7 @@ export class PatternProductController {
     @Query('by') by: any,
     @Query('where') where: string,
     @Query('type') type: string,
+    @Query('category') category: string,
   ) {
     return await this.patternProductService.getAll(
       query,
@@ -51,6 +51,7 @@ export class PatternProductController {
       by,
       where,
       type,
+      category,
     );
   }
   @Get('/auth/get/')
@@ -63,6 +64,7 @@ export class PatternProductController {
     @Query('by') by: any,
     @Query('where') where: string,
     @Query('type') type: string,
+    @Query('category') category: string,
     @GetAccount() user: UserEntity,
   ) {
     return await this.patternProductService.getAllAuth(
@@ -73,6 +75,7 @@ export class PatternProductController {
       by,
       where,
       type,
+      category,
       user.id,
     );
   }
@@ -112,7 +115,7 @@ export class PatternProductController {
   @Put('/update/:patternProductId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, PatternProductGuard)
-  async update(@Request() req, @Body() body: UpdatePatternProductDto) {
+  async update(@Request() req, @Body() body: PatternProductDto) {
     return await this.patternProductService.update(req.patternProductId, body);
   }
 
@@ -127,8 +130,15 @@ export class PatternProductController {
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getLiked(
     @Query(new LangValidationPipe()) query: string,
+    @Query('size') size: number,
+    @Query('page') page: number,
     @GetAccount() user: UserEntity,
   ) {
-    return await this.patternProductService.getLiked(user.id, query);
+    return await this.patternProductService.getLiked(
+      user.id,
+      query,
+      size,
+      page,
+    );
   }
 }

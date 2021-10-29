@@ -3,15 +3,18 @@ import { Injectable } from '@nestjs/common';
 import { PostDto } from './dto/post.dto';
 import { PostRepository } from './post.repository';
 import { FileUploadService } from '../file-upload/file-upload.service';
+import { RecommendationService } from '../recommendation/recommendation.service';
 
 @Injectable()
 export class PostService {
   constructor(
     private postRepository: PostRepository,
     private fileUploadService: FileUploadService,
+    private recommendationService: RecommendationService,
   ) {}
 
   async create(body: PostDto): Promise<PostEntity> {
+    body.vendorCode = PostEntity.getVendorCode();
     return await this.postRepository.save(body);
   }
 
@@ -22,7 +25,8 @@ export class PostService {
     sort: string,
     by: string,
     where: string,
-  ): Promise<PostEntity[]> {
+    category: string,
+  ): Promise<[PostEntity[], number]> {
     if (sort === 'title') {
       if (query === 'ru') {
         sort = 'post.titleRu';
@@ -31,12 +35,27 @@ export class PostService {
       }
     } else if (sort === 'date') {
       sort = 'post.createdDate';
+      by = 'ASC';
     } else sort = '';
 
     if (query === 'ru')
-      return await this.postRepository.findAllRu(size, page, sort, by, where);
+      return await this.postRepository.findAllRu(
+        size,
+        page,
+        sort,
+        by,
+        where,
+        category,
+      );
     if (query === 'en')
-      return await this.postRepository.findAllEn(size, page, sort, by, where);
+      return await this.postRepository.findAllEn(
+        size,
+        page,
+        sort,
+        by,
+        where,
+        category,
+      );
   }
   async getAllAuth(
     query: string,
@@ -45,8 +64,9 @@ export class PostService {
     sort: string,
     by: string,
     where: string,
+    category: string,
     userId: number,
-  ): Promise<PostEntity[]> {
+  ): Promise<[PostEntity[], number]> {
     if (sort === 'title') {
       if (query === 'ru') {
         sort = 'post.titleRu';
@@ -55,6 +75,7 @@ export class PostService {
       }
     } else if (sort === 'date') {
       sort = 'post.createdDate';
+      by = 'ASC';
     } else sort = '';
 
     if (query === 'ru')
@@ -64,6 +85,7 @@ export class PostService {
         sort,
         by,
         where,
+        category,
         userId,
       );
     if (query === 'en')
@@ -73,6 +95,7 @@ export class PostService {
         sort,
         by,
         where,
+        category,
         userId,
       );
   }
@@ -103,17 +126,34 @@ export class PostService {
       return await this.postRepository.findPinnedEnAuth(userId);
   }
 
-  async getLiked(userId: number, query: string): Promise<PostEntity[]> {
-    if (query === 'ru') return await this.postRepository.findLikedRu(userId);
-    if (query === 'en') return await this.postRepository.findLikedEn(userId);
+  async getLiked(
+    userId: number,
+    query: string,
+    size: number,
+    page: number,
+  ): Promise<[PostEntity[], number]> {
+    if (query === 'ru')
+      return await this.postRepository.findLikedRu(userId, size, page);
+    if (query === 'en')
+      return await this.postRepository.findLikedEn(userId, size, page);
+  }
+
+  async update(id: string, body: PostDto) {
+    const post: PostEntity = await this.postRepository.findOneOrFail(id, {
+      relations: ['image'],
+    });
+    if (body.image.id !== post.image.id) {
+      await this.fileUploadService.delete(post.image.id);
+    }
+    if (post.recommendation?.id) {
+      await this.recommendationService.delete(post.recommendation.id);
+    }
+    Object.assign(post, { ...body });
+    return await this.postRepository.save(post);
   }
 
   async delete(id: string) {
     const post = await this.postRepository.findOneOrFail(id);
-    await this.fileUploadService.deletePost(post.id);
     return await this.postRepository.delete(post.id);
-  }
-  async update(id: any, body: any) {
-    return await this.postRepository.update(id, body);
   }
 }

@@ -18,14 +18,13 @@ import { USER_ROLE } from '../user/enum/user-role.enum';
 import { SewingProductService } from './sewing-product.service';
 import { SewingProductGuard } from './guard/sewing-product.guard';
 import { LangValidationPipe } from 'src/common/guards/lang.guard';
-import { UpdateSewingProductDto } from './dto/update-sewing-product.dto';
 import { SewingProductDto } from './dto/sewing-product.dto';
 import { GetAccount } from '../user/decorator/get-account.decorator';
 import { UserEntity } from '../user/user.entity';
 
 @Controller('sewing-product')
 export class SewingProductController {
-  constructor(private readonly sewingProductService: SewingProductService) {}
+  constructor(private sewingProductService: SewingProductService) {}
 
   @Post('/create/')
   @Roles(USER_ROLE.ADMIN)
@@ -42,6 +41,7 @@ export class SewingProductController {
     @Query('page') page: number,
     @Query('by') by: any,
     @Query('where') where: string,
+    @Query('category') category: string,
   ) {
     return await this.sewingProductService.getAll(
       query,
@@ -50,6 +50,7 @@ export class SewingProductController {
       sort,
       by,
       where,
+      category,
     );
   }
   @Get('/auth/get/')
@@ -61,6 +62,7 @@ export class SewingProductController {
     @Query('page') page: number,
     @Query('by') by: any,
     @Query('where') where: string,
+    @Query('category') category: string,
     @GetAccount() user: UserEntity,
   ) {
     return await this.sewingProductService.getAllAuth(
@@ -70,6 +72,7 @@ export class SewingProductController {
       sort,
       by,
       where,
+      category,
       user.id,
     );
   }
@@ -113,21 +116,26 @@ export class SewingProductController {
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getLiked(
     @Query(new LangValidationPipe()) query: string,
+    @Query('size') size: number,
+    @Query('page') page: number,
     @GetAccount() user: UserEntity,
   ) {
-    return await this.sewingProductService.getLiked(user.id, query);
+    return await this.sewingProductService.getLiked(user.id, query, size, page);
   }
 
   @Put('/update/:sewingProductId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
-  async update(@Request() req, @Body() body: UpdateSewingProductDto) {
-    return await this.sewingProductService.update(req.sewingProductId, body);
+  async update(
+    @Param('sewingProductId') sewingProductId: string,
+    @Body() body: SewingProductDto,
+  ) {
+    return await this.sewingProductService.update(sewingProductId, body);
   }
   @Delete('/delete/:sewingProductId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
-  async delete(@Request() req) {
-    return await this.sewingProductService.delete(req.sewingProductId);
+  async delete(@Param('sewingProductId') sewingProductId: string) {
+    return await this.sewingProductService.delete(sewingProductId);
   }
 }

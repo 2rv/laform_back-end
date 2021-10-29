@@ -1,7 +1,6 @@
 import { FileUploadRepository } from './file-upload.repository';
 import { uploadFile } from './../../common/utils/file-upload';
 import { FILE_UPLOAD_ERROR } from './enum/file-upload-error.enum';
-import { Repository } from 'typeorm';
 import { FileUploadEntity } from './file-upload.entity';
 import {
   Injectable,
@@ -35,30 +34,6 @@ export class FileUploadService {
     return result;
   }
 
-  async getAllMasterClasses(id: string): Promise<FileUploadEntity[]> {
-    return await this.fileRepository.find({
-      where: {
-        masterClassId: id,
-      },
-    });
-  }
-
-  async getAllSewingProducts(id: string): Promise<FileUploadEntity[]> {
-    return await this.fileRepository.find({
-      where: {
-        sewingProductId: id,
-      },
-    });
-  }
-
-  async getAllPatternProducts(id): Promise<FileUploadEntity[]> {
-    return await this.fileRepository.find({
-      where: {
-        patternProductId: id,
-      },
-    });
-  }
-
   async getOne(id: string): Promise<FileUploadEntity> {
     try {
       return await this.fileRepository.findOne(id);
@@ -71,11 +46,11 @@ export class FileUploadService {
     return await this.fileRepository.find();
   }
 
-  async delete(id: string): Promise<void> {
+  async delete(id: string): Promise<any> {
     const result = this.fileRepository.findOne(id);
     if (!result) {
       throw new BadRequestException(FILE_UPLOAD_ERROR.FILE_NOT_FOUND);
-    } else await this.fileRepository.delete(id);
+    } else return await this.fileRepository.delete(id);
   }
 
   async deleteMany(body: DeleteManyFilesDto) {
@@ -86,18 +61,5 @@ export class FileUploadService {
     } else {
       return await this.fileRepository.delete(result);
     }
-  }
-
-  async deleteMasterClass(id) {
-    await this.fileRepository.delete({ masterClassId: id });
-  }
-  async deletePatternProduct(id) {
-    await this.fileRepository.delete({ patternProductId: id });
-  }
-  async deleteSewingGoods(id) {
-    await this.fileRepository.delete({ sewingProductId: id });
-  }
-  async deletePost(id) {
-    await this.fileRepository.delete({ postId: id });
   }
 }

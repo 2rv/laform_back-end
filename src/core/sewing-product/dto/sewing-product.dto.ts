@@ -10,49 +10,71 @@ import {
   ArrayMinSize,
   ArrayMaxSize,
   IsBoolean,
+  IsObject,
 } from 'class-validator';
 import { CategoryDto } from 'src/core/category/dto/category.dto';
-import { CreateColorDto } from 'src/core/colors/dto/create-color.dto';
 import { FileDto } from 'src/core/file-upload/dto/file-dto';
+import { ProductOptionDto } from 'src/core/product-option/dto/product-option.dto';
 import { CreateRecommendationDto } from 'src/core/recommendation/dto/create-recommendation.dto';
-import { CreateSizeDto } from 'src/core/sizes/dto/create-size.dto';
 
 export class SewingProductDto {
+  @IsOptional()
+  @IsBoolean()
+  pinned: boolean;
+
   @IsNotEmpty()
   @IsString()
   titleRu: string;
-
-  @IsNotEmpty()
-  @IsString()
-  descriptionRu: string;
-
   @IsOptional()
   @IsString()
   titleEn: string;
 
+  @IsNotEmpty()
+  @IsString()
+  descriptionRu: string;
   @IsOptional()
   @IsString()
   descriptionEn: string;
 
-  @ArrayNotEmpty()
-  @IsArray()
-  @ArrayMinSize(1)
-  @ArrayMaxSize(5)
-  categories: [CategoryDto];
+  @IsOptional()
+  @IsString()
+  modifierRu: string;
+  @IsOptional()
+  @IsString()
+  modifierEn: string;
 
-  @ArrayNotEmpty()
+  @IsOptional()
   @IsArray()
-  sizes: [CreateSizeDto];
+  categories: CategoryDto[];
 
-  @ArrayNotEmpty()
+  @IsOptional()
   @IsArray()
-  colors: [CreateColorDto];
+  options: ProductOptionDto[];
 
   @ArrayNotEmpty()
   @IsArray()
   @ArrayMinSize(1)
   @ArrayMaxSize(6)
-  images: [FileDto];
+  images: FileDto[];
+
+  @IsOptional()
+  @IsObject()
+  recommendation: CreateRecommendationDto;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  price: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  count: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  length: number;
 
   @IsOptional()
   @IsNumber()
@@ -61,19 +83,30 @@ export class SewingProductDto {
   discount: number;
 
   @IsOptional()
-  @IsString()
-  modifier: string;
-
-  @IsNotEmpty()
   @IsNumber()
   @Min(3)
   @Max(3)
   type: number;
 
   @IsOptional()
+  @IsNumber()
+  @Min(0)
+  @Max(3)
+  optionType: number;
+
+  @IsOptional()
+  @IsBoolean()
+  isCount: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  isLength: boolean;
+
+  @IsOptional()
   @IsBoolean()
   deleted: boolean;
 
   @IsOptional()
-  recommendation: CreateRecommendationDto;
+  @IsString()
+  vendorCode: string;
 }

@@ -5,7 +5,6 @@ import {
   IsBoolean,
   IsArray,
   ArrayMinSize,
-  ArrayMaxSize,
   IsObject,
   IsNumber,
   Min,
@@ -16,40 +15,6 @@ import { FileDto } from 'src/core/file-upload/dto/file-dto';
 import { CreateRecommendationDto } from 'src/core/recommendation/dto/create-recommendation.dto';
 
 export class PostDto {
-  @IsNotEmpty()
-  @IsString()
-  titleRu: string;
-
-  @IsOptional()
-  @IsString()
-  titleEn: string;
-
-  @IsOptional()
-  @IsString()
-  modifier: string;
-
-  @IsNotEmpty()
-  @IsObject()
-  image: FileDto;
-
-  @IsNotEmpty()
-  @IsArray()
-  @ArrayMinSize(1)
-  @ArrayMaxSize(5)
-  categories: [CategoryDto];
-
-  @IsNotEmpty()
-  @IsObject()
-  articleText: {
-    blocks: [];
-    time: number;
-    version: string;
-  };
-
-  @IsOptional()
-  @IsBoolean()
-  pinned: boolean;
-
   @IsOptional()
   @IsNumber()
   @Min(4)
@@ -57,5 +22,51 @@ export class PostDto {
   type: number;
 
   @IsOptional()
+  @IsBoolean()
+  pinned: boolean;
+
+  @IsNotEmpty()
+  @IsObject()
+  image: FileDto;
+
+  @IsOptional()
+  @IsArray()
+  categories: CategoryDto[];
+
+  @IsOptional()
+  @IsObject()
   recommendation: CreateRecommendationDto;
+
+  @IsNotEmpty()
+  @IsString()
+  titleRu: string;
+  @IsOptional()
+  @IsString()
+  titleEn: string;
+
+  @IsOptional()
+  @IsString()
+  modifierRu: string;
+  @IsOptional()
+  @IsString()
+  modifierEn: string;
+
+  @IsNotEmpty()
+  @IsObject()
+  articleRu: {
+    blocks: [];
+    time: number;
+    version: string;
+  };
+  @IsOptional()
+  @IsObject()
+  articleEn: {
+    blocks: [];
+    time: number;
+    version: string;
+  };
+
+  @IsOptional()
+  @IsString()
+  vendorCode: string;
 }

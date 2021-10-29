@@ -18,7 +18,6 @@ import { MasterClassService } from './master-class.service';
 import { MasterClassGuard } from './guard/master-class.guard';
 import { LangValidationPipe } from 'src/common/guards/lang.guard';
 import { MasterClassDto } from './dto/master-class.dto';
-import { UpdateMasterClassDto } from './dto/update-master-class.dto';
 import { GetAccount } from '../user/decorator/get-account.decorator';
 import { UserEntity } from '../user/user.entity';
 
@@ -41,6 +40,7 @@ export class MasterClassController {
     @Query('page') page: number,
     @Query('by') by: any,
     @Query('where') where: string,
+    @Query('category') category: string,
   ) {
     return await this.masterClassService.getAll(
       query,
@@ -49,6 +49,7 @@ export class MasterClassController {
       sort,
       by,
       where,
+      category,
     );
   }
 
@@ -61,6 +62,7 @@ export class MasterClassController {
     @Query('page') page: number,
     @Query('by') by: any,
     @Query('where') where: string,
+    @Query('category') category: string,
     @GetAccount() user: UserEntity,
   ) {
     return await this.masterClassService.getAllAuth(
@@ -70,6 +72,7 @@ export class MasterClassController {
       sort,
       by,
       where,
+      category,
       user.id,
     );
   }
@@ -81,6 +84,15 @@ export class MasterClassController {
     @Param('masterClassId') masterClassId: string,
   ) {
     return await this.masterClassService.getOne(masterClassId, query);
+  }
+
+  @Get('/get/for-update/:masterClassId')
+  @UseGuards(MasterClassGuard)
+  async getOneForUpdate(
+    @Query(new LangValidationPipe()) query,
+    @Param('masterClassId') masterClassId: string,
+  ) {
+    return await this.masterClassService.getOneForUpdate(masterClassId, query);
   }
 
   @Get('/auth/get/:masterClassId')
@@ -115,9 +127,11 @@ export class MasterClassController {
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getLiked(
     @Query(new LangValidationPipe()) query: string,
+    @Query('size') size: number,
+    @Query('page') page: number,
     @GetAccount() user: UserEntity,
   ) {
-    return await this.masterClassService.getLiked(user.id, query);
+    return await this.masterClassService.getLiked(user.id, query, size, page);
   }
 
   @Put('/update/:masterClassId')
@@ -125,7 +139,7 @@ export class MasterClassController {
   @UseGuards(AuthGuard('jwt'), AccountGuard, MasterClassGuard)
   async update(
     @Param('masterClassId') masterClassId: string,
-    @Body() body: UpdateMasterClassDto,
+    @Body() body: MasterClassDto,
   ) {
     return await this.masterClassService.update(masterClassId, body);
   }

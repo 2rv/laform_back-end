@@ -40,8 +40,17 @@ export class PostController {
     @Query('page') page: number,
     @Query('by') by: any,
     @Query('where') where: string,
+    @Query('category') category: string,
   ) {
-    return await this.postService.getAll(query, size, page, sort, by, where);
+    return await this.postService.getAll(
+      query,
+      size,
+      page,
+      sort,
+      by,
+      where,
+      category,
+    );
   }
   @Get('/auth/get/')
   @UseGuards(AuthGuard('jwt'), AccountGuard)
@@ -52,6 +61,7 @@ export class PostController {
     @Query('page') page: number,
     @Query('by') by: any,
     @Query('where') where: string,
+    @Query('category') category: string,
     @GetAccount() user: UserEntity,
   ) {
     return await this.postService.getAllAuth(
@@ -61,6 +71,7 @@ export class PostController {
       sort,
       by,
       where,
+      category,
       user.id,
     );
   }
@@ -100,15 +111,17 @@ export class PostController {
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getLiked(
     @Query(new LangValidationPipe()) query: string,
+    @Query('size') size: number,
+    @Query('page') page: number,
     @GetAccount() user: UserEntity,
   ) {
-    return await this.postService.getLiked(user.id, query);
+    return await this.postService.getLiked(user.id, query, size, page);
   }
 
   @Put('/update/:postId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard)
-  async update(@Param('postId') id: string, @Body() body: any) {
+  async update(@Param('postId') id: string, @Body() body: PostDto) {
     return await this.postService.update(id, body);
   }
 

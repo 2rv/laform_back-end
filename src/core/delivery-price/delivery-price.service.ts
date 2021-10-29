@@ -11,6 +11,10 @@ export class DeliveryPriceService {
     return await this.deliveryPriceRepository.find();
   }
 
+  async getOneForPurchase(id: string): Promise<DeliveryPriceEntity> {
+    return await this.deliveryPriceRepository.findOne(id);
+  }
+
   async create(body: CreateDeliveryPriceDto): Promise<void> {
     await this.deliveryPriceRepository.save(body);
   }

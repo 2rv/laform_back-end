@@ -20,6 +20,7 @@ import { AccountGuard } from '../user/guard/account.guard';
 import { USER_ROLE } from '../user/enum/user-role.enum';
 import { Roles } from '../user/decorator/role.decorator';
 import { UserEntity } from '../user/user.entity';
+import { UpdatePurchaseStatusDto } from './dto/update-purchase-status.dto';
 
 @Controller('purchase')
 export class PurchaseController {
@@ -40,11 +41,19 @@ export class PurchaseController {
   async saveForNotAuthUser(
     @Body(new ValidationPipe()) body: CreatePurchaseDto,
   ) {
-    return await this.purchaseService.save(
-      body,
-      undefined,
-      body.purchase.email,
+    const verified = await this.purchaseService.verifyUserByCodeAndEmail(
+      body.purchase,
     );
+
+    if (verified) {
+      return await this.purchaseService.save(
+        body,
+        undefined,
+        body.purchase.email,
+      );
+    } else {
+      return verified;
+    }
   }
 
   @Get('get/:purchaseId')
@@ -85,6 +94,19 @@ export class PurchaseController {
     @Query('page') page: number,
   ) {
     return await this.purchaseService.getAllForUser(size, page, user.id);
+  }
+
+  @Put('update-status/:purchaseId')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard, PurchaseGuard)
+  async updatePurchaseStatus(
+    @Body() body: UpdatePurchaseStatusDto,
+    @Request() req,
+  ) {
+    return await this.purchaseService.updatePurchaseStatus(
+      req.purchaseId,
+      body,
+    );
   }
 
   @Put('update/:purchaseId')

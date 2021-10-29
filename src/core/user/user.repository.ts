@@ -113,7 +113,7 @@ export class UserRepository extends Repository<UserEntity> {
       .getOne();
   }
 
-  async getAll() {
+  async getAll(size = 30, page = 1): Promise<[UserEntity[], number]> {
     return await this.createQueryBuilder('user')
       .select([
         'user.id',
@@ -123,12 +123,12 @@ export class UserRepository extends Repository<UserEntity> {
         'user.notificationEmail',
         'user.googleId',
         'user.facebookId',
+        'user.createDate',
       ])
-      .getMany();
-  }
-
-  async updateOne(id: number, body: any): Promise<any> {
-    return await this.update(id, body);
+      .orderBy('user.createDate', 'ASC')
+      .take(size)
+      .skip((page - 1) * size || 0)
+      .getManyAndCount();
   }
 
   async changePassword(
@@ -149,6 +149,7 @@ export class UserRepository extends Repository<UserEntity> {
   async changeEmail(user: UserEntity, email: string): Promise<void> {
     user.email = email;
     user.emailConfirmed = false;
+    user.notificationEmail = false;
     try {
       await user.save();
     } catch (err) {
@@ -162,6 +163,7 @@ export class UserRepository extends Repository<UserEntity> {
 
   async confirmEmailById(user: UserEntity): Promise<UserEntity> {
     user.emailConfirmed = true;
+    user.notificationEmail = true;
     try {
       await user.save();
       return user;
