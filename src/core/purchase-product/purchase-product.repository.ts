@@ -11,7 +11,7 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
       .leftJoin('purchase_product.purchase', 'purchase')
 
       .leftJoin('purchase_product.optionId', 'option')
-      .leftJoin('option.filePdf', 'option_filePdf')
+      .leftJoin('option.filesPdf', 'option_filesPdf')
 
       .leftJoin('purchase_product.masterClassId', 'master_class')
       .leftJoin('master_class.images', 'master_class_images')
@@ -20,7 +20,7 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
       .leftJoin('purchase_product.patternProductId', 'pattern_product')
       .leftJoin('pattern_product.images', 'pattern_product_images')
       .leftJoin('pattern_product.categories', 'pattern_product_categories')
-      .leftJoin('pattern_product.filePdf', 'pattern_product_filePdf')
+      .leftJoin('pattern_product.filesPdf', 'pattern_product_filesPdf')
 
       .leftJoin('purchase_product.sewingProductId', 'sewing_product')
       .leftJoin('sewing_product.images', 'sewing_product_images')
@@ -69,7 +69,7 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
         'pattern_product.price',
         'pattern_product_images',
         'pattern_product_categories',
-        'pattern_product_filePdf',
+        'pattern_product_filesPdf',
 
         'sewing_product.id',
         'sewing_product.optionType',
@@ -93,7 +93,7 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
         'option.size',
         'option.colorRu',
         'option.colorEn',
-        'option_filePdf',
+        'option_filesPdf',
       ])
 
       .where('purchase_product.id = :id', { id })
