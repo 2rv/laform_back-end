@@ -141,4 +141,17 @@ export class PatternProductController {
       page,
     );
   }
+
+  @Get('/get/for-update/:patternProductId')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard, PatternProductGuard)
+  async getOneForUpdate(
+    @Query(new LangValidationPipe()) query,
+    @Request() req,
+  ) {
+    return await this.patternProductService.getOneForUpdate(
+      req.patternProductId,
+      query,
+    );
+  }
 }

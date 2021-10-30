@@ -189,7 +189,11 @@ export class PatternProductService {
       return item;
     });
     const patternProduct: PatternProductEntity =
-      await this.patternProductRepository.findOneOrFail(id);
+      await this.patternProductRepository.findOneOrFail(id, {
+        relations: ['recommendation'],
+      });
+    console.log(body.options[0].filesPdf);
+
     if (patternProduct.recommendation?.id) {
       await this.recommendationService.delete(patternProduct.recommendation.id);
     }
@@ -294,5 +298,13 @@ export class PatternProductService {
         });
       }
     }
+  }
+
+  async getOneForUpdate(
+    id: string,
+    query: string,
+  ): Promise<PatternProductEntity> {
+    if (query === 'ru')
+      return await this.patternProductRepository.findOneForUpdate(id);
   }
 }

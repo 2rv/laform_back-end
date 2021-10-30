@@ -74,6 +74,10 @@ export class PatternProductDto {
   images: FileDto[];
 
   @IsOptional()
+  @IsArray()
+  filesPdf: FileDto[];
+
+  @IsOptional()
   @IsObject()
   recommendation: CreateRecommendationDto;
 
@@ -116,9 +120,6 @@ export class PatternProductDto {
   @IsOptional()
   @IsString()
   vendorCode: string;
-
-  @IsOptional()
-  filePdf: FileDto;
 
   @IsOptional()
   @IsBoolean()

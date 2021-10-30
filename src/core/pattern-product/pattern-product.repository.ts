@@ -72,7 +72,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         }),
       )
       .getManyAndCount();
-      // .getMany();
+    // .getMany();
   }
   async findAllEn(
     size: number = 30,
@@ -137,7 +137,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         }),
       )
       .getManyAndCount();
-      // .getMany();
+    // .getMany();
   }
   async findAllRuAuth(
     size: number = 30,
@@ -207,7 +207,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         }),
       )
       .getManyAndCount();
-      // .getMany();
+    // .getMany();
   }
   async findAllEnAuth(
     size: number = 30,
@@ -277,7 +277,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         }),
       )
       .getManyAndCount();
-      // .getMany();
+    // .getMany();
   }
 
   async findOneRu(id: string): Promise<PatternProductEntity> {
@@ -810,6 +810,65 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       ])
       .where('pattern_product.id = :id', { id })
       .where('options.id = :id', { id: option })
+      .getOne();
+  }
+
+  async findOneForUpdate(id: string): Promise<PatternProductEntity> {
+    return await this.createQueryBuilder('pattern_product')
+      .leftJoin('pattern_product.images', 'images')
+      .leftJoin('pattern_product.categories', 'categories')
+      .leftJoin('pattern_product.filesPdf', 'pattern_product_filesPdf')
+      .leftJoin('pattern_product.options', 'options')
+      .leftJoin('options.filesPdf', 'options_filesPdf')
+      .leftJoin('pattern_product.recommendation', 'recommendation')
+      .leftJoin('recommendation.recommendationProducts', 'recommendations')
+
+      .leftJoin('recommendations.masterClassId', 'rec_master_class')
+      .leftJoin('recommendations.postId', 'rec_post')
+      .leftJoin('recommendations.patternProductId', 'rec_pattern_product')
+      .leftJoin('recommendations.sewingProductId', 'rec_sewing_product')
+
+      .leftJoin('rec_master_class.images', 'rec_master_class_images')
+      .leftJoin('rec_pattern_product.images', 'rec_pattern_product_images')
+      .leftJoin('rec_sewing_product.images', 'rec_sewing_product_images')
+      .leftJoin('rec_post.image', 'rec_post_image')
+
+      .leftJoin('rec_pattern_product.options', 'rec_pattern_product_options')
+      .leftJoin('rec_sewing_product.options', 'rec_sewing_product_options')
+
+      .select([
+        'pattern_product.id',
+        'pattern_product.type',
+        'pattern_product.optionType',
+        'pattern_product.titleRu',
+        'pattern_product.modifierRu',
+        'pattern_product.descriptionRu',
+        'pattern_product.materialRu',
+        'pattern_product.complexity',
+        'pattern_product.pinned',
+        'pattern_product.vendorCode',
+        'pattern_product.price',
+        'pattern_product.discount',
+        'pattern_product.count',
+        'pattern_product.isCount',
+        'pattern_product_filesPdf',
+        'options_filesPdf',
+        'images',
+        'categories.id',
+        'categories.categoryNameRu',
+        'options.id',
+        'options.price',
+        'options.discount',
+        'options.size',
+        'options.count',
+        'options.vendorCode',
+        ...recommendationsRu,
+      ])
+      .where('recommendations_sewing_product.deleted = false')
+      .where('recommendations_master_class.deleted = false')
+      .where('recommendations_pattern_product.deleted = false')
+      .where('recommendations_post.deleted = false')
+      .where('pattern_product.id = :id', { id })
       .getOne();
   }
 }

@@ -87,7 +87,8 @@ export class MasterClassController {
   }
 
   @Get('/get/for-update/:masterClassId')
-  @UseGuards(MasterClassGuard)
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard, MasterClassGuard)
   async getOneForUpdate(
     @Query(new LangValidationPipe()) query,
     @Param('masterClassId') masterClassId: string,

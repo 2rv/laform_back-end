@@ -5,7 +5,6 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  OneToOne,
 } from 'typeorm';
 import { PatternProductEntity } from '../pattern-product/pattern-product.entity';
 import { SewingProductEntity } from '../sewing-product/sewing-product.entity';
@@ -73,11 +72,11 @@ export class ProductOptionEntity {
   })
   length!: number;
 
-  @OneToOne(() => FileUploadEntity, (res: FileUploadEntity) => res.filePdf)
-  @JoinColumn({
-    name: 'file_pdf',
-  })
-  filePdf: FileUploadEntity;
+  @OneToMany(
+    () => FileUploadEntity,
+    (res: FileUploadEntity) => res.optionFilePdf,
+  )
+  filesPdf: FileUploadEntity[];
 
   @ManyToOne(
     () => PatternProductEntity,
