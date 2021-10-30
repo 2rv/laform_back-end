@@ -192,7 +192,6 @@ export class PatternProductService {
       await this.patternProductRepository.findOneOrFail(id, {
         relations: ['recommendation'],
       });
-    console.log(body.options[0].filesPdf);
 
     if (patternProduct.recommendation?.id) {
       await this.recommendationService.delete(patternProduct.recommendation.id);
@@ -289,7 +288,6 @@ export class PatternProductService {
           select: ['id', 'count', 'isCount'],
         },
       );
-      console.log(result);
       if (!Boolean(result)) return;
       if (result.isCount && Number(result.count) >= Number(count)) {
         const newCount = Number(result.count) - Number(count);
