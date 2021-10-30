@@ -10,7 +10,7 @@ import {
 @EntityRepository(SewingProductEntity)
 export class SewingProductRepository extends Repository<SewingProductEntity> {
   async findAllRu(
-    size: number = 3,
+    size: number = 30,
     page: number = 1,
     sort: string,
     by: any = 'ASC',
@@ -140,7 +140,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .getManyAndCount();
   }
   async findAllRuAuth(
-    size: number = 3,
+    size: number = 30,
     page: number = 1,
     sort: string,
     by: any = 'ASC',

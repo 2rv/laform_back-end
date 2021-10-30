@@ -10,7 +10,7 @@ import {
 @EntityRepository(PatternProductEntity)
 export class PatternProductRepository extends Repository<PatternProductEntity> {
   async findAllRu(
-    size: number = 3,
+    size: number = 30,
     page: number = 1,
     sort: string,
     by: any = 'ASC',

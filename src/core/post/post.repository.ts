@@ -10,7 +10,7 @@ import {
 @EntityRepository(PostEntity)
 export class PostRepository extends Repository<PostEntity> {
   async findAllRu(
-    size: number = 3,
+    size: number = 30,
     page: number = 1,
     sort: string,
     by: any = 'ASC',
