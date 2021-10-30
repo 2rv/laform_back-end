@@ -10,13 +10,14 @@ import {
 @EntityRepository(PatternProductEntity)
 export class PatternProductRepository extends Repository<PatternProductEntity> {
   async findAllRu(
-    size: number = 30,
+    size: number = 3,
     page: number = 1,
     sort: string,
     by: any = 'ASC',
     where: string,
     type: string,
     category: string,
+    allProductsPage: string,
   ): Promise<[PatternProductEntity[], number]> {
     return await this.createQueryBuilder('pattern_product')
       .leftJoin('pattern_product.images', 'images')
@@ -36,6 +37,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'pattern_product.count',
         'pattern_product.isCount',
         'pattern_product.createdDate',
+        'pattern_product.deleted',
         'images',
         'categories.id',
         'categories.categoryNameRu',
@@ -49,7 +51,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .orderBy(sort, by)
       .take(size)
       .skip((page - 1) * size || 0)
-      .where('pattern_product.deleted = false')
+      .where(allProductsPage !== 'yes' && 'pattern_product.deleted = false')
       .andWhere(
         new Brackets((qb) => {
           if (where) {
@@ -67,7 +69,9 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
               category: category,
             });
           } else {
-            qb.where('pattern_product.deleted = false');
+            qb.where(
+              allProductsPage !== 'yes' && 'pattern_product.deleted = false',
+            );
           }
         }),
       )
@@ -82,6 +86,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
     where: string,
     type: string,
     category: string,
+    allProductsPage: string,
   ): Promise<[PatternProductEntity[], number]> {
     return await this.createQueryBuilder('pattern_product')
       .leftJoin('pattern_product.images', 'images')
@@ -101,6 +106,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'pattern_product.count',
         'pattern_product.isCount',
         'pattern_product.createdDate',
+        'pattern_product.deleted',
         'images',
         'categories.id',
         'categories.categoryNameEn',
@@ -114,7 +120,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .orderBy(sort, by)
       .take(size)
       .skip((page - 1) * size || 0)
-      .where('pattern_product.deleted = false')
+      .where(allProductsPage !== 'yes' && 'pattern_product.deleted = false')
       .andWhere(
         new Brackets((qb) => {
           if (where) {
@@ -132,7 +138,9 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
               category: category,
             });
           } else {
-            qb.where('pattern_product.deleted = false');
+            qb.where(
+              allProductsPage !== 'yes' && 'pattern_product.deleted = false',
+            );
           }
         }),
       )
@@ -147,6 +155,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
     where: string,
     type: string,
     category: string,
+    allProductsPage: string,
     userId: number,
   ): Promise<[PatternProductEntity[], number]> {
     return await this.createQueryBuilder('pattern_product')
@@ -170,6 +179,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'pattern_product.count',
         'pattern_product.isCount',
         'pattern_product.createdDate',
+        'pattern_product.deleted',
         'images',
         'categories.id',
         'categories.categoryNameRu',
@@ -184,7 +194,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .orderBy(sort, by)
       .take(size)
       .skip((page - 1) * size || 0)
-      .where('pattern_product.deleted = false')
+      .where(allProductsPage !== 'yes' && 'pattern_product.deleted = false')
       .andWhere(
         new Brackets((qb) => {
           if (where) {
@@ -202,7 +212,9 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
               category: category,
             });
           } else {
-            qb.where('pattern_product.deleted = false');
+            qb.where(
+              allProductsPage !== 'yes' && 'pattern_product.deleted = false',
+            );
           }
         }),
       )
@@ -217,6 +229,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
     where: string,
     type: string,
     category: string,
+    allProductsPage: string,
     userId: number,
   ): Promise<[PatternProductEntity[], number]> {
     return await this.createQueryBuilder('pattern_product')
@@ -240,6 +253,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'pattern_product.count',
         'pattern_product.isCount',
         'pattern_product.createdDate',
+        'pattern_product.deleted',
         'images',
         'categories.id',
         'categories.categoryNameEn',
@@ -254,7 +268,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .orderBy(sort, by)
       .take(size)
       .skip((page - 1) * size || 0)
-      .where('pattern_product.deleted = false')
+      .where(allProductsPage !== 'yes' && 'pattern_product.deleted = false')
       .andWhere(
         new Brackets((qb) => {
           if (where) {
@@ -272,7 +286,9 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
               category: category,
             });
           } else {
-            qb.where('pattern_product.deleted = false');
+            qb.where(
+              allProductsPage !== 'yes' && 'pattern_product.deleted = false',
+            );
           }
         }),
       )

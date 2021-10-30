@@ -5,6 +5,7 @@ import { SewingProductDto } from './dto/sewing-product.dto';
 import { ProductOptionEntity } from '../product-option/product-option.entity';
 import { ProductOptionService } from '../product-option/product-option.service';
 import { RecommendationService } from '../recommendation/recommendation.service';
+import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
 
 @Injectable()
 export class SewingProductService {
@@ -12,6 +13,7 @@ export class SewingProductService {
     private sewingProductRepository: SewingProductRepository,
     private productOptionService: ProductOptionService,
     private recommendationService: RecommendationService,
+    private purchaseProductRepository: PurchaseProductRepository,
   ) {}
 
   async create(body: SewingProductDto): Promise<SewingProductEntity> {
@@ -33,6 +35,7 @@ export class SewingProductService {
     by: string,
     where: string,
     category: string,
+    allProductsPage: string,
   ): Promise<[SewingProductEntity[], number]> {
     if (sort === 'title') {
       if (query === 'ru') {
@@ -53,6 +56,7 @@ export class SewingProductService {
         by,
         where,
         category,
+        allProductsPage,
       );
     if (query === 'en')
       return await this.sewingProductRepository.findAllEn(
@@ -62,6 +66,7 @@ export class SewingProductService {
         by,
         where,
         category,
+        allProductsPage,
       );
   }
   async getAllAuth(
@@ -72,6 +77,7 @@ export class SewingProductService {
     by: string,
     where: string,
     category: string,
+    allProductsPage: string,
     userId: number,
   ): Promise<[SewingProductEntity[], number]> {
     if (sort === 'title') {
@@ -93,6 +99,7 @@ export class SewingProductService {
         by,
         where,
         category,
+        allProductsPage,
         userId,
       );
     if (query === 'en')
@@ -103,6 +110,7 @@ export class SewingProductService {
         by,
         where,
         category,
+        allProductsPage,
         userId,
       );
   }
@@ -167,7 +175,15 @@ export class SewingProductService {
   }
   async delete(id: string) {
     const sewingProduct = await this.sewingProductRepository.findOneOrFail(id);
-    return await this.sewingProductRepository.delete(sewingProduct.id);
+    const wasPurchased = await this.purchaseProductRepository.findOne({
+      sewingProductId: sewingProduct,
+    });
+
+    if (Boolean(wasPurchased)) {
+      await this.sewingProductRepository.update({ id }, { deleted: true });
+    } else {
+      await this.sewingProductRepository.delete(id);
+    }
   }
   async getPriceAndDiscountAndCountAndLength(
     sewingProduct: SewingProductEntity,

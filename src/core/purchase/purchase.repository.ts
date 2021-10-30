@@ -22,7 +22,7 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
   }
 
   async getAllForUser(
-    size: number = 30,
+    size: number = 3,
     page: number = 1,
     userId,
   ): Promise<[PurchaseEntity[], number]> {

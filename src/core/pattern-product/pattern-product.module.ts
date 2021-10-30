@@ -5,12 +5,16 @@ import { PatternProductService } from './pattern-product.service';
 import { PatternProductRepository } from './pattern-product.repository';
 import { ProductOptionModule } from '../product-option/product-option.module';
 import { RecommendationModule } from '../recommendation/recommendation.module';
+import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
 
 @Module({
   imports: [
     ProductOptionModule,
     RecommendationModule,
-    TypeOrmModule.forFeature([PatternProductRepository]),
+    TypeOrmModule.forFeature([
+      PatternProductRepository,
+      PurchaseProductRepository,
+    ]),
   ],
   providers: [PatternProductService],
   exports: [PatternProductService],

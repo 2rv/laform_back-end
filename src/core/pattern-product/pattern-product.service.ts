@@ -5,6 +5,7 @@ import { PatternProductDto } from './dto/pattern-product.dto';
 import { ProductOptionEntity } from '../product-option/product-option.entity';
 import { ProductOptionService } from '../product-option/product-option.service';
 import { RecommendationService } from '../recommendation/recommendation.service';
+import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
 
 @Injectable()
 export class PatternProductService {
@@ -12,6 +13,7 @@ export class PatternProductService {
     private patternProductRepository: PatternProductRepository,
     private productOptionService: ProductOptionService,
     private recommendationService: RecommendationService,
+    private purchaseProductRepository: PurchaseProductRepository,
   ) {}
 
   async create(body: PatternProductDto): Promise<PatternProductEntity> {
@@ -34,6 +36,7 @@ export class PatternProductService {
     where: string,
     type: string,
     category: string,
+    allProductsPage: string,
   ): Promise<[PatternProductEntity[], number]> {
     if (sort === 'title') {
       if (query === 'ru') {
@@ -62,6 +65,7 @@ export class PatternProductService {
         where,
         type,
         category,
+        allProductsPage,
       );
     if (query === 'en')
       return await this.patternProductRepository.findAllEn(
@@ -72,6 +76,7 @@ export class PatternProductService {
         where,
         type,
         category,
+        allProductsPage,
       );
   }
   async getAllAuth(
@@ -83,6 +88,7 @@ export class PatternProductService {
     where: string,
     type: string,
     category: string,
+    allProductsPage: string,
     userId: number,
   ): Promise<[PatternProductEntity[], number]> {
     if (sort === 'title') {
@@ -112,6 +118,7 @@ export class PatternProductService {
         where,
         type,
         category,
+        allProductsPage,
         userId,
       );
     if (query === 'en')
@@ -123,6 +130,7 @@ export class PatternProductService {
         where,
         type,
         category,
+        allProductsPage,
         userId,
       );
   }
@@ -204,7 +212,15 @@ export class PatternProductService {
     const patternProduct = await this.patternProductRepository.findOneOrFail(
       id,
     );
-    return await this.patternProductRepository.delete(patternProduct.id);
+    const wasPurchased = await this.purchaseProductRepository.findOne({
+      patternProductId: patternProduct,
+    });
+
+    if (Boolean(wasPurchased)) {
+      await this.patternProductRepository.update({ id }, { deleted: true });
+    } else {
+      await this.patternProductRepository.delete(id);
+    }
   }
 
   async getPriceAndDiscount(

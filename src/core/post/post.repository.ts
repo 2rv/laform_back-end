@@ -10,12 +10,13 @@ import {
 @EntityRepository(PostEntity)
 export class PostRepository extends Repository<PostEntity> {
   async findAllRu(
-    size: number = 30,
+    size: number = 3,
     page: number = 1,
     sort: string,
     by: any = 'ASC',
     where: string,
     category: string,
+    allProductsPage: string,
   ): Promise<[PostEntity[], number]> {
     return await this.createQueryBuilder('post')
       .leftJoin('post.image', 'image')
@@ -28,6 +29,7 @@ export class PostRepository extends Repository<PostEntity> {
         'post.pinned',
         'post.createdDate',
         'post.vendorCode',
+        'post.deleted',
         'image',
         'categories.id',
         'categories.categoryNameRu',
@@ -35,7 +37,7 @@ export class PostRepository extends Repository<PostEntity> {
       .orderBy(sort, by)
       .take(size)
       .skip((page - 1) * size || 0)
-      .where('post.deleted = false')
+      .where(allProductsPage !== 'yes' && 'post.deleted = false')
       .andWhere(
         new Brackets((qb) => {
           if (where) {
@@ -49,7 +51,7 @@ export class PostRepository extends Repository<PostEntity> {
               category: category,
             });
           } else {
-            qb.where('post.deleted = false');
+            qb.where(allProductsPage !== 'yes' && 'post.deleted = false');
           }
         }),
       )
@@ -62,6 +64,7 @@ export class PostRepository extends Repository<PostEntity> {
     by: any = 'ASC',
     where: string,
     category: string,
+    allProductsPage: string,
   ): Promise<[PostEntity[], number]> {
     return await this.createQueryBuilder('post')
       .leftJoin('post.image', 'image')
@@ -74,6 +77,7 @@ export class PostRepository extends Repository<PostEntity> {
         'post.pinned',
         'post.createdDate',
         'post.vendorCode',
+        'post.deleted',
         'image',
         'categories.id',
         'categories.categoryNameEn',
@@ -81,7 +85,7 @@ export class PostRepository extends Repository<PostEntity> {
       .orderBy(sort, by)
       .take(size)
       .skip((page - 1) * size || 0)
-      .where('post.deleted = false')
+      .where(allProductsPage !== 'yes' && 'post.deleted = false')
       .andWhere(
         new Brackets((qb) => {
           if (where) {
@@ -95,7 +99,7 @@ export class PostRepository extends Repository<PostEntity> {
               category: category,
             });
           } else {
-            qb.where('post.deleted = false');
+            qb.where(allProductsPage !== 'yes' && 'post.deleted = false');
           }
         }),
       )
@@ -108,6 +112,7 @@ export class PostRepository extends Repository<PostEntity> {
     by: any = 'ASC',
     where: string,
     category: string,
+    allProductsPage: string,
     userId: number,
   ): Promise<[PostEntity[], number]> {
     return await this.createQueryBuilder('post')
@@ -122,6 +127,7 @@ export class PostRepository extends Repository<PostEntity> {
         'post.pinned',
         'post.createdDate',
         'post.vendorCode',
+        'post.deleted',
         'image',
         'categories.id',
         'categories.categoryNameRu',
@@ -130,7 +136,7 @@ export class PostRepository extends Repository<PostEntity> {
       .orderBy(sort, by)
       .take(size)
       .skip((page - 1) * size || 0)
-      .where('post.deleted = false')
+      .where(allProductsPage !== 'yes' && 'post.deleted = false')
       .andWhere(
         new Brackets((qb) => {
           if (where) {
@@ -144,7 +150,7 @@ export class PostRepository extends Repository<PostEntity> {
               category: category,
             });
           } else {
-            qb.where('post.deleted = false');
+            qb.where(allProductsPage !== 'yes' && 'post.deleted = false');
           }
         }),
       )
@@ -157,6 +163,7 @@ export class PostRepository extends Repository<PostEntity> {
     by: any = 'ASC',
     where: string,
     category: string,
+    allProductsPage: string,
     userId: number,
   ): Promise<[PostEntity[], number]> {
     return await this.createQueryBuilder('post')
@@ -171,6 +178,7 @@ export class PostRepository extends Repository<PostEntity> {
         'post.pinned',
         'post.createdDate',
         'post.vendorCode',
+        'post.deleted',
         'image',
         'categories.id',
         'categories.categoryNameEn',
@@ -179,7 +187,7 @@ export class PostRepository extends Repository<PostEntity> {
       .orderBy(sort, by)
       .take(size)
       .skip((page - 1) * size || 0)
-      .where('post.deleted = false')
+      .where(allProductsPage !== 'yes' && 'post.deleted = false')
       .andWhere(
         new Brackets((qb) => {
           if (where) {
@@ -193,7 +201,7 @@ export class PostRepository extends Repository<PostEntity> {
               category: category,
             });
           } else {
-            qb.where('post.deleted = false');
+            qb.where(allProductsPage !== 'yes' && 'post.deleted = false');
           }
         }),
       )

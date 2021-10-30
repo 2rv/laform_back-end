@@ -3,12 +3,14 @@ import { MasterClassRepository } from './master-class.repository';
 import { MasterClassEntity } from './master-class.entity';
 import { MasterClassDto } from './dto/master-class.dto';
 import { RecommendationService } from '../recommendation/recommendation.service';
+import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
 
 @Injectable()
 export class MasterClassService {
   constructor(
     private masterClassRepository: MasterClassRepository,
     private recommendationService: RecommendationService,
+    private purchaseProductRepository: PurchaseProductRepository,
   ) {}
 
   async save(body: MasterClassDto): Promise<MasterClassEntity> {
@@ -25,6 +27,7 @@ export class MasterClassService {
     by: string,
     where: string,
     category: string,
+    allProductsPage: string,
   ): Promise<[MasterClassEntity[], number]> {
     if (sort === 'title') {
       if (query === 'ru') {
@@ -44,6 +47,7 @@ export class MasterClassService {
         by,
         where,
         category,
+        allProductsPage,
       );
     if (query === 'en')
       return await this.masterClassRepository.findAllEn(
@@ -53,6 +57,7 @@ export class MasterClassService {
         by,
         where,
         category,
+        allProductsPage,
       );
   }
   async getAllAuth(
@@ -63,6 +68,7 @@ export class MasterClassService {
     by: string,
     where: string,
     category: string,
+    allProductsPage: string,
     userId: number,
   ): Promise<[MasterClassEntity[], number]> {
     if (sort === 'title') {
@@ -83,6 +89,7 @@ export class MasterClassService {
         by,
         where,
         category,
+        allProductsPage,
         userId,
       );
     if (query === 'en')
@@ -93,6 +100,7 @@ export class MasterClassService {
         by,
         where,
         category,
+        allProductsPage,
         userId,
       );
   }
@@ -158,7 +166,15 @@ export class MasterClassService {
 
   async delete(id: string) {
     const masterClass = await this.masterClassRepository.findOneOrFail(id);
-    return await this.masterClassRepository.delete(masterClass.id);
+    const wasPurchased = await this.purchaseProductRepository.findOne({
+      masterClassId: masterClass,
+    });
+
+    if (Boolean(wasPurchased)) {
+      await this.masterClassRepository.update({ id }, { deleted: true });
+    } else {
+      await this.masterClassRepository.delete(id);
+    }
   }
 
   async getPriceAndDiscount(
