@@ -448,15 +448,13 @@ export class PurchaseService {
 
   async update(id: any, body: any) {
     const result = await this.purchaseRepository.findOne({ id });
-    if (result) {
-      const getOrderProducts = await this.purchaseRepository.getAllForEmail(
-        body.id,
-      );
-      await this.mailService.sendInfoAboutOrderStatus(getOrderProducts);
-      await this.purchaseRepository.update(id, body);
-    } else {
+
+    if (!result) {
       throw new BadRequestException(PURCHASE_ERROR.PURCHASE_NOT_FOUND);
     }
+
+    await this.purchaseRepository.update(result.id, body);
+    await this.sendUpdatedPurchaseInfo(result.id);
   }
 
   async delete(id: string) {

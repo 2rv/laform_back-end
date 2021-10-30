@@ -67,15 +67,19 @@
 						<div>Количество: <b>1</b></div>
 						<div>Категория товара: <b>Электронная выкройка</b></div>
 						<div>Тип товара: <b>Электронный</b></div>
-						<div>Ссылка на товар:
+						<div>Ссылки на файлы: <div></div>
 					if product.optionId === null
-						<a href="#{product.patternProductId.filePdf.fileUrl}" style="color: #5F5B5D;">
-							<b>Ссылка</b>
-						</a>
+						each file in product.patternProductId.filesPdf
+							<a href="#{file.fileUrl}" style="color: #5F5B5D;">
+								<b>Ссылка</b>
+							</a>
+							<div></div>
 					else
-						<a href="#{product.optionId.filePdf.fileUrl}" style="color: #5F5B5D;">
-							<b>Ссылка</b>
-						</a>
+						each file in product.optionId.filesPdf
+							<a href="#{file.fileUrl}" style="color: #5F5B5D;">
+								<b>Ссылка</b>
+							</a>
+							<div></div>
 						</div>
 						<hr />
 					</div>
