@@ -293,7 +293,6 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         }),
       )
       .getManyAndCount();
-    // .getMany();
   }
 
   async findOneRu(id: string): Promise<PatternProductEntity> {
