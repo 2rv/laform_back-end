@@ -6,12 +6,17 @@ import { SewingProductRepository } from './sewing-product.repository';
 import { ProductOptionModule } from '../product-option/product-option.module';
 import { RecommendationModule } from '../recommendation/recommendation.module';
 import { SewingProductEntity } from './sewing-product.entity';
+import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
 
 @Module({
   imports: [
     ProductOptionModule,
     RecommendationModule,
-    TypeOrmModule.forFeature([SewingProductRepository, SewingProductEntity]),
+    TypeOrmModule.forFeature([
+      SewingProductRepository,
+      SewingProductEntity,
+      PurchaseProductRepository,
+    ]),
   ],
   providers: [SewingProductService],
   exports: [SewingProductService],
