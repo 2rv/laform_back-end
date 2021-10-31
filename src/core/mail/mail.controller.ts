@@ -35,16 +35,6 @@ export class MailController {
     return await this.mailService.sendPdf(user, body);
   }
 
-  @Post('/send-purchase-info')
-  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async sendPurchasedProductsInfo(
-    @GetUser() user: UserEntity,
-    @Body() body,
-  ): Promise<any> {
-    return await this.mailService.sendPurchasedProductsInfo(user, body);
-  }
-
   @Post('/send/verification-code')
   async sendVerificationCode(
     @Body(new ValidationPipe()) body: MailDto,

@@ -37,9 +37,7 @@ export class ProductOptionDto {
 
   @IsOptional()
   @IsArray()
-  @ArrayMinSize(1)
-  @ArrayMaxSize(1)
-  filePdf: FileDto;
+  filesPdf: FileDto[];
 
   @IsOptional()
   @IsString()

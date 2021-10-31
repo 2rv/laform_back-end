@@ -122,6 +122,7 @@ export class UserRepository extends Repository<UserEntity> {
         'user.emailConfirmed',
         'user.notificationEmail',
         'user.googleId',
+        'user.appleId',
         'user.facebookId',
         'user.createDate',
       ])

@@ -26,6 +26,7 @@ export class PostService {
     by: string,
     where: string,
     category: string,
+    allProductsPage: string,
   ): Promise<[PostEntity[], number]> {
     if (sort === 'title') {
       if (query === 'ru') {
@@ -46,6 +47,7 @@ export class PostService {
         by,
         where,
         category,
+        allProductsPage,
       );
     if (query === 'en')
       return await this.postRepository.findAllEn(
@@ -55,6 +57,7 @@ export class PostService {
         by,
         where,
         category,
+        allProductsPage,
       );
   }
   async getAllAuth(
@@ -65,6 +68,7 @@ export class PostService {
     by: string,
     where: string,
     category: string,
+    allProductsPage: string,
     userId: number,
   ): Promise<[PostEntity[], number]> {
     if (sort === 'title') {
@@ -86,6 +90,7 @@ export class PostService {
         by,
         where,
         category,
+        allProductsPage,
         userId,
       );
     if (query === 'en')
@@ -96,6 +101,7 @@ export class PostService {
         by,
         where,
         category,
+        allProductsPage,
         userId,
       );
   }

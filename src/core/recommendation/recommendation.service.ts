@@ -10,7 +10,6 @@ export class RecommendationService {
     const recommendations: RecommendationEntity =
       await this.recommendationRepository.findOneOrFail(id);
     Object.assign(recommendations, { ...body });
-    console.log(recommendations);
 
     return await this.recommendationRepository.save(recommendations);
   }

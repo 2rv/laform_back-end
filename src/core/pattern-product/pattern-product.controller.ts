@@ -42,6 +42,7 @@ export class PatternProductController {
     @Query('where') where: string,
     @Query('type') type: string,
     @Query('category') category: string,
+    @Query('allProductsPage') allProductsPage: string,
   ) {
     return await this.patternProductService.getAll(
       query,
@@ -52,6 +53,7 @@ export class PatternProductController {
       where,
       type,
       category,
+      allProductsPage,
     );
   }
   @Get('/auth/get/')
@@ -65,6 +67,7 @@ export class PatternProductController {
     @Query('where') where: string,
     @Query('type') type: string,
     @Query('category') category: string,
+    @Query('allProductsPage') allProductsPage: string,
     @GetAccount() user: UserEntity,
   ) {
     return await this.patternProductService.getAllAuth(
@@ -76,6 +79,7 @@ export class PatternProductController {
       where,
       type,
       category,
+      allProductsPage,
       user.id,
     );
   }
@@ -139,6 +143,19 @@ export class PatternProductController {
       query,
       size,
       page,
+    );
+  }
+
+  @Get('/get/for-update/:patternProductId')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard, PatternProductGuard)
+  async getOneForUpdate(
+    @Query(new LangValidationPipe()) query,
+    @Request() req,
+  ) {
+    return await this.patternProductService.getOneForUpdate(
+      req.patternProductId,
+      query,
     );
   }
 }

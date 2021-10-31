@@ -28,13 +28,6 @@ export class FileUploadEntity {
   @OneToMany(() => SliderEntity, (slider: SliderEntity) => slider.imageUrl)
   slider: SliderEntity[];
 
-  @OneToOne(
-    () => ProductOptionEntity,
-    (res: ProductOptionEntity) => res.filePdf,
-    { onDelete: 'CASCADE' },
-  )
-  filePdf: ProductOptionEntity;
-
   @OneToOne(() => PostEntity, (res: PostEntity) => res.image, {
     onDelete: 'CASCADE',
     onUpdate: 'SET NULL',
@@ -73,4 +66,24 @@ export class FileUploadEntity {
     name: 'pattern_product_id',
   })
   patternProductId: PatternProductEntity;
+
+  @ManyToOne(
+    () => PatternProductEntity,
+    (patternProduct: PatternProductEntity) => patternProduct.filesPdf,
+    { onDelete: 'CASCADE', onUpdate: 'CASCADE' },
+  )
+  @JoinColumn({
+    name: 'pattern_product_files_pdf',
+  })
+  productFilePdf: PatternProductEntity;
+
+  @ManyToOne(
+    () => ProductOptionEntity,
+    (res: ProductOptionEntity) => res.filesPdf,
+    { onDelete: 'CASCADE', onUpdate: 'CASCADE' },
+  )
+  @JoinColumn({
+    name: 'pattern_option_files_pdf',
+  })
+  optionFilePdf: ProductOptionEntity;
 }

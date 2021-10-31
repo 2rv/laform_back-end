@@ -27,7 +27,6 @@ export class PatternProductEntity {
   @Column({
     type: 'int',
     name: 'type',
-    readonly: true,
   })
   type!: number;
 
@@ -67,6 +66,12 @@ export class PatternProductEntity {
   images: FileUploadEntity[];
 
   @OneToMany(
+    () => FileUploadEntity,
+    (res: FileUploadEntity) => res.productFilePdf,
+  )
+  filesPdf: FileUploadEntity[];
+
+  @OneToMany(
     () => ProductOptionEntity,
     (res: ProductOptionEntity) => res.patternProductId,
     { cascade: true, onUpdate: 'CASCADE', onDelete: 'CASCADE' },
@@ -97,12 +102,6 @@ export class PatternProductEntity {
 
   @OneToMany(() => CommentEntity, (res: CommentEntity) => res.patternProductId)
   comment: CommentEntity[];
-
-  @OneToOne(() => FileUploadEntity, (res: FileUploadEntity) => res.filePdf)
-  @JoinColumn({
-    name: 'file_pdf',
-  })
-  filePdf: FileUploadEntity;
 
   @Column({
     type: 'varchar',

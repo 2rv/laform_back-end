@@ -105,7 +105,7 @@ export class AuthController {
   async appleAuthRedirect(@Req() req) {
     return { ok: 'ok' };
   }
-  
+
   @Post('/verify/code')
   async authVerifyByCode(@Body() body: AuthBasketForCodeDto): Promise<void> {
     return this.authService.authVerifyByCode(body);

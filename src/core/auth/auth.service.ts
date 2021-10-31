@@ -194,7 +194,7 @@ export class AuthService {
 
     return { accessToken };
   }
-  
+
   async authVerifyByCode(body: AuthBasketForCodeDto): Promise<any> {
     const codeResult: string = await this.cacheManager.get(
       `AuthBasketEmailCodeFor${body.email}`,
@@ -205,6 +205,5 @@ export class AuthService {
     } else {
       throw new BadRequestException(AUTH_ERROR.AUTH_CODE_IS_INCORRECT);
     }
-
   }
 }

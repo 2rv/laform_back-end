@@ -22,7 +22,7 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
   }
 
   async getAllForUser(
-    size: number = 30,
+    size: number = 3,
     page: number = 1,
     userId,
   ): Promise<[PurchaseEntity[], number]> {
@@ -41,14 +41,14 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
       .leftJoin('purchase_products.patternProductId', 'pattern_product')
       .leftJoin('pattern_product.images', 'p_p_images')
       .leftJoin('pattern_product.categories', 'p_p_categories')
-      .leftJoin('pattern_product.filePdf', 'p_p_file_pdf')
+      .leftJoin('pattern_product.filesPdf', 'p_p_file_pdf')
 
       .leftJoin('purchase_products.sewingProductId', 'sewing_product')
       .leftJoin('sewing_product.images', 's_p_images')
       .leftJoin('sewing_product.categories', 's_p_categories')
 
       .leftJoin('purchase_products.optionId', 'option')
-      .leftJoin('option.filePdf', 'option_file_pdf')
+      .leftJoin('option.filesPdf', 'option_file_pdf')
 
       .select([
         'purchase.id',
@@ -131,14 +131,14 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
       .leftJoin('purchase_products.patternProductId', 'pattern_product')
       .leftJoin('pattern_product.images', 'p_p_images')
       .leftJoin('pattern_product.categories', 'p_p_categories')
-      .leftJoin('pattern_product.filePdf', 'p_p_file_pdf')
+      .leftJoin('pattern_product.filesPdf', 'p_p_file_pdf')
 
       .leftJoin('purchase_products.sewingProductId', 'sewing_product')
       .leftJoin('sewing_product.images', 's_p_images')
       .leftJoin('sewing_product.categories', 's_p_categories')
 
       .leftJoin('purchase_products.optionId', 'option')
-      .leftJoin('option.filePdf', 'option_file_pdf')
+      .leftJoin('option.filesPdf', 'option_file_pdf')
 
       .select([
         'purchase.id',
@@ -226,14 +226,14 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
       .leftJoin('purchase_products.patternProductId', 'pattern_product')
       .leftJoin('pattern_product.images', 'p_p_images')
       .leftJoin('pattern_product.categories', 'p_p_categories')
-      .leftJoin('pattern_product.filePdf', 'p_p_file_pdf')
+      .leftJoin('pattern_product.filesPdf', 'p_p_file_pdf')
 
       .leftJoin('purchase_products.sewingProductId', 'sewing_product')
       .leftJoin('sewing_product.images', 's_p_images')
       .leftJoin('sewing_product.categories', 's_p_categories')
 
       .leftJoin('purchase_products.optionId', 'option')
-      .leftJoin('option.filePdf', 'option_file_pdf')
+      .leftJoin('option.filesPdf', 'option_file_pdf')
 
       .select([
         'purchase.id',

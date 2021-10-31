@@ -81,14 +81,12 @@ export class MailService {
       .sendMail({
         to: user.email,
         subject: 'La`forme Patterns, скачивание pdf товара',
-        html: `<p style="font-size: 20px;">PDF версия товара - <b>${body.productName}</b></p>`,
-        attachments: [
-          {
-            filename: `${body.productName}.pdf`,
-            path: body.productPdfUrl,
-            contentType: 'application/pdf',
-          },
-        ],
+        html: `<p style="font-size: 20px;">PDF версии товара - <b>${body.productName}</b></p>`,
+        attachments: body.filesPdf.map((file) => ({
+          filename: file.fileUrl.split('.com/')[1],
+          path: file.fileUrl,
+          contentType: 'application/pdf',
+        })),
       })
       .catch((e) => {
         console.log(e);
@@ -154,47 +152,6 @@ export class MailService {
           orderNumber: body.orderNumber,
           orderStatus: PURCHASE_STATUS_INFO[body.orderStatus || 0],
           orderStatusNum: body.orderStatus || 0,
-        },
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
-
-  async sendInfoAboutOrderStatus(orderProducts: PurchaseEntity) {
-    return await this.mailerService
-      .sendMail({
-        to: orderProducts.email,
-        subject: `Статус заказа ${orderProducts.orderNumber} изменен`,
-        template: path.join(
-          path.resolve(),
-          'src/templates/info-about-order-status.pug',
-        ),
-        context: {
-          fullName: orderProducts.fullName,
-          purchasedProducts: orderProducts.purchaseProducts,
-          status: orderProducts.orderStatus,
-        },
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
-  async sendPurchasedProductsInfo(user: UserEntity, body: any) {
-    return await this.mailerService
-      .sendMail({
-        to: user.email,
-        subject: 'La`forme Patterns, информация о купленных продуктах',
-        template: path.join(
-          path.resolve(),
-          'src/templates/purchased-products-info.pug',
-        ),
-        context: {
-          address: body.purchase.city,
-          fullName: body.purchase.fullName,
-          phone: body.purchase.phoneNumber,
-          totalPrice: body.totalPrice,
-          purchasedProducts: body.purchaseProducts,
         },
       })
       .catch((e) => {
