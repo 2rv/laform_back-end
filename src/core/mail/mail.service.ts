@@ -81,14 +81,12 @@ export class MailService {
       .sendMail({
         to: user.email,
         subject: 'La`forme Patterns, скачивание pdf товара',
-        html: `<p style="font-size: 20px;">PDF версия товара - <b>${body.productName}</b></p>`,
-        attachments: [
-          {
-            filename: `${body.productName}.pdf`,
-            path: body.productPdfUrl,
-            contentType: 'application/pdf',
-          },
-        ],
+        html: `<p style="font-size: 20px;">PDF версии товара - <b>${body.productName}</b></p>`,
+        attachments: body.filesPdf.map((file) => ({
+          filename: file.fileUrl.split('.com/')[1],
+          path: file.fileUrl,
+          contentType: 'application/pdf',
+        })),
       })
       .catch((e) => {
         console.log(e);
