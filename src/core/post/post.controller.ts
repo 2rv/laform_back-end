@@ -129,6 +129,13 @@ export class PostController {
     return await this.postService.update(id, body);
   }
 
+  @Put('/update-pinned/:postId')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard)
+  async updatePinned(@Param('postId') id: string, @Body() body: any) {
+    return await this.postService.updatePinned(id, body);
+  }
+
   @Delete('/delete/:postId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard)

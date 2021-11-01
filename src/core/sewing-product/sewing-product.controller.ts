@@ -136,6 +136,16 @@ export class SewingProductController {
   ) {
     return await this.sewingProductService.update(sewingProductId, body);
   }
+
+  @Put('/update-pinned/:sewingProductId')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
+  async updatePinned(
+    @Param('sewingProductId') sewingProductId: string,
+    @Body() body: any,
+  ) {
+    return await this.sewingProductService.updatePinned(sewingProductId, body);
+  }
   @Delete('/delete/:sewingProductId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
