@@ -25,6 +25,7 @@ import { CommentModule } from './core/comment/comment.module';
 import { AboutUsModule } from './core/about-us/about-us.module';
 import { DeliveryPriceModule } from './core/delivery-price/delivery-price.module';
 import { FaqModule } from './core/faq/faq.module';
+import { StatisticsModule } from './core/statistics/statistics.module';
 
 @Module({
   providers: [],
@@ -54,6 +55,7 @@ import { FaqModule } from './core/faq/faq.module';
     AboutUsModule,
     DeliveryPriceModule,
     FaqModule,
+    StatisticsModule,
   ],
 })
 export class AppModule {}
