@@ -73,7 +73,6 @@ export class StatisticsService {
             item.createdDate.getMonth() +
             '.' +
             item.createdDate.getFullYear();
-          console.log(date);
 
           const res = acc.chartOrders.find((i) => i.date === date);
           if (res) {
