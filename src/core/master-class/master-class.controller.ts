@@ -148,6 +148,16 @@ export class MasterClassController {
   ) {
     return await this.masterClassService.update(masterClassId, body);
   }
+
+  @Put('/update-pinned/:masterClassId')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard, MasterClassGuard)
+  async updatePinned(
+    @Param('masterClassId') masterClassId: string,
+    @Body() body: any,
+  ) {
+    return await this.masterClassService.updatePinned(masterClassId, body);
+  }
   @Delete('/delete/:masterClassId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, MasterClassGuard)

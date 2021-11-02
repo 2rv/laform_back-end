@@ -158,6 +158,10 @@ export class PostService {
     return await this.postRepository.save(post);
   }
 
+  async updatePinned(id: string, body: any) {
+    await this.postRepository.update({ id }, body);
+  }
+
   async delete(id: string) {
     const post = await this.postRepository.findOneOrFail(id);
     return await this.postRepository.delete(post.id);

@@ -67,13 +67,7 @@ export class StatisticsService {
         acc.totalOrders += 1;
 
         item.purchaseProducts.forEach((item) => {
-          const date =
-            item.createdDate.getDate() +
-            '.' +
-            item.createdDate.getMonth() +
-            '.' +
-            item.createdDate.getFullYear();
-
+          const date = item.createdDate.toString();
           const res = acc.chartOrders.find((i) => i.date === date);
           if (res) {
             res.orders += item.totalCount ?? 1;

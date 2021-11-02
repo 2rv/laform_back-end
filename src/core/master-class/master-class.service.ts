@@ -164,6 +164,10 @@ export class MasterClassService {
     return await this.masterClassRepository.save(masterClass);
   }
 
+  async updatePinned(id: string, body: any) {
+    await this.masterClassRepository.update({ id }, body);
+  }
+
   async delete(id: string) {
     const masterClass = await this.masterClassRepository.findOneOrFail(id);
     const wasPurchased = await this.purchaseProductRepository.findOne({
