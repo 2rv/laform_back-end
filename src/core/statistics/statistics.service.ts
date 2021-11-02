@@ -67,12 +67,28 @@ export class StatisticsService {
         acc.totalOrders += 1;
 
         item.purchaseProducts.forEach((item) => {
-          const date = item.createdDate.toString();
-          const res = acc.chartOrders.find((i) => i.date === date);
+          const date = item.createdDate.getDate();
+          const res = acc.chartOrders.find((i) => i.indexDate === date);
           if (res) {
             res.orders += item.totalCount ?? 1;
+            res.price += getPrice(
+              item.totalPrice,
+              item.totalDiscount,
+              item.totalCount,
+              item.totalLength,
+            );
           } else {
-            acc.chartOrders.push({ date: date, orders: 1 });
+            acc.chartOrders.push({
+              indexDate: date,
+              date: item.createdDate,
+              orders: 1,
+              price: getPrice(
+                item.totalPrice,
+                item.totalDiscount,
+                item.totalCount,
+                item.totalLength,
+              ),
+            });
           }
           if (item.type === 0) {
             acc.masterClassPrice += getPrice(
