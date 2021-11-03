@@ -103,7 +103,7 @@ export class AuthController {
   @Post('/apple/redirect')
   @UseGuards(AuthGuard('apple'))
   async appleAuthRedirect(@Req() req, @Res() res) {
-    console.log(req);
+    console.log(req.user, req.user.idToken, req.user.accessToken);
 
     //return res.send(req);
     // const token = await this.authService.signUpWithApple(req.user);
