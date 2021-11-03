@@ -29,11 +29,6 @@ export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
     idToken,
     cb,
   ): Promise<any> {
-    const user = {
-      idToken: idToken,
-      profile: profile,
-      accessToken: accessToken,
-    };
     // const { name, email } = profile;
     // const user = {
     //   email: email,
@@ -41,7 +36,7 @@ export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
     //   idToken,
     //   id: profile.id,
     // };
-    console.log({ hui: user.idToken, pizda: user.accessToken });
-    cb(null, user);
+
+    cb(null, idToken);
   }
 }
