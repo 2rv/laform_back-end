@@ -36,6 +36,6 @@ export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
       accessToken,
       id: profile.id,
     };
-    cb(null, idToken);
+    cb(null, profile);
   }
 }
