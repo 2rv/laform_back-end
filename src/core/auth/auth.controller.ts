@@ -104,7 +104,11 @@ export class AuthController {
   @UseGuards(AuthGuard('apple'))
   async appleAuthRedirect(@Req() req, @Res() res) {
     console.log(req.user, req.user.idToken, req.user.accessToken);
-
+    return {
+      user: req.user,
+      idToken: req.user.idToken,
+      accessToken: req.user.accessToken,
+    };
     //return res.send(req);
     // const token = await this.authService.signUpWithApple(req.user);
     // const clientUrl = req.hostname.includes('localhost')
