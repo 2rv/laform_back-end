@@ -1,5 +1,5 @@
 import { PassportStrategy } from '@nestjs/passport';
-import { Profile, Strategy, VerifyCallback } from 'passport-apple';
+import { Profile, Strategy } from 'passport-apple';
 
 import { Injectable } from '@nestjs/common';
 import { AppleConfig } from 'src/config/apple.config';
@@ -25,9 +25,9 @@ export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
   async validate(
     accessToken: string,
     refreshToken: string,
-    profile: Profile,
+    profile,
     idToken,
-    done: VerifyCallback,
+    cb,
   ): Promise<any> {
     const user = {
       idToken: idToken,
@@ -41,6 +41,7 @@ export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
     //   idToken,
     //   id: profile.id,
     // };
-    done(null, user);
+    console.log({ hui: user.idToken, pizda: user.accessToken });
+    cb(null, user);
   }
 }
