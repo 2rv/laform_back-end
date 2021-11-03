@@ -29,9 +29,9 @@ export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
     idToken,
     cb,
   ): Promise<any> {
-    const { name, emails } = profile;
+    const { name, email } = profile;
     const user = {
-      email: emails[0].value,
+      email: email,
       accessToken,
       idToken,
       id: profile.id,
