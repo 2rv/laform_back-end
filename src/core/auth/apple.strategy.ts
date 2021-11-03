@@ -27,7 +27,7 @@ export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
     refreshToken: string,
     profile: Profile,
     idToken,
-    cb,
+    done: VerifyCallback,
   ): Promise<any> {
     // const { name, email } = profile;
     // const user = {
@@ -36,6 +36,6 @@ export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
     //   idToken,
     //   id: profile.id,
     // };
-    cb(null, profile);
+    done(null, profile);
   }
 }
