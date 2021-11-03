@@ -105,7 +105,7 @@ export class AuthController {
   async appleAuthRedirect(@Req() req, @Res() res) {
     console.log(req);
 
-    return res.send(req);
+    //return res.send(req);
     // const token = await this.authService.signUpWithApple(req.user);
     // const clientUrl = req.hostname.includes('localhost')
     //   ? `${req.protocol}://localhost:3000`
