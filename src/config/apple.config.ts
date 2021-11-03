@@ -1,6 +1,6 @@
 import * as config from 'config';
 
-const APPLE_CONFIG = config.get('GOOGLE');
+const APPLE_CONFIG = config.get('APPLE');
 
 export const AppleConfig = {
   clientID: APPLE_CONFIG.CLIENT_ID,
