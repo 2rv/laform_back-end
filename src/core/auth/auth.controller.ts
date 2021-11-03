@@ -100,10 +100,10 @@ export class AuthController {
     return { ok: 'ok' };
   }
 
-  @Post('/apple/redirect')
+  @Get('/apple/redirect')
   @UseGuards(AuthGuard('apple'))
   async appleAuthRedirect(@Req() req, @Res() res) {
-    return { ok: 'ok', res: res };
+    return { ok: 'ok' };
     const token = await this.authService.signUpWithApple(req.user);
     const clientUrl = req.hostname.includes('localhost')
       ? `${req.protocol}://localhost:3000`
