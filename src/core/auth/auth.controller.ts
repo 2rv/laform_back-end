@@ -102,7 +102,7 @@ export class AuthController {
   @UseGuards(AuthGuard('apple'))
   async appleAuthRedirect(@Req() req, @Res() res) {
     //console.log('huipizda', req.user, req.user.idToken, req.user.accessToken);
-    res.json(req.user);
+    res.json(req.idToken);
     // return {
     //   user: req.user,
     //   idToken: req.user.idToken,
