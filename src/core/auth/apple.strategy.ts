@@ -29,13 +29,13 @@ export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
     idToken,
     cb,
   ): Promise<any> {
-    const { name, email } = profile;
-    const user = {
-      email: email,
-      accessToken,
-      idToken,
-      id: profile.id,
-    };
-    cb(null, user);
+    // const { name, email } = profile;
+    // const user = {
+    //   email: email,
+    //   accessToken,
+    //   idToken,
+    //   id: profile.id,
+    // };
+    cb(null, profile);
   }
 }
