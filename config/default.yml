@@ -45,5 +45,10 @@ APPLE:
   TEAM_ID: '59862PVTZ2'
   CALLBACK_URL: 'https://laform-api.herokuapp.com/auth/apple/redirect'
 
+PAY_ANY_WAY:
+  MNT_ID: '72511945'
+  MNT_INTEGRITY_CODE: 'LF5492769db'
+  PAY_URL: 'https://payanyway.ru/assistant.htm?'
+
 CLIENT:
   URL: 'https://laform-client.herokuapp.com'
