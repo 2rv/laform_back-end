@@ -26,6 +26,9 @@ import { DeliveryPriceEntity } from 'src/core/delivery-price/delivery-price.enti
 import { ProductOptionEntity } from 'src/core/product-option/product-option.entity';
 import { FaqEntity } from 'src/core/faq/faq.entity';
 import { StatisticsEntity } from 'src/core/statistics/statistics.entity';
+import { PrivacyPolicyEntity } from 'src/core/privacy-policy/privacy-policy.entity';
+import { LegalInformationEntity } from 'src/core/legal-information/legal-information.entity';
+import { TermsOfUseEntity } from 'src/core/terms-of-use/terms-of-use.entity';
 
 const DATABASE_CONFIG = config.get('DATABASE');
 export const ApiEntities = [
@@ -53,6 +56,9 @@ export const ApiEntities = [
   DeliveryPriceEntity,
   FaqEntity,
   StatisticsEntity,
+  PrivacyPolicyEntity,
+  LegalInformationEntity,
+  TermsOfUseEntity,
 ];
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
