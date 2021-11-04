@@ -27,6 +27,7 @@ import { DeliveryPriceModule } from './core/delivery-price/delivery-price.module
 import { FaqModule } from './core/faq/faq.module';
 import { StatisticsModule } from './core/statistics/statistics.module';
 import { PrivacyPolicyModule } from './core/privacy-policy/privacy-policy.module';
+import { LegalInformationModule } from './core/legal-information/legal-information.module';
 
 @Module({
   providers: [],
@@ -58,6 +59,7 @@ import { PrivacyPolicyModule } from './core/privacy-policy/privacy-policy.module
     FaqModule,
     StatisticsModule,
     PrivacyPolicyModule,
+    LegalInformationModule,
   ],
 })
 export class AppModule {}
