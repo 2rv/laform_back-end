@@ -11,9 +11,7 @@ export class PrivacyPolicyService {
     return await this.privacyPolicyRepository.findOne({});
   }
 
-  async save(
-    body: CreateOrUpdatePrivacyPolicyDto,
-  ): Promise<PrivacyPolicyEntity> {
-    return await this.privacyPolicyRepository.createOrUpdate(body);
+  async save(body: CreateOrUpdatePrivacyPolicyDto): Promise<void> {
+    await this.privacyPolicyRepository.createOrUpdate(body);
   }
 }

@@ -11,9 +11,7 @@ export class LegalInformationService {
     return await this.legalInformationRepository.findOne({});
   }
 
-  async save(
-    body: CreateOrUpdateLegalInformationDto,
-  ): Promise<LegalInformationEntity> {
-    return await this.legalInformationRepository.createOrUpdate(body);
+  async save(body: CreateOrUpdateLegalInformationDto): Promise<void> {
+    await this.legalInformationRepository.createOrUpdate(body);
   }
 }
