@@ -26,6 +26,7 @@ import { AboutUsModule } from './core/about-us/about-us.module';
 import { DeliveryPriceModule } from './core/delivery-price/delivery-price.module';
 import { FaqModule } from './core/faq/faq.module';
 import { StatisticsModule } from './core/statistics/statistics.module';
+import { PrivacyPolicyModule } from './core/privacy-policy/privacy-policy.module';
 
 @Module({
   providers: [],
@@ -56,6 +57,7 @@ import { StatisticsModule } from './core/statistics/statistics.module';
     DeliveryPriceModule,
     FaqModule,
     StatisticsModule,
+    PrivacyPolicyModule,
   ],
 })
 export class AppModule {}
