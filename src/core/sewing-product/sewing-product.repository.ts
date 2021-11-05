@@ -309,6 +309,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'sewing_product.descriptionRu',
         'sewing_product.modifierRu',
         'sewing_product.discount',
+        'sewing_product.deleted',
         'sewing_product.price',
         'sewing_product.count',
         'sewing_product.isCount',
