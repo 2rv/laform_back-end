@@ -34,7 +34,7 @@ export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
       accessToken,
       idToken,
     };
-    console.dir(accessToken, idToken, profile, user);
+    console.log(accessToken, idToken, profile, user);
     cb(null, user);
   }
 }
