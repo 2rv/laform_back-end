@@ -833,4 +833,57 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .where('options.id = :id', { id: option })
       .getOne();
   }
+
+  async findOneForUpdate(id: string): Promise<SewingProductEntity> {
+    return await this.createQueryBuilder('sewing_product')
+      .leftJoin('sewing_product.images', 'images')
+      .leftJoin('sewing_product.categories', 'categories')
+      .leftJoin('sewing_product.options', 'options')
+      .leftJoin('sewing_product.recommendation', 'recommendation')
+      .leftJoin('recommendation.recommendationProducts', 'recommendations')
+
+      .leftJoin('recommendations.masterClassId', 'rec_master_class')
+      .leftJoin('recommendations.postId', 'rec_post')
+      .leftJoin('recommendations.patternProductId', 'rec_pattern_product')
+      .leftJoin('recommendations.sewingProductId', 'rec_sewing_product')
+
+      .leftJoin('rec_master_class.images', 'rec_master_class_images')
+      .leftJoin('rec_pattern_product.images', 'rec_pattern_product_images')
+      .leftJoin('rec_sewing_product.images', 'rec_sewing_product_images')
+      .leftJoin('rec_post.image', 'rec_post_image')
+
+      .leftJoin('rec_pattern_product.options', 'rec_pattern_product_options')
+      .leftJoin('rec_sewing_product.options', 'rec_sewing_product_options')
+
+      .select([
+        'sewing_product.id',
+        'sewing_product.createdDate',
+        'sewing_product.type',
+        'sewing_product.optionType',
+        'sewing_product.titleRu',
+        'sewing_product.descriptionRu',
+        'sewing_product.modifierRu',
+        'sewing_product.discount',
+        'sewing_product.deleted',
+        'sewing_product.price',
+        'sewing_product.count',
+        'sewing_product.isCount',
+        'sewing_product.length',
+        'sewing_product.isLength',
+        'sewing_product.vendorCode',
+        'images',
+        'categories',
+        'options.id',
+        'options.vendorCode',
+        'options.colorRu',
+        'options.size',
+        'options.price',
+        'options.discount',
+        'options.count',
+        'options.length',
+        ...recommendationsRu,
+      ])
+      .where('sewing_product.id = :id', { id })
+      .getOne();
+  }
 }

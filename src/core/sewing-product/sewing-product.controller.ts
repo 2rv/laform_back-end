@@ -152,4 +152,17 @@ export class SewingProductController {
   async delete(@Param('sewingProductId') sewingProductId: string) {
     return await this.sewingProductService.delete(sewingProductId);
   }
+
+  @Get('/get/for-update/:sewingProductId')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
+  async getOneForUpdate(
+    @Query(new LangValidationPipe()) query,
+    @Param('sewingProductId') sewingProductId: string,
+  ) {
+    return await this.sewingProductService.getOneForUpdate(
+      sewingProductId,
+      query,
+    );
+  }
 }

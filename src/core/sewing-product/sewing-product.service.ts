@@ -291,4 +291,12 @@ export class SewingProductService {
       }
     }
   }
+
+  async getOneForUpdate(
+    id: string,
+    query: string,
+  ): Promise<SewingProductEntity> {
+    if (query === 'ru')
+      return await this.sewingProductRepository.findOneForUpdate(id);
+  }
 }
