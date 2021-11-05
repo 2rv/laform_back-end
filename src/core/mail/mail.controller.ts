@@ -41,4 +41,9 @@ export class MailController {
   ): Promise<any> {
     return await this.mailService.sendVerificationCode(body);
   }
+
+  @Post('/send-feedback')
+  async sendFeedback(@Body() body): Promise<any> {
+    return await this.mailService.sendFeedback(body);
+  }
 }
