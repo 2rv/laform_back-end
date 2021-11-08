@@ -9,6 +9,7 @@ import { generateVendorCode } from 'src/common/utils/vendor-coder';
 import { MailDto } from './dto/mail.dto';
 import { PurchaseEntity } from '../purchase/purchase.entity';
 import { PURCHASE_STATUS_INFO } from '../purchase/enum/purchase.status';
+import { USER_ROLE } from '../user/enum/user-role.enum';
 
 @Injectable()
 export class MailService {
@@ -157,5 +158,27 @@ export class MailService {
       .catch((e) => {
         console.log(e);
       });
+  }
+
+  async sendFeedback(body: any) {
+    const recipients = await this.userRepository.find();
+    return recipients.map(async (recipient) => {
+      if (recipient.role === USER_ROLE.ADMIN) {
+        return await this.mailerService
+          .sendMail({
+            to: recipient.email,
+            subject: 'La`forme Patterns, Обратная связь',
+            template: path.join(path.resolve(), 'src/templates/feedback.pug'),
+            context: {
+              description: body.description,
+            },
+            attachments: body.images.map((image) => ({
+              filename: image.file.name,
+              path: image.fileUrl,
+            })),
+          })
+          .catch((e) => console.log(e));
+      }
+    });
   }
 }
