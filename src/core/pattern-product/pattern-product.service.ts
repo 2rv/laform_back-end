@@ -1,11 +1,12 @@
 import { PatternProductRepository } from './pattern-product.repository';
 import { PatternProductEntity } from './pattern-product.entity';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PatternProductDto } from './dto/pattern-product.dto';
 import { ProductOptionEntity } from '../product-option/product-option.entity';
 import { ProductOptionService } from '../product-option/product-option.service';
 import { RecommendationService } from '../recommendation/recommendation.service';
 import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
+import { PURCHASE_ERROR } from '../purchase/enum/purchase.enum';
 
 @Injectable()
 export class PatternProductService {
@@ -217,7 +218,7 @@ export class PatternProductService {
     });
 
     if (Boolean(wasPurchased)) {
-      await this.patternProductRepository.update({ id }, { deleted: true });
+      throw new BadRequestException(PURCHASE_ERROR.PRODUCT_WAS_PURCHASED);
     } else {
       await this.patternProductRepository.delete(id);
     }
