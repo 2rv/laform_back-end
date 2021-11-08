@@ -864,6 +864,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'pattern_product.count',
         'pattern_product.isCount',
         'pattern_product_filesPdf',
+        'pattern_product.deleted',
         'options_filesPdf',
         'images',
         'categories.id',

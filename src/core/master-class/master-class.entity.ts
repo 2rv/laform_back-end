@@ -89,7 +89,6 @@ export class MasterClassEntity {
     name: 'title_ru',
   })
   titleRu!: string;
-
   @Column({
     type: 'varchar',
     name: 'title_en',
@@ -102,13 +101,33 @@ export class MasterClassEntity {
     name: 'description_ru',
   })
   descriptionRu!: string;
-
   @Column({
     type: 'varchar',
     name: 'description_en',
     nullable: true,
   })
   descriptionEn: string;
+
+  @Column({
+    type: 'json',
+    name: ' material_ru',
+    nullable: true,
+  })
+  materialRu: {
+    blocks: [];
+    time: number;
+    version: string;
+  };
+  @Column({
+    type: 'json',
+    name: ' material_en',
+    nullable: true,
+  })
+  materialEn: {
+    blocks: [];
+    time: number;
+    version: string;
+  };
 
   @Column({
     type: 'varchar',

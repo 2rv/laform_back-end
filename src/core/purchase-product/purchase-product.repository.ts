@@ -122,6 +122,8 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
         'master_class.titleEn',
         'master_class.modifierRu',
         'master_class.modifierEn',
+        'master_class.materialRu',
+        'master_class.materialEn',
         'master_class.articleRu',
         'master_class.articleEn',
         'master_class.descriptionRu',

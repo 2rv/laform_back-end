@@ -143,16 +143,19 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
       .leftJoin('master_class.categories', 'm_c_categories')
 
       .leftJoin('purchase_products.patternProductId', 'pattern_product')
+      .leftJoin('pattern_product.options', 'p_p_options')
       .leftJoin('pattern_product.images', 'p_p_images')
       .leftJoin('pattern_product.categories', 'p_p_categories')
-      .leftJoin('pattern_product.filesPdf', 'p_p_file_pdf')
+      .leftJoin('pattern_product.filesPdf', 'p_p_files_pdf')
+      .leftJoin('p_p_options.filesPdf', 'p_p_options_files_pdf')
 
       .leftJoin('purchase_products.sewingProductId', 'sewing_product')
+      .leftJoin('sewing_product.options', 's_p_options')
       .leftJoin('sewing_product.images', 's_p_images')
       .leftJoin('sewing_product.categories', 's_p_categories')
 
       .leftJoin('purchase_products.optionId', 'option')
-      .leftJoin('option.filesPdf', 'option_file_pdf')
+      .leftJoin('option.filesPdf', 'option_files_pdf')
 
       .select([
         'purchase.id',
@@ -172,6 +175,7 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
 
         'purchase_products.id',
         'purchase_products.createdDate',
+        'purchase_products.type',
         'purchase_products.totalCount',
         'purchase_products.totalLength',
         'purchase_products.totalDiscount',
@@ -180,7 +184,7 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
         'option.id',
         'option.vendorCode',
         'option.size',
-        'option_file_pdf',
+        'option_files_pdf',
         'option.colorRu',
         'option.colorEn',
         'option.count',
@@ -202,29 +206,55 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
 
         'pattern_product.id',
         'pattern_product.type',
+        'pattern_product.optionType',
         'pattern_product.titleRu',
         'pattern_product.titleEn',
         'pattern_product.price',
         'pattern_product.discount',
         'pattern_product.count',
-        'p_p_file_pdf',
+        'pattern_product.isCount',
+        'p_p_files_pdf',
         'p_p_images',
         'p_p_categories.id',
         'p_p_categories.categoryNameRu',
         'p_p_categories.categoryNameEn',
 
+        'p_p_options.id',
+        'p_p_options.vendorCode',
+        'p_p_options.size',
+        'p_p_options_files_pdf',
+        'p_p_options.colorRu',
+        'p_p_options.colorEn',
+        'p_p_options.count',
+        'p_p_options.length',
+        'p_p_options.price',
+        'p_p_options.discount',
+
         'sewing_product.id',
         'sewing_product.type',
+        'sewing_product.optionType',
         'sewing_product.titleRu',
         'sewing_product.titleEn',
         'sewing_product.price',
         'sewing_product.discount',
         'sewing_product.count',
+        'sewing_product.isCount',
         'sewing_product.length',
+        'sewing_product.isLength',
         's_p_images',
         's_p_categories.id',
         's_p_categories.categoryNameRu',
         's_p_categories.categoryNameEn',
+
+        's_p_options.id',
+        's_p_options.vendorCode',
+        's_p_options.size',
+        's_p_options.colorRu',
+        's_p_options.colorEn',
+        's_p_options.count',
+        's_p_options.length',
+        's_p_options.price',
+        's_p_options.discount',
       ])
       .where('purchase.id = :id', { id })
       .getOne();

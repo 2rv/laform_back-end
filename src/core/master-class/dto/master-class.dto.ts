@@ -44,6 +44,21 @@ export class MasterClassDto {
   @IsString()
   descriptionEn: string;
 
+  @IsNotEmpty()
+  @IsObject()
+  materialRu: {
+    blocks: [];
+    time: number;
+    version: string;
+  };
+  @IsOptional()
+  @IsObject()
+  materialEn: {
+    blocks: [];
+    time: number;
+    version: string;
+  };
+
   @IsOptional()
   @IsString()
   modifierRu: string;

@@ -113,6 +113,13 @@ export class CommentService {
     return await this.commentRepository.findAllUserComments(userId);
   }
 
+  async getAllUserCommentsForAdmin(
+    size: number,
+    page: number,
+  ): Promise<[CommentEntity[], number]> {
+    return await this.commentRepository.findAllUserCommentsForAdmin(size, page);
+  }
+
   async getOne(id: string) {
     const result = await this.commentRepository.findOneComment(id);
     const sub = await this.subCommentRepository.findAllToOneComment(id);

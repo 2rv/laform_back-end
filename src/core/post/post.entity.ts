@@ -99,6 +99,13 @@ export class PostEntity {
   modifierEn!: string;
 
   @Column({
+    type: 'varchar',
+    name: 'modifier_color',
+    nullable: true,
+  })
+  modifierColor: string;
+
+  @Column({
     type: 'json',
     name: 'article_ru',
   })

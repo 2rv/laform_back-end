@@ -11,7 +11,7 @@ export class AboutUsService {
     return await this.aboutUsRepository.findOne({});
   }
 
-  async save(body: CreateOrUpdateAboutUsDto): Promise<AboutUsEntity> {
-    return await this.aboutUsRepository.createOrUpdate(body);
+  async save(body: CreateOrUpdateAboutUsDto): Promise<void> {
+    await this.aboutUsRepository.createOrUpdate(body);
   }
 }

@@ -11,6 +11,7 @@ export class CategoryService {
   async create(body: CategoryDto): Promise<CategoryEntity> {
     const result = await this.categoryRepository.findOne({
       categoryNameRu: body.categoryNameRu,
+      type: body.type,
     });
 
     if (result) {

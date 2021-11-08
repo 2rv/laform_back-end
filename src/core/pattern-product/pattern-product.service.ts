@@ -223,6 +223,10 @@ export class PatternProductService {
     }
   }
 
+  async disable(id: string, deleted: boolean) {
+    await this.patternProductRepository.update({ id }, { deleted });
+  }
+
   async getPriceAndDiscount(
     patternProduct: PatternProductEntity,
     option: ProductOptionEntity,
@@ -239,8 +243,8 @@ export class PatternProductService {
           select: ['price', 'discount'],
         });
     return {
-      totalPrice: result.price || result.options[0].price || 0,
-      totalDiscount: result.discount || result.options[0].discount,
+      totalPrice: result.price || result.options?.[0].price || 0,
+      totalDiscount: result.discount || result.options?.[0].discount,
     };
   }
 

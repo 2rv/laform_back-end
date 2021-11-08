@@ -190,6 +190,11 @@ export class SewingProductService {
       await this.sewingProductRepository.delete(id);
     }
   }
+
+  async disable(id: string, deleted: boolean) {
+    await this.sewingProductRepository.update({ id }, { deleted });
+  }
+
   async getPriceAndDiscountAndCountAndLength(
     sewingProduct: SewingProductEntity,
     option: ProductOptionEntity,
@@ -290,5 +295,13 @@ export class SewingProductService {
         });
       }
     }
+  }
+
+  async getOneForUpdate(
+    id: string,
+    query: string,
+  ): Promise<SewingProductEntity> {
+    if (query === 'ru')
+      return await this.sewingProductRepository.findOneForUpdate(id);
   }
 }

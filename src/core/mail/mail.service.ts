@@ -9,6 +9,7 @@ import { generateVendorCode } from 'src/common/utils/vendor-coder';
 import { MailDto } from './dto/mail.dto';
 import { PurchaseEntity } from '../purchase/purchase.entity';
 import { PURCHASE_STATUS_INFO } from '../purchase/enum/purchase.status';
+import { USER_ROLE } from '../user/enum/user-role.enum';
 
 @Injectable()
 export class MailService {
@@ -98,7 +99,7 @@ export class MailService {
     return await this.mailerService
       .sendMail({
         to: body.email,
-        subject: 'Подтверждение почту для совершения покупок',
+        subject: 'Подтверждение почты для совершения покупок',
         text: `Подтвердите почту для совершения покупок`,
         template: path.join(
           path.resolve(),
@@ -152,6 +153,50 @@ export class MailService {
           orderNumber: body.orderNumber,
           orderStatus: PURCHASE_STATUS_INFO[body.orderStatus || 0],
           orderStatusNum: body.orderStatus || 0,
+        },
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
+  async sendFeedback(body: any) {
+    const recipients = await this.userRepository.find();
+    return recipients.map(async (recipient) => {
+      if (recipient.role === USER_ROLE.ADMIN) {
+        return await this.mailerService
+          .sendMail({
+            to: recipient.email,
+            subject: 'La`forme Patterns, Обратная связь',
+            template: path.join(path.resolve(), 'src/templates/feedback.pug'),
+            context: {
+              description: body.description,
+            },
+            attachments: body.images.map((image) => ({
+              filename: image.file.name,
+              path: image.fileUrl,
+            })),
+          })
+          .catch((e) => console.log(e));
+      }
+    });
+  }
+  async sendPasswordForNewCreatedUserAfterPurchase(data: {
+    email: string;
+    password: string;
+    login: string;
+  }) {
+    return await this.mailerService
+      .sendMail({
+        to: data.email,
+        subject: 'La`forme Patterns, данные для входа',
+        template: path.join(
+          path.resolve(),
+          'src/templates/data-new-created-user-after-purchase.pug',
+        ),
+        context: {
+          password: data.password,
+          login: data.login,
         },
       })
       .catch((e) => {
