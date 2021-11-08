@@ -99,7 +99,7 @@ export class MailService {
     return await this.mailerService
       .sendMail({
         to: body.email,
-        subject: 'Подтверждение почту для совершения покупок',
+        subject: 'Подтверждение почты для совершения покупок',
         text: `Подтвердите почту для совершения покупок`,
         template: path.join(
           path.resolve(),
@@ -180,5 +180,27 @@ export class MailService {
           .catch((e) => console.log(e));
       }
     });
+  }
+  async sendPasswordForNewCreatedUserAfterPurchase(data: {
+    email: string;
+    password: string;
+    login: string;
+  }) {
+    return await this.mailerService
+      .sendMail({
+        to: data.email,
+        subject: 'La`forme Patterns, данные для входа',
+        template: path.join(
+          path.resolve(),
+          'src/templates/data-new-created-user-after-purchase.pug',
+        ),
+        context: {
+          password: data.password,
+          login: data.login,
+        },
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }
 }
