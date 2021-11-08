@@ -136,6 +136,37 @@ export class MailService {
         console.log(e);
       });
   }
+  async sendAdminNewOrderInfo(body: PurchaseEntity) {
+    const recipients = await this.userRepository.find();
+    return recipients.map(async (recipient) => {
+      if (recipient.role === USER_ROLE.ADMIN) {
+        return await this.mailerService
+          .sendMail({
+            to: recipient.email,
+            subject: 'La`forme Patterns, оформлен новый заказ',
+            template: path.join(
+              path.resolve(),
+              'src/templates/purchase-info.pug',
+            ),
+            context: {
+              address: body.city,
+              fullName: body.fullName,
+              phone: body.phoneNumber,
+              price: Number(body.price) + (Number(body.shippingPrice) || 0),
+              shippingPrice: body.shippingPrice,
+              deliveryMethod: body.typeOfDelivery,
+              purchasedProducts: body.purchaseProducts,
+              orderNumber: body.orderNumber,
+              orderStatus: PURCHASE_STATUS_INFO[body.orderStatus || 0],
+              orderStatusNum: body.orderStatus || 0,
+            },
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      }
+    });
+  }
   async sendUpdatedPurchaseInfo(email: string, body: PurchaseEntity) {
     return await this.mailerService
       .sendMail({
