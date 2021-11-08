@@ -172,10 +172,6 @@ export class MailService {
             context: {
               description: body.description,
             },
-            attachments: body.images.map((image) => ({
-              filename: image.file.name,
-              path: image.fileUrl,
-            })),
           })
           .catch((e) => console.log(e));
       }
