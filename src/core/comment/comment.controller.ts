@@ -108,6 +108,16 @@ export class CommentController {
     return await this.commentService.getAllUserComments(user.id);
   }
 
+  @Get('get/for-admin')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getAllForAdmin(
+    @Query('size') size: number,
+    @Query('page') page: number,
+  ): Promise<[CommentEntity[], number]> {
+    return await this.commentService.getAllUserCommentsForAdmin(size, page);
+  }
+
   @Get('get/:id')
   async getOne(@Param('id') id: string): Promise<CommentEntity> {
     return await this.commentService.getOne(id);
