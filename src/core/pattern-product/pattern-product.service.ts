@@ -223,6 +223,10 @@ export class PatternProductService {
     }
   }
 
+  async disable(id: string, deleted: boolean) {
+    await this.patternProductRepository.update({ id }, { deleted });
+  }
+
   async getPriceAndDiscount(
     patternProduct: PatternProductEntity,
     option: ProductOptionEntity,

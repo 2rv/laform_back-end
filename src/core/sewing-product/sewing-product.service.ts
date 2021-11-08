@@ -190,6 +190,11 @@ export class SewingProductService {
       await this.sewingProductRepository.delete(id);
     }
   }
+
+  async disable(id: string, deleted: boolean) {
+    await this.sewingProductRepository.update({ id }, { deleted });
+  }
+
   async getPriceAndDiscountAndCountAndLength(
     sewingProduct: SewingProductEntity,
     option: ProductOptionEntity,

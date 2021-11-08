@@ -142,4 +142,14 @@ export class PostController {
   async delete(@Param('postId') id: string) {
     return await this.postService.delete(id);
   }
+
+  @Put('/disable/:postId')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard)
+  async disable(
+    @Param('postId') id: string,
+    @Body() body: { deleted: boolean },
+  ) {
+    return await this.postService.disable(id, body.deleted);
+  }
 }

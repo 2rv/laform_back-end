@@ -181,6 +181,10 @@ export class MasterClassService {
     }
   }
 
+  async disable(id: string, deleted: boolean) {
+    await this.masterClassRepository.update({ id }, { deleted });
+  }
+
   async getPriceAndDiscount(
     masterClass: MasterClassEntity,
   ): Promise<{ totalPrice: number; totalDiscount: number }> {
