@@ -239,8 +239,8 @@ export class PatternProductService {
           select: ['price', 'discount'],
         });
     return {
-      totalPrice: result.price || result.options[0].price || 0,
-      totalDiscount: result.discount || result.options[0].discount,
+      totalPrice: result.price || result.options?.[0].price || 0,
+      totalDiscount: result.discount || result.options?.[0].discount,
     };
   }
 

@@ -26,6 +26,7 @@ import { VerifyByCodeDto } from './dto/verify-by-code.dto';
 import { MailService } from '../mail/mail.service';
 import { PURCHASE_STATUS } from './enum/purchase.status';
 import { UpdatePurchaseStatusDto } from './dto/update-purchase-status.dto';
+import { UpdatePurchaseDto } from './dto/update-purchase.dto';
 
 interface ProductParamsInfoType {
   title?: string;
@@ -446,15 +447,25 @@ export class PurchaseService {
     await this.sendUpdatedPurchaseInfo(result.id);
   }
 
-  async update(id: any, body: any) {
-    const result = await this.purchaseRepository.findOne({ id });
-
+  async update(id: any, body: UpdatePurchaseDto) {
+    const result = await this.purchaseRepository.findOneOrFail({ id });
     if (!result) {
       throw new BadRequestException(PURCHASE_ERROR.PURCHASE_NOT_FOUND);
     }
-
-    await this.purchaseRepository.update(result.id, body);
-    await this.sendUpdatedPurchaseInfo(result.id);
+    const { products, price } = await this.verifyProducts(
+      body.purchaseProducts,
+    );
+    result.orderStatus = body.orderStatus;
+    result.email = body.email;
+    result.fullName = body.fullName;
+    result.city = body.city;
+    result.phoneNumber = body.phoneNumber;
+    result.comment = body.comment;
+    result.typeOfDelivery = body.typeOfDelivery;
+    result.price = price;
+    //@ts-ignore
+    result.purchaseProducts = products;
+    return await this.purchaseRepository.save(result);
   }
 
   async delete(id: string) {

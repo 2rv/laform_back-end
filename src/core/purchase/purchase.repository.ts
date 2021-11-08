@@ -175,6 +175,7 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
 
         'purchase_products.id',
         'purchase_products.createdDate',
+        'purchase_products.type',
         'purchase_products.totalCount',
         'purchase_products.totalLength',
         'purchase_products.totalDiscount',
