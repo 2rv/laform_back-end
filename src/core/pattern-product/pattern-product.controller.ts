@@ -130,6 +130,16 @@ export class PatternProductController {
     return await this.patternProductService.delete(req.patternProductId);
   }
 
+  @Put('/disable/:patternProductId')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard, PatternProductGuard)
+  async disable(@Request() req, @Body() body: { deleted: boolean }) {
+    return await this.patternProductService.disable(
+      req.patternProductId,
+      body.deleted,
+    );
+  }
+
   @Get('/liked/get/')
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getLiked(

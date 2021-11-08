@@ -164,4 +164,14 @@ export class MasterClassController {
   async delete(@Param('masterClassId') masterClassId: string) {
     return await this.masterClassService.delete(masterClassId);
   }
+
+  @Put('/disable/:masterClassId')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard, MasterClassGuard)
+  async disable(
+    @Param('masterClassId') masterClassId: string,
+    @Body() body: { deleted: boolean },
+  ) {
+    return await this.masterClassService.disable(masterClassId, body.deleted);
+  }
 }

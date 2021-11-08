@@ -152,6 +152,18 @@ export class SewingProductController {
   async delete(@Param('sewingProductId') sewingProductId: string) {
     return await this.sewingProductService.delete(sewingProductId);
   }
+  @Put('/disable/:sewingProductId')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
+  async disable(
+    @Param('sewingProductId') sewingProductId: string,
+    @Body() body: { deleted: boolean },
+  ) {
+    return await this.sewingProductService.disable(
+      sewingProductId,
+      body.deleted,
+    );
+  }
 
   @Get('/get/for-update/:sewingProductId')
   @Roles(USER_ROLE.ADMIN)
