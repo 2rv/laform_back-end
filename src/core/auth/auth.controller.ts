@@ -21,6 +21,7 @@ import { AccountDataDto } from './dto/account-data.dto';
 import { ClientConfig } from '../../config/client.config';
 import { AuthBasketForCodeDto } from './dto/auth-basket-code.dto';
 import { ViewAuthFilter } from '../user/guard/auth.filter';
+import * as util from 'util';
 
 @Controller('auth')
 export class AuthController {
@@ -92,7 +93,6 @@ export class AuthController {
       `${clientUrl}/social-auth-access?data=${token.accessToken}`,
     );
   }
-
   @Get('/apple')
   @UseGuards(AuthGuard('apple'))
   async appleAuth() {}
@@ -101,6 +101,7 @@ export class AuthController {
   @UseGuards(AuthGuard('apple'))
   async appleAuthRedirect(@Req() req, @Res() res) {
     console.log(req.user);
+    console.log(util.inspect(req.user.user));
     //res.json(req.user);
     // return {
     //   user: req.user,
