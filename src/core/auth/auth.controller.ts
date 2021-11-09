@@ -56,7 +56,7 @@ export class AuthController {
   }
 
   @Get('/facebook')
-  @UseGuards(AuthGuard('facebook'))
+  @UseGuards(AuthGuard('facebook'), TestGuard)
   async facebookLogin(@Req() req) {
     console.log('facebook');
     console.log(req);
