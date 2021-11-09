@@ -8,6 +8,7 @@ import {
   Req,
   Res,
   UsePipes,
+  UseFilters,
 } from '@nestjs/common';
 import { UserSignUpDto } from './dto/user-sign-up.dto';
 import { UserLoginDto } from './dto/user-login.dto';
@@ -20,6 +21,8 @@ import { LoginInfoDto } from './dto/login-info.dto';
 import { AccountDataDto } from './dto/account-data.dto';
 import { ClientConfig } from '../../config/client.config';
 import { AuthBasketForCodeDto } from './dto/auth-basket-code.dto';
+import { ViewAuthFilter } from '../user/guard/auth.filter';
+import * as util from 'util';
 
 @Controller('auth')
 export class AuthController {
@@ -61,30 +64,27 @@ export class AuthController {
 
   @Get('/facebook')
   @UseGuards(AuthGuard('facebook'))
-  async facebookLogin(): Promise<any> {
-    return { ok: 'ok' };
-  }
+  async facebookLogin() {}
 
   @Get('/facebook/redirect')
   @UseGuards(AuthGuard('facebook'))
-  async facebookLoginRedirect(@Req() req, @Res() res): Promise<any> {
+  @UseFilters(ViewAuthFilter)
+  async facebookLoginRedirect(@Req() req, @Res() res) {
     const clientUrl = req.hostname.includes('localhost')
       ? `${req.protocol}://localhost:3000`
       : ClientConfig.url;
 
-    if (res.status === 'connected') {
-      const token = await this.authService.signUpWithFacebook(req.user);
-      return res.redirect(
-        `${clientUrl}/social-auth-access?data=${token.accessToken}`,
-      );
-    } else {
-      return res.redirect(clientUrl);
-    }
+    const token = await this.authService.signUpWithFacebook(req.user);
+    return res.redirect(
+      `${clientUrl}/social-auth-access?data=${token.accessToken}`,
+    );
   }
 
   @Get('/google')
   @UseGuards(AuthGuard('google'))
-  async googleAuth() {}
+  async googleAuth() {
+    console.log('google');
+  }
 
   @Get('/google/redirect')
   @UseGuards(AuthGuard('google'))
@@ -98,16 +98,29 @@ export class AuthController {
       `${clientUrl}/social-auth-access?data=${token.accessToken}`,
     );
   }
-
   @Get('/apple')
   @UseGuards(AuthGuard('apple'))
-  async appleAuth() {
-    return { ok: 'ok' };
-  }
+  async appleAuth() {}
 
-  @Get('/apple/redirect')
+  @Post('/apple/redirect')
   @UseGuards(AuthGuard('apple'))
-  async appleAuthRedirect(@Req() req) {
-    return { ok: 'ok' };
+  async appleAuthRedirect(@Req() req, @Res() res) {
+    console.log(req.user);
+    console.log(util.inspect(req.user.user));
+    //res.json(req.user);
+    // return {
+    //   user: req.user,
+    //   idToken: req.user.idToken,
+    //   accessToken: req.user.accessToken,
+    // };
+    //return res.send(req);
+    // const token = await this.authService.signUpWithApple(req.user);
+    // const clientUrl = req.hostname.includes('localhost')
+    //   ? `${req.protocol}://localhost:3000`
+    //   : ClientConfig.url;
+
+    // return res.redirect(
+    //   `${clientUrl}/social-auth-access?data=${token.accessToken}`,
+    // );
   }
 }
