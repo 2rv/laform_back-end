@@ -60,7 +60,7 @@ export class PurchaseController {
   }
 
   @Get('get/:purchaseId')
-  @Roles(USER_ROLE.ADMIN)
+  @Roles(USER_ROLE.USER, USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, PurchaseGuard)
   async getOne(@Request() req) {
     return await this.purchaseService.getOne(req.purchaseId);

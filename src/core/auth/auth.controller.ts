@@ -7,6 +7,7 @@ import {
   Get,
   Req,
   Res,
+  UsePipes,
   UseFilters,
 } from '@nestjs/common';
 import { UserSignUpDto } from './dto/user-sign-up.dto';
@@ -27,17 +28,21 @@ import * as util from 'util';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @UsePipes(new ValidationPipe({ transform: true }))
+  @Post('/verify/code')
+  async authVerifyByCode(@Body() body: AuthBasketForCodeDto): Promise<void> {
+    return this.authService.authVerifyByCode(body);
+  }
+
+  @UsePipes(new ValidationPipe({ transform: true }))
   @Post('/signup')
-  async signUp(
-    @Body(ValidationPipe) userSignUpDto: UserSignUpDto,
-  ): Promise<LoginInfoDto> {
+  async signUp(@Body() userSignUpDto: UserSignUpDto): Promise<LoginInfoDto> {
     return this.authService.signUp(userSignUpDto);
   }
 
+  @UsePipes(new ValidationPipe({ transform: true }))
   @Post('/login')
-  logIn(
-    @Body(ValidationPipe) userLoginDto: UserLoginDto,
-  ): Promise<LoginInfoDto> {
+  logIn(@Body() userLoginDto: UserLoginDto): Promise<LoginInfoDto> {
     return this.authService.login(userLoginDto);
   }
 
@@ -117,10 +122,5 @@ export class AuthController {
     // return res.redirect(
     //   `${clientUrl}/social-auth-access?data=${token.accessToken}`,
     // );
-  }
-
-  @Post('/verify/code')
-  async authVerifyByCode(@Body() body: AuthBasketForCodeDto): Promise<void> {
-    return this.authService.authVerifyByCode(body);
   }
 }

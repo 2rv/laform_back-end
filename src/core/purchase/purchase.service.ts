@@ -393,6 +393,10 @@ export class PurchaseService {
       orderNumber: await PurchaseEntity.generateOrderNumber(newPurchase._NID),
     });
     await this.purchaseAwaitingPayment(newPurchase.id);
+    const purchaseData = await this.purchaseRepository.getAllForEmail(
+      newPurchase.id,
+    );
+    await this.mailService.sendAdminNewOrderInfo(purchaseData);
 
     return result;
   }
