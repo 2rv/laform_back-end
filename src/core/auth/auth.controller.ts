@@ -19,6 +19,7 @@ import { LoginInfoDto } from './dto/login-info.dto';
 import { AccountDataDto } from './dto/account-data.dto';
 import { ClientConfig } from '../../config/client.config';
 import { AuthBasketForCodeDto } from './dto/auth-basket-code.dto';
+import { TestGuard } from '../user/guard/test.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -63,10 +64,8 @@ export class AuthController {
   }
 
   @Get('/facebook/redirect')
-  @UseGuards(AuthGuard('facebook'))
+  @UseGuards(AuthGuard('facebook'), TestGuard)
   async facebookLoginRedirect(@Req() req, @Res() res) {
-    console.log('redirect');
-    console.log(req);
     const clientUrl = req.hostname.includes('localhost')
       ? `${req.protocol}://localhost:3000`
       : ClientConfig.url;
