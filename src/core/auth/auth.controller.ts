@@ -7,6 +7,7 @@ import {
   Get,
   Req,
   Res,
+  UseFilters,
 } from '@nestjs/common';
 import { UserSignUpDto } from './dto/user-sign-up.dto';
 import { UserLoginDto } from './dto/user-login.dto';
@@ -19,7 +20,7 @@ import { LoginInfoDto } from './dto/login-info.dto';
 import { AccountDataDto } from './dto/account-data.dto';
 import { ClientConfig } from '../../config/client.config';
 import { AuthBasketForCodeDto } from './dto/auth-basket-code.dto';
-import { TestGuard } from '../user/guard/test.guard';
+import { ViewAuthFilter } from '../user/guard/auth.filter';
 
 @Controller('auth')
 export class AuthController {
@@ -56,7 +57,7 @@ export class AuthController {
   }
 
   @Get('/facebook')
-  @UseGuards(AuthGuard('facebook'), TestGuard)
+  @UseGuards(AuthGuard('facebook'))
   async facebookLogin(@Req() req) {
     console.log('facebook');
     console.log(req);
@@ -64,7 +65,8 @@ export class AuthController {
   }
 
   @Get('/facebook/redirect')
-  @UseGuards(AuthGuard('facebook'), TestGuard)
+  @UseGuards(AuthGuard('facebook'))
+  @UseFilters(ViewAuthFilter)
   async facebookLoginRedirect(@Req() req, @Res() res) {
     const clientUrl = req.hostname.includes('localhost')
       ? `${req.protocol}://localhost:3000`
