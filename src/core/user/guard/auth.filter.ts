@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { UnauthorizedException } from '@nestjs/common';
+import { ClientConfig } from 'src/config/client.config';
 
 @Catch(UnauthorizedException)
 export class ViewAuthFilter implements ExceptionFilter {
@@ -14,6 +15,6 @@ export class ViewAuthFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const status = exception.getStatus();
 
-    response.status(status).redirect('/');
+    response.status(status).redirect(ClientConfig.url + '/login');
   }
 }
