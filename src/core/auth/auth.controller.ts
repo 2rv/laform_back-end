@@ -56,7 +56,9 @@ export class AuthController {
 
   @Get('/facebook')
   @UseGuards(AuthGuard('facebook'))
-  async facebookLogin(): Promise<any> {
+  async facebookLogin(@Req() req): Promise<any> {
+    console.log('face');
+    console.log(req);
     return { ok: 'ok' };
   }
 
