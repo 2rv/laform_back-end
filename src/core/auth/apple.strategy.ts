@@ -24,16 +24,9 @@ export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
 
   async validate(accessToken, refreshToken, profile, cb): Promise<any> {
     //const { id, name, email } = profile;
-    const {
-      id,
-      name: { firstName, lastName },
-      email,
-    } = profile;
+    const { id, email } = profile;
     const user = {
       email: email[0].value,
-      firstName: firstName,
-      lastName: lastName,
-      accessToken,
       id: id,
     };
     cb(null, user);

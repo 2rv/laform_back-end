@@ -65,7 +65,7 @@ export class AuthController {
   @Get('/facebook/redirect')
   @UseGuards(AuthGuard('facebook'))
   async facebookLoginRedirect(@Req() req, @Res() res) {
-    console.dir('redirect');
+    console.log('redirect');
     console.dir(req);
     const clientUrl = req.hostname.includes('localhost')
       ? `${req.protocol}://localhost:3000`
@@ -80,11 +80,14 @@ export class AuthController {
 
   @Get('/google')
   @UseGuards(AuthGuard('google'))
-  async googleAuth() {}
+  async googleAuth() {
+    console.log('google');
+  }
 
   @Get('/google/redirect')
   @UseGuards(AuthGuard('google'))
   async googleAuthRedirect(@Req() req, @Res() res) {
+    console.log('google-redirect');
     const token = await this.authService.signUpWithGoogle(req.user);
     const clientUrl = req.hostname.includes('localhost')
       ? `${req.protocol}://localhost:3000`
@@ -103,7 +106,7 @@ export class AuthController {
   @UseGuards(AuthGuard('apple'))
   async appleAuthRedirect(@Req() req, @Res() res) {
     //console.log('huipizda', req.user, req.user.idToken, req.user.accessToken);
-    console.dir(req);
+    console.dir(req, req.user);
     //res.json(req.user);
     // return {
     //   user: req.user,
