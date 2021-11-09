@@ -57,16 +57,16 @@ export class AuthController {
   @Get('/facebook')
   @UseGuards(AuthGuard('facebook'))
   async facebookLogin(@Req() req): Promise<any> {
-    console.log('face');
-    console.log(req);
+    console.dir('face');
+    console.dir(req);
     return { ok: 'ok' };
   }
 
   @Get('/facebook/redirect')
   @UseGuards(AuthGuard('facebook'))
   async facebookLoginRedirect(@Req() req, @Res() res) {
-    console.log('redirect');
-    console.log(req);
+    console.dir('redirect');
+    console.dir(req);
     const clientUrl = req.hostname.includes('localhost')
       ? `${req.protocol}://localhost:3000`
       : ClientConfig.url;
@@ -103,7 +103,7 @@ export class AuthController {
   @UseGuards(AuthGuard('apple'))
   async appleAuthRedirect(@Req() req, @Res() res) {
     //console.log('huipizda', req.user, req.user.idToken, req.user.accessToken);
-    console.log(req.user);
+    console.dir(req);
     //res.json(req.user);
     // return {
     //   user: req.user,
