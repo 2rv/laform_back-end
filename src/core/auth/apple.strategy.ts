@@ -26,7 +26,7 @@ export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
     accessToken,
     refreshToken,
     idToken,
-    profile: Profile,
+    profile,
     cb: VerifyCallback,
   ): Promise<any> {
     //const { id, name, email } = profile;
