@@ -100,7 +100,7 @@ export class AuthController {
   @Post('/apple/redirect')
   @UseGuards(AuthGuard('apple'))
   async appleAuthRedirect(@Req() req, @Res() res) {
-    console.log(req.user.user);
+    console.log(req.idToken);
     //res.json(req.user);
     // return {
     //   user: req.user,
