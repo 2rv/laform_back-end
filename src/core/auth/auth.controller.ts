@@ -63,6 +63,8 @@ export class AuthController {
   @Get('/facebook/redirect')
   @UseGuards(AuthGuard('facebook'))
   async facebookLoginRedirect(@Req() req, @Res() res) {
+    console.log('redirect');
+    console.log(req);
     const clientUrl = req.hostname.includes('localhost')
       ? `${req.protocol}://localhost:3000`
       : ClientConfig.url;
@@ -81,7 +83,6 @@ export class AuthController {
   @Get('/google/redirect')
   @UseGuards(AuthGuard('google'))
   async googleAuthRedirect(@Req() req, @Res() res) {
-    console.log(req);
     const token = await this.authService.signUpWithGoogle(req.user);
     const clientUrl = req.hostname.includes('localhost')
       ? `${req.protocol}://localhost:3000`
