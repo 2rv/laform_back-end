@@ -56,7 +56,9 @@ export class AuthController {
 
   @Get('/facebook')
   @UseGuards(AuthGuard('facebook'))
-  async facebookLogin(@Req() req): Promise<any> {
+  async facebookLogin(@Req() req) {
+    console.log('facebook');
+    console.log(req);
     return { ok: 'ok' };
   }
 
@@ -73,17 +75,6 @@ export class AuthController {
     return res.redirect(
       `${clientUrl}/social-auth-access?data=${token.accessToken}`,
     );
-  }
-
-  @Get(
-    '/auth/facebook/redirect?error=access_denied&error_code=200&error_description=Permissions+error&error_reason=user_denied',
-  )
-  @UseGuards(AuthGuard('facebook'))
-  async facebookFailRedirect(@Req() req, @Res() res) {
-    const clientUrl = req.hostname.includes('localhost')
-      ? `${req.protocol}://localhost:3000`
-      : ClientConfig.url;
-    return res.redirect(`${clientUrl}/`);
   }
 
   @Get('/google')

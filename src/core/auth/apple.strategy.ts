@@ -1,5 +1,5 @@
 import { PassportStrategy } from '@nestjs/passport';
-import { Profile, Strategy } from 'passport-apple';
+import { VerifyCallback, Profile, Strategy } from 'passport-apple';
 
 import { Injectable } from '@nestjs/common';
 import { AppleConfig } from 'src/config/apple.config';
@@ -27,8 +27,8 @@ export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
     accessToken,
     refreshToken,
     idToken,
-    profile,
-    cb,
+    profile: Profile,
+    done: VerifyCallback,
   ): Promise<any> {
     //const { id, name, email } = profile;
     const user = {
@@ -37,6 +37,6 @@ export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
       profile,
     };
 
-    cb(null, user);
+    done(null, user);
   }
 }
