@@ -66,7 +66,7 @@ export class AuthController {
     const clientUrl = req.hostname.includes('localhost')
       ? `${req.protocol}://localhost:3000`
       : ClientConfig.url;
-
+    console.log(res);
     if (res.status === 'connected') {
       const token = await this.authService.signUpWithFacebook(req.user);
       return res.redirect(
@@ -102,7 +102,7 @@ export class AuthController {
   @UseGuards(AuthGuard('apple'))
   async appleAuthRedirect(@Req() req, @Res() res) {
     //console.log('huipizda', req.user, req.user.idToken, req.user.accessToken);
-    console.log(req.user.user);
+    console.log(req.user);
     //res.json(req.user);
     // return {
     //   user: req.user,
