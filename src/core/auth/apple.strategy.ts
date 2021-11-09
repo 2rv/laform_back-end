@@ -13,7 +13,7 @@ export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
       teamID: AppleConfig.teamID,
       callbackURL: AppleConfig.callbackURL,
       keyID: AppleConfig.keyID,
-      privateKeyLocation: path.join(__dirname, '../../../config/AuthKey.p8'),
+      key: path.join(__dirname, '../../../config/AuthKey.p8'),
       //passReqToCallback: true,
       scope: ['email', 'name'],
       // clientID: '1042068275751-c6pbac6s5l3bjvo73amvl77f3ol2e8dj.apps.googleusercontent.com',
@@ -24,7 +24,18 @@ export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
 
   async validate(accessToken, refreshToken, profile, cb): Promise<any> {
     //const { id, name, email } = profile;
-
-    cb(null, profile);
+    const {
+      id,
+      name: { firstName, lastName },
+      email,
+    } = profile;
+    const user = {
+      email: email[0].value,
+      firstName: firstName,
+      lastName: lastName,
+      accessToken,
+      id: id,
+    };
+    cb(null, user);
   }
 }
