@@ -5,7 +5,7 @@ export class UserRecoveryDto {
   @IsNotEmpty()
   @IsString()
   @IsEmail()
-  @Transform((value: string) => value?.toLowerCase())
-  @Transform((value: string) => value?.trim())
+  @Transform((value) => value.toLowerCase())
+  @Transform((value) => value.trim())
   email: string;
 }

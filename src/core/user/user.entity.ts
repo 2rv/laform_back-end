@@ -26,8 +26,8 @@ export class UserEntity extends BaseEntity {
   id: number;
 
   @Column({ unique: true, nullable: true })
-  @Transform((value: string) => value?.trim())
-  @Transform((value: string) => value?.toLowerCase())
+  @Transform((value) => value.trim())
+  @Transform((value) => value.toLowerCase())
   login: string;
 
   @Column({ unique: true, nullable: true })
