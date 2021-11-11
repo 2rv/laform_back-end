@@ -29,6 +29,8 @@ import { StatisticsEntity } from 'src/core/statistics/statistics.entity';
 import { PrivacyPolicyEntity } from 'src/core/privacy-policy/privacy-policy.entity';
 import { LegalInformationEntity } from 'src/core/legal-information/legal-information.entity';
 import { TermsOfUseEntity } from 'src/core/terms-of-use/terms-of-use.entity';
+import { CompilationProductEntity } from 'src/core/compilation-product/compilation-product.entity';
+import { CompilationEntity } from 'src/core/compilation/compilation.entity';
 
 const DATABASE_CONFIG = config.get('DATABASE');
 export const ApiEntities = [
@@ -59,6 +61,8 @@ export const ApiEntities = [
   PrivacyPolicyEntity,
   LegalInformationEntity,
   TermsOfUseEntity,
+  CompilationEntity,
+  CompilationProductEntity,
 ];
 
 export const typeOrmConfig: TypeOrmModuleOptions = {

@@ -29,6 +29,7 @@ import { StatisticsModule } from './core/statistics/statistics.module';
 import { PrivacyPolicyModule } from './core/privacy-policy/privacy-policy.module';
 import { LegalInformationModule } from './core/legal-information/legal-information.module';
 import { TermsOfUseModule } from './core/terms-of-use/terms-of-use.module';
+import { CompilationModule } from './core/compilation/compilation.module';
 
 @Module({
   providers: [],
@@ -62,6 +63,7 @@ import { TermsOfUseModule } from './core/terms-of-use/terms-of-use.module';
     PrivacyPolicyModule,
     LegalInformationModule,
     TermsOfUseModule,
+    CompilationModule,
   ],
 })
 export class AppModule {}
