@@ -18,6 +18,7 @@ import { PurchaseProductEntity } from '../purchase-product/purchase-product.enti
 import { RecommendationProductEntity } from '../recommendation-product/recommendation-product.entity';
 import { RecommendationEntity } from '../recommendation/recommendation.entity';
 import { generateVendorCode } from 'src/common/utils/vendor-coder';
+import { CompilationProductEntity } from '../compilation-product/compilation-product.entity';
 
 @Entity({ name: 'sewing_product' })
 export class SewingProductEntity {
@@ -86,6 +87,12 @@ export class SewingProductEntity {
     (res: RecommendationProductEntity) => res.sewingProductId,
   )
   recommendationProduct: RecommendationProductEntity[];
+
+  @OneToMany(
+    () => CompilationProductEntity,
+    (res: CompilationProductEntity) => res.sewingProductId,
+  )
+  compilationProduct: CompilationProductEntity[];
 
   @OneToMany(
     () => PurchaseProductEntity,
