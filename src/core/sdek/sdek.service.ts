@@ -66,7 +66,6 @@ export class SdekService {
     if (!data) {
       return;
     }
-    console.log(data);
     const result = await fetch(
       'https://api.edu.cdek.ru/v2/calculator/tarifflist',
       {
