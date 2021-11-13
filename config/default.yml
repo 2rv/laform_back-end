@@ -47,3 +47,7 @@ APPLE:
 
 CLIENT:
   URL: 'https://laform-client.herokuapp.com'
+
+SDEK :
+ CLIENT_ID: 'EMscd6r9JnFiQ3bLoyjJY6eM78JrJceI'
+ CLIENT_SECRET: 'PjLZkKBHEiLK3YsjtNrt3TGNG0ahs3kG'

@@ -26,7 +26,7 @@ import { AboutUsModule } from './core/about-us/about-us.module';
 import { DeliveryPriceModule } from './core/delivery-price/delivery-price.module';
 import { FaqModule } from './core/faq/faq.module';
 import { StatisticsModule } from './core/statistics/statistics.module';
-
+import { SdekModule } from './core/sdek/sdek.module';
 @Module({
   providers: [],
   imports: [
@@ -56,6 +56,7 @@ import { StatisticsModule } from './core/statistics/statistics.module';
     DeliveryPriceModule,
     FaqModule,
     StatisticsModule,
+    SdekModule,
   ],
 })
 export class AppModule {}

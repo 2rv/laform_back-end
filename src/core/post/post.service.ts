@@ -4,6 +4,7 @@ import { PostDto } from './dto/post.dto';
 import { PostRepository } from './post.repository';
 import { FileUploadService } from '../file-upload/file-upload.service';
 import { RecommendationService } from '../recommendation/recommendation.service';
+import { AwsConfig } from '../../config/aws.config';
 
 @Injectable()
 export class PostService {
