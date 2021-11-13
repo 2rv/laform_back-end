@@ -18,6 +18,7 @@ import { PurchaseProductEntity } from '../purchase-product/purchase-product.enti
 import { RecommendationProductEntity } from '../recommendation-product/recommendation-product.entity';
 import { RecommendationEntity } from '../recommendation/recommendation.entity';
 import { generateVendorCode } from 'src/common/utils/vendor-coder';
+import { CompilationProductEntity } from '../compilation-product/compilation-product.entity';
 
 @Entity({ name: 'pattern_product' })
 export class PatternProductEntity {
@@ -90,6 +91,12 @@ export class PatternProductEntity {
     (res: RecommendationProductEntity) => res.patternProductId,
   )
   recommendationProduct: RecommendationProductEntity[];
+
+  @OneToMany(
+    () => CompilationProductEntity,
+    (res: CompilationProductEntity) => res.patternProductId,
+  )
+  compilationProduct: CompilationProductEntity[];
 
   @OneToMany(
     () => PurchaseProductEntity,
