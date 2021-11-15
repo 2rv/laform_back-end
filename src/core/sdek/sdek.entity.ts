@@ -8,17 +8,15 @@ import {
   ManyToOne,
 } from 'typeorm';
 
-
-
 @Entity({ name: 'sdek' })
 export class FileUploadEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({
-    type: 'varchar',
-    name: 'test',
+    type: 'integer',
+    name: 'weight',
+    default: 100,
   })
-  fileUrl!: string;
-
+  Weight!: number;
 }

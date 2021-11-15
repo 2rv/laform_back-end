@@ -1,3 +1,3 @@
-export enum FILE_UPLOAD_ERROR {
-  FILE_NOT_FOUND = 'FILE_NOT_FOUND',
+export enum SDEK_ERROR {
+  SDEK_NOT_FOUND = 'SDEK_NOT_FOUND',
 }

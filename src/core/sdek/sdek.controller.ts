@@ -1,3 +1,4 @@
+import { SdekService } from './sdek.service';
 import {
   Controller,
   Post,
@@ -7,19 +8,15 @@ import {
   Body,
   Delete,
   Request,
-  UploadedFile,
-  UseInterceptors,
 } from '@nestjs/common';
-import { request } from 'http';
-import { SdekService } from './sdek.service';
+import { SdekDto } from './dto/sdek.dto';
 
 @Controller('sdek')
 export class SdekController {
   constructor(private readonly SdekService: SdekService) {}
   @Post('/auth')
-  async authInSdek(@Request() req) {
-    const { grant_type } = req.body;
-    return this.SdekService.authInSdek(grant_type);
+  async authInSdek() {
+    return this.SdekService.authInSdek();
   }
   @Post('/calculator/tarrif/code')
   async CalculationByTariffCode(@Request() req) {
@@ -28,5 +25,13 @@ export class SdekController {
   @Post('/calculator/available/tarrif/code')
   async CalculationForAnAvailableTariffCode(@Request() req) {
     return this.SdekService.CalculationForAnAvailableTariffCode(req);
+  }
+  @Post('/registration/order')
+  async registrationOrder(@Request() req) {
+    return this.SdekService.registrationOrder(req);
+  }
+  @Get('/get/information/order')
+  async getInformationAboutOrder(@Request() req) {
+    return this.SdekService.getInformationAboutOrder(req);
   }
 }
