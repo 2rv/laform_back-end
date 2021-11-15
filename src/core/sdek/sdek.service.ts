@@ -104,7 +104,7 @@ export class SdekService {
       throw new BadRequestException(result.errors);
     }
     if (result.requests.state) {
-      throw new BadRequestException(result.request);
+      throw new BadRequestException(result.request.errors);
     }
     return result;
   }
@@ -127,7 +127,7 @@ export class SdekService {
       throw new BadRequestException(result.errors);
     }
     if (result.requests.state) {
-      throw new BadRequestException(result.request);
+      throw new BadRequestException(result.request.errors);
     }
     return result;
   }
