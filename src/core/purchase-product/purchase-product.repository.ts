@@ -1,5 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { PurchaseProductEntity } from './purchase-product.entity';
+import { StatisticType } from '../statistics/enum/statistic.enum';
 
 @EntityRepository(PurchaseProductEntity)
 export class PurchaseProductRepository extends Repository<PurchaseProductEntity> {
@@ -135,5 +136,31 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
 
       .where('purchase_product.id = :id', { id })
       .getOne();
+  }
+
+  async statistics(from: Date, to: Date, type: StatisticType): Promise<any[]> {
+    let query = await this.createQueryBuilder('purchase_product')
+      .where('purchase_product.created_date >= :from', { from })
+      .andWhere('purchase_product.created_date <= :to', { to });
+    if (type === StatisticType.MasterClass) {
+      query
+        .andWhere('purchase_product.masterClassId is not null')
+        .andWhere('purchase_product.patternProductId is null')
+        .andWhere('purchase_product.sewingProductId is null');
+    }
+    if (type === StatisticType.PatternProduct) {
+      query
+        .andWhere('purchase_product.masterClassId is null')
+        .andWhere('purchase_product.patternProductId is not null')
+        .andWhere('purchase_product.sewingProductId is null');
+    }
+    if (type === StatisticType.SewingProduct) {
+      query
+        .andWhere('purchase_product.masterClassId is null')
+        .andWhere('purchase_product.patternProductId is null')
+        .andWhere('purchase_product.sewingProductId is not null');
+    }
+
+    return await query.getMany();
   }
 }

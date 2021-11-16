@@ -7,6 +7,7 @@ import { StatisticsEntity } from './statistics.entity';
 import { PurchaseModule } from '../purchase/purchase.module';
 import { PurchaseEntity } from '../purchase/purchase.entity';
 import { PurchaseRepository } from '../purchase/purchase.repository';
+import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { PurchaseRepository } from '../purchase/purchase.repository';
       StatisticsEntity,
       PurchaseRepository,
       PurchaseEntity,
+      PurchaseProductRepository,
     ]),
   ],
   providers: [StatisticsService],
