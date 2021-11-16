@@ -26,9 +26,11 @@ import { DeliveryPriceEntity } from 'src/core/delivery-price/delivery-price.enti
 import { ProductOptionEntity } from 'src/core/product-option/product-option.entity';
 import { FaqEntity } from 'src/core/faq/faq.entity';
 import { StatisticsEntity } from 'src/core/statistics/statistics.entity';
+import { SdekEntity } from 'src/core/sdek/sdek.entity';
 
 const DATABASE_CONFIG = config.get('DATABASE');
 export const ApiEntities = [
+  SdekEntity,
   UserEntity,
   UserInfoEntity,
   NotificationEntity,
@@ -68,7 +70,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   type: 'postgres',
   host: 'localhost',
   port: 5432,
-  username: 'postgres',
+  username: 'kokni1',
   password: 'nSnS44Tt',
   database: 'postgres',
   synchronize: true,

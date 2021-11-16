@@ -9,10 +9,6 @@ import {
   Max,
 } from 'class-validator';
 export class SdekDto {
-  @IsOptional()
-  @IsUUID('all')
-  id: string;
-
   @IsNotEmpty()
   @IsNumber()
   type: number;
@@ -48,4 +44,7 @@ export class SdekDto {
 
   @IsOptional()
   headers;
+
+  @IsOptional()
+  query;
 }
