@@ -148,8 +148,18 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
         .andWhere('purchase_product.patternProductId is null')
         .andWhere('purchase_product.sewingProductId is null');
     }
-    if (type === StatisticType.PatternProduct) {
+    if (type === StatisticType.ElectronicPatternProduct) {
       query
+        .leftJoin('purchase_product.patternProductId', 'patternProductId')
+        .andWhere('patternProductId.type = 1')
+        .andWhere('purchase_product.masterClassId is null')
+        .andWhere('purchase_product.patternProductId is not null')
+        .andWhere('purchase_product.sewingProductId is null');
+    }
+    if (type === StatisticType.PrintedPatternProduct) {
+      query
+        .leftJoin('purchase_product.patternProductId', 'patternProductId')
+        .andWhere('patternProductId.type = 2')
         .andWhere('purchase_product.masterClassId is null')
         .andWhere('purchase_product.patternProductId is not null')
         .andWhere('purchase_product.sewingProductId is null');
@@ -160,7 +170,9 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
         .andWhere('purchase_product.patternProductId is null')
         .andWhere('purchase_product.sewingProductId is not null');
     }
-
+    if (type === StatisticType.All) {
+      return await query.getMany();
+    }
     return await query.getMany();
   }
 }

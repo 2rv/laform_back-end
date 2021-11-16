@@ -13,7 +13,6 @@ export class StatisticValidationPipe implements PipeTransform {
     const statisticTypes = Object.values(StatisticType);
     const type = Number(value.type);
     const index = statisticTypes.indexOf(type);
-    console.log(index);
     if (index === -1) {
       throw new BadRequestException(StatisticError.StatisticTypeNotFound);
     }

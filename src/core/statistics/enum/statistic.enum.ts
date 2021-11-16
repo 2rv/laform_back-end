@@ -1,7 +1,9 @@
 export enum StatisticType {
-  MasterClass = 1,
-  PatternProduct = 2,
+  MasterClass = 0,
+  ElectronicPatternProduct = 1,
+  PrintedPatternProduct = 2,
   SewingProduct = 3,
+  All = 9,
 }
 
 export enum StatisticError {
