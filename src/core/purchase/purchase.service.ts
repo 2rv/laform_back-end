@@ -3,6 +3,7 @@ import {
   BadRequestException,
   Inject,
   CACHE_MANAGER,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { PurchaseEntity } from './purchase.entity';
@@ -26,6 +27,11 @@ import { VerifyByCodeDto } from './dto/verify-by-code.dto';
 import { MailService } from '../mail/mail.service';
 import { PURCHASE_STATUS } from './enum/purchase.status';
 import { UpdatePurchaseStatusDto } from './dto/update-purchase-status.dto';
+import { UpdatePurchaseDto } from './dto/update-purchase.dto';
+import { UserRepository } from '../user/user.repository';
+import { UserEntity } from '../user/user.entity';
+import { generateVendorCode } from 'src/common/utils/vendor-coder';
+import { UserInfoService } from '../user-info/user-info.service';
 
 interface ProductParamsInfoType {
   title?: string;
@@ -58,6 +64,8 @@ export class PurchaseService {
     private sewingProductService: SewingProductService,
     private masterClassService: MasterClassService,
     private mailService: MailService,
+    private userInfoService: UserInfoService,
+    private userRepository: UserRepository,
   ) {}
 
   getPrice(props: getPriceProps): number {
@@ -344,7 +352,8 @@ export class PurchaseService {
     body: CreatePurchaseDto,
     userId: number,
     email: string,
-  ): Promise<PurchaseEntity> {
+    auth: boolean,
+  ): Promise<any> {
     const { products, price } = await this.verifyProducts(
       body.purchaseProducts,
     );
@@ -361,14 +370,59 @@ export class PurchaseService {
     body.purchase.typeOfDelivery = diliveryName;
     body.purchase.shippingPrice = diliveryPrice || 0;
 
-    const purchase = await this.create(body.purchase, products, userId, email);
+    let result;
+    let notAuthUserId: number;
+    const findUser: UserEntity = await this.userRepository.findOne({ email });
+    if (Boolean(findUser) === true && auth === false) {
+      result = { userExist: true };
+      notAuthUserId = findUser.id;
+    } else if (Boolean(findUser) === false) {
+      const user = await this.createUserAfterPurchase(email);
+      notAuthUserId = user.id;
+    }
+
+    const purchase = await this.create(
+      body.purchase,
+      products,
+      auth ? userId : notAuthUserId,
+      email,
+    );
     const newPurchase = await this.purchaseRepository.save(purchase);
     await this.productUpdateData(purchase.purchaseProducts);
     await this.purchaseRepository.update(newPurchase.id, {
       orderNumber: await PurchaseEntity.generateOrderNumber(newPurchase._NID),
     });
     await this.purchaseAwaitingPayment(newPurchase.id);
-    return newPurchase;
+    const purchaseData = await this.purchaseRepository.getAllForEmail(
+      newPurchase.id,
+    );
+    await this.mailService.sendAdminNewOrderInfo(purchaseData);
+
+    return result;
+  }
+
+  async createUserAfterPurchase(email: string): Promise<UserEntity> {
+    const user: UserEntity = new UserEntity();
+    const password = generateVendorCode();
+    const login = email.split('@')[0];
+    user.login = login;
+    user.email = email;
+    user.emailConfirmed = true;
+    user.password = await UserEntity.hashPassword(password);
+
+    try {
+      await user.save();
+      await this.userInfoService.create(user);
+      await this.mailService.sendPasswordForNewCreatedUserAfterPurchase({
+        email,
+        password,
+        login,
+      });
+
+      return user;
+    } catch {
+      throw new InternalServerErrorException();
+    }
   }
 
   async purchaseAwaitingPayment(purchaseId: string) {
@@ -446,15 +500,25 @@ export class PurchaseService {
     await this.sendUpdatedPurchaseInfo(result.id);
   }
 
-  async update(id: any, body: any) {
-    const result = await this.purchaseRepository.findOne({ id });
-
+  async update(id: any, body: UpdatePurchaseDto) {
+    const result = await this.purchaseRepository.findOneOrFail({ id });
     if (!result) {
       throw new BadRequestException(PURCHASE_ERROR.PURCHASE_NOT_FOUND);
     }
-
-    await this.purchaseRepository.update(result.id, body);
-    await this.sendUpdatedPurchaseInfo(result.id);
+    const { products, price } = await this.verifyProducts(
+      body.purchaseProducts,
+    );
+    result.orderStatus = body.orderStatus;
+    result.email = body.email;
+    result.fullName = body.fullName;
+    result.city = body.city;
+    result.phoneNumber = body.phoneNumber;
+    result.comment = body.comment;
+    result.typeOfDelivery = body.typeOfDelivery;
+    result.price = price;
+    //@ts-ignore
+    result.purchaseProducts = products;
+    return await this.purchaseRepository.save(result);
   }
 
   async delete(id: string) {

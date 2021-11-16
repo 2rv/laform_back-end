@@ -1,5 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { PurchaseProductEntity } from './purchase-product.entity';
+import { StatisticType } from '../statistics/enum/statistic.enum';
 
 @EntityRepository(PurchaseProductEntity)
 export class PurchaseProductRepository extends Repository<PurchaseProductEntity> {
@@ -122,6 +123,8 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
         'master_class.titleEn',
         'master_class.modifierRu',
         'master_class.modifierEn',
+        'master_class.materialRu',
+        'master_class.materialEn',
         'master_class.articleRu',
         'master_class.articleEn',
         'master_class.descriptionRu',
@@ -133,5 +136,43 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
 
       .where('purchase_product.id = :id', { id })
       .getOne();
+  }
+
+  async statistics(from: Date, to: Date, type: StatisticType): Promise<any[]> {
+    let query = await this.createQueryBuilder('purchase_product')
+      .where('purchase_product.created_date >= :from', { from })
+      .andWhere('purchase_product.created_date <= :to', { to });
+    if (type === StatisticType.MasterClass) {
+      query
+        .andWhere('purchase_product.masterClassId is not null')
+        .andWhere('purchase_product.patternProductId is null')
+        .andWhere('purchase_product.sewingProductId is null');
+    }
+    if (type === StatisticType.ElectronicPatternProduct) {
+      query
+        .leftJoin('purchase_product.patternProductId', 'patternProductId')
+        .andWhere('patternProductId.type = 1')
+        .andWhere('purchase_product.masterClassId is null')
+        .andWhere('purchase_product.patternProductId is not null')
+        .andWhere('purchase_product.sewingProductId is null');
+    }
+    if (type === StatisticType.PrintedPatternProduct) {
+      query
+        .leftJoin('purchase_product.patternProductId', 'patternProductId')
+        .andWhere('patternProductId.type = 2')
+        .andWhere('purchase_product.masterClassId is null')
+        .andWhere('purchase_product.patternProductId is not null')
+        .andWhere('purchase_product.sewingProductId is null');
+    }
+    if (type === StatisticType.SewingProduct) {
+      query
+        .andWhere('purchase_product.masterClassId is null')
+        .andWhere('purchase_product.patternProductId is null')
+        .andWhere('purchase_product.sewingProductId is not null');
+    }
+    if (type === StatisticType.All) {
+      return await query.getMany();
+    }
+    return await query.getMany();
   }
 }

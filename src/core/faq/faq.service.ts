@@ -11,7 +11,7 @@ export class FaqService {
     return await this.faqRepository.findOne({});
   }
 
-  async save(body: CreateOrUpdateFaqDto): Promise<FaqEntity> {
-    return await this.faqRepository.createOrUpdate(body);
+  async save(body: CreateOrUpdateFaqDto): Promise<void> {
+    await this.faqRepository.createOrUpdate(body);
   }
 }

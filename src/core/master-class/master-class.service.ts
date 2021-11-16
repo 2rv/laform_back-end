@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { MasterClassRepository } from './master-class.repository';
 import { MasterClassEntity } from './master-class.entity';
 import { MasterClassDto } from './dto/master-class.dto';
 import { RecommendationService } from '../recommendation/recommendation.service';
 import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
+import { PURCHASE_ERROR } from '../purchase/enum/purchase.enum';
 
 @Injectable()
 export class MasterClassService {
@@ -175,10 +176,14 @@ export class MasterClassService {
     });
 
     if (Boolean(wasPurchased)) {
-      await this.masterClassRepository.update({ id }, { deleted: true });
+      throw new BadRequestException(PURCHASE_ERROR.PRODUCT_WAS_PURCHASED);
     } else {
       await this.masterClassRepository.delete(id);
     }
+  }
+
+  async disable(id: string, deleted: boolean) {
+    await this.masterClassRepository.update({ id }, { deleted });
   }
 
   async getPriceAndDiscount(

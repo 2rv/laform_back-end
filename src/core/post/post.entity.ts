@@ -15,6 +15,7 @@ import { CommentEntity } from './../comment/comment.entity';
 import { RecommendationProductEntity } from '../recommendation-product/recommendation-product.entity';
 import { RecommendationEntity } from '../recommendation/recommendation.entity';
 import { generateVendorCode } from 'src/common/utils/vendor-coder';
+import { CompilationProductEntity } from '../compilation-product/compilation-product.entity';
 
 @Entity({ name: 'post' })
 export class PostEntity {
@@ -67,6 +68,12 @@ export class PostEntity {
   )
   recommendationProduct: RecommendationProductEntity[];
 
+  @OneToMany(
+    () => CompilationProductEntity,
+    (res: CompilationProductEntity) => res.postId,
+  )
+  compilationProduct: CompilationProductEntity[];
+
   @OneToMany(() => LikeEntity, (res: LikeEntity) => res.postId)
   like: LikeEntity[];
 
@@ -97,6 +104,13 @@ export class PostEntity {
     nullable: true,
   })
   modifierEn!: string;
+
+  @Column({
+    type: 'varchar',
+    name: 'modifier_color',
+    nullable: true,
+  })
+  modifierColor: string;
 
   @Column({
     type: 'json',

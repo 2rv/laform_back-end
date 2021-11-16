@@ -12,6 +12,8 @@ import { DeliveryPriceModule } from '../delivery-price/delivery-price.module';
 import { CacheModuleConfig } from 'src/config/cache.config';
 import { MailModule } from '../mail/mail.module';
 import { PurchaseEntity } from './purchase.entity';
+import { UserRepository } from '../user/user.repository';
+import { UserInfoModule } from '../user-info/user-info.module';
 
 @Module({
   imports: [
@@ -23,7 +25,12 @@ import { PurchaseEntity } from './purchase.entity';
     PurchaseProductModule,
     DeliveryPriceModule,
     MailModule,
-    TypeOrmModule.forFeature([PurchaseRepository, PurchaseEntity]),
+    UserInfoModule,
+    TypeOrmModule.forFeature([
+      PurchaseRepository,
+      UserRepository,
+      PurchaseEntity,
+    ]),
   ],
   providers: [PurchaseService],
   exports: [PurchaseService],

@@ -166,4 +166,8 @@ export class PostService {
     const post = await this.postRepository.findOneOrFail(id);
     return await this.postRepository.delete(post.id);
   }
+
+  async disable(id: string, deleted: boolean) {
+    await this.postRepository.update({ id }, { deleted });
+  }
 }

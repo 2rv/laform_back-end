@@ -27,6 +27,11 @@ import { ProductOptionEntity } from 'src/core/product-option/product-option.enti
 import { FaqEntity } from 'src/core/faq/faq.entity';
 import { StatisticsEntity } from 'src/core/statistics/statistics.entity';
 import { PaymentEntity } from 'src/core/payment/payment.entity';
+import { PrivacyPolicyEntity } from 'src/core/privacy-policy/privacy-policy.entity';
+import { LegalInformationEntity } from 'src/core/legal-information/legal-information.entity';
+import { TermsOfUseEntity } from 'src/core/terms-of-use/terms-of-use.entity';
+import { CompilationProductEntity } from 'src/core/compilation-product/compilation-product.entity';
+import { CompilationEntity } from 'src/core/compilation/compilation.entity';
 
 const DATABASE_CONFIG = config.get('DATABASE');
 export const ApiEntities = [
@@ -55,6 +60,11 @@ export const ApiEntities = [
   FaqEntity,
   StatisticsEntity,
   PaymentEntity,
+  PrivacyPolicyEntity,
+  LegalInformationEntity,
+  TermsOfUseEntity,
+  CompilationEntity,
+  CompilationProductEntity,
 ];
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
@@ -62,6 +72,6 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   url: process.env.DATABASE_URL || DATABASE_CONFIG.URL,
   entities: ApiEntities,
   ssl: { rejectUnauthorized: false },
-  //   logging: ['query', 'error'],
+  logging: ['query', 'error'],
   synchronize: process.env.TYPEORM_SYNC || DATABASE_CONFIG.SYNCHRONIZE,
 };

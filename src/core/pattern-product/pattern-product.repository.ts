@@ -76,7 +76,6 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         }),
       )
       .getManyAndCount();
-    // .getMany();
   }
   async findAllEn(
     size: number = 30,
@@ -145,7 +144,6 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         }),
       )
       .getManyAndCount();
-    // .getMany();
   }
   async findAllRuAuth(
     size: number = 30,
@@ -219,7 +217,6 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         }),
       )
       .getManyAndCount();
-    // .getMany();
   }
   async findAllEnAuth(
     size: number = 30,
@@ -867,6 +864,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'pattern_product.count',
         'pattern_product.isCount',
         'pattern_product_filesPdf',
+        'pattern_product.deleted',
         'options_filesPdf',
         'images',
         'categories.id',

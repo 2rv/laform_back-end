@@ -1,21 +1,20 @@
 import { AboutUsEntity } from './about-us.entity';
 import { EntityRepository, getConnection, Repository } from 'typeorm';
+import { CreateOrUpdateAboutUsDto } from './dto/create-or-update-about-us.dto';
 
 @EntityRepository(AboutUsEntity)
 export class AboutUsRepository extends Repository<AboutUsEntity> {
-  async createOrUpdate(body): Promise<any> {
+  async createOrUpdate(body: CreateOrUpdateAboutUsDto): Promise<void> {
     const aboutUsExists = await this.findOne({});
 
     if (Boolean(aboutUsExists)) {
-      return await getConnection()
+      await getConnection()
         .createQueryBuilder()
         .update(AboutUsEntity)
         .set({ about: body.about })
-        .returning('*')
-        .execute()
-        .then((response) => response.raw[0]);
+        .execute();
     } else {
-      return await this.save(body);
+      await this.save(body);
     }
   }
 }

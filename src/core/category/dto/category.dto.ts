@@ -12,4 +12,8 @@ export class CategoryDto {
   @IsOptional()
   @IsString()
   categoryNameEn: string;
+
+  @IsOptional()
+  @IsString()
+  type!: string;
 }

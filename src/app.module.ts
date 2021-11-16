@@ -27,6 +27,11 @@ import { DeliveryPriceModule } from './core/delivery-price/delivery-price.module
 import { FaqModule } from './core/faq/faq.module';
 import { StatisticsModule } from './core/statistics/statistics.module';
 import { PaymentModule } from './core/payment/payment.module';
+import { PrivacyPolicyModule } from './core/privacy-policy/privacy-policy.module';
+import { LegalInformationModule } from './core/legal-information/legal-information.module';
+import { TermsOfUseModule } from './core/terms-of-use/terms-of-use.module';
+import { CompilationModule } from './core/compilation/compilation.module';
+
 
 @Module({
   providers: [],
@@ -58,6 +63,10 @@ import { PaymentModule } from './core/payment/payment.module';
     FaqModule,
     StatisticsModule,
     PaymentModule,
+    PrivacyPolicyModule,
+    LegalInformationModule,
+    TermsOfUseModule,
+    CompilationModule,
   ],
 })
 export class AppModule {}

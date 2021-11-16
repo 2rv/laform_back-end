@@ -16,6 +16,8 @@ import { CommentEntity } from '../comment/comment.entity';
 import { RecommendationProductEntity } from '../recommendation-product/recommendation-product.entity';
 import { RecommendationEntity } from '../recommendation/recommendation.entity';
 import { generateVendorCode } from 'src/common/utils/vendor-coder';
+import { CompilationEntity } from '../compilation/compilation.entity';
+import { CompilationProductEntity } from '../compilation-product/compilation-product.entity';
 
 @Entity({ name: 'master_class' })
 export class MasterClassEntity {
@@ -73,6 +75,12 @@ export class MasterClassEntity {
   recommendationProduct: RecommendationProductEntity[];
 
   @OneToMany(
+    () => CompilationProductEntity,
+    (res: CompilationProductEntity) => res.masterClassId,
+  )
+  compilationProduct: CompilationProductEntity[];
+
+  @OneToMany(
     () => PurchaseProductEntity,
     (res: PurchaseProductEntity) => res.masterClassId,
   )
@@ -89,7 +97,6 @@ export class MasterClassEntity {
     name: 'title_ru',
   })
   titleRu!: string;
-
   @Column({
     type: 'varchar',
     name: 'title_en',
@@ -102,13 +109,33 @@ export class MasterClassEntity {
     name: 'description_ru',
   })
   descriptionRu!: string;
-
   @Column({
     type: 'varchar',
     name: 'description_en',
     nullable: true,
   })
   descriptionEn: string;
+
+  @Column({
+    type: 'json',
+    name: ' material_ru',
+    nullable: true,
+  })
+  materialRu: {
+    blocks: [];
+    time: number;
+    version: string;
+  };
+  @Column({
+    type: 'json',
+    name: ' material_en',
+    nullable: true,
+  })
+  materialEn: {
+    blocks: [];
+    time: number;
+    version: string;
+  };
 
   @Column({
     type: 'varchar',

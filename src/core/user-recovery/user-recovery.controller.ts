@@ -1,4 +1,11 @@
-import { Controller, Post, Body, ValidationPipe, Query } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  ValidationPipe,
+  Query,
+  UsePipes,
+} from '@nestjs/common';
 
 import { UserRecoveryService } from './user-recovery.service';
 import { UserRecoveryDto } from './dto/user-recovery.dto';
@@ -8,10 +15,9 @@ import { UserRecoveryChangeCredentialsDto } from './dto/user-recovery-change-pas
 export class UserRecoveryController {
   constructor(private userRecoveryService: UserRecoveryService) {}
 
+  @UsePipes(new ValidationPipe({ transform: true }))
   @Post()
-  async getRecoveryCode(
-    @Body(ValidationPipe) data: UserRecoveryDto,
-  ): Promise<void> {
+  async getRecoveryCode(@Body() data: UserRecoveryDto): Promise<void> {
     return this.userRecoveryService.getRecoveryCode(data);
   }
 

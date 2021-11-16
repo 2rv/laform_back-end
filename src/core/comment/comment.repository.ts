@@ -129,6 +129,38 @@ export class CommentRepository extends Repository<CommentEntity> {
       .getMany();
   }
 
+  async findAllUserCommentsForAdmin(
+    size = 30,
+    page = 1,
+  ): Promise<[CommentEntity[], number]> {
+    return await this.createQueryBuilder('comment')
+      .leftJoin('comment.postId', 'post_id')
+      .leftJoin('post_id.image', 'post_image')
+      .leftJoin('comment.masterClassId', 'master_class_id')
+      .leftJoin('master_class_id.images', 'master_class_images')
+      .leftJoin('comment.sewingProductId', 'sewing_product_id')
+      .leftJoin('sewing_product_id.images', 'sewing_product_images')
+      .leftJoin('comment.patternProductId', 'pattern_product_id')
+      .leftJoin('pattern_product_id.images', 'pattern_product_images')
+      .select([
+        'comment.id',
+        'comment.text',
+        'comment.createDate',
+        'post_id.id',
+        'master_class_id.id',
+        'sewing_product_id.id',
+        'pattern_product_id.id',
+        'post_image',
+        'master_class_images',
+        'sewing_product_images',
+        'pattern_product_images',
+      ])
+      .orderBy('comment.createDate', 'DESC')
+      .take(size)
+      .skip((page - 1) * size || 0)
+      .getManyAndCount();
+  }
+
   async findOneComment(id: string): Promise<CommentEntity> {
     return await this.createQueryBuilder('comment')
       .leftJoin('comment.userId', 'user_id')
