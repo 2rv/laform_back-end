@@ -25,7 +25,6 @@ import { AboutUsEntity } from 'src/core/about-us/about-us.entity';
 import { DeliveryPriceEntity } from 'src/core/delivery-price/delivery-price.entity';
 import { ProductOptionEntity } from 'src/core/product-option/product-option.entity';
 import { FaqEntity } from 'src/core/faq/faq.entity';
-import { StatisticsEntity } from 'src/core/statistics/statistics.entity';
 import { PaymentEntity } from 'src/core/payment/payment.entity';
 import { PrivacyPolicyEntity } from 'src/core/privacy-policy/privacy-policy.entity';
 import { LegalInformationEntity } from 'src/core/legal-information/legal-information.entity';
@@ -58,7 +57,6 @@ export const ApiEntities = [
   AboutUsEntity,
   DeliveryPriceEntity,
   FaqEntity,
-  StatisticsEntity,
   PaymentEntity,
   PrivacyPolicyEntity,
   LegalInformationEntity,
