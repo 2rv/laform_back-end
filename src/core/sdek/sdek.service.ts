@@ -1,4 +1,3 @@
-import { Repository } from 'typeorm';
 import fetch from 'cross-fetch';
 import { stringify } from 'querystring';
 import { SdekConfig } from 'src/config/sdek.config';

@@ -9,7 +9,6 @@ import {
   Delete,
   Request,
 } from '@nestjs/common';
-import { SdekDto } from './dto/sdek.dto';
 
 @Controller('sdek')
 export class SdekController {
