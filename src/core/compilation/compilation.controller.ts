@@ -28,12 +28,12 @@ export class CompilationController {
     return await this.compilationService.create(body);
   }
 
-  @Get('/get/')
-  async get() {
+  @Get('/get')
+  async getAll() {
     return await this.compilationService.get();
   }
 
-  @Get('/auth/get/')
+  @Get('/auth/get')
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getAllAuth(@GetAccount() user: UserEntity) {
     return await this.compilationService.getAuth(user.id);
