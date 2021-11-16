@@ -42,8 +42,4 @@ export class StatisticsController {
   ) {
     return await this.statisticsService.countStatistic(from, to, type);
   }
-  // @Get('get/master-class')
-  // async getMasterClass() {
-  //   return await this.statisticsService.getPurchasesMasterClassDataForPeriod();
-  // }
 }
