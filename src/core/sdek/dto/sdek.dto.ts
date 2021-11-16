@@ -17,10 +17,12 @@ export class SdekDto {
   @IsNumber()
   tariff_code: number;
 
+  //Это же обьект не????????????
   @IsOptional()
   @IsString()
   from_location: string;
 
+  //Это же обьект не????????????
   @IsOptional()
   @IsString()
   to_location1: string;
@@ -29,6 +31,7 @@ export class SdekDto {
   @IsString()
   code: string;
 
+  //Массив посылок может состоять из более одного пропа
   @IsNotEmpty()
   @IsArray()
   @Min(1)
@@ -39,12 +42,13 @@ export class SdekDto {
   @IsNumber()
   weight: number;
 
+  //Почекай другие модули в Nest так не пишут
   @IsOptional()
   body;
-
+  //Почекай другие модули в Nest так не пишут
   @IsOptional()
   headers;
-
+  //Почекай другие модули в Nest так не пишут
   @IsOptional()
   query;
 }
