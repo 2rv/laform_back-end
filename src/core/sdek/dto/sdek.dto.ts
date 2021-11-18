@@ -7,48 +7,55 @@ import {
   Min,
   IsUUID,
   Max,
+  IsObject,
+  IsNotEmptyObject,
 } from 'class-validator';
-export class SdekDto {
-  @IsNotEmpty()
-  @IsNumber()
-  type: number;
+import { ToLocationDto } from './sdekUpdateOrder.dto';
 
+export class SdekDto {
   @IsOptional()
   @IsNumber()
   tariff_code: number;
 
-  //Это же обьект не????????????
-  @IsOptional()
-  @IsString()
-  from_location: string;
+  @IsNotEmptyObject()
+  @IsObject()
+  from_location: object;
 
-  //Это же обьект не????????????
-  @IsOptional()
-  @IsString()
-  to_location1: string;
+  @IsNotEmptyObject()
+  @IsObject()
+  to_location: object;
 
   @IsOptional()
   @IsString()
   code: string;
 
-  //Массив посылок может состоять из более одного пропа
   @IsNotEmpty()
   @IsArray()
-  @Min(1)
-  @Max(1)
   packages: [];
 
   @IsOptional()
   @IsNumber()
   weight: number;
+}
 
-  //Почекай другие модули в Nest так не пишут
+export class SdekDtoOrder {
   @IsOptional()
-  body;
-  //Почекай другие модули в Nest так не пишут
+  @IsNumber()
+  tariff_code: number;
+
+  @IsNotEmptyObject()
+  @IsObject()
+  to_location: ToLocationDto;
+
   @IsOptional()
-  headers;
-  //Почекай другие модули в Nest так не пишут
+  @IsString()
+  code: string;
+
+  @IsNotEmpty()
+  @IsArray()
+  packages: [];
+
   @IsOptional()
-  query;
+  @IsNumber()
+  weight: number;
 }

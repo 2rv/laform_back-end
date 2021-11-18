@@ -1,6 +1,8 @@
 import { SdekConfig } from 'src/config/sdek.config';
-import { SdekDto } from './dto/sdek.dto';
+import { SdekDto, SdekDtoOrder } from './dto/sdek.dto';
 import { SdekRepository } from './sdek.repository';
+import fetch from 'cross-fetch';
+import { stringify } from 'querystring';
 
 import {
   Injectable,
@@ -10,11 +12,6 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-
-// Спроси женю по поводу метода запроса с другого бека
-// у нас здесь есть axios если что
-import fetch from 'cross-fetch';
-import { stringify } from 'querystring';
 
 @Injectable()
 export class SdekService {
@@ -31,114 +28,153 @@ export class SdekService {
       body: stringify(data),
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     })
-      .then((res) => res.json())
-      .then((json) => {
-        return json;
+      .then((res) => {
+        return res.json();
+      })
+      .catch((err) => {
+        throw new InternalServerErrorException(err);
       });
     if (result.errors) {
-      throw new InternalServerErrorException(result.errors);
+      throw new BadRequestException(result.errors);
     }
-    return result;
+    return 'Bearer ' + result.access_token;
   }
-  // брать from_location из конфига/БазыДанных возьми любой рандомный адресс в СПБ
-  async CalculationByTariffCode(req: SdekDto) {
-    const data = {
-      type: req.body.type,
-      date: req.body.date,
-      currency: req.body.currency,
-      tariff_code: req.body.tariff_code,
-      from_location: req.body.from_location,
-      to_location: req.body.to_location,
-      services: req.body.services,
-      packages: req.body.packages,
-    };
-
-    const result = await fetch('https://api.edu.cdek.ru/v2/calculator/tariff', {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: req.headers.authorization,
+  async CalculationByTariffCode(body: SdekDto) {
+    const result: any = await fetch(
+      'https://api.edu.cdek.ru/v2/calculator/tariff',
+      {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: await this.authInSdek(),
+        },
       },
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        return json;
+    )
+      .then((data) => {
+        return data.json();
+      })
+      .catch((err) => {
+        throw new InternalServerErrorException(err);
       });
     if (result.errors) {
       throw new BadRequestException(result.errors);
     }
     return result;
   }
-  //getTariff - Как проще назвать
-  async CalculationForAnAvailableTariffCode(req: SdekDto) {
-    const data = {
-      from_location: req.body.from_location,
-      to_location: req.body.to_location,
-      packages: req.body.packages,
-    };
+  async getTariff(body: SdekDto) {
     const result = await fetch(
       'https://api.edu.cdek.ru/v2/calculator/tarifflist',
       {
         method: 'POST',
-        body: JSON.stringify(data),
+        body: JSON.stringify(body),
         headers: {
           'Content-Type': 'application/json',
-          Authorization: req.headers.authorization,
+          Authorization: await this.authInSdek(),
         },
       },
     )
-      .then((res) => res.json())
-      .then((json) => {
-        return json;
+      .then((res) => {
+        return res.json();
+      })
+      .catch((err) => {
+        throw new InternalServerErrorException(err);
       });
     if (result.errors) {
       throw new BadRequestException(result.errors);
     }
     return result;
   }
-  async registrationOrder(req: SdekDto) {
+  async registrationOrder(body: SdekDtoOrder) {
     const result = await fetch('https://api.edu.cdek.ru/v2/orders', {
       method: 'POST',
-      body: JSON.stringify(req.body),
+      body: JSON.stringify(body),
       headers: {
         'Content-Type': 'application/json',
-        Authorization: req.headers.authorization,
+        Authorization: await this.authInSdek(),
       },
     })
-      .then((res) => res.json())
-      .then((json) => {
-        return json;
+      .then((res) => {
+        return res.json();
+      })
+      .catch((err) => {
+        throw new InternalServerErrorException(err);
       });
     if (result.error) {
       throw new InternalServerErrorException(result);
     }
-    if (result.requst) {
+    if (result.requests) {
       for (let exception of result.requests) {
         if (exception.errors) {
-          throw new NotFoundException(exception.errors);
+          throw new BadRequestException(exception.errors);
         }
       }
     }
     return result;
   }
-  // id получать надо в controller так удобнее всем а здесь пишешь id: string dto для одного Id не нужен
-  //  никогда не видел что бы ошибку искали перебором в js есть метод catch он не работает?
-  async getInformationAboutOrder(req: SdekDto) {
-    const { id } = req.query;
-    const result = await fetch('https://api.cdek.ru/v2/orders/' + `${id}`, {
+  async getInformationAboutOrder(id: string) {
+    const result = await fetch('https://api.edu.cdek.ru/v2/orders/' + `${id}`, {
       method: 'GET',
       headers: {
-        Authorization: req.headers.authorization,
+        Authorization: await this.authInSdek(),
       },
     })
-      .then((res) => res.json())
-      .then((json) => {
-        return json;
+      .then((res) => {
+        return res.json();
+      })
+      .catch((err) => {
+        throw new InternalServerErrorException(err);
       });
-    for (let exception of result.requests) {
-      if (exception.errors) {
-        throw new NotFoundException(exception.errors);
+    return result;
+  }
+  async editOrder(body) {
+    const result = await fetch('https://api.edu.cdek.ru/v2/orders', {
+      method: 'PATCH',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: await this.authInSdek(),
+      },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .catch((err) => {
+        throw new InternalServerErrorException(err);
+      });
+    if (result.error) {
+      throw new InternalServerErrorException(result);
+    }
+    if (result.requests) {
+      for (let exception of result.requests) {
+        if (exception.errors) {
+          throw new BadRequestException(exception.errors);
+        }
+      }
+    }
+    return result;
+  }
+  async deleteOrder(id: string) {
+    const result = await fetch('https://api.edu.cdek.ru/v2/orders/' + `${id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: await this.authInSdek(),
+      },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .catch((err) => {
+        throw new InternalServerErrorException(err);
+      });
+    if (result.error) {
+      throw new InternalServerErrorException(result);
+    }
+    if (result.requests) {
+      for (let exception of result.requests) {
+        if (exception.errors) {
+          throw new BadRequestException(exception.errors);
+        }
       }
     }
     return result;

@@ -1,3 +1,0 @@
-export enum SDEK_ERROR {
-  SDEK_NOT_FOUND = 'SDEK_NOT_FOUND',
-}
