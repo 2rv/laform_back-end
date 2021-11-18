@@ -1,16 +1,13 @@
 import { SdekService } from './sdek.service';
 import { SdekDto, SdekDtoOrder } from './dto/sdek.dto';
+import { SdekUpdate } from './dto/sdekUpdate.dto';
 import {
   Controller,
   Post,
-  UseGuards,
   Get,
-  Put,
   Body,
   Delete,
-  Request,
   ValidationPipe,
-  Param,
   Query,
   Patch,
 } from '@nestjs/common';
@@ -39,7 +36,7 @@ export class SdekController {
     return this.SdekService.getInformationAboutOrder(query.id);
   }
   @Patch('/edit/order')
-  async editOrder(@Body(new ValidationPipe()) body) {
+  async editOrder(@Body(new ValidationPipe()) body: SdekUpdate) {
     return this.SdekService.editOrder(body);
   }
   @Delete('/delete/order')

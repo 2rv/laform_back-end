@@ -1,12 +1,10 @@
 import {
   IsNotEmpty,
   IsString,
-  IsOptional,
   IsNumber,
-  IsNotEmptyObject,
 } from 'class-validator';
 
-export class ToLocationDto {
+export class SdekLocation {
   @IsNotEmpty()
   @IsNumber()
   code: number;

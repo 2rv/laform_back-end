@@ -4,26 +4,26 @@ import {
   IsOptional,
   IsArray,
   IsNumber,
-  Min,
-  IsUUID,
-  Max,
-  IsObject,
-  IsNotEmptyObject,
+  ValidateNested,
 } from 'class-validator';
-import { ToLocationDto } from './sdekUpdateOrder.dto';
+import { Type } from 'class-transformer';
+import { SdekLocation } from './sdekLocation.dto';
+import { SdekPackages } from './sdekPackages.dto';
 
 export class SdekDto {
   @IsOptional()
   @IsNumber()
   tariff_code: number;
 
-  @IsNotEmptyObject()
-  @IsObject()
-  from_location: object;
+  @IsNotEmpty()
+  @ValidateNested()
+  @Type(() => SdekLocation)
+  to_location: SdekLocation;
 
-  @IsNotEmptyObject()
-  @IsObject()
-  to_location: object;
+  @IsNotEmpty()
+  @ValidateNested()
+  @Type(() => SdekLocation)
+  from_location: SdekLocation;
 
   @IsOptional()
   @IsString()
@@ -31,7 +31,7 @@ export class SdekDto {
 
   @IsNotEmpty()
   @IsArray()
-  packages: [];
+  packages: SdekPackages[];
 
   @IsOptional()
   @IsNumber()
@@ -43,9 +43,10 @@ export class SdekDtoOrder {
   @IsNumber()
   tariff_code: number;
 
-  @IsNotEmptyObject()
-  @IsObject()
-  to_location: ToLocationDto;
+  @IsNotEmpty()
+  @ValidateNested()
+  @Type(() => SdekLocation)
+  to_location: SdekLocation;
 
   @IsOptional()
   @IsString()
@@ -53,7 +54,7 @@ export class SdekDtoOrder {
 
   @IsNotEmpty()
   @IsArray()
-  packages: [];
+  packages: SdekPackages[];
 
   @IsOptional()
   @IsNumber()
