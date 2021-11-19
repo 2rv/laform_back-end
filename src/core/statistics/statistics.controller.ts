@@ -42,4 +42,13 @@ export class StatisticsController {
   ) {
     return await this.statisticsService.countStatistic(from, to, type);
   }
+
+  @Get('count-and-price/get')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async purchasedProductsCountAndPrice(
+    @Query(new StatisticValidationPipe()) type: StatisticType,
+  ) {
+    return await this.statisticsService.purchasedProductsCountAndPriceStatistic(type);
+  }
 }

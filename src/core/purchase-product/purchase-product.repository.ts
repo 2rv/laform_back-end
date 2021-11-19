@@ -175,4 +175,101 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
     }
     return await query.getMany();
   }
+
+  async purchasedProductsCountAndPriceStatistic(
+    type: StatisticType,
+    allPurchasesLength: number,
+    totalPurchasesPrice: number,
+    purchasesAverageCost: number,
+  ): Promise<any> {
+    const query = await this.createQueryBuilder('purchase_product');
+    const allPurchasedProducts = await query.getMany();
+    const masterClass = await this.getMasterClass();
+    const electronicPattern = await this.getElectronicPattern();
+    const printedPattern = await this.getPrintedPattern();
+    const sewingGood = await this.getSewingGood();
+
+    if (type === StatisticType.MasterClass) {
+      return {
+        productsCount: masterClass.length,
+        totalPurchasedProductPrice: masterClass.reduce(
+          (acc, n) => acc + Number(n.totalPrice),
+          0,
+        ),
+      };
+    }
+    if (type === StatisticType.ElectronicPatternProduct) {
+      return {
+        productsCount: electronicPattern.length,
+        totalPurchasedProductPrice: electronicPattern.reduce(
+          (acc, n) => acc + Number(n.totalPrice),
+          0,
+        ),
+      };
+    }
+    if (type === StatisticType.PrintedPatternProduct) {
+      return {
+        productsCount: printedPattern.length,
+        totalPurchasedProductPrice: printedPattern.reduce(
+          (acc, n) => acc + Number(n.totalPrice),
+          0,
+        ),
+      };
+    }
+    if (type === StatisticType.SewingProduct) {
+      return {
+        productsCount: sewingGood.length,
+        totalPurchasedProductPrice: sewingGood.reduce(
+          (acc, n) => acc + Number(n.totalPrice),
+          0,
+        ),
+      };
+    }
+    if (type === StatisticType.All) {
+      return {
+        allPurchasesCount: allPurchasesLength,
+        purchasedProductsCount: allPurchasedProducts.length,
+        physicalPurchasedProductsCount: printedPattern.length + sewingGood.length,
+        electronicPurchasedProductsCount: electronicPattern.length + masterClass.length,
+        totalPurchasesPrice,
+        purchasesAverageCost,
+      };
+    }
+  }
+
+  async getMasterClass() {
+    return await this.createQueryBuilder('purchase_product')
+      .andWhere('purchase_product.masterClassId is not null')
+      .andWhere('purchase_product.patternProductId is null')
+      .andWhere('purchase_product.sewingProductId is null')
+      .getMany();
+  }
+
+  async getElectronicPattern() {
+    return await this.createQueryBuilder('purchase_product')
+      .leftJoin('purchase_product.patternProductId', 'patternProductId')
+      .andWhere('patternProductId.type = 1')
+      .andWhere('purchase_product.masterClassId is null')
+      .andWhere('purchase_product.patternProductId is not null')
+      .andWhere('purchase_product.sewingProductId is null')
+      .getMany();
+  }
+
+  async getPrintedPattern() {
+    return await this.createQueryBuilder('purchase_product')
+      .leftJoin('purchase_product.patternProductId', 'patternProductId')
+      .andWhere('patternProductId.type = 2')
+      .andWhere('purchase_product.masterClassId is null')
+      .andWhere('purchase_product.patternProductId is not null')
+      .andWhere('purchase_product.sewingProductId is null')
+      .getMany();
+  }
+
+  async getSewingGood() {
+    return await this.createQueryBuilder('purchase_product')
+      .andWhere('purchase_product.masterClassId is null')
+      .andWhere('purchase_product.patternProductId is null')
+      .andWhere('purchase_product.sewingProductId is not null')
+      .getMany();
+  }
 }

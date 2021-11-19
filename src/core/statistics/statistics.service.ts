@@ -1,11 +1,15 @@
 import { Injectable } from '@nestjs/common';
 
 import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
+import { PurchaseService } from '../purchase/purchase.service';
 import { StatisticType } from './enum/statistic.enum';
 
 @Injectable()
 export class StatisticsService {
-  constructor(private purchaseProductRepository: PurchaseProductRepository) {}
+  constructor(
+    private purchaseProductRepository: PurchaseProductRepository,
+    private purchaseService: PurchaseService,
+  ) {}
 
   async priceStatistic(from: Date, to: Date, type: StatisticType) {
     const array = [];
@@ -81,5 +85,17 @@ export class StatisticsService {
       };
     });
     return newData;
+  }
+
+  async purchasedProductsCountAndPriceStatistic(type: StatisticType) {
+    const allPurchases = await this.purchaseService.getAllPurchasesStatistic();
+    const { totalPurchasesPrice, purchasesAverageCost } = await this.purchaseService.getTotalPurchasesPriceStatistic();
+
+    return await this.purchaseProductRepository.purchasedProductsCountAndPriceStatistic(
+      type,
+      allPurchases.length,
+      totalPurchasesPrice,
+      purchasesAverageCost,
+    );
   }
 }

@@ -524,4 +524,20 @@ export class PurchaseService {
   async delete(id: string) {
     return await this.purchaseRepository.delete(id);
   }
+
+  async getAllPurchasesStatistic() {
+    return await this.purchaseRepository.find();
+  }
+
+  async getTotalPurchasesPriceStatistic() {
+    const allPurchases = await this.getAllPurchasesStatistic();
+    const totalPurchasesPrice = allPurchases.reduce((acc, n) => {
+      return acc + (Number(n.price) + Number(n.shippingPrice));
+    }, 0);
+
+    return {
+      totalPurchasesPrice,
+      purchasesAverageCost: totalPurchasesPrice / allPurchases.length,
+    };
+  }
 }
