@@ -3,7 +3,7 @@ import { SdekDto, SdekDtoOrder } from './dto/sdek.dto';
 import { SdekRepository } from './sdek.repository';
 import fetch from 'cross-fetch';
 import { stringify } from 'querystring';
-
+import { SdekUpdate } from './dto/sdekUpdate.dto';
 import {
   Injectable,
   BadRequestException,
@@ -124,7 +124,7 @@ export class SdekService {
       });
     return result;
   }
-  async editOrder(body) {
+  async editOrder(body: SdekUpdate) {
     const result = await fetch('https://api.edu.cdek.ru/v2/orders', {
       method: 'PATCH',
       body: JSON.stringify(body),
