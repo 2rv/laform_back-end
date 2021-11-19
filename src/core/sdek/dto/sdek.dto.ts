@@ -15,12 +15,12 @@ export class SdekDto {
   @IsNumber()
   tariff_code: number;
 
-  @IsNotEmpty()
+  @IsOptional()
   @ValidateNested()
   @Type(() => SdekLocation)
   to_location: SdekLocation;
 
-  @IsNotEmpty()
+  @IsOptional()
   @ValidateNested()
   @Type(() => SdekLocation)
   from_location: SdekLocation;
@@ -43,7 +43,7 @@ export class SdekDtoOrder {
   @IsNumber()
   tariff_code: number;
 
-  @IsNotEmpty()
+  @IsOptional()
   @ValidateNested()
   @Type(() => SdekLocation)
   to_location: SdekLocation;
@@ -52,7 +52,7 @@ export class SdekDtoOrder {
   @IsString()
   code: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsArray()
   packages: SdekPackages[];
 

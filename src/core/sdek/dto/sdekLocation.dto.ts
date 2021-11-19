@@ -1,19 +1,15 @@
-import {
-  IsNotEmpty,
-  IsString,
-  IsNumber,
-} from 'class-validator';
+import { IsNotEmpty, IsString, IsNumber, IsOptional } from 'class-validator';
 
 export class SdekLocation {
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
   code: number;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   city: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   address: string;
 }

@@ -1,7 +1,7 @@
-import { IsNotEmpty, IsNumber, IsUUID } from 'class-validator';
+import { IsOptional, IsUUID } from 'class-validator';
 
 export class SdekUpdate {
-  @IsNotEmpty()
+  @IsOptional()
   @IsUUID('all')
   id: string;
 }

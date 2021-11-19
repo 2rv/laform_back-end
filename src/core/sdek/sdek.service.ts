@@ -6,11 +6,8 @@ import { stringify } from 'querystring';
 
 import {
   Injectable,
-  Response,
-  HttpCode,
   BadRequestException,
   InternalServerErrorException,
-  NotFoundException,
 } from '@nestjs/common';
 
 @Injectable()

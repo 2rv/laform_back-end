@@ -1,26 +1,23 @@
-import {
-  IsNotEmpty,
-  IsNumber,
-} from 'class-validator';
+import { IsOptional, IsNumber } from 'class-validator';
 
 export class SdekPackages {
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
   number: number;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
   height: number;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
   length: number;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
   weight: number;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
   width: number;
 }
