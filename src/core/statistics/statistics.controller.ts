@@ -44,8 +44,8 @@ export class StatisticsController {
   }
 
   @Get('general/get')
-  // @Roles(USER_ROLE.ADMIN)
-  // @UseGuards(AuthGuard('jwt'), AccountGuard)
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
   async general(@Query('from') from: Date, @Query('to') to: Date) {
     return await this.statisticsService.generalStatistic(from, to);
   }
