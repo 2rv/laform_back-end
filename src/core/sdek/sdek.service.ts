@@ -176,4 +176,29 @@ export class SdekService {
     }
     return result;
   }
+  async getOffice() {
+    const result = await fetch('https://api.edu.cdek.ru/v2/deliverypoints', {
+      method: 'GET',
+      headers: {
+        Authorization: await this.authInSdek(),
+      },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .catch((err) => {
+        throw new InternalServerErrorException(err);
+      });
+    if (result.error) {
+      throw new InternalServerErrorException(result);
+    }
+    if (result.requests) {
+      for (let exception of result.requests) {
+        if (exception.errors) {
+          throw new BadRequestException(exception.errors);
+        }
+      }
+    }
+    return result;
+  }
 }
