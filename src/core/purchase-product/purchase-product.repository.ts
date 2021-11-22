@@ -153,7 +153,6 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
         .leftJoin('purchase_product.patternProductId', 'patternProductId')
         .andWhere('patternProductId.type = 1')
         .andWhere('purchase_product.masterClassId is null')
-        .andWhere('purchase_product.patternProductId is not null')
         .andWhere('purchase_product.sewingProductId is null');
     }
     if (type === StatisticType.PrintedPatternProduct) {
@@ -169,6 +168,20 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
         .andWhere('purchase_product.masterClassId is null')
         .andWhere('purchase_product.patternProductId is null')
         .andWhere('purchase_product.sewingProductId is not null');
+    }
+    if (type === StatisticType.MaterialProduct) {
+      query
+        .leftJoin('purchase_product.patternProductId', 'patternProductId')
+        .andWhere(
+          'purchase_product.sewingProductId is not null OR patternProductId.type = 2',
+        );
+    }
+    if (type === StatisticType.NotMaterialProduct) {
+      query
+        .leftJoin('purchase_product.patternProductId', 'patternProductId')
+        .andWhere(
+          'purchase_product.masterClassId is not null OR patternProductId.type = 1',
+        );
     }
     if (type === StatisticType.All) {
       return await query.getMany();

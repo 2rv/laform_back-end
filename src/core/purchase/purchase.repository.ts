@@ -323,4 +323,11 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
       ])
       .getMany();
   }
+  async statistics(from: Date, to: Date): Promise<any[]> {
+    let query = await this.createQueryBuilder('purchase')
+      .where('purchase.created_date >= :from', { from })
+      .andWhere('purchase.created_date <= :to', { to });
+
+    return await query.getMany();
+  }
 }

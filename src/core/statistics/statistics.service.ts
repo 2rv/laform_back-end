@@ -2,10 +2,14 @@ import { Injectable } from '@nestjs/common';
 
 import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
 import { StatisticType } from './enum/statistic.enum';
+import { PurchaseRepository } from '../purchase/purchase.repository';
 
 @Injectable()
 export class StatisticsService {
-  constructor(private purchaseProductRepository: PurchaseProductRepository) {}
+  constructor(
+    private purchaseProductRepository: PurchaseProductRepository,
+    private purchaseRepository: PurchaseRepository,
+  ) {}
 
   async priceStatistic(from: Date, to: Date, type: StatisticType) {
     const array = [];
@@ -81,5 +85,51 @@ export class StatisticsService {
       };
     });
     return newData;
+  }
+
+  async generalStatistic(from: Date, to: Date) {
+    let purchaseProductsCount = 0;
+    let purchaseProductsTotalPrice = 0;
+    let materialPurchaseProductsCount = 0;
+    let notMaterialPurchaseProductsCount = 0;
+
+    const purchaseProducts = await this.purchaseProductRepository.statistics(
+      from,
+      to,
+      StatisticType.All,
+    );
+    const purchases = await this.purchaseRepository.statistics(from, to);
+    const materialPurchaseProducts =
+      await this.purchaseProductRepository.statistics(
+        from,
+        to,
+        StatisticType.MaterialProduct,
+      );
+    const notMaterialPurchaseProducts =
+      await this.purchaseProductRepository.statistics(
+        from,
+        to,
+        StatisticType.NotMaterialProduct,
+      );
+
+    for (let purchaseProduct of purchaseProducts) {
+      purchaseProductsCount += purchaseProduct.totalCount;
+    }
+    for (let purchase of purchases) {
+      purchaseProductsTotalPrice += purchase.price;
+    }
+    for (let materialPurchaseProduct of materialPurchaseProducts) {
+      materialPurchaseProductsCount += materialPurchaseProduct.totalCount;
+    }
+    for (let notMaterialPurchaseProduct of notMaterialPurchaseProducts) {
+      notMaterialPurchaseProductsCount += notMaterialPurchaseProduct.totalCount;
+    }
+
+    return {
+      purchaseProductsCount,
+      purchaseProductsTotalPrice,
+      materialPurchaseProductsCount,
+      notMaterialPurchaseProductsCount,
+    };
   }
 }
