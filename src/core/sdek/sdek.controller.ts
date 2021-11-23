@@ -21,8 +21,8 @@ import { USER_ROLE } from '../user/enum/user-role.enum';
 export class SdekController {
   constructor(private readonly SdekService: SdekService) {}
 
-  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  // @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  // @UseGuards(AuthGuard('jwt'), AccountGuard)
   @Get('/auth')
   async authInSdek() {
     return this.SdekService.authInSdek();
@@ -57,16 +57,22 @@ export class SdekController {
   async editOrder(@Body(new ValidationPipe()) body: SdekUpdate) {
     return this.SdekService.editOrder(body);
   }
-  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  // @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  // @UseGuards(AuthGuard('jwt'), AccountGuard)
   @Get('/get/office')
-  async getOffice() {
-    return this.SdekService.getOffice();
+  async getOffice(@Query() query) {
+    return this.SdekService.getOffice(query.postal_code);
   }
-  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  // @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  // @UseGuards(AuthGuard('jwt'), AccountGuard)
   @Delete('/delete/order')
   async deleteOrder(@Query() query) {
     return this.SdekService.deleteOrder(query.id);
+  }
+  // @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  // @UseGuards(AuthGuard('jwt'), AccountGuard)
+  @Get('/get/cities')
+  async listOfCities(@Query() query) {
+    return this.SdekService.listOfCities(query.fias_guid);
   }
 }
