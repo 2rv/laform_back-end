@@ -27,9 +27,8 @@ export class PaymentController {
   async GetUnitpayLink(
     @GetUser() user: UserEntity,
     @Body() body: PaymentDto,
-    @Res() res,
   ): Promise<any> {
     const url = await this.paymentService.getPayAnyWayLink(body, user);
-    return res.redirect(url);
+    return url;
   }
 }
