@@ -25,8 +25,6 @@ export class PostEntity {
   @Column({
     type: 'varchar',
     name: 'vendor_code',
-    unique: true,
-    readonly: true,
   })
   vendorCode: string;
 

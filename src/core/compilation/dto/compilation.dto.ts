@@ -5,7 +5,6 @@ import {
   IsUUID,
   ValidateNested,
 } from 'class-validator';
-import { CompilationProductEntity } from 'src/core/compilation-product/compilation-product.entity';
 import { MasterClassEntity } from 'src/core/master-class/master-class.entity';
 import { PatternProductEntity } from 'src/core/pattern-product/pattern-product.entity';
 import { PostEntity } from 'src/core/post/post.entity';
@@ -19,6 +18,10 @@ export class CompilationDto {
   @IsOptional()
   @IsString()
   title: string;
+
+  @IsOptional()
+  @IsString()
+  path: string;
 
   @IsOptional()
   @IsArray()

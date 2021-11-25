@@ -14,7 +14,9 @@ export class PostService {
   ) {}
 
   async create(body: PostDto): Promise<PostEntity> {
-    body.vendorCode = PostEntity.getVendorCode();
+    if (!Boolean(body.vendorCode)) {
+      body.vendorCode = PostEntity.getVendorCode();
+    }
     return await this.postRepository.save(body);
   }
 
@@ -145,6 +147,9 @@ export class PostService {
   }
 
   async update(id: string, body: PostDto) {
+    if (!Boolean(body.vendorCode)) {
+      body.vendorCode = PostEntity.getVendorCode();
+    }
     const post: PostEntity = await this.postRepository.findOneOrFail(id, {
       relations: ['image'],
     });

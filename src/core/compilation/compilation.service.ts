@@ -7,7 +7,7 @@ import { CompilationDto } from './dto/compilation.dto';
 export class CompilationService {
   constructor(private compilationRepository: CompilationRepository) {}
 
-  async create(body: CompilationDto) {
+  async create(body: CompilationDto[]) {
     return await this.compilationRepository.save(body);
   }
   async get(): Promise<CompilationEntity[]> {

@@ -15,9 +15,10 @@ export class MasterClassService {
   ) {}
 
   async save(body: MasterClassDto): Promise<MasterClassEntity> {
-    const result = this.masterClassRepository.create(body);
-    result.vendorCode = MasterClassEntity.getVendorCode();
-    return await this.masterClassRepository.save(result);
+    if (!Boolean(body.vendorCode)) {
+      body.vendorCode = MasterClassEntity.getVendorCode();
+    }
+    return await this.masterClassRepository.save(body);
   }
 
   async getAll(
@@ -153,10 +154,14 @@ export class MasterClassService {
   }
 
   async update(id: string, body: MasterClassDto) {
+    if (!Boolean(body.vendorCode)) {
+      body.vendorCode = MasterClassEntity.getVendorCode();
+    }
     const masterClass: MasterClassEntity =
       await this.masterClassRepository.findOneOrFail(id, {
         relations: ['recommendation'],
       });
+
     if (masterClass.recommendation?.id) {
       await this.recommendationService.delete(masterClass.recommendation.id);
     }

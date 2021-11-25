@@ -1,12 +1,9 @@
 import {
-  IsNotEmpty,
   IsString,
   IsNumber,
   Min,
   IsOptional,
   IsArray,
-  ArrayMinSize,
-  ArrayMaxSize,
   Max,
 } from 'class-validator';
 import { FileDto } from 'src/core/file-upload/dto/file-dto';

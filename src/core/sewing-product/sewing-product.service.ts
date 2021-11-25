@@ -18,13 +18,24 @@ export class SewingProductService {
   ) {}
 
   async create(body: SewingProductDto): Promise<SewingProductEntity> {
-    body.options = body.options.map((item) => {
-      item.vendorCode = SewingProductEntity.getVendorCode();
-      return item;
-    });
-    if (body.optionType === 0) {
+    if (!Boolean(body.vendorCode)) {
       body.vendorCode = SewingProductEntity.getVendorCode();
     }
+    body.options = body.options.map((item, index: number) => {
+      if (body.optionType === 1) {
+        item.vendorCode = `${body.vendorCode}-${item.size || index}-${
+          item.colorRu || item.colorEn || index
+        }`;
+      } else if (body.optionType === 2) {
+        item.vendorCode = `${body.vendorCode}-${item.size || index}`;
+      } else if (body.optionType === 3) {
+        item.vendorCode = `${body.vendorCode}-${
+          item.colorRu || item.colorEn || index
+        }`;
+      }
+      return item;
+    });
+
     return await this.sewingProductRepository.save(body);
   }
 
@@ -160,14 +171,27 @@ export class SewingProductService {
   }
 
   async update(id: string, body: SewingProductDto) {
-    body.options = body.options.map((item) => {
-      if (!item.vendorCode) {
-        item.vendorCode = SewingProductEntity.getVendorCode();
+    if (!Boolean(body.vendorCode)) {
+      body.vendorCode = SewingProductEntity.getVendorCode();
+    }
+    body.options = body.options.map((item, index) => {
+      if (body.optionType === 1) {
+        item.vendorCode = `${body.vendorCode}-${item.size || index}-${
+          item.colorRu || item.colorEn || index
+        }`;
+      } else if (body.optionType === 2) {
+        item.vendorCode = `${body.vendorCode}-${item.size || index}`;
+      } else if (body.optionType === 3) {
+        item.vendorCode = `${body.vendorCode}-${
+          item.colorRu || item.colorEn || index
+        }`;
       }
       return item;
     });
+
     const sewingProduct: SewingProductEntity =
       await this.sewingProductRepository.findOneOrFail(id);
+
     if (sewingProduct.recommendation?.id) {
       await this.recommendationService.delete(sewingProduct.recommendation.id);
     }

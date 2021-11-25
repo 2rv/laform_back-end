@@ -24,7 +24,7 @@ export class CompilationController {
   @Post('/create/')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async create(@Body(new ValidationPipe()) body: CompilationDto) {
+  async create(@Body(new ValidationPipe()) body: CompilationDto[]) {
     return await this.compilationService.create(body);
   }
 

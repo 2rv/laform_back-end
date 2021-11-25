@@ -19,8 +19,6 @@ export class ProductOptionEntity {
   @Column({
     type: 'varchar',
     name: 'vendor_code',
-    unique: true,
-    readonly: true,
   })
   vendorCode: string;
 

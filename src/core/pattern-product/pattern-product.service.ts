@@ -18,13 +18,14 @@ export class PatternProductService {
   ) {}
 
   async create(body: PatternProductDto): Promise<PatternProductEntity> {
-    body.options = body.options.map((item) => {
-      item.vendorCode = PatternProductEntity.getVendorCode();
-      return item;
-    });
-    if (body.optionType === 0) {
+    if (!Boolean(body.vendorCode)) {
       body.vendorCode = PatternProductEntity.getVendorCode();
     }
+    body.options = body.options.map((item, index) => {
+      item.vendorCode = `${body.vendorCode}-${item.size || index}`;
+      return item;
+    });
+
     return await this.patternProductRepository.save(body);
   }
 
@@ -191,12 +192,14 @@ export class PatternProductService {
   }
 
   async update(id: string, body: PatternProductDto) {
-    body.options = body.options.map((item) => {
-      if (!item.vendorCode) {
-        item.vendorCode = PatternProductEntity.getVendorCode();
-      }
+    if (!Boolean(body.vendorCode)) {
+      body.vendorCode = PatternProductEntity.getVendorCode();
+    }
+    body.options = body.options.map((item, index) => {
+      item.vendorCode = `${body.vendorCode}-${item.size || index}`;
       return item;
     });
+
     const patternProduct: PatternProductEntity =
       await this.patternProductRepository.findOneOrFail(id, {
         relations: ['recommendation'],

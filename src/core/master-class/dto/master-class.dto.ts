@@ -105,4 +105,8 @@ export class MasterClassDto {
   @IsOptional()
   @IsObject()
   recommendation: CreateRecommendationDto;
+
+  @IsOptional()
+  @IsString()
+  vendorCode: string;
 }

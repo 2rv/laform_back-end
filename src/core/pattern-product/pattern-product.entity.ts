@@ -41,8 +41,6 @@ export class PatternProductEntity {
   @Column({
     type: 'varchar',
     name: 'vendor_code',
-    unique: true,
-    nullable: true,
   })
   vendorCode: string;
 
