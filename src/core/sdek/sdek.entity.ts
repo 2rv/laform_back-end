@@ -29,4 +29,12 @@ export class SdekEntity {
     default: 100,
   })
   weight?: number;
+
+  @Column({
+    type: 'integer',
+    name: 'code',
+    nullable: false,
+    default: 270,
+  })
+  code?: number;
 }

@@ -37,6 +37,13 @@ export class SdekService {
     return 'Bearer ' + result.access_token;
   }
   async CalculationByTariffCode(body: SdekDto) {
+    const findFromLocation = await this.SdekRepository.findOne();
+    const data = {
+      city: findFromLocation.city,
+      adress: findFromLocation.adress,
+      code: findFromLocation.code,
+    };
+    body.from_location = data;
     const result: any = await fetch(
       'https://api.edu.cdek.ru/v2/calculator/tariff',
       {
@@ -60,6 +67,13 @@ export class SdekService {
     return result;
   }
   async getTariff(body: SdekDto) {
+    const findFromLocation = await this.SdekRepository.findOne();
+    const data = {
+      city: findFromLocation.city,
+      adress: findFromLocation.adress,
+      code: findFromLocation.code,
+    };
+    body.from_location = data;
     const result = await fetch(
       'https://api.edu.cdek.ru/v2/calculator/tarifflist',
       {
@@ -83,6 +97,13 @@ export class SdekService {
     return result;
   }
   async registrationOrder(body: SdekDtoOrder) {
+    const findFromLocation = await this.SdekRepository.findOne();
+    const data = {
+      city: findFromLocation.city,
+      adress: findFromLocation.adress,
+      code: findFromLocation.code,
+    };
+    body.from_location = data;
     const result = await fetch('https://api.edu.cdek.ru/v2/orders', {
       method: 'POST',
       body: JSON.stringify(body),

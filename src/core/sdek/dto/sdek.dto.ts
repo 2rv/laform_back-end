@@ -21,9 +21,7 @@ export class SdekDto {
   to_location: SdekLocation;
 
   @IsOptional()
-  @ValidateNested()
-  @Type(() => SdekLocation)
-  from_location: SdekLocation;
+  from_location: object;
 
   @IsOptional()
   @IsString()
@@ -47,6 +45,9 @@ export class SdekDtoOrder {
   @ValidateNested()
   @Type(() => SdekLocation)
   to_location: SdekLocation;
+
+  @IsOptional()
+  from_location: object;
 
   @IsOptional()
   @IsString()
