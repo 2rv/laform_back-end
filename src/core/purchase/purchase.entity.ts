@@ -69,6 +69,7 @@ export class PurchaseEntity {
   @Column({
     type: 'varchar',
     name: 'city',
+    nullable: true,
   })
   city!: string;
 

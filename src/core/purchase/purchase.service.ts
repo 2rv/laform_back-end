@@ -360,15 +360,15 @@ export class PurchaseService {
     const { promoCode, promoCodeDiscount } = await this.verifyPromo(
       body.purchase.promoCode,
     );
-    const { diliveryName, diliveryPrice } = await this.verifyDiliveryMethod(
-      body.purchase.typeOfDelivery,
-    );
+    // const { diliveryName, diliveryPrice } = await this.verifyDiliveryMethod(
+    //   body.purchase.typeOfDelivery,
+    // );
 
     body.purchase.promoCodeDiscount = promoCodeDiscount;
     body.purchase.promoCode = promoCode;
     body.purchase.price = Number(price.toFixed(2));
-    body.purchase.typeOfDelivery = diliveryName;
-    body.purchase.shippingPrice = diliveryPrice || 0;
+    // body.purchase.typeOfDelivery = diliveryName;
+    // body.purchase.shippingPrice = diliveryPrice || 0;
 
     let result;
     let notAuthUserId: number;
