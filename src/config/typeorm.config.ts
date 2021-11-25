@@ -73,3 +73,4 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   //   logging: ['query', 'error'],
   synchronize: process.env.TYPEORM_SYNC || DATABASE_CONFIG.SYNCHRONIZE,
 };
+
