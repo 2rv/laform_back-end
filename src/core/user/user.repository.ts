@@ -8,11 +8,11 @@ import {
 import { USER_ERROR } from './enum/user-error.enum';
 import { UserCreateDto } from './dto/user-create.dto';
 import { UserChangePasswordDto } from './dto/user-change-password.dto';
-import { UserChangeEmailDto } from './dto/user-change-email.dto';
 import { UserEntity } from './user.entity';
 import { CreateGoogleUseDto } from './dto/create-user-google.dto';
 import { CreateFacebookUseDto } from './dto/create-user-facebook.dto';
 import { CreateAppleUseDto } from './dto/create-user-apple.dto';
+import { USER_ROLE } from './enum/user-role.enum';
 
 @EntityRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {
@@ -120,6 +120,7 @@ export class UserRepository extends Repository<UserEntity> {
         'user.login',
         'user.role',
         'user.emailConfirmed',
+        'user.receivesNewOrders',
         'user.notificationEmail',
         'user.googleId',
         'user.appleId',
@@ -225,5 +226,13 @@ export class UserRepository extends Repository<UserEntity> {
         throw new InternalServerErrorException();
       }
     }
+  }
+
+  async getAdminsToNotificationNewOrder(): Promise<UserEntity[]> {
+    return await this.createQueryBuilder('user')
+      .select(['user.id', 'user.email', 'user.role'])
+      .where('user.receivesNewOrders = true')
+      .andWhere('user.role = :role', { role: USER_ROLE.ADMIN })
+      .getMany();
   }
 }

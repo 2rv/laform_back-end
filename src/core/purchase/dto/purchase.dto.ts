@@ -25,10 +25,6 @@ export class PurchaseDto {
 
   @IsNotEmpty()
   @IsString()
-  city: string;
-
-  @IsNotEmpty()
-  @IsString()
   phoneNumber: string;
 
   @IsOptional()
@@ -46,10 +42,6 @@ export class PurchaseDto {
   @IsOptional()
   @IsString()
   promoCode: string;
-
-  @IsNotEmpty()
-  @IsString()
-  typeOfDelivery: string;
 
   @IsOptional()
   @IsNumber()

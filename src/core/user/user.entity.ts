@@ -52,6 +52,9 @@ export class UserEntity extends BaseEntity {
   @Column({ default: true })
   notificationEmail: boolean;
 
+  @Column({ default: false })
+  receivesNewOrders: boolean;
+
   @Column({ name: 'google_id', nullable: true })
   googleId?: string;
 
