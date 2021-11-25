@@ -35,9 +35,6 @@ export class MasterClassEntity {
   @Column({
     type: 'varchar',
     name: 'vendor_code',
-    unique: true,
-    readonly: true,
-    nullable: true,
   })
   vendorCode: string;
 
