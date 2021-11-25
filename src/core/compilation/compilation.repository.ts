@@ -23,6 +23,7 @@ export class CompilationRepository extends Repository<CompilationEntity> {
       .select([
         'compilation.id',
         'compilation.title',
+        'compilation.path',
         'compilation_products.id',
 
         'com_master_class.id',
@@ -140,6 +141,7 @@ export class CompilationRepository extends Repository<CompilationEntity> {
       .select([
         'compilation.id',
         'compilation.title',
+        'compilation.path',
         'compilation_products.id',
 
         'com_master_class.id',

@@ -21,8 +21,16 @@ export class CompilationEntity {
   @Column({
     type: 'varchar',
     name: 'title',
+    default: ' ',
   })
   title: string;
+
+  @Column({
+    type: 'varchar',
+    name: 'path',
+    nullable: true,
+  })
+  path: string;
 
   @OneToMany(
     () => CompilationProductEntity,
