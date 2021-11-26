@@ -23,7 +23,6 @@ export class UserRepository extends Repository<UserEntity> {
     user.login = login;
     user.email = email;
     user.password = await UserEntity.hashPassword(password);
-
     try {
       await user.save();
       return user;
@@ -179,17 +178,16 @@ export class UserRepository extends Repository<UserEntity> {
     user.googleId = body.googleId;
     user.login = body.login;
     user.email = body.email;
-
-    try {
-      await user.save();
-      return user;
-    } catch (err) {
-      if (err.code === '23505') {
-        throw new ConflictException(USER_ERROR.USER_ALREADY_EXISTS);
-      } else {
-        throw new InternalServerErrorException();
+      try {
+        await user.save();
+        return user;
+      } catch (err) {
+        if (err.code === '23505') {
+          throw new ConflictException(USER_ERROR.USER_ALREADY_EXISTS);
+        } else {
+          throw new InternalServerErrorException();
+        }
       }
-    }
   }
 
   async saveAppleUser(body: CreateAppleUseDto): Promise<UserEntity> {

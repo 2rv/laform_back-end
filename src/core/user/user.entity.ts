@@ -84,15 +84,23 @@ export class UserEntity extends BaseEntity {
   @OneToMany(
     () => PurchaseEntity,
     (purchase: PurchaseEntity) => purchase.userId,
+    {
+      onDelete: 'CASCADE',
+    },
   )
   purchase: PurchaseEntity[];
 
-  @OneToMany(() => CommentEntity, (comment: CommentEntity) => comment.userId)
+  @OneToMany(() => CommentEntity, (comment: CommentEntity) => comment.userId, {
+    onDelete: 'CASCADE',
+  })
   comment: CommentEntity[];
 
   @OneToOne(
     () => UserInfoEntity,
     (userSettingsInfo: UserInfoEntity) => userSettingsInfo.userId,
+    {
+      onDelete: 'CASCADE',
+    },
   )
   userSettingId: UserInfoEntity;
 }
