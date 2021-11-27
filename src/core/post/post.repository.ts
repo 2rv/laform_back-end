@@ -448,91 +448,6 @@ export class PostRepository extends Repository<PostEntity> {
       .getOne();
   }
 
-  async findPinnedRu(): Promise<PostEntity[]> {
-    return await this.createQueryBuilder('post')
-      .leftJoin('post.image', 'image')
-      .leftJoin('post.categories', 'categories')
-      .select([
-        'post.id',
-        'post.type',
-        'post.titleRu',
-        'post.modifierRu',
-        'post.modifierColor',
-        'post.pinned',
-        'post.createdDate',
-        'post.vendorCode',
-        'image',
-        'categories.id',
-        'categories.categoryNameRu',
-      ])
-      .where('post.pinned = true')
-      .getMany();
-  }
-  async findPinnedEn(): Promise<PostEntity[]> {
-    return await this.createQueryBuilder('post')
-      .leftJoin('post.image', 'image')
-      .leftJoin('post.categories', 'categories')
-      .select([
-        'post.id',
-        'post.type',
-        'post.titleEn',
-        'post.modifierEn',
-        'post.modifierColor',
-        'post.pinned',
-        'post.createdDate',
-        'post.vendorCode',
-        'image',
-        'categories.id',
-        'categories.categoryNameEn',
-      ])
-      .where('post.pinned = true')
-      .getMany();
-  }
-  async findPinnedRuAuth(userId: number): Promise<PostEntity[]> {
-    return await this.createQueryBuilder('post')
-      .leftJoin('post.image', 'image')
-      .leftJoin('post.categories', 'categories')
-      .leftJoin('post.like', 'like', 'like.userId = :userId', { userId })
-      .select([
-        'post.id',
-        'post.type',
-        'post.titleRu',
-        'post.modifierRu',
-        'post.modifierColor',
-        'post.pinned',
-        'post.createdDate',
-        'post.vendorCode',
-        'image',
-        'categories.id',
-        'categories.categoryNameRu',
-        'like',
-      ])
-      .where('post.pinned = true')
-      .getMany();
-  }
-  async findPinnedEnAuth(userId: number): Promise<PostEntity[]> {
-    return await this.createQueryBuilder('post')
-      .leftJoin('post.image', 'image')
-      .leftJoin('post.categories', 'categories')
-      .leftJoin('post.like', 'like', 'like.userId = :userId', { userId })
-      .select([
-        'post.id',
-        'post.type',
-        'post.titleEn',
-        'post.modifierEn',
-        'post.modifierColor',
-        'post.pinned',
-        'post.createdDate',
-        'post.vendorCode',
-        'image',
-        'categories.id',
-        'categories.categoryNameEn',
-        'like',
-      ])
-      .where('post.pinned = true')
-      .getMany();
-  }
-
   async findLikedRu(
     userId: number,
     size: number = 30,
@@ -592,3 +507,88 @@ export class PostRepository extends Repository<PostEntity> {
       .getManyAndCount();
   }
 }
+
+// async findPinnedRu(): Promise<PostEntity[]> {
+//     return await this.createQueryBuilder('post')
+//       .leftJoin('post.image', 'image')
+//       .leftJoin('post.categories', 'categories')
+//       .select([
+//         'post.id',
+//         'post.type',
+//         'post.titleRu',
+//         'post.modifierRu',
+//         'post.modifierColor',
+//         'post.pinned',
+//         'post.createdDate',
+//         'post.vendorCode',
+//         'image',
+//         'categories.id',
+//         'categories.categoryNameRu',
+//       ])
+//       .where('post.pinned = true')
+//       .getMany();
+//   }
+//   async findPinnedEn(): Promise<PostEntity[]> {
+//     return await this.createQueryBuilder('post')
+//       .leftJoin('post.image', 'image')
+//       .leftJoin('post.categories', 'categories')
+//       .select([
+//         'post.id',
+//         'post.type',
+//         'post.titleEn',
+//         'post.modifierEn',
+//         'post.modifierColor',
+//         'post.pinned',
+//         'post.createdDate',
+//         'post.vendorCode',
+//         'image',
+//         'categories.id',
+//         'categories.categoryNameEn',
+//       ])
+//       .where('post.pinned = true')
+//       .getMany();
+//   }
+//   async findPinnedRuAuth(userId: number): Promise<PostEntity[]> {
+//     return await this.createQueryBuilder('post')
+//       .leftJoin('post.image', 'image')
+//       .leftJoin('post.categories', 'categories')
+//       .leftJoin('post.like', 'like', 'like.userId = :userId', { userId })
+//       .select([
+//         'post.id',
+//         'post.type',
+//         'post.titleRu',
+//         'post.modifierRu',
+//         'post.modifierColor',
+//         'post.pinned',
+//         'post.createdDate',
+//         'post.vendorCode',
+//         'image',
+//         'categories.id',
+//         'categories.categoryNameRu',
+//         'like',
+//       ])
+//       .where('post.pinned = true')
+//       .getMany();
+//   }
+//   async findPinnedEnAuth(userId: number): Promise<PostEntity[]> {
+//     return await this.createQueryBuilder('post')
+//       .leftJoin('post.image', 'image')
+//       .leftJoin('post.categories', 'categories')
+//       .leftJoin('post.like', 'like', 'like.userId = :userId', { userId })
+//       .select([
+//         'post.id',
+//         'post.type',
+//         'post.titleEn',
+//         'post.modifierEn',
+//         'post.modifierColor',
+//         'post.pinned',
+//         'post.createdDate',
+//         'post.vendorCode',
+//         'image',
+//         'categories.id',
+//         'categories.categoryNameEn',
+//         'like',
+//       ])
+//       .where('post.pinned = true')
+//       .getMany();
+//   }

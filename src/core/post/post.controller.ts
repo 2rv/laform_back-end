@@ -79,7 +79,6 @@ export class PostController {
       user.id,
     );
   }
-
   @Get('/get/:postId')
   @UseGuards(PostGuard)
   async getOne(
@@ -97,20 +96,6 @@ export class PostController {
   ) {
     return await this.postService.getOneAuth(id, query, user.id);
   }
-
-  @Get('/pinned/get/')
-  async getPinned(@Query(new LangValidationPipe()) query: string) {
-    return await this.postService.getPinned(query);
-  }
-  @Get('/auth/pinned/get/')
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async getPinnedAuth(
-    @Query(new LangValidationPipe()) query: string,
-    @GetAccount() user: UserEntity,
-  ) {
-    return await this.postService.getPinnedAuth(query, user.id);
-  }
-
   @Get('/liked/get/')
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getLiked(
@@ -121,28 +106,18 @@ export class PostController {
   ) {
     return await this.postService.getLiked(user.id, query, size, page);
   }
-
   @Put('/update/:postId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard)
   async update(@Param('postId') id: string, @Body() body: PostDto) {
     return await this.postService.update(id, body);
   }
-
-  @Put('/update-pinned/:postId')
-  @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard)
-  async updatePinned(@Param('postId') id: string, @Body() body: any) {
-    return await this.postService.updatePinned(id, body);
-  }
-
   @Delete('/delete/:postId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard)
   async delete(@Param('postId') id: string) {
     return await this.postService.delete(id);
   }
-
   @Put('/disable/:postId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard)
@@ -153,3 +128,23 @@ export class PostController {
     return await this.postService.disable(id, body.deleted);
   }
 }
+
+// @Get('/pinned/get/')
+// async getPinned(@Query(new LangValidationPipe()) query: string) {
+//   return await this.postService.getPinned(query);
+// }
+// @Get('/auth/pinned/get/')
+// @UseGuards(AuthGuard('jwt'), AccountGuard)
+// async getPinnedAuth(
+//   @Query(new LangValidationPipe()) query: string,
+//   @GetAccount() user: UserEntity,
+// ) {
+//   return await this.postService.getPinnedAuth(query, user.id);
+// }
+
+// @Put('/update-pinned/:postId')
+// @Roles(USER_ROLE.ADMIN)
+// @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard)
+// async updatePinned(@Param('postId') id: string, @Body() body: any) {
+//   return await this.postService.updatePinned(id, body);
+// }

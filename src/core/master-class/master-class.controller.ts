@@ -114,20 +114,6 @@ export class MasterClassController {
     );
   }
 
-  @Get('/pinned/get/')
-  async getPinned(@Query(new LangValidationPipe()) query: string) {
-    return await this.masterClassService.getPinned(query);
-  }
-
-  @Get('/auth/pinned/get/')
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async getPinnedAuth(
-    @Query(new LangValidationPipe()) query: string,
-    @GetAccount() user: UserEntity,
-  ) {
-    return await this.masterClassService.getPinnedAuth(query, user.id);
-  }
-
   @Get('/liked/get/')
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getLiked(
@@ -149,15 +135,6 @@ export class MasterClassController {
     return await this.masterClassService.update(masterClassId, body);
   }
 
-  @Put('/update-pinned/:masterClassId')
-  @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard, MasterClassGuard)
-  async updatePinned(
-    @Param('masterClassId') masterClassId: string,
-    @Body() body: any,
-  ) {
-    return await this.masterClassService.updatePinned(masterClassId, body);
-  }
   @Delete('/delete/:masterClassId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, MasterClassGuard)
@@ -175,3 +152,26 @@ export class MasterClassController {
     return await this.masterClassService.disable(masterClassId, body.deleted);
   }
 }
+
+// @Get('/pinned/get/')
+// async getPinned(@Query(new LangValidationPipe()) query: string) {
+//   return await this.masterClassService.getPinned(query);
+// }
+
+// @Get('/auth/pinned/get/')
+// @UseGuards(AuthGuard('jwt'), AccountGuard)
+// async getPinnedAuth(
+//   @Query(new LangValidationPipe()) query: string,
+//   @GetAccount() user: UserEntity,
+// ) {
+//   return await this.masterClassService.getPinnedAuth(query, user.id);
+// }
+// @Put('/update-pinned/:masterClassId')
+// @Roles(USER_ROLE.ADMIN)
+// @UseGuards(AuthGuard('jwt'), AccountGuard, MasterClassGuard)
+// async updatePinned(
+//   @Param('masterClassId') masterClassId: string,
+//   @Body() body: any,
+// ) {
+//   return await this.masterClassService.updatePinned(masterClassId, body);
+// }
