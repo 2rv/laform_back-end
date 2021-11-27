@@ -478,99 +478,6 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
       .getOne();
   }
 
-  async findPinnedRu(): Promise<MasterClassEntity[]> {
-    return await this.createQueryBuilder('master_class')
-      .leftJoin('master_class.images', 'images')
-      .leftJoin('master_class.categories', 'categories')
-      .select([
-        'master_class.id',
-        'master_class.type',
-        'master_class.vendorCode',
-        'master_class.createdDate',
-        'master_class.titleRu',
-        'master_class.modifierRu',
-        'master_class.discount',
-        'master_class.price',
-        'master_class.pinned',
-        'images',
-        'categories.id',
-        'categories.categoryNameRu',
-      ])
-      .where('master_class.pinned = true')
-      .getMany();
-  }
-  async findPinnedEn(): Promise<MasterClassEntity[]> {
-    return await this.createQueryBuilder('master_class')
-      .leftJoin('master_class.images', 'images')
-      .leftJoin('master_class.categories', 'categories')
-      .select([
-        'master_class.id',
-        'master_class.type',
-        'master_class.vendorCode',
-        'master_class.createdDate',
-        'master_class.titleEn',
-        'master_class.modifierEn',
-        'master_class.discount',
-        'master_class.price',
-        'master_class.pinned',
-        'images',
-        'categories.id',
-        'categories.categoryNameEn',
-      ])
-      .where('master_class.pinned = true')
-      .getMany();
-  }
-  async findPinnedRuAuth(userId: number): Promise<MasterClassEntity[]> {
-    return await this.createQueryBuilder('master_class')
-      .leftJoin('master_class.images', 'images')
-      .leftJoin('master_class.categories', 'categories')
-      .leftJoin('master_class.like', 'like', 'like.userId = :userId', {
-        userId,
-      })
-      .select([
-        'master_class.id',
-        'master_class.type',
-        'master_class.vendorCode',
-        'master_class.createdDate',
-        'master_class.titleRu',
-        'master_class.modifierRu',
-        'master_class.discount',
-        'master_class.price',
-        'master_class.pinned',
-        'images',
-        'categories.id',
-        'categories.categoryNameRu',
-        'like',
-      ])
-      .where('master_class.pinned = true')
-      .getMany();
-  }
-  async findPinnedEnAuth(userId: number): Promise<MasterClassEntity[]> {
-    return await this.createQueryBuilder('master_class')
-      .leftJoin('master_class.images', 'images')
-      .leftJoin('master_class.categories', 'categories')
-      .leftJoin('master_class.like', 'like', 'like.userId = :userId', {
-        userId,
-      })
-      .select([
-        'master_class.id',
-        'master_class.type',
-        'master_class.vendorCode',
-        'master_class.createdDate',
-        'master_class.titleEn',
-        'master_class.modifierEn',
-        'master_class.discount',
-        'master_class.price',
-        'master_class.pinned',
-        'images',
-        'categories.id',
-        'categories.categoryNameEn',
-        'like',
-      ])
-      .where('master_class.pinned = true')
-      .getMany();
-  }
-
   async findLikedRu(
     userId: number,
     size: number = 30,
@@ -678,3 +585,96 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
       .getOne();
   }
 }
+
+// async findPinnedRu(): Promise<MasterClassEntity[]> {
+//     return await this.createQueryBuilder('master_class')
+//       .leftJoin('master_class.images', 'images')
+//       .leftJoin('master_class.categories', 'categories')
+//       .select([
+//         'master_class.id',
+//         'master_class.type',
+//         'master_class.vendorCode',
+//         'master_class.createdDate',
+//         'master_class.titleRu',
+//         'master_class.modifierRu',
+//         'master_class.discount',
+//         'master_class.price',
+//         'master_class.pinned',
+//         'images',
+//         'categories.id',
+//         'categories.categoryNameRu',
+//       ])
+//       .where('master_class.pinned = true')
+//       .getMany();
+//   }
+//   async findPinnedEn(): Promise<MasterClassEntity[]> {
+//     return await this.createQueryBuilder('master_class')
+//       .leftJoin('master_class.images', 'images')
+//       .leftJoin('master_class.categories', 'categories')
+//       .select([
+//         'master_class.id',
+//         'master_class.type',
+//         'master_class.vendorCode',
+//         'master_class.createdDate',
+//         'master_class.titleEn',
+//         'master_class.modifierEn',
+//         'master_class.discount',
+//         'master_class.price',
+//         'master_class.pinned',
+//         'images',
+//         'categories.id',
+//         'categories.categoryNameEn',
+//       ])
+//       .where('master_class.pinned = true')
+//       .getMany();
+//   }
+//   async findPinnedRuAuth(userId: number): Promise<MasterClassEntity[]> {
+//     return await this.createQueryBuilder('master_class')
+//       .leftJoin('master_class.images', 'images')
+//       .leftJoin('master_class.categories', 'categories')
+//       .leftJoin('master_class.like', 'like', 'like.userId = :userId', {
+//         userId,
+//       })
+//       .select([
+//         'master_class.id',
+//         'master_class.type',
+//         'master_class.vendorCode',
+//         'master_class.createdDate',
+//         'master_class.titleRu',
+//         'master_class.modifierRu',
+//         'master_class.discount',
+//         'master_class.price',
+//         'master_class.pinned',
+//         'images',
+//         'categories.id',
+//         'categories.categoryNameRu',
+//         'like',
+//       ])
+//       .where('master_class.pinned = true')
+//       .getMany();
+//   }
+//   async findPinnedEnAuth(userId: number): Promise<MasterClassEntity[]> {
+//     return await this.createQueryBuilder('master_class')
+//       .leftJoin('master_class.images', 'images')
+//       .leftJoin('master_class.categories', 'categories')
+//       .leftJoin('master_class.like', 'like', 'like.userId = :userId', {
+//         userId,
+//       })
+//       .select([
+//         'master_class.id',
+//         'master_class.type',
+//         'master_class.vendorCode',
+//         'master_class.createdDate',
+//         'master_class.titleEn',
+//         'master_class.modifierEn',
+//         'master_class.discount',
+//         'master_class.price',
+//         'master_class.pinned',
+//         'images',
+//         'categories.id',
+//         'categories.categoryNameEn',
+//         'like',
+//       ])
+//       .where('master_class.pinned = true')
+//       .getMany();
+//   }

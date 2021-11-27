@@ -155,22 +155,6 @@ export class PatternProductService {
       return await this.patternProductRepository.findOneEnAuth(id, userId);
   }
 
-  async getPinned(query: string): Promise<PatternProductEntity[]> {
-    if (query === 'ru')
-      return await this.patternProductRepository.findPinnedRu();
-    if (query === 'en')
-      return await this.patternProductRepository.findPinnedEn();
-  }
-  async getPinnedAuth(
-    query: string,
-    userId: number,
-  ): Promise<PatternProductEntity[]> {
-    if (query === 'ru')
-      return await this.patternProductRepository.findPinnedRuAuth(userId);
-    if (query === 'en')
-      return await this.patternProductRepository.findPinnedEnAuth(userId);
-  }
-
   async getLiked(
     userId: number,
     query: string,
@@ -330,3 +314,19 @@ export class PatternProductService {
       return await this.patternProductRepository.findOneForUpdate(id);
   }
 }
+
+// async getPinned(query: string): Promise<PatternProductEntity[]> {
+//     if (query === 'ru')
+//       return await this.patternProductRepository.findPinnedRu();
+//     if (query === 'en')
+//       return await this.patternProductRepository.findPinnedEn();
+//   }
+//   async getPinnedAuth(
+//     query: string,
+//     userId: number,
+//   ): Promise<PatternProductEntity[]> {
+//     if (query === 'ru')
+//       return await this.patternProductRepository.findPinnedRuAuth(userId);
+//     if (query === 'en')
+//       return await this.patternProductRepository.findPinnedEnAuth(userId);
+//   }

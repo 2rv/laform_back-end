@@ -19,7 +19,6 @@ export class PostService {
     }
     return await this.postRepository.save(body);
   }
-
   async getAll(
     query: string,
     size: number,
@@ -107,7 +106,6 @@ export class PostService {
         userId,
       );
   }
-
   async getOne(id: string, query: string): Promise<PostEntity> {
     if (query === 'ru') return await this.postRepository.findOneRu(id);
     if (query === 'en') return await this.postRepository.findOneEn(id);
@@ -122,18 +120,6 @@ export class PostService {
     if (query === 'en')
       return await this.postRepository.findOneEnAuth(id, userId);
   }
-
-  async getPinned(query: string): Promise<PostEntity[]> {
-    if (query === 'ru') return await this.postRepository.findPinnedRu();
-    if (query === 'en') return await this.postRepository.findPinnedEn();
-  }
-  async getPinnedAuth(query: string, userId: number): Promise<PostEntity[]> {
-    if (query === 'ru')
-      return await this.postRepository.findPinnedRuAuth(userId);
-    if (query === 'en')
-      return await this.postRepository.findPinnedEnAuth(userId);
-  }
-
   async getLiked(
     userId: number,
     query: string,
@@ -145,7 +131,6 @@ export class PostService {
     if (query === 'en')
       return await this.postRepository.findLikedEn(userId, size, page);
   }
-
   async update(id: string, body: PostDto) {
     if (!Boolean(body.vendorCode)) {
       body.vendorCode = PostEntity.getVendorCode();
@@ -162,17 +147,25 @@ export class PostService {
     Object.assign(post, { ...body });
     return await this.postRepository.save(post);
   }
-
-  async updatePinned(id: string, body: any) {
-    await this.postRepository.update({ id }, body);
-  }
-
   async delete(id: string) {
     const post = await this.postRepository.findOneOrFail(id);
     return await this.postRepository.delete(post.id);
   }
-
   async disable(id: string, deleted: boolean) {
     await this.postRepository.update({ id }, { deleted });
   }
 }
+
+// async updatePinned(id: string, body: any) {
+//     await this.postRepository.update({ id }, body);
+//   }
+//   async getPinned(query: string): Promise<PostEntity[]> {
+//     if (query === 'ru') return await this.postRepository.findPinnedRu();
+//     if (query === 'en') return await this.postRepository.findPinnedEn();
+//   }
+//   async getPinnedAuth(query: string, userId: number): Promise<PostEntity[]> {
+//     if (query === 'ru')
+//       return await this.postRepository.findPinnedRuAuth(userId);
+//     if (query === 'en')
+//       return await this.postRepository.findPinnedEnAuth(userId);
+//   }

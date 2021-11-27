@@ -73,6 +73,13 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
           }
         }),
       )
+      .andWhere(
+        new Brackets((qb) => {
+          qb.where('options.optionVisibility = true').orWhere(
+            'sewing_product.optionType = 0',
+          );
+        }),
+      )
       .getManyAndCount();
   }
   async findAllEn(
@@ -137,6 +144,13 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
               allProductsPage !== 'yes' && 'sewing_product.deleted = false',
             );
           }
+        }),
+      )
+      .andWhere(
+        new Brackets((qb) => {
+          qb.where('options.optionVisibility = true').orWhere(
+            'sewing_product.optionType = 0',
+          );
         }),
       )
       .getManyAndCount();
@@ -210,6 +224,13 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
           }
         }),
       )
+      .andWhere(
+        new Brackets((qb) => {
+          qb.where('options.optionVisibility = true').orWhere(
+            'sewing_product.optionType = 0',
+          );
+        }),
+      )
       .getManyAndCount();
   }
   async findAllEnAuth(
@@ -281,6 +302,13 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
           }
         }),
       )
+      .andWhere(
+        new Brackets((qb) => {
+          qb.where('options.optionVisibility = true').orWhere(
+            'sewing_product.optionType = 0',
+          );
+        }),
+      )
       .getManyAndCount();
   }
 
@@ -338,6 +366,13 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .where('rec_post.deleted = false')
       .where('sewing_product.id = :id', { id })
       .andWhere('sewing_product.deleted = false')
+      .andWhere(
+        new Brackets((qb) => {
+          qb.where('options.optionVisibility = true').orWhere(
+            'sewing_product.optionType = 0',
+          );
+        }),
+      )
       .getOne();
   }
   async findOneEn(id: string): Promise<SewingProductEntity> {
@@ -392,6 +427,13 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .where('recommendations_pattern_product.deleted = false')
       .where('recommendations_post.deleted = false')
       .where('sewing_product.id = :id', { id })
+      .andWhere(
+        new Brackets((qb) => {
+          qb.where('options.optionVisibility = true').orWhere(
+            'sewing_product.optionType = 0',
+          );
+        }),
+      )
       .getOne();
   }
   async findOneRuAuth(
@@ -485,6 +527,13 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .where('recommendations_pattern_product.deleted = false')
       .where('recommendations_post.deleted = false')
       .where('sewing_product.id = :id', { id })
+      .andWhere(
+        new Brackets((qb) => {
+          qb.where('options.optionVisibility = true').orWhere(
+            'sewing_product.optionType = 0',
+          );
+        }),
+      )
       .getOne();
   }
   async findOneEnAuth(
@@ -578,156 +627,14 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .where('recommendations_pattern_product.deleted = false')
       .where('recommendations_post.deleted = false')
       .where('sewing_product.id = :id', { id })
+      .andWhere(
+        new Brackets((qb) => {
+          qb.where('options.optionVisibility = true').orWhere(
+            'sewing_product.optionType = 0',
+          );
+        }),
+      )
       .getOne();
-  }
-
-  async findPinnedRu(): Promise<SewingProductEntity[]> {
-    return await this.createQueryBuilder('sewing_product')
-      .leftJoin('sewing_product.images', 'images')
-      .leftJoin('sewing_product.categories', 'categories')
-      .leftJoin('sewing_product.options', 'options')
-      .select([
-        'sewing_product.id',
-        'sewing_product.titleRu',
-        'sewing_product.modifierRu',
-        'sewing_product.vendorCode',
-        'sewing_product.type',
-        'sewing_product.pinned',
-        'sewing_product.price',
-        'sewing_product.discount',
-        'sewing_product.optionType',
-        'sewing_product.count',
-        'sewing_product.isCount',
-        'sewing_product.length',
-        'sewing_product.isLength',
-        'images',
-        'categories.id',
-        'categories.categoryNameRu',
-        'options.id',
-        'options.size',
-        'options.colorRu',
-        'options.price',
-        'options.count',
-        'options.length',
-        'options.discount',
-        'options.vendorCode',
-      ])
-      .where('sewing_product.pinned = true')
-      .andWhere('sewing_product.deleted = false')
-      .getMany();
-  }
-  async findPinnedEn(): Promise<SewingProductEntity[]> {
-    return await this.createQueryBuilder('sewing_product')
-      .leftJoin('sewing_product.images', 'images')
-      .leftJoin('sewing_product.categories', 'categories')
-      .leftJoin('sewing_product.options', 'options')
-      .select([
-        'sewing_product.id',
-        'sewing_product.titleEn',
-        'sewing_product.modifierEn',
-        'sewing_product.vendorCode',
-        'sewing_product.type',
-        'sewing_product.pinned',
-        'sewing_product.price',
-        'sewing_product.discount',
-        'sewing_product.optionType',
-        'sewing_product.count',
-        'sewing_product.isCount',
-        'sewing_product.length',
-        'sewing_product.isLength',
-        'images',
-        'categories.id',
-        'categories.categoryNameEn',
-        'options.id',
-        'options.size',
-        'options.colorEn',
-        'options.price',
-        'options.count',
-        'options.length',
-        'options.discount',
-        'options.vendorCode',
-      ])
-      .where('sewing_product.pinned = true')
-      .andWhere('sewing_product.deleted = false')
-      .getMany();
-  }
-  async findPinnedRuAuth(userId: number): Promise<SewingProductEntity[]> {
-    return await this.createQueryBuilder('sewing_product')
-      .leftJoin('sewing_product.images', 'images')
-      .leftJoin('sewing_product.categories', 'categories')
-      .leftJoin('sewing_product.options', 'options')
-      .leftJoin('sewing_product.like', 'like', 'like.userId = :userId', {
-        userId,
-      })
-      .select([
-        'sewing_product.id',
-        'sewing_product.titleRu',
-        'sewing_product.modifierRu',
-        'sewing_product.vendorCode',
-        'sewing_product.type',
-        'sewing_product.pinned',
-        'sewing_product.price',
-        'sewing_product.discount',
-        'sewing_product.optionType',
-        'sewing_product.count',
-        'sewing_product.isCount',
-        'sewing_product.length',
-        'sewing_product.isLength',
-        'images',
-        'categories.id',
-        'categories.categoryNameRu',
-        'options.id',
-        'options.size',
-        'options.colorRu',
-        'options.price',
-        'options.count',
-        'options.length',
-        'options.discount',
-        'options.vendorCode',
-        'like',
-      ])
-      .where('sewing_product.pinned = true')
-      .andWhere('sewing_product.deleted = false')
-      .getMany();
-  }
-  async findPinnedEnAuth(userId: number): Promise<SewingProductEntity[]> {
-    return await this.createQueryBuilder('sewing_product')
-      .leftJoin('sewing_product.images', 'images')
-      .leftJoin('sewing_product.categories', 'categories')
-      .leftJoin('sewing_product.options', 'options')
-      .leftJoin('sewing_product.like', 'like', 'like.userId = :userId', {
-        userId,
-      })
-      .select([
-        'sewing_product.id',
-        'sewing_product.titleEn',
-        'sewing_product.modifierEn',
-        'sewing_product.vendorCode',
-        'sewing_product.type',
-        'sewing_product.pinned',
-        'sewing_product.price',
-        'sewing_product.discount',
-        'sewing_product.optionType',
-        'sewing_product.count',
-        'sewing_product.isCount',
-        'sewing_product.length',
-        'sewing_product.isLength',
-        'images',
-        'categories.id',
-        'categories.categoryNameEn',
-        'options.id',
-        'options.size',
-        'options.colorEn',
-        'options.price',
-        'options.count',
-        'options.length',
-        'options.discount',
-        'options.vendorCode',
-        'like',
-      ])
-      .where('sewing_product.pinned = true')
-      .andWhere('sewing_product.deleted = false')
-      .getMany();
   }
 
   async findLikedRu(
@@ -771,6 +678,13 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .skip((page - 1) * size || 0)
       .where('sewing_product.deleted = false')
       .andWhere('like.userId = :userId', { userId })
+      .andWhere(
+        new Brackets((qb) => {
+          qb.where('options.optionVisibility = true').orWhere(
+            'sewing_product.optionType = 0',
+          );
+        }),
+      )
       .getManyAndCount();
   }
   async findLikedEn(
@@ -814,6 +728,13 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .skip((page - 1) * size || 0)
       .where('sewing_product.deleted = false')
       .andWhere('like.userId = :userId', { userId })
+      .andWhere(
+        new Brackets((qb) => {
+          qb.where('options.optionVisibility = true').orWhere(
+            'sewing_product.optionType = 0',
+          );
+        }),
+      )
       .getManyAndCount();
   }
 
@@ -843,7 +764,6 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .where('options.id = :id', { id: option })
       .getOne();
   }
-
   async findOneForUpdate(id: string): Promise<SewingProductEntity> {
     return await this.createQueryBuilder('sewing_product')
       .leftJoin('sewing_product.images', 'images')
@@ -891,9 +811,187 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
         'options.discount',
         'options.count',
         'options.length',
+        'options.optionVisibility',
         ...recommendationsRu,
       ])
       .where('sewing_product.id = :id', { id })
       .getOne();
   }
 }
+
+// async findPinnedRu(): Promise<SewingProductEntity[]> {
+//     return await this.createQueryBuilder('sewing_product')
+//       .leftJoin('sewing_product.images', 'images')
+//       .leftJoin('sewing_product.categories', 'categories')
+//       .leftJoin('sewing_product.options', 'options')
+//       .select([
+//         'sewing_product.id',
+//         'sewing_product.titleRu',
+//         'sewing_product.modifierRu',
+//         'sewing_product.vendorCode',
+//         'sewing_product.type',
+//         'sewing_product.pinned',
+//         'sewing_product.price',
+//         'sewing_product.discount',
+//         'sewing_product.optionType',
+//         'sewing_product.count',
+//         'sewing_product.isCount',
+//         'sewing_product.length',
+//         'sewing_product.isLength',
+//         'images',
+//         'categories.id',
+//         'categories.categoryNameRu',
+//         'options.id',
+//         'options.size',
+//         'options.colorRu',
+//         'options.price',
+//         'options.count',
+//         'options.length',
+//         'options.discount',
+//         'options.vendorCode',
+//       ])
+//       .where('sewing_product.pinned = true')
+//       .andWhere('sewing_product.deleted = false')
+//       .andWhere(
+//         new Brackets((qb) => {
+//           qb.where('options.optionVisibility = true').orWhere(
+//             'sewing_product.optionType = 0',
+//           );
+//         }),
+//       )
+//       .getMany();
+//   }
+//   async findPinnedEn(): Promise<SewingProductEntity[]> {
+//     return await this.createQueryBuilder('sewing_product')
+//       .leftJoin('sewing_product.images', 'images')
+//       .leftJoin('sewing_product.categories', 'categories')
+//       .leftJoin('sewing_product.options', 'options')
+//       .select([
+//         'sewing_product.id',
+//         'sewing_product.titleEn',
+//         'sewing_product.modifierEn',
+//         'sewing_product.vendorCode',
+//         'sewing_product.type',
+//         'sewing_product.pinned',
+//         'sewing_product.price',
+//         'sewing_product.discount',
+//         'sewing_product.optionType',
+//         'sewing_product.count',
+//         'sewing_product.isCount',
+//         'sewing_product.length',
+//         'sewing_product.isLength',
+//         'images',
+//         'categories.id',
+//         'categories.categoryNameEn',
+//         'options.id',
+//         'options.size',
+//         'options.colorEn',
+//         'options.price',
+//         'options.count',
+//         'options.length',
+//         'options.discount',
+//         'options.vendorCode',
+//       ])
+//       .where('sewing_product.pinned = true')
+//       .andWhere('sewing_product.deleted = false')
+//       .andWhere(
+//         new Brackets((qb) => {
+//           qb.where('options.optionVisibility = true').orWhere(
+//             'sewing_product.optionType = 0',
+//           );
+//         }),
+//       )
+//       .getMany();
+//   }
+//   async findPinnedRuAuth(userId: number): Promise<SewingProductEntity[]> {
+//     return await this.createQueryBuilder('sewing_product')
+//       .leftJoin('sewing_product.images', 'images')
+//       .leftJoin('sewing_product.categories', 'categories')
+//       .leftJoin('sewing_product.options', 'options')
+//       .leftJoin('sewing_product.like', 'like', 'like.userId = :userId', {
+//         userId,
+//       })
+//       .select([
+//         'sewing_product.id',
+//         'sewing_product.titleRu',
+//         'sewing_product.modifierRu',
+//         'sewing_product.vendorCode',
+//         'sewing_product.type',
+//         'sewing_product.pinned',
+//         'sewing_product.price',
+//         'sewing_product.discount',
+//         'sewing_product.optionType',
+//         'sewing_product.count',
+//         'sewing_product.isCount',
+//         'sewing_product.length',
+//         'sewing_product.isLength',
+//         'images',
+//         'categories.id',
+//         'categories.categoryNameRu',
+//         'options.id',
+//         'options.size',
+//         'options.colorRu',
+//         'options.price',
+//         'options.count',
+//         'options.length',
+//         'options.discount',
+//         'options.vendorCode',
+//         'like',
+//       ])
+//       .where('sewing_product.pinned = true')
+//       .andWhere('sewing_product.deleted = false')
+//       .andWhere(
+//         new Brackets((qb) => {
+//           qb.where('options.optionVisibility = true').orWhere(
+//             'sewing_product.optionType = 0',
+//           );
+//         }),
+//       )
+//       .getMany();
+//   }
+//   async findPinnedEnAuth(userId: number): Promise<SewingProductEntity[]> {
+//     return await this.createQueryBuilder('sewing_product')
+//       .leftJoin('sewing_product.images', 'images')
+//       .leftJoin('sewing_product.categories', 'categories')
+//       .leftJoin('sewing_product.options', 'options')
+//       .leftJoin('sewing_product.like', 'like', 'like.userId = :userId', {
+//         userId,
+//       })
+//       .select([
+//         'sewing_product.id',
+//         'sewing_product.titleEn',
+//         'sewing_product.modifierEn',
+//         'sewing_product.vendorCode',
+//         'sewing_product.type',
+//         'sewing_product.pinned',
+//         'sewing_product.price',
+//         'sewing_product.discount',
+//         'sewing_product.optionType',
+//         'sewing_product.count',
+//         'sewing_product.isCount',
+//         'sewing_product.length',
+//         'sewing_product.isLength',
+//         'images',
+//         'categories.id',
+//         'categories.categoryNameEn',
+//         'options.id',
+//         'options.size',
+//         'options.colorEn',
+//         'options.price',
+//         'options.count',
+//         'options.length',
+//         'options.discount',
+//         'options.vendorCode',
+//         'like',
+//       ])
+//       .where('sewing_product.pinned = true')
+//       .andWhere('sewing_product.deleted = false')
+//       .andWhere(
+//         new Brackets((qb) => {
+//           qb.where('options.optionVisibility = true').orWhere(
+//             'sewing_product.optionType = 0',
+//           );
+//         }),
+//       )
+//       .getMany();
+//   }

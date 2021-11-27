@@ -5,6 +5,7 @@ import {
   IsOptional,
   IsArray,
   Max,
+  IsBoolean,
 } from 'class-validator';
 import { FileDto } from 'src/core/file-upload/dto/file-dto';
 
@@ -49,4 +50,8 @@ export class ProductOptionDto {
   @IsNumber()
   @Min(0)
   length: number;
+
+  @IsOptional()
+  @IsBoolean()
+  optionVisibility: boolean;
 }

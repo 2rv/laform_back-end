@@ -13,14 +13,12 @@ export class MasterClassService {
     private recommendationService: RecommendationService,
     private purchaseProductRepository: PurchaseProductRepository,
   ) {}
-
   async save(body: MasterClassDto): Promise<MasterClassEntity> {
     if (!Boolean(body.vendorCode)) {
       body.vendorCode = MasterClassEntity.getVendorCode();
     }
     return await this.masterClassRepository.save(body);
   }
-
   async getAll(
     query: string,
     size: number,
@@ -106,7 +104,6 @@ export class MasterClassService {
         userId,
       );
   }
-
   async getOne(id: string, query: string): Promise<MasterClassEntity> {
     if (query === 'ru') return await this.masterClassRepository.findOneRu(id);
     if (query === 'en') return await this.masterClassRepository.findOneEn(id);
@@ -126,21 +123,6 @@ export class MasterClassService {
     if (query === 'en')
       return await this.masterClassRepository.findOneEnAuth(id, userId);
   }
-
-  async getPinned(query: string): Promise<MasterClassEntity[]> {
-    if (query === 'ru') return await this.masterClassRepository.findPinnedRu();
-    if (query === 'en') return await this.masterClassRepository.findPinnedEn();
-  }
-  async getPinnedAuth(
-    query: string,
-    userId: number,
-  ): Promise<MasterClassEntity[]> {
-    if (query === 'ru')
-      return await this.masterClassRepository.findPinnedRuAuth(userId);
-    if (query === 'en')
-      return await this.masterClassRepository.findPinnedEnAuth(userId);
-  }
-
   async getLiked(
     userId: number,
     query: string,
@@ -152,7 +134,6 @@ export class MasterClassService {
     if (query === 'en')
       return await this.masterClassRepository.findLikedEn(userId, size, page);
   }
-
   async update(id: string, body: MasterClassDto) {
     if (!Boolean(body.vendorCode)) {
       body.vendorCode = MasterClassEntity.getVendorCode();
@@ -169,11 +150,6 @@ export class MasterClassService {
     Object.assign(masterClass, { ...body });
     return await this.masterClassRepository.save(masterClass);
   }
-
-  async updatePinned(id: string, body: any) {
-    await this.masterClassRepository.update({ id }, body);
-  }
-
   async delete(id: string) {
     const masterClass = await this.masterClassRepository.findOneOrFail(id);
     const wasPurchased = await this.purchaseProductRepository.findOne({
@@ -186,11 +162,9 @@ export class MasterClassService {
       await this.masterClassRepository.delete(id);
     }
   }
-
   async disable(id: string, deleted: boolean) {
     await this.masterClassRepository.update({ id }, { deleted });
   }
-
   async getPriceAndDiscount(
     masterClass: MasterClassEntity,
   ): Promise<{ totalPrice: number; totalDiscount: number }> {
@@ -203,3 +177,20 @@ export class MasterClassService {
     };
   }
 }
+
+// async getPinned(query: string): Promise<MasterClassEntity[]> {
+//     if (query === 'ru') return await this.masterClassRepository.findPinnedRu();
+//     if (query === 'en') return await this.masterClassRepository.findPinnedEn();
+//   }
+//   async getPinnedAuth(
+//     query: string,
+//     userId: number,
+//   ): Promise<MasterClassEntity[]> {
+//     if (query === 'ru')
+//       return await this.masterClassRepository.findPinnedRuAuth(userId);
+//     if (query === 'en')
+//       return await this.masterClassRepository.findPinnedEnAuth(userId);
+//   }
+//   async updatePinned(id: string, body: any) {
+//     await this.masterClassRepository.update({ id }, body);
+//   }
