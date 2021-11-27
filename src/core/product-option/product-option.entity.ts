@@ -70,6 +70,13 @@ export class ProductOptionEntity {
   })
   length!: number;
 
+  @Column({
+    type: 'boolean',
+    name: 'option_visibility',
+    default: true,
+  })
+  optionVisibility: boolean;
+
   @OneToMany(
     () => FileUploadEntity,
     (res: FileUploadEntity) => res.optionFilePdf,
