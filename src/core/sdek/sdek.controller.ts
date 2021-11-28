@@ -11,6 +11,7 @@ import {
   ValidationPipe,
   Query,
   Patch,
+  Param,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AccountGuard } from '../user/guard/account.guard';
@@ -19,68 +20,68 @@ import { USER_ROLE } from '../user/enum/user-role.enum';
 
 @Controller('sdek')
 export class SdekController {
-  constructor(private readonly SdekService: SdekService) {}
+  constructor(private readonly sdekService: SdekService) {}
 
   @Get('/auth')
-  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async authInSdek() {
-    return this.SdekService.authInSdek();
+    return this.sdekService.authInSdek();
   }
 
-  @Post('/calculator/tarrif/code')
+  @Get('/cities/:fiasGuid')
+  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async listOfCities(@Param('fiasGuid') fiasGuid: string) {
+    return this.sdekService.listOfCities(fiasGuid);
+  }
+
+  @Get('/offices/:postalCode')
+  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getOffice(@Param('postalCode') postalCode: string) {
+    return this.sdekService.getOffice(postalCode);
+  }
+
+  @Post('/calculator/tariff')
   @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async CalculationByTariffCode(@Body(new ValidationPipe()) body: SdekDto) {
-    return this.SdekService.CalculationByTariffCode(body);
+    return this.sdekService.сalculationByTariffCode(body);
   }
 
-  @Post('/calculator/available/tarrif/code')
+  @Post('/calculator/tarifflist')
   @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async getTariff(@Body(new ValidationPipe()) body: SdekDto) {
-    return this.SdekService.getTariff(body);
+  async getTariffList(@Body(new ValidationPipe()) body: SdekDto) {
+    return this.sdekService.getTariffList(body);
   }
 
-  @Post('/registration/order')
+  @Post('/order/create')
   @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async registrationOrder(@Body(new ValidationPipe()) body: SdekDtoOrder) {
-    return this.SdekService.registrationOrder(body);
+    return this.sdekService.registrationOrder(body);
   }
 
-  @Get('/get/information/order')
+  @Get('/order/:orderId')
   @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async getInformationAboutOrder(@Query() query) {
-    return this.SdekService.getInformationAboutOrder(query.id);
+  async getInformationAboutOrder(@Param('orderId') orderId: string) {
+    return this.sdekService.getInformationAboutOrder(orderId);
   }
 
-  @Patch('/edit/order')
-  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  @Patch('/order/edit')
+  @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async editOrder(@Body(new ValidationPipe()) body: SdekUpdate) {
-    return this.SdekService.editOrder(body);
+    return this.sdekService.editOrder(body);
   }
 
-  @Get('/get/office')
-  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  @Delete('/order/delete/:orderId')
+  @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async getOffice(@Query() query) {
-    return this.SdekService.getOffice(query.postal_code);
-  }
-
-  @Delete('/delete/order')
-  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async deleteOrder(@Query() query) {
-    return this.SdekService.deleteOrder(query.id);
-  }
-
-  @Get('/get/cities')
-  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async listOfCities(@Query() query) {
-    return this.SdekService.listOfCities(query.fias_guid);
+  async deleteOrder(@Param('orderId') orderId: string) {
+    return this.sdekService.deleteOrder(orderId);
   }
 }

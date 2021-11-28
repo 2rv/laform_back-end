@@ -36,7 +36,8 @@ export class SdekService {
     }
     return 'Bearer ' + result.access_token;
   }
-  async CalculationByTariffCode(body: SdekDto) {
+
+  async сalculationByTariffCode(body: SdekDto) {
     const findFromLocation = await this.SdekRepository.findOne();
     const data = {
       city: findFromLocation.city,
@@ -66,7 +67,7 @@ export class SdekService {
     }
     return result;
   }
-  async getTariff(body: SdekDto) {
+  async getTariffList(body: SdekDto) {
     const findFromLocation = await this.SdekRepository.findOne();
     const data = {
       city: findFromLocation.city,
@@ -96,6 +97,74 @@ export class SdekService {
     }
     return result;
   }
+
+  async getOffice(postal_code: string) {
+    const url: any = new URL('https://api.edu.cdek.ru/v2/deliverypoints');
+    const params = { postal_code: postal_code };
+    Object.keys(params).forEach((key) =>
+      url.searchParams.append(key, params[key]),
+    );
+    const result = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: await this.authInSdek(),
+      },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .catch((err) => {
+        throw new InternalServerErrorException(err);
+      });
+    if (result.error) {
+      throw new InternalServerErrorException(result);
+    }
+    if (result.requests) {
+      for (let exception of result.requests) {
+        if (exception.errors) {
+          throw new BadRequestException(exception.errors);
+        }
+      }
+    }
+    for (let office of result) {
+      if (office.location.postal_code === postal_code) {
+        return office;
+      }
+    }
+  }
+  async listOfCities(fias_guid: string) {
+    const url: any = new URL('https://api.edu.cdek.ru/v2/location/cities');
+    const params = { fias_guid: fias_guid };
+    Object.keys(params).forEach((key) =>
+      url.searchParams.append(key, params[key]),
+    );
+    const result = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: await this.authInSdek(),
+      },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .catch((err) => {
+        throw new InternalServerErrorException(err);
+      });
+    if (result.error) {
+      throw new InternalServerErrorException(result);
+    }
+    if (result.requests) {
+      for (let exception of result.requests) {
+        if (exception.errors) {
+          throw new BadRequestException(exception.errors);
+        }
+      }
+    }
+    for (let codes of result) {
+      return codes.postal_codes;
+    }
+  }
+
   async registrationOrder(body: SdekDtoOrder) {
     const findFromLocation = await this.SdekRepository.findOne();
     const data = {
@@ -196,71 +265,5 @@ export class SdekService {
       }
     }
     return result;
-  }
-  async getOffice(postal_code: string) {
-    const url: any = new URL('https://api.edu.cdek.ru/v2/deliverypoints');
-    const params = { postal_code: postal_code };
-    Object.keys(params).forEach((key) =>
-      url.searchParams.append(key, params[key]),
-    );
-    const result = await fetch(url, {
-      method: 'GET',
-      headers: {
-        Authorization: await this.authInSdek(),
-      },
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .catch((err) => {
-        throw new InternalServerErrorException(err);
-      });
-    if (result.error) {
-      throw new InternalServerErrorException(result);
-    }
-    if (result.requests) {
-      for (let exception of result.requests) {
-        if (exception.errors) {
-          throw new BadRequestException(exception.errors);
-        }
-      }
-    }
-    for (let office of result) {
-      if (office.location.postal_code === postal_code) {
-        return office;
-      }
-    }
-  }
-  async listOfCities(fias_guid: string) {
-    const url: any = new URL('https://api.edu.cdek.ru/v2/location/cities');
-    const params = { fias_guid: fias_guid };
-    Object.keys(params).forEach((key) =>
-      url.searchParams.append(key, params[key]),
-    );
-    const result = await fetch(url, {
-      method: 'GET',
-      headers: {
-        Authorization: await this.authInSdek(),
-      },
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .catch((err) => {
-        throw new InternalServerErrorException(err);
-      });
-    if (result.error) {
-      throw new InternalServerErrorException(result);
-    }
-    if (result.requests) {
-      for (let exception of result.requests) {
-        if (exception.errors) {
-          throw new BadRequestException(exception.errors);
-        }
-      }
-    }
-    for (let codes of result) {
-      return codes.postal_codes;
-    }
   }
 }
