@@ -31,11 +31,9 @@ import { LegalInformationEntity } from 'src/core/legal-information/legal-informa
 import { TermsOfUseEntity } from 'src/core/terms-of-use/terms-of-use.entity';
 import { CompilationProductEntity } from 'src/core/compilation-product/compilation-product.entity';
 import { CompilationEntity } from 'src/core/compilation/compilation.entity';
-import { SdekEntity } from 'src/core/sdek/sdek.entity';
 
 const DATABASE_CONFIG = config.get('DATABASE');
 export const ApiEntities = [
-  SdekEntity,
   UserEntity,
   UserInfoEntity,
   NotificationEntity,
