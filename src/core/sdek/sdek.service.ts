@@ -1,6 +1,5 @@
 import { SdekConfig } from 'src/config/sdek.config';
 import { SdekDto, SdekDtoOrder } from './dto/sdek.dto';
-import { SdekRepository } from './sdek.repository';
 import fetch from 'cross-fetch';
 import { stringify } from 'querystring';
 import { SdekUpdate } from './dto/sdekUpdate.dto';
@@ -12,8 +11,6 @@ import {
 
 @Injectable()
 export class SdekService {
-  constructor(private SdekRepository: SdekRepository) {}
-
   async authInSdek(): Promise<string> {
     const data = {
       grant_type: SdekConfig.grant_type,
@@ -37,11 +34,10 @@ export class SdekService {
     return 'Bearer ' + result.access_token;
   }
   async CalculationByTariffCode(body: SdekDto) {
-    const findFromLocation = await this.SdekRepository.findOne();
     const data = {
-      city: findFromLocation.city,
-      adress: findFromLocation.adress,
-      code: findFromLocation.code,
+      city: SdekConfig.from_location.city,
+      adress: SdekConfig.from_location.adress,
+      code: SdekConfig.from_location.code,
     };
     body.from_location = data;
     const result: any = await fetch(
@@ -67,11 +63,10 @@ export class SdekService {
     return result;
   }
   async getTariff(body: SdekDto) {
-    const findFromLocation = await this.SdekRepository.findOne();
     const data = {
-      city: findFromLocation.city,
-      adress: findFromLocation.adress,
-      code: findFromLocation.code,
+      city: SdekConfig.from_location.city,
+      adress: SdekConfig.from_location.adress,
+      code: SdekConfig.from_location.code,
     };
     body.from_location = data;
     const result = await fetch(
@@ -97,11 +92,10 @@ export class SdekService {
     return result;
   }
   async registrationOrder(body: SdekDtoOrder) {
-    const findFromLocation = await this.SdekRepository.findOne();
     const data = {
-      city: findFromLocation.city,
-      adress: findFromLocation.adress,
-      code: findFromLocation.code,
+      city: SdekConfig.from_location.city,
+      adress: SdekConfig.from_location.adress,
+      code: SdekConfig.from_location.code,
     };
     body.from_location = data;
     const result = await fetch('https://api.edu.cdek.ru/v2/orders', {
