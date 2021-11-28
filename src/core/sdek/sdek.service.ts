@@ -33,7 +33,7 @@ export class SdekService {
     }
     return 'Bearer ' + result.access_token;
   }
-  async CalculationByTariffCode(body: SdekDto) {
+  async сalculationByTariffCode(body: SdekDto) {
     const data = {
       city: SdekConfig.from_location.city,
       adress: SdekConfig.from_location.adress,
@@ -62,7 +62,7 @@ export class SdekService {
     }
     return result;
   }
-  async getTariff(body: SdekDto) {
+  async getTariffList(body: SdekDto) {
     const data = {
       city: SdekConfig.from_location.city,
       adress: SdekConfig.from_location.adress,
