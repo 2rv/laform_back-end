@@ -46,7 +46,7 @@ export class SdekController {
   @Post('/calculator/tariff')
   @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async CalculationByTariffCode(@Body(new ValidationPipe()) body: SdekDto) {
+  async сalculationByTariffCode(@Body(new ValidationPipe()) body: SdekDto) {
     return this.sdekService.сalculationByTariffCode(body);
   }
 
