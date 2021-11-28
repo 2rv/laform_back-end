@@ -32,7 +32,7 @@ import { LegalInformationModule } from './core/legal-information/legal-informati
 import { TermsOfUseModule } from './core/terms-of-use/terms-of-use.module';
 import { CompilationModule } from './core/compilation/compilation.module';
 
-
+import { SdekModule } from './core/sdek/sdek.module';
 @Module({
   providers: [],
   imports: [
@@ -67,6 +67,7 @@ import { CompilationModule } from './core/compilation/compilation.module';
     LegalInformationModule,
     TermsOfUseModule,
     CompilationModule,
+    SdekModule,
   ],
 })
 export class AppModule {}
