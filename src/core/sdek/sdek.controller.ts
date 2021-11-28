@@ -32,8 +32,8 @@ export class SdekController {
   @Get('/cities/:fiasGuid')
   @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async listOfCities(@Param('fiasGuid') fiasGuid: string) {
-    return this.sdekService.listOfCities(fiasGuid);
+  async getCities(@Param('fiasGuid') fiasGuid: string) {
+    return this.sdekService.getCities(fiasGuid);
   }
 
   @Get('/offices/:postalCode')
@@ -60,15 +60,15 @@ export class SdekController {
   @Post('/order/create')
   @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async registrationOrder(@Body(new ValidationPipe()) body: SdekDtoOrder) {
-    return this.sdekService.registrationOrder(body);
+  async createOrder(@Body(new ValidationPipe()) body: SdekDtoOrder) {
+    return this.sdekService.createOrder(body);
   }
 
   @Get('/order/:orderId')
   @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async getInformationAboutOrder(@Param('orderId') orderId: string) {
-    return this.sdekService.getInformationAboutOrder(orderId);
+  async getOrder(@Param('orderId') orderId: string) {
+    return this.sdekService.getOrder(orderId);
   }
 
   @Patch('/order/edit')
