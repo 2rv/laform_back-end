@@ -8,6 +8,7 @@ import {
   BadRequestException,
   InternalServerErrorException,
 } from '@nestjs/common';
+import axios from 'axios';
 
 @Injectable()
 export class SdekService {
@@ -92,71 +93,121 @@ export class SdekService {
     return result;
   }
 
-  async getOffice(postal_code: string) {
-    const url: any = new URL('https://api.edu.cdek.ru/v2/deliverypoints');
-    const params = { postal_code: postal_code };
-    Object.keys(params).forEach((key) =>
-      url.searchParams.append(key, params[key]),
-    );
-    const result = await fetch(url, {
-      method: 'GET',
-      headers: {
-        Authorization: await this.authInSdek(),
-      },
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .catch((err) => {
-        throw new InternalServerErrorException(err);
-      });
-    if (result.error) {
-      throw new InternalServerErrorException(result);
-    }
-    if (result.requests) {
-      for (let exception of result.requests) {
-        if (exception.errors) {
-          throw new BadRequestException(exception.errors);
-        }
-      }
-    }
-    for (let office of result) {
-      if (office.location.postal_code === postal_code) {
-        return office;
-      }
+  async getCityCodeByKladr(kladr_code) {
+    try {
+      const response = await axios.post(
+        `https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/delivery`,
+        {
+          query: kladr_code,
+        },
+        {
+          headers: {
+            Authorization: 'Token 47277a98629b84336b47c3b23b49f7d67bce9f77',
+          },
+        },
+      );
+
+      return response.data.suggestions[0].data.cdek_id;
+    } catch (err) {
+      throw new InternalServerErrorException(err);
     }
   }
-  async getCities(fias_guid: string) {
-    const url: any = new URL('https://api.edu.cdek.ru/v2/location/cities');
-    const params = { fias_guid: fias_guid };
-    Object.keys(params).forEach((key) =>
-      url.searchParams.append(key, params[key]),
-    );
-    const result = await fetch(url, {
-      method: 'GET',
-      headers: {
-        Authorization: await this.authInSdek(),
-      },
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .catch((err) => {
-        throw new InternalServerErrorException(err);
-      });
-    if (result.error) {
-      throw new InternalServerErrorException(result);
+
+  async getOffices(city_code: string) {
+    try {
+      const response = await axios.get(
+        `https://api.edu.cdek.ru/v2/deliverypoints?city_code=${city_code}`,
+        {
+          headers: {
+            Authorization: await this.authInSdek(),
+          },
+        },
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
     }
-    if (result.requests) {
-      for (let exception of result.requests) {
-        if (exception.errors) {
-          throw new BadRequestException(exception.errors);
-        }
-      }
+
+    // const url: any = new URL('https://api.edu.cdek.ru/v2/deliverypoints');
+    // const params = { postal_code: postal_code };
+    // Object.keys(params).forEach((key) =>
+    //   url.searchParams.append(key, params[key]),
+    // );
+    // const result = await fetch(url, {
+    //   method: 'GET',
+    //   headers: {
+    //     Authorization: await this.authInSdek(),
+    //   },
+    // })
+    //   .then((res) => {
+    //     return res.json();
+    //   })
+    //   .catch((err) => {
+    //     throw new InternalServerErrorException(err);
+    //   });
+    // if (result.error) {
+    //   throw new InternalServerErrorException(result);
+    // }
+    // if (result.requests) {
+    //   for (let exception of result.requests) {
+    //     if (exception.errors) {
+    //       throw new BadRequestException(exception.errors);
+    //     }
+    //   }
+    // }
+    // for (let office of result) {
+    //   if (office.location.postal_code === postal_code) {
+    //     return office;
+    //   }
+    // }
+  }
+  async getCities(code: string) {
+    console.log(code);
+
+    try {
+      const response = await axios.get(
+        `https://api.edu.cdek.ru/v2/location/cities/?code=${code}&country_codes=RU,TR`,
+        {
+          headers: {
+            Authorization: await this.authInSdek(),
+          },
+        },
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
     }
-    for (let codes of result) {
-      return codes.postal_codes;
-    }
+
+    // const url: any = new URL('https://api.edu.cdek.ru/v2/location/cities');
+    // const params = { fias_region_guid: fias_region_guid };
+    // Object.keys(params).forEach((key) =>
+    //   url.searchParams.append(key, params[key]),
+    // );
+    // const result = await fetch(url, {
+    //   method: 'GET',
+    //   headers: {
+    //     Authorization: await this.authInSdek(),
+    //   },
+    // })
+    //   .then((res) => {
+    //     return res.json();
+    //   })
+    //   .catch((err) => {
+    //     throw new InternalServerErrorException(err);
+    //   });
+    // if (result.error) {
+    //   throw new InternalServerErrorException(result);
+    // }
+    // if (result.requests) {
+    //   for (let exception of result.requests) {
+    //     if (exception.errors) {
+    //       throw new BadRequestException(exception.errors);
+    //     }
+    //   }
+    // }
+    // for (let codes of result) {
+    //   return codes.postal_codes;
+    // }
   }
 
   async createOrder(body: SdekDtoOrder) {

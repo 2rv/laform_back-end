@@ -36,11 +36,18 @@ export class SdekController {
     return this.sdekService.getCities(fiasGuid);
   }
 
-  @Get('/offices/:postalCode')
+  @Get('/offices/:city_code')
   @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async getOffice(@Param('postalCode') postalCode: string) {
-    return this.sdekService.getOffice(postalCode);
+  async getOffices(@Param('city_code') city_code: string) {
+    return this.sdekService.getOffices(city_code);
+  }
+
+  @Get('/city-code/:kladr')
+  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getCityCodeByKladr(@Param('kladr') kladr: string) {
+    return this.sdekService.getCityCodeByKladr(kladr);
   }
 
   @Post('/calculator/tariff')
