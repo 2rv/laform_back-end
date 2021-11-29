@@ -4,7 +4,6 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { PromoCodeEntity } from './promo-code.entity';
 import { PROMO_CODE_ERROR } from './enum/promo-code.enum';
 import { CreatePromoCodeDto } from './dto/create-promo-code.dto';
-import { CheckPromoCodeDto } from './dto/check-promo-code.dto';
 
 @Injectable()
 export class PromoCodeService {
