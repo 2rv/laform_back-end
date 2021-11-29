@@ -108,11 +108,6 @@ export class AuthService {
       email: body.email,
     });
 
-    if (findUserByEmail.googleId == null) {
-      findUserByEmail.password = body.id;
-      await findUserByEmail.save();
-    }
-
     if (Boolean(findUserByEmail) && !findUserByEmail.googleId) {
       findUserByEmail.googleId = body.id;
       await findUserByEmail.save();
