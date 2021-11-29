@@ -6,6 +6,7 @@ import {
   ValidationPipe,
   Get,
   Delete,
+  Param,
 } from '@nestjs/common';
 import { PromoCodeEntity } from './promo-code.entity';
 import { PromoCodeService } from './promo-code.service';
@@ -37,9 +38,9 @@ export class PromoCodeController {
     return await this.promoCodeService.get();
   }
 
-  @Post('/check')
-  async check(@Body(ValidationPipe) checkPromoCodeDto: CheckPromoCodeDto) {
-    return await this.promoCodeService.check(checkPromoCodeDto);
+  @Get('/check/:code')
+  async check(@Param('code') code: string) {
+    return await this.promoCodeService.check(code);
   }
 
   @Delete('/delete')
