@@ -32,14 +32,14 @@ export class PromoCodeService {
       throw new BadRequestException(PROMO_CODE_ERROR.PROMO_CODE_NOT_EXISTS);
     } else await this.promoCodeRepository.delete(result.id);
   }
-  async check(body: CheckPromoCodeDto) {
+  async check(code: string) {
     const result = await this.promoCodeRepository.findOne({
-      text: body.text,
+      text: code,
     });
     if (!result) {
       throw new BadRequestException(PROMO_CODE_ERROR.PROMO_CODE_NOT_EXISTS);
     }
-    return { discount: result.discount, promocode: body.text };
+    return { discount: result.discount, promocode: code };
   }
 
   async checkFromServer(
