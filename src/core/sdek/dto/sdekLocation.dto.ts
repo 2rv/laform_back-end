@@ -1,7 +1,7 @@
-import {  IsString, IsNumber, IsOptional } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsNotEmpty } from 'class-validator';
 
-export class SdekLocation {
-  @IsOptional()
+export class SdekLocationDto {
+  @IsNotEmpty()
   @IsNumber()
   code: number;
 

@@ -6,8 +6,6 @@ import {
   ValidationPipe,
   Get,
   Delete,
-  Param,
-  UsePipes,
 } from '@nestjs/common';
 import { PromoCodeEntity } from './promo-code.entity';
 import { PromoCodeService } from './promo-code.service';
@@ -17,6 +15,7 @@ import { Roles } from '../user/decorator/role.decorator';
 import { USER_ROLE } from '../user/enum/user-role.enum';
 
 import { CreatePromoCodeDto } from './dto/create-promo-code.dto';
+import { CheckPromoCodeDto } from './dto/check-promo-code.dto';
 
 @Controller('promo-code')
 export class PromoCodeController {
@@ -24,9 +23,10 @@ export class PromoCodeController {
 
   @Post('/create')
   @Roles(USER_ROLE.ADMIN)
-  @UsePipes(new ValidationPipe({ transform: true }))
   @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async create(@Body() createPromoCodeDto: CreatePromoCodeDto): Promise<void> {
+  async create(
+    @Body(ValidationPipe) createPromoCodeDto: CreatePromoCodeDto,
+  ): Promise<void> {
     return await this.promoCodeService.create(createPromoCodeDto);
   }
 
@@ -37,9 +37,9 @@ export class PromoCodeController {
     return await this.promoCodeService.get();
   }
 
-  @Get('/check/:code')
-  async check(@Param('code') code: string) {
-    return await this.promoCodeService.check(code.trim());
+  @Post('/check')
+  async check(@Body(ValidationPipe) checkPromoCodeDto: CheckPromoCodeDto) {
+    return await this.promoCodeService.check(checkPromoCodeDto);
   }
 
   @Delete('/delete')

@@ -10,8 +10,8 @@ import { Type } from 'class-transformer';
 import { SdekLocationDto } from './sdekLocation.dto';
 import { SdekPackagesDto } from './sdekPackages.dto';
 
-export class SdekDto {
-  @IsOptional()
+export class SdekCalculateDto {
+  @IsNotEmpty()
   @IsNumber()
   tariff_code: number;
 

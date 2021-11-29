@@ -1,8 +1,11 @@
 import { SdekConfig } from 'src/config/sdek.config';
-import { SdekDto, SdekDtoOrder } from './dto/sdek.dto';
+import { SdekDto } from './dto/sdek.dto';
 import fetch from 'cross-fetch';
 import { stringify } from 'querystring';
-import { SdekUpdate } from './dto/sdekUpdate.dto';
+import { SdekUpdateDto } from './dto/sdekUpdate.dto';
+import { SdekPackagesDto } from './dto/sdekPackages.dto';
+import { SdekOrderDto } from './dto/sdekOrder.dto';
+
 import {
   Injectable,
   BadRequestException,
@@ -95,122 +98,40 @@ export class SdekService {
 
   async getCityCodeByKladr(kladr_code) {
     try {
-      const response = await axios.post(
+      const cityByKladrCode = await axios.post(
         `https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/delivery`,
         {
           query: kladr_code,
         },
         {
           headers: {
-            Authorization: 'Token 47277a98629b84336b47c3b23b49f7d67bce9f77',
+            Authorization: SdekConfig.tokenByKladr,
           },
         },
       );
-
-      return response.data.suggestions[0].data.cdek_id;
+      if (cityByKladrCode.data.suggestions == '') {
+        throw new BadRequestException(
+          "City with this kladr code dosen't exist",
+        );
+      }
+      const getOffices = await axios.get(
+        `https://api.edu.cdek.ru/v2/deliverypoints?city_code=${cityByKladrCode.data.suggestions[0].data.cdek_id}`,
+        {
+          headers: {
+            Authorization: await this.authInSdek(),
+          },
+        },
+      );
+      if (getOffices.data == '') {
+        throw new BadRequestException("City with this code dosen't exist");
+      }
+      return getOffices.data;
     } catch (err) {
       throw new InternalServerErrorException(err);
     }
   }
 
-  async getOffices(city_code: string) {
-    try {
-      const response = await axios.get(
-        `https://api.edu.cdek.ru/v2/deliverypoints?city_code=${city_code}`,
-        {
-          headers: {
-            Authorization: await this.authInSdek(),
-          },
-        },
-      );
-      return response.data;
-    } catch (error) {
-      console.log(error);
-    }
-
-    // const url: any = new URL('https://api.edu.cdek.ru/v2/deliverypoints');
-    // const params = { postal_code: postal_code };
-    // Object.keys(params).forEach((key) =>
-    //   url.searchParams.append(key, params[key]),
-    // );
-    // const result = await fetch(url, {
-    //   method: 'GET',
-    //   headers: {
-    //     Authorization: await this.authInSdek(),
-    //   },
-    // })
-    //   .then((res) => {
-    //     return res.json();
-    //   })
-    //   .catch((err) => {
-    //     throw new InternalServerErrorException(err);
-    //   });
-    // if (result.error) {
-    //   throw new InternalServerErrorException(result);
-    // }
-    // if (result.requests) {
-    //   for (let exception of result.requests) {
-    //     if (exception.errors) {
-    //       throw new BadRequestException(exception.errors);
-    //     }
-    //   }
-    // }
-    // for (let office of result) {
-    //   if (office.location.postal_code === postal_code) {
-    //     return office;
-    //   }
-    // }
-  }
-  async getCities(code: string) {
-    console.log(code);
-
-    try {
-      const response = await axios.get(
-        `https://api.edu.cdek.ru/v2/location/cities/?code=${code}&country_codes=RU,TR`,
-        {
-          headers: {
-            Authorization: await this.authInSdek(),
-          },
-        },
-      );
-      return response.data;
-    } catch (error) {
-      console.log(error);
-    }
-
-    // const url: any = new URL('https://api.edu.cdek.ru/v2/location/cities');
-    // const params = { fias_region_guid: fias_region_guid };
-    // Object.keys(params).forEach((key) =>
-    //   url.searchParams.append(key, params[key]),
-    // );
-    // const result = await fetch(url, {
-    //   method: 'GET',
-    //   headers: {
-    //     Authorization: await this.authInSdek(),
-    //   },
-    // })
-    //   .then((res) => {
-    //     return res.json();
-    //   })
-    //   .catch((err) => {
-    //     throw new InternalServerErrorException(err);
-    //   });
-    // if (result.error) {
-    //   throw new InternalServerErrorException(result);
-    // }
-    // if (result.requests) {
-    //   for (let exception of result.requests) {
-    //     if (exception.errors) {
-    //       throw new BadRequestException(exception.errors);
-    //     }
-    //   }
-    // }
-    // for (let codes of result) {
-    //   return codes.postal_codes;
-    // }
-  }
-
-  async createOrder(body: SdekDtoOrder) {
+  async createOrder(body: SdekOrderDto) {
     const data = {
       city: SdekConfig.from_location.city,
       adress: SdekConfig.from_location.adress,
@@ -258,7 +179,14 @@ export class SdekService {
       });
     return result;
   }
-  async editOrder(body: SdekUpdate) {
+  async editOrder(body: SdekUpdateDto) {
+    const data: SdekPackagesDto = {
+      height: SdekConfig.height,
+      length: SdekConfig.length,
+      weight: SdekConfig.weight,
+      width: SdekConfig.width,
+    };
+    body.packages.push(data);
     const result = await fetch('https://api.edu.cdek.ru/v2/orders', {
       method: 'PATCH',
       body: JSON.stringify(body),
