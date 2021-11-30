@@ -1,6 +1,4 @@
-import { IsEnum, IsOptional, IsString } from 'class-validator';
-
-import { DELIVERY_TYPE } from '../enum/delivery-type.enum';
+import { IsEnum, IsOptional, IsPhoneNumber, IsString } from 'class-validator';
 import { PAYMENT_TYPE } from '../enum/payment-type.enum';
 
 export class UserInfoUpdateDto {
@@ -9,7 +7,7 @@ export class UserInfoUpdateDto {
   fullName: string;
 
   @IsOptional()
-  @IsString()
+  @IsPhoneNumber('RU')
   phone: string;
 
   @IsOptional()

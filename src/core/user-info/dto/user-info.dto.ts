@@ -1,4 +1,3 @@
-import { DELIVERY_TYPE } from '../enum/delivery-type.enum';
 import { PAYMENT_TYPE } from '../enum/payment-type.enum';
 
 export interface UserInfoDto {

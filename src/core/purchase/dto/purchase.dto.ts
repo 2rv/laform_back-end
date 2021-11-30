@@ -1,9 +1,12 @@
+import { Transform } from 'class-transformer';
 import {
   IsNotEmpty,
   IsNumber,
   IsString,
   IsOptional,
   IsEmail,
+  IsPhoneNumber,
+  IsMobilePhone,
 } from 'class-validator';
 
 export class PurchaseDto {
@@ -13,10 +16,14 @@ export class PurchaseDto {
 
   @IsNotEmpty()
   @IsEmail()
+  @Transform((value) => value.toLowerCase())
+  @Transform((value) => value.trim())
   email: string;
 
   @IsOptional()
   @IsString()
+  @Transform((value) => value.toLowerCase())
+  @Transform((value) => value.trim())
   emailConfirmCode: string;
 
   @IsNotEmpty()
@@ -24,14 +31,14 @@ export class PurchaseDto {
   fullName: string;
 
   @IsNotEmpty()
-  @IsString()
-  phoneNumber: string;
+  @IsPhoneNumber('RU')
+  phone: string;
 
   @IsOptional()
   @IsString()
   comment: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
   price: number;
 

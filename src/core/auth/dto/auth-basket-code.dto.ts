@@ -10,5 +10,7 @@ export class AuthBasketForCodeDto {
 
   @IsNotEmpty()
   @IsString()
+  @Transform((login) => login.toLowerCase())
+  @Transform((value) => value.trim())
   code: string;
 }

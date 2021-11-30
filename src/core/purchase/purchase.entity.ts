@@ -75,9 +75,9 @@ export class PurchaseEntity {
 
   @Column({
     type: 'varchar',
-    name: 'phone_number',
+    name: 'phone',
   })
-  phoneNumber!: string;
+  phone!: string;
 
   @Column({
     type: 'varchar',

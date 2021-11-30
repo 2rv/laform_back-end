@@ -5,11 +5,11 @@ import * as path from 'path';
 import { UserEntity } from '../user/user.entity';
 import { randomUUID } from 'src/common/utils/hash';
 import { UserRepository } from '../user/user.repository';
-import { generateVendorCode } from 'src/common/utils/vendor-coder';
 import { MailDto } from './dto/mail.dto';
 import { PurchaseEntity } from '../purchase/purchase.entity';
 import { PURCHASE_STATUS_INFO } from '../purchase/enum/purchase.status';
 import { USER_ROLE } from '../user/enum/user-role.enum';
+import { generateAuthCode } from 'src/common/utils/generate-auth-code';
 
 @Injectable()
 export class MailService {
@@ -94,19 +94,19 @@ export class MailService {
       });
   }
   async sendVerificationCode(body: MailDto) {
-    const code = generateVendorCode();
+    const code = generateAuthCode();
     await this.cacheManager.set(`AuthBasketEmailCodeFor${body.email}`, code);
     return await this.mailerService
       .sendMail({
         to: body.email,
-        subject: 'Подтверждение почты для совершения покупок',
-        text: `Подтвердите почту для совершения покупок`,
+        subject: 'Подтвердите почту для совершения покупки',
+        text: `Подтвердите почту для совершения покупки`,
         template: path.join(
           path.resolve(),
           'src/templates/confirm-email-for-order.pug',
         ),
         context: {
-          code,
+          code: code.toUpperCase(),
         },
       })
       .catch((e) => {
@@ -122,7 +122,7 @@ export class MailService {
         context: {
           address: body.city,
           fullName: body.fullName,
-          phone: body.phoneNumber,
+          phone: body.phone,
           price: Number(body.price) + (Number(body.shippingPrice) || 0),
           shippingPrice: body.shippingPrice,
           deliveryMethod: body.typeOfDelivery,
@@ -149,7 +149,7 @@ export class MailService {
         context: {
           address: body.city,
           fullName: body.fullName,
-          phone: body.phoneNumber,
+          phone: body.phone,
           price: Number(body.price) + (Number(body.shippingPrice) || 0),
           shippingPrice: body.shippingPrice,
           deliveryMethod: body.typeOfDelivery,
@@ -173,7 +173,7 @@ export class MailService {
         context: {
           address: body.city,
           fullName: body.fullName,
-          phone: body.phoneNumber,
+          phone: body.phone,
           price: Number(body.price) + (Number(body.shippingPrice) || 0),
           shippingPrice: body.shippingPrice,
           deliveryMethod: body.typeOfDelivery,

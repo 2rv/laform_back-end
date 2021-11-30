@@ -3,6 +3,7 @@ import {
   Controller,
   Post,
   UseGuards,
+  UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -35,10 +36,9 @@ export class MailController {
     return await this.mailService.sendPdf(user, body);
   }
 
+  @UsePipes(new ValidationPipe({ transform: true }))
   @Post('/send/verification-code')
-  async sendVerificationCode(
-    @Body(new ValidationPipe()) body: MailDto,
-  ): Promise<any> {
+  async sendVerificationCode(@Body() body: MailDto): Promise<any> {
     return await this.mailService.sendVerificationCode(body);
   }
 
