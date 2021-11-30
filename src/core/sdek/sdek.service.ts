@@ -109,11 +109,6 @@ export class SdekService {
           },
         },
       );
-      if (cityByKladrCode.data.suggestions == '') {
-        throw new BadRequestException(
-          "City with this kladr code dosen't exist",
-        );
-      }
       const getOffices = await axios.get(
         `https://api.cdek.ru/v2/deliverypoints?city_code=${cityByKladrCode.data.suggestions[0].data.cdek_id}`,
         {
@@ -122,9 +117,6 @@ export class SdekService {
           },
         },
       );
-      if (getOffices.data == '') {
-        throw new BadRequestException("City with this code dosen't exist");
-      }
       return getOffices.data;
     } catch (err) {
       throw new InternalServerErrorException(err);
