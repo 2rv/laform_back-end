@@ -15,7 +15,7 @@ export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
       keyID: AppleConfig.keyID,
       privateKeyLocation: path.join(__dirname, '../../../config/AuthKey.p8'),
       //passReqToCallback: true,
-      scope: ['email', 'profile'],
+      scope: ['email', 'name', 'profile'],
       // clientID: '1042068275751-c6pbac6s5l3bjvo73amvl77f3ol2e8dj.apps.googleusercontent.com',
       // clientSecret: 'pQRjjsvJLxydvHMESpajKikM',
       // callbackURL: 'http://localhost:4000/auth/google/redirect',
@@ -29,7 +29,7 @@ export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
     profile,
     cb: VerifyCallback,
   ): Promise<any> {
-    const { id, email } = profile;
+    const { id, name, email } = profile;
     const user = {
       email: email,
       accessToken,
