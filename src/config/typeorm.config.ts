@@ -74,3 +74,16 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   synchronize: process.env.TYPEORM_SYNC || DATABASE_CONFIG.SYNCHRONIZE,
 };
 
+<<<<<<< HEAD
+=======
+// export const typeOrmConfig: TypeOrmModuleOptions = {
+//   type: 'postgres',
+//   host: 'localhost',
+//   port: 5432,
+//   username: 'postgres',
+//   password: 'nSnS44Tt',
+//   database: 'postgres',
+//   synchronize: true,
+//   entities: ApiEntities,
+// };
+>>>>>>> 6128e42dc3499bf39460d5b4e8694c6a6222ed6c

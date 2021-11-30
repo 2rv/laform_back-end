@@ -205,4 +205,11 @@ export class AuthService {
       throw new BadRequestException(AUTH_ERROR.AUTH_CODE_IS_INCORRECT);
     }
   }
+  async deleteUser(id: number): Promise<any> {
+    const result = await this.userRepository.delete({ id });
+    if (!result) {
+      throw new BadRequestException(AUTH_ERROR.AUTH_CODE_IS_INCORRECT);
+    }
+    return result;
+  }
 }

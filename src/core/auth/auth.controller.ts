@@ -9,6 +9,8 @@ import {
   Res,
   UsePipes,
   UseFilters,
+  Delete,
+  Query,
 } from '@nestjs/common';
 import { UserSignUpDto } from './dto/user-sign-up.dto';
 import { UserLoginDto } from './dto/user-login.dto';
@@ -23,6 +25,7 @@ import { ClientConfig } from '../../config/client.config';
 import { AuthBasketForCodeDto } from './dto/auth-basket-code.dto';
 import { ViewAuthFilter } from '../user/guard/auth.filter';
 import * as util from 'util';
+import { query } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -32,6 +35,11 @@ export class AuthController {
   @Post('/verify/code')
   async authVerifyByCode(@Body() body: AuthBasketForCodeDto): Promise<void> {
     return this.authService.authVerifyByCode(body);
+  }
+
+  @Delete('/delete/user')
+  async deleteUser(@Query() query): Promise<void> {
+    return this.authService.deleteUser(query.id);
   }
 
   @UsePipes(new ValidationPipe({ transform: true }))
