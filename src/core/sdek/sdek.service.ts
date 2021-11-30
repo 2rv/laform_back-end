@@ -109,6 +109,9 @@ export class SdekService {
           },
         },
       );
+      if (cityByKladrCode.data.suggestions == '') {
+        return [];
+      }
       const getOffices = await axios.get(
         `https://api.cdek.ru/v2/deliverypoints?city_code=${cityByKladrCode.data.suggestions[0].data.cdek_id}`,
         {
