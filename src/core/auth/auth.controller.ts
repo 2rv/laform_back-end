@@ -106,7 +106,7 @@ export class AuthController {
     );
   }
   @Get('/apple')
-  // @UseGuards(AuthGuard('apple'))
+  @UseGuards(AuthGuard('apple'))
   async appleAuth() {}
 
   @Post('/apple/redirect')
