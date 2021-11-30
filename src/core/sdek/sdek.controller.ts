@@ -32,15 +32,15 @@ export class SdekController {
   }
 
   @Get('/city-code/:kladr')
-  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  //   @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  //   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getCityCodeByKladr(@Param('kladr') kladr: string) {
     return this.sdekService.getCityCodeByKladr(kladr);
   }
 
   @Post('/calculator/tariff')
-  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  //   @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  //   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async сalculationByTariffCode(
     @Body(new ValidationPipe()) body: SdekCalculateDto,
   ) {
@@ -48,15 +48,15 @@ export class SdekController {
   }
 
   @Post('/calculator/tarifflist')
-  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  //   @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  //   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getTariffList(@Body(new ValidationPipe()) body: SdekDto) {
     return this.sdekService.getTariffList(body);
   }
 
   @Post('/order/create')
-  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  //   @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  //   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async createOrder(@Body(new ValidationPipe()) body: SdekOrderDto) {
     return this.sdekService.createOrder(body);
   }
