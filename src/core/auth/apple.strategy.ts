@@ -15,7 +15,6 @@ export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
       keyID: AppleConfig.keyID,
       privateKeyLocation: path.join(__dirname, '../../../config/AuthKey.p8'),
       //passReqToCallback: true,
-      state: '123',
       scope: ['email'],
       // clientID: '1042068275751-c6pbac6s5l3bjvo73amvl77f3ol2e8dj.apps.googleusercontent.com',
       // clientSecret: 'pQRjjsvJLxydvHMESpajKikM',
