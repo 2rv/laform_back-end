@@ -6,7 +6,7 @@ import { AppleConfig } from 'src/config/apple.config';
 import * as path from 'path';
 
 @Injectable()
-export class AppleStrategy extends PassportStrategy(Strategy) {
+export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
   constructor() {
     super({
       clientID: AppleConfig.clientID,
@@ -29,14 +29,24 @@ export class AppleStrategy extends PassportStrategy(Strategy) {
     profile,
     cb: VerifyCallback,
   ): Promise<any> {
-    const { id, name, email } = profile;
+    const { id, name, emails } = profile;
     const user = {
-      email: email,
+      email: emails[0].value,
+      firstName: name.givenName,
+      lastName: name.familyName,
       accessToken,
-      idToken,
-      id: id,
+      id: profile.id,
     };
+    // email: emails[0].value,
+    // firstName: name.givenName,
+    // lastName: name.familyName,
+    // accessToken,
+    // id: profile.id,
 
-    cb(null, user);
+    // email: emails,
+    // accessToken,
+    // idToken,
+    // id: id,
+    // cb(null, user);
   }
 }
