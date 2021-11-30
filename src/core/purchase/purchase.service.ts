@@ -183,9 +183,8 @@ export class PurchaseService {
     const codeResult: string = await this.cacheManager.get(
       `AuthBasketEmailCodeFor${body.email}`,
     );
-
     if (codeResult === body.emailConfirmCode) {
-      this.cacheManager.del(`AuthBasketEmailCodeFor${body.email}`);
+      await this.cacheManager.del(`AuthBasketEmailCodeFor${body.email}`);
       return true;
     } else {
       throw new BadRequestException(PURCHASE_ERROR.AUTH_CODE_IS_INCORRECT);
@@ -360,13 +359,13 @@ export class PurchaseService {
     const { promoCode, promoCodeDiscount } = await this.verifyPromo(
       body.purchase.promoCode,
     );
-    // const { diliveryName, diliveryPrice } = await this.verifyDiliveryMethod(
-    //   body.purchase.typeOfDelivery,
-    // );
-
     body.purchase.promoCodeDiscount = promoCodeDiscount;
     body.purchase.promoCode = promoCode;
     body.purchase.price = Number(price.toFixed(2));
+
+    // const { diliveryName, diliveryPrice } = await this.verifyDiliveryMethod(
+    //   body.purchase.typeOfDelivery,
+    // );
     // body.purchase.typeOfDelivery = diliveryName;
     // body.purchase.shippingPrice = diliveryPrice || 0;
 
@@ -512,7 +511,7 @@ export class PurchaseService {
     result.email = body.email;
     result.fullName = body.fullName;
     result.city = body.city;
-    result.phoneNumber = body.phoneNumber;
+    result.phone = body.phone;
     result.comment = body.comment;
     result.typeOfDelivery = body.typeOfDelivery;
     result.price = price;

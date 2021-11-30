@@ -1,32 +1,29 @@
 import {
-  IsNotEmpty,
-  IsString,
   IsOptional,
   IsArray,
-  IsNumber,
   ValidateNested,
   IsUUID,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { SdekLocation } from './sdekLocation.dto';
-import { SdekPackages } from './sdekPackages.dto';
+import { SdekLocationDto } from './sdekLocation.dto';
+import { SdekPackagesDto } from './sdekPackages.dto';
 
-export class SdekUpdate {
+export class SdekUpdateDto {
   @IsOptional()
   @IsUUID('all')
   id: string;
 
   @IsOptional()
   @ValidateNested()
-  @Type(() => SdekLocation)
-  from_location: SdekLocation;
+  @Type(() => SdekLocationDto)
+  from_location: SdekLocationDto;
 
   @IsOptional()
   @ValidateNested()
-  @Type(() => SdekLocation)
-  to_location: SdekLocation;
+  @Type(() => SdekLocationDto)
+  to_location: SdekLocationDto;
 
   @IsOptional()
   @IsArray()
-  packages: SdekPackages[];
+  packages: SdekPackagesDto[];
 }

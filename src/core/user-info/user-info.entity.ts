@@ -6,10 +6,7 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
-
 import { UserEntity } from '../user/user.entity';
-
-import { DELIVERY_TYPE } from './enum/delivery-type.enum';
 import { PAYMENT_TYPE } from './enum/payment-type.enum';
 
 @Entity({ name: 'user_info' })

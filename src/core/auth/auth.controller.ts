@@ -25,7 +25,6 @@ import { ClientConfig } from '../../config/client.config';
 import { AuthBasketForCodeDto } from './dto/auth-basket-code.dto';
 import { ViewAuthFilter } from '../user/guard/auth.filter';
 import * as util from 'util';
-import { query } from 'express';
 
 @Controller('auth')
 export class AuthController {

@@ -14,6 +14,7 @@ import {
   Request,
   Delete,
   Param,
+  UsePipes,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AccountGuard } from '../user/guard/account.guard';
@@ -26,18 +27,20 @@ import { UpdatePurchaseStatusDto } from './dto/update-purchase-status.dto';
 export class PurchaseController {
   constructor(private readonly purchaseService: PurchaseService) {}
 
+  @UsePipes(new ValidationPipe({ transform: true }))
   @Post('/create')
   @Roles(USER_ROLE.USER, USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async saveForUser(
     @GetUser() user: UserEntity,
-    @Body(new ValidationPipe()) body: CreatePurchaseDto,
+    @Body() body: CreatePurchaseDto,
   ) {
     const AUTH = true;
     body.purchase.userId = user.id;
     return await this.purchaseService.save(body, user.id, user.email, AUTH);
   }
 
+  @UsePipes(new ValidationPipe({ transform: true }))
   @Post('/not-auth/create')
   async saveForNotAuthUser(
     @Body(new ValidationPipe()) body: CreatePurchaseDto,
@@ -112,6 +115,7 @@ export class PurchaseController {
     );
   }
 
+  @UsePipes(new ValidationPipe({ transform: true }))
   @Put('update/:purchaseId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, PurchaseGuard)

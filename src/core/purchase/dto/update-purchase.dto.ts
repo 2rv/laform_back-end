@@ -14,6 +14,7 @@ import { PatternProductEntity } from 'src/core/pattern-product/pattern-product.e
 import { SewingProductEntity } from 'src/core/sewing-product/sewing-product.entity';
 import { MasterClassEntity } from 'src/core/master-class/master-class.entity';
 import { ProductOptionEntity } from 'src/core/product-option/product-option.entity';
+import { Transform } from 'class-transformer';
 
 export class UpdatePurchaseDto {
   @IsOptional()
@@ -22,6 +23,8 @@ export class UpdatePurchaseDto {
 
   @IsOptional()
   @IsEmail()
+  @Transform((value) => value.toLowerCase())
+  @Transform((value) => value.trim())
   email: string;
 
   @IsOptional()
@@ -34,7 +37,7 @@ export class UpdatePurchaseDto {
 
   @IsOptional()
   @IsPhoneNumber('RU')
-  phoneNumber: string;
+  phone: string;
 
   @IsOptional()
   @IsString()
