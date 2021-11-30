@@ -110,22 +110,17 @@ export class SdekService {
         },
       );
       if (cityByKladrCode.data.suggestions == '') {
-        throw new BadRequestException(
-          "City with this kladr code dosen't exist",
-        );
+        return [];
       }
       const getOffices = await axios.get(
-        `https://api.edu.cdek.ru/v2/deliverypoints?city_code=${cityByKladrCode.data.suggestions[0].data.cdek_id}`,
+        `https://api.cdek.ru/v2/deliverypoints?city_code=${cityByKladrCode.data.suggestions[0].data.cdek_id}`,
         {
           headers: {
             Authorization: await this.authInSdek(),
           },
         },
       );
-      if (getOffices.data == '') {
-        throw new BadRequestException("City with this code dosen't exist");
-      }
-      return getOffices.data;
+      return getOffices.data || [];
     } catch (err) {
       throw new InternalServerErrorException(err);
     }
