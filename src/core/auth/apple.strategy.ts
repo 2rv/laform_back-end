@@ -6,7 +6,7 @@ import { AppleConfig } from 'src/config/apple.config';
 import * as path from 'path';
 
 @Injectable()
-export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
+export class AppleStrategy extends PassportStrategy(Strategy) {
   constructor() {
     super({
       clientID: AppleConfig.clientID,
@@ -15,7 +15,7 @@ export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
       keyID: AppleConfig.keyID,
       privateKeyLocation: path.join(__dirname, '../../../config/AuthKey.p8'),
       //passReqToCallback: true,
-      scope: ['email', 'name', 'profile'],
+      scope: ['email', 'profile'],
       // clientID: '1042068275751-c6pbac6s5l3bjvo73amvl77f3ol2e8dj.apps.googleusercontent.com',
       // clientSecret: 'pQRjjsvJLxydvHMESpajKikM',
       // callbackURL: 'http://localhost:4000/auth/google/redirect',
