@@ -11,7 +11,7 @@ export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
     super({
       clientID: AppleConfig.clientID,
       teamID: AppleConfig.teamID,
-      callbackURL: AppleConfig.callbackURL,
+      redirectUri: AppleConfig.callbackURL,
       keyID: AppleConfig.keyID,
       privateKeyLocation: path.join(__dirname, '../../../config/AuthKey.p8'),
       //passReqToCallback: true,
