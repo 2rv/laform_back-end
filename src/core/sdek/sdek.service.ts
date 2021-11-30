@@ -120,10 +120,7 @@ export class SdekService {
           },
         },
       );
-      if (getOffices.data == null || getOffices.data == undefined) {
-        return [];
-      }
-      return getOffices.data;
+      return getOffices.data || [];
     } catch (err) {
       throw new InternalServerErrorException(err);
     }
