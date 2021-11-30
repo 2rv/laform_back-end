@@ -106,7 +106,6 @@ export class AuthController {
       `${clientUrl}/social-auth-access?data=${token.accessToken}`,
     );
   }
-
   @Get('/apple')
   @UseGuards(AuthGuard('apple'))
   async appleAuth() {}
@@ -114,6 +113,15 @@ export class AuthController {
   @Post('/apple/redirect')
   @UseGuards(AuthGuard('apple'))
   async appleAuthRedirect(@Req() req, @Res() res) {
+    console.log(req.user);
+    console.log(util.inspect(req.user.user));
+    //res.json(req.user);
+    // return {
+    //   user: req.user,
+    //   idToken: req.user.idToken,
+    //   accessToken: req.user.accessToken,
+    // };
+    //return res.send(req);
     const token = await this.authService.signUpWithApple(req.user);
     const clientUrl = req.hostname.includes('localhost')
       ? `${req.protocol}://localhost:3000`
