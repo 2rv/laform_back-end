@@ -13,6 +13,7 @@ import { UserEntity } from './user.entity';
 import { CreateGoogleUseDto } from './dto/create-user-google.dto';
 import { CreateFacebookUseDto } from './dto/create-user-facebook.dto';
 import { CreateAppleUseDto } from './dto/create-user-apple.dto';
+import { USER_ROLE } from './enum/user-role.enum';
 
 @EntityRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {
@@ -132,6 +133,14 @@ export class UserRepository extends Repository<UserEntity> {
       .getManyAndCount();
   }
 
+  async statistics(from: Date, to: Date): Promise<any[]> {
+    const role = USER_ROLE.USER;
+    return await this.createQueryBuilder('user')
+      .where('user.createDate >= :from', { from })
+      .andWhere('user.createDate <= :to', { to })
+      .andWhere('user.role = :role', { role })
+      .getMany();
+  }
   async changePassword(
     user: UserEntity,
     data: UserChangePasswordDto,

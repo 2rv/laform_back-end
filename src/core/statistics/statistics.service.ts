@@ -3,12 +3,14 @@ import { Injectable } from '@nestjs/common';
 import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
 import { StatisticType } from './enum/statistic.enum';
 import { PurchaseRepository } from '../purchase/purchase.repository';
+import { UserRepository } from '../user/user.repository';
 
 @Injectable()
 export class StatisticsService {
   constructor(
     private purchaseProductRepository: PurchaseProductRepository,
     private purchaseRepository: PurchaseRepository,
+    private userRepository: UserRepository,
   ) {}
 
   async priceStatistic(from: Date, to: Date, type: StatisticType) {
@@ -85,6 +87,33 @@ export class StatisticsService {
       };
     });
     return newData;
+  }
+
+  async userStatistic(from: Date, to: Date) {
+    const array = [];
+
+    const results = await this.userRepository.statistics(from, to);
+
+    for (let result of results) {
+      result.createDate = new Intl.DateTimeFormat().format(result.createDate);
+      const data = {
+        date: result.createDate,
+      };
+      array.push(data);
+    }
+
+    const counter = array.reduce((o, i) => {
+      if (!o.hasOwnProperty(i.date)) {
+        o[i.date] = 0;
+      }
+      o[i.date]++;
+      return o;
+    }, {});
+    const result = Object.keys(counter).map((date) => {
+      return { date: date, sum: counter[date] };
+    });
+
+    return result;
   }
 
   async generalStatistic(from: Date, to: Date) {
