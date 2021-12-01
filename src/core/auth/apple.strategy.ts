@@ -29,24 +29,18 @@ export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
     profile,
     cb: VerifyCallback,
   ): Promise<any> {
-    const { id, name, emails } = profile;
+    const { id, name, email } = profile;
     const user = {
-      email: emails[0].value,
-      firstName: name.givenName,
-      lastName: name.familyName,
+      email: email,
       accessToken,
-      id: profile.id,
+      idToken,
+      id: id,
     };
     // email: emails[0].value,
     // firstName: name.givenName,
     // lastName: name.familyName,
     // accessToken,
     // id: profile.id,
-
-    // email: emails,
-    // accessToken,
-    // idToken,
-    // id: id,
-    // cb(null, user);
+    cb(null, user);
   }
 }

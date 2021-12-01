@@ -126,9 +126,6 @@ export class AuthController {
     const clientUrl = req.hostname.includes('localhost')
       ? `${req.protocol}://localhost:3000`
       : ClientConfig.url;
-
-    return res.redirect(
-      `${clientUrl}/social-auth-access?data=${token.accessToken}`,
-    );
+    return res.redirect(`${clientUrl}/social-auth-access?data=${token.accessToken}`);
   }
 }
