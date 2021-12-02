@@ -23,7 +23,6 @@ import { MailModule } from './core/mail/mail.module';
 import { ProductOptionModule } from './core/product-option/product-option.module';
 import { CommentModule } from './core/comment/comment.module';
 import { AboutUsModule } from './core/about-us/about-us.module';
-import { DeliveryPriceModule } from './core/delivery-price/delivery-price.module';
 import { FaqModule } from './core/faq/faq.module';
 import { StatisticsModule } from './core/statistics/statistics.module';
 import { PaymentModule } from './core/payment/payment.module';
@@ -59,7 +58,6 @@ import { SdekModule } from './core/sdek/sdek.module';
     MailModule,
     CommentModule,
     AboutUsModule,
-    DeliveryPriceModule,
     FaqModule,
     StatisticsModule,
     PaymentModule,
