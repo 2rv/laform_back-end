@@ -7,7 +7,6 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { UserEntity } from '../user/user.entity';
-import { PAYMENT_TYPE } from './enum/payment-type.enum';
 
 @Entity({ name: 'user_info' })
 export class UserInfoEntity extends BaseEntity {
@@ -35,30 +34,6 @@ export class UserInfoEntity extends BaseEntity {
     default: null,
   })
   phone: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'location',
-    nullable: true,
-    default: null,
-  })
-  location: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'delivery_type',
-    default: null,
-    nullable: true,
-  })
-  deliveryType: string;
-
-  @Column({
-    type: 'enum',
-    enum: PAYMENT_TYPE,
-    default: PAYMENT_TYPE.ONLINE,
-    nullable: false,
-  })
-  paymentType: PAYMENT_TYPE;
 
   @Column({ name: 'google_id', nullable: true })
   googleId: string;
