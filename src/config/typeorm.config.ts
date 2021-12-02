@@ -22,7 +22,6 @@ import {
   SubCommentEntity,
 } from 'src/core/comment/comment.entity';
 import { AboutUsEntity } from 'src/core/about-us/about-us.entity';
-import { DeliveryPriceEntity } from 'src/core/delivery-price/delivery-price.entity';
 import { ProductOptionEntity } from 'src/core/product-option/product-option.entity';
 import { FaqEntity } from 'src/core/faq/faq.entity';
 import { PaymentEntity } from 'src/core/payment/payment.entity';
@@ -55,7 +54,6 @@ export const ApiEntities = [
   RecommendationEntity,
   RecommendationProductEntity,
   AboutUsEntity,
-  DeliveryPriceEntity,
   FaqEntity,
   PaymentEntity,
   PrivacyPolicyEntity,
