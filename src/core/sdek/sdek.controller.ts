@@ -19,6 +19,9 @@ import { AuthGuard } from '@nestjs/passport';
 import { AccountGuard } from '../user/guard/account.guard';
 import { Roles } from '../user/decorator/role.decorator';
 import { USER_ROLE } from '../user/enum/user-role.enum';
+import { SdekPdfDto } from './dto/sdekPdf.dto';
+import { SdekCourierDto } from './dto/sdek.courier.dto';
+import { SdekBarcoderDto } from './dto/sdek.barcode.dto';
 
 @Controller('sdek')
 export class SdekController {
@@ -32,15 +35,15 @@ export class SdekController {
   }
 
   @Get('/city-code/:kladr')
-    @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
-    @UseGuards(AuthGuard('jwt'), AccountGuard)
+  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getCityCodeByKladr(@Param('kladr') kladr: string) {
     return this.sdekService.getCityCodeByKladr(kladr);
   }
 
   @Post('/calculator/tariff')
-    @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
-    @UseGuards(AuthGuard('jwt'), AccountGuard)
+  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
   async сalculationByTariffCode(
     @Body(new ValidationPipe()) body: SdekCalculateDto,
   ) {
@@ -48,17 +51,38 @@ export class SdekController {
   }
 
   @Post('/calculator/tarifflist')
-    @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
-    @UseGuards(AuthGuard('jwt'), AccountGuard)
+  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getTariffList(@Body(new ValidationPipe()) body: SdekDto) {
     return this.sdekService.getTariffList(body);
   }
 
   @Post('/order/create')
-    @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
-    @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async createOrder(@Body(new ValidationPipe()) body: SdekOrderDto) {
+  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async createOrder(@Body(new ValidationPipe()) body) {
     return this.sdekService.createOrder(body);
+  }
+
+  @Post('/order/create/pdf')
+  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async createPdfReceipt(@Body(new ValidationPipe()) body: SdekPdfDto) {
+    return this.sdekService.createPdfReceipt(body);
+  }
+
+  @Post('/order/courier')
+  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async createCourier(@Body(new ValidationPipe()) body: SdekCourierDto) {
+    return this.sdekService.createCourier(body);
+  }
+
+  @Post('/order/barcode')
+  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async createBarcode(@Body(new ValidationPipe()) body: SdekBarcoderDto) {
+    return this.sdekService.createBarcode(body);
   }
 
   @Get('/order/:orderId')

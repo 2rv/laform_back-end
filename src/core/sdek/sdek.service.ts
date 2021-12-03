@@ -5,13 +5,16 @@ import { stringify } from 'querystring';
 import { SdekUpdateDto } from './dto/sdekUpdate.dto';
 import { SdekPackagesDto } from './dto/sdekPackages.dto';
 import { SdekOrderDto } from './dto/sdekOrder.dto';
+import axios from 'axios';
+import { SdekPdfDto } from './dto/sdekPdf.dto';
+import { SdekCourierDto } from './dto/sdek.courier.dto';
 
 import {
   Injectable,
   BadRequestException,
   InternalServerErrorException,
 } from '@nestjs/common';
-import axios from 'axios';
+import { SdekBarcoderDto } from './dto/sdek.barcode.dto';
 
 @Injectable()
 export class SdekService {
@@ -40,7 +43,7 @@ export class SdekService {
   async сalculationByTariffCode(body: SdekDto) {
     const data = {
       city: SdekConfig.from_location.city,
-      adress: SdekConfig.from_location.adress,
+      adress: SdekConfig.from_location.address,
       code: SdekConfig.from_location.code,
     };
     body.from_location = data;
@@ -69,7 +72,7 @@ export class SdekService {
   async getTariffList(body: SdekDto) {
     const data = {
       city: SdekConfig.from_location.city,
-      adress: SdekConfig.from_location.adress,
+      adress: SdekConfig.from_location.address,
       code: SdekConfig.from_location.code,
     };
     body.from_location = data;
@@ -129,7 +132,7 @@ export class SdekService {
   async createOrder(body: SdekOrderDto) {
     const data = {
       city: SdekConfig.from_location.city,
-      adress: SdekConfig.from_location.adress,
+      address: SdekConfig.from_location.address,
       code: SdekConfig.from_location.code,
     };
     body.from_location = data;
@@ -232,5 +235,103 @@ export class SdekService {
       }
     }
     return result;
+  }
+  async createPdfReceipt(body: SdekPdfDto) {
+    try {
+      const createPdf = await fetch('https://api.edu.cdek.ru/v2/print/orders', {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: await this.authInSdek(),
+        },
+      });
+      if (!createPdf) {
+        return [];
+      }
+      const result = await createPdf.json();
+      const getUrlByPdf: any = await fetch(
+        'https://api.edu.cdek.ru/v2/print/orders/' + result.entity.uuid,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: await this.authInSdek(),
+          },
+        },
+      );
+      const url = await getUrlByPdf.json();
+      const data = {
+        url: url.entity.url,
+        token: await this.authInSdek(),
+      };
+      return data;
+    } catch (err) {
+      throw new InternalServerErrorException(err);
+    }
+  }
+  async createCourier(body: SdekCourierDto) {
+    try {
+      const createCourier = await fetch('https://api.edu.cdek.ru/v2/intakes', {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: await this.authInSdek(),
+        },
+      });
+      const result = await createCourier.json();
+      if (result.entity.uuid == null) {
+        return [];
+      }
+      const getInformation = await fetch(
+        'https://api.edu.cdek.ru/v2/intakes/' + result.entity.uuid,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: await this.authInSdek(),
+          },
+        },
+      );
+      return getInformation.json();
+    } catch (err) {
+      throw new InternalServerErrorException(err);
+    }
+  }
+  async createBarcode(body: SdekBarcoderDto) {
+    try {
+      const createBarcode = await fetch(
+        'https://api.edu.cdek.ru/v2/print/barcodes',
+        {
+          method: 'POST',
+          body: JSON.stringify(body),
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: await this.authInSdek(),
+          },
+        },
+      );
+      const result = await createBarcode.json();
+      if (result.entity.uuid == null) {
+        return [];
+      }
+      const getBarcode = await fetch(
+        'https://api.edu.cdek.ru/v2/print/barcodes/' + result.entity.uuid,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: await this.authInSdek(),
+          },
+        },
+      );
+      const data = {
+        information: await getBarcode.json(),
+        token: await this.authInSdek(),
+      };
+      return data;
+    } catch (err) {
+      throw new InternalServerErrorException(err);
+    }
   }
 }
