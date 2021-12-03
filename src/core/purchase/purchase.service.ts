@@ -21,7 +21,6 @@ import { MasterClassEntity } from '../master-class/master-class.entity';
 import { PatternProductEntity } from '../pattern-product/pattern-product.entity';
 import { ProductOptionEntity } from '../product-option/product-option.entity';
 import { SewingProductEntity } from '../sewing-product/sewing-product.entity';
-import { DeliveryPriceService } from '../delivery-price/delivery-price.service';
 import { PURCHASE_ERROR } from './enum/purchase.enum';
 import { VerifyByCodeDto } from './dto/verify-by-code.dto';
 import { MailService } from '../mail/mail.service';
@@ -57,7 +56,6 @@ export class PurchaseService {
   constructor(
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private promoCodeService: PromoCodeService,
-    private deliveryPriceService: DeliveryPriceService,
     private purchaseRepository: PurchaseRepository,
     private purchaseProductService: PurchaseProductService,
     private patternProductService: PatternProductService,
@@ -322,17 +320,6 @@ export class PurchaseService {
       promoCodeDiscount: result?.discount,
     };
   }
-  async verifyDiliveryMethod(diliveryId: string) {
-    const result = await this.deliveryPriceService.getOneForPurchase(
-      diliveryId,
-    );
-
-    return {
-      diliveryName: result?.deliveryType,
-      diliveryPrice: result?.deliveryTypePrice,
-    };
-  }
-
   async create(
     purchase: PurchaseDto,
     purchaseProducts: PurchaseProductDto[],
@@ -362,12 +349,6 @@ export class PurchaseService {
     body.purchase.promoCodeDiscount = promoCodeDiscount;
     body.purchase.promoCode = promoCode;
     body.purchase.price = Number(price.toFixed(2));
-
-    // const { diliveryName, diliveryPrice } = await this.verifyDiliveryMethod(
-    //   body.purchase.typeOfDelivery,
-    // );
-    // body.purchase.typeOfDelivery = diliveryName;
-    // body.purchase.shippingPrice = diliveryPrice || 0;
 
     let result;
     let notAuthUserId: number;

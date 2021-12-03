@@ -8,7 +8,6 @@ import { MasterClassModule } from '../master-class/master-class.module';
 import { SewingProductModule } from '../sewing-product/sewing-product.module';
 import { PromoCodeModule } from '../promo-code/promo-code.module';
 import { PurchaseProductModule } from '../purchase-product/purchase-product.module';
-import { DeliveryPriceModule } from '../delivery-price/delivery-price.module';
 import { CacheModuleConfig } from 'src/config/cache.config';
 import { MailModule } from '../mail/mail.module';
 import { PurchaseEntity } from './purchase.entity';
@@ -23,7 +22,6 @@ import { UserInfoModule } from '../user-info/user-info.module';
     MasterClassModule,
     SewingProductModule,
     PurchaseProductModule,
-    DeliveryPriceModule,
     MailModule,
     UserInfoModule,
     TypeOrmModule.forFeature([
