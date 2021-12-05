@@ -30,7 +30,6 @@ import { PrivacyPolicyModule } from './core/faq-privacy-policy/privacy-policy.mo
 import { LegalInformationModule } from './core/faq-legal-information/legal-information.module';
 import { TermsOfUseModule } from './core/faq-terms-of-use/terms-of-use.module';
 import { CompilationModule } from './core/compilation/compilation.module';
-
 import { SdekModule } from './core/sdek/sdek.module';
 import { FaqSizeModule } from './core/faq-size/faq-size.module';
 import { FaqDeliveryPaymentModule } from './core/faq-delivery-payment/faq-delivery-payment.module';
