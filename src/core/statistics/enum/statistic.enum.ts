@@ -6,6 +6,7 @@ export enum StatisticType {
   All = 9,
   PrintProduct = 10,
   ElectronicProduct = 11,
+  PatternProduct = 12,
 }
 
 export enum StatisticError {
