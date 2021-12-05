@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { UpdatePurchaseProductDto } from '../purchase/dto/update-purchase.dto';
 import { PurchaseProductRepository } from './purchase-product.repository';
 
 @Injectable()

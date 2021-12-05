@@ -1,4 +1,3 @@
-import { FileUploadModule } from '../file-upload/file-upload.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LegalInformationRepository } from './legal-information.repository';
@@ -8,7 +7,6 @@ import { LegalInformationEntity } from './legal-information.entity';
 
 @Module({
   imports: [
-    FileUploadModule,
     TypeOrmModule.forFeature([
       LegalInformationRepository,
       LegalInformationEntity,

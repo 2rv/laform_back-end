@@ -178,16 +178,16 @@ export class UserRepository extends Repository<UserEntity> {
     user.googleId = body.googleId;
     user.login = body.login;
     user.email = body.email;
-      try {
-        await user.save();
-        return user;
-      } catch (err) {
-        if (err.code === '23505') {
-          throw new ConflictException(USER_ERROR.USER_ALREADY_EXISTS);
-        } else {
-          throw new InternalServerErrorException();
-        }
+    try {
+      await user.save();
+      return user;
+    } catch (err) {
+      if (err.code === '23505') {
+        throw new ConflictException(USER_ERROR.USER_ALREADY_EXISTS);
+      } else {
+        throw new InternalServerErrorException();
       }
+    }
   }
 
   async saveAppleUser(body: CreateAppleUseDto): Promise<UserEntity> {
@@ -231,6 +231,15 @@ export class UserRepository extends Repository<UserEntity> {
       .select(['user.id', 'user.email', 'user.role'])
       .where('user.receivesNewOrders = true')
       .andWhere('user.role = :role', { role: USER_ROLE.ADMIN })
+      .getMany();
+  }
+
+  async statistics(from: Date, to: Date): Promise<any[]> {
+    const role = USER_ROLE.USER;
+    return await this.createQueryBuilder('user')
+      .where('user.createDate >= :from', { from })
+      .andWhere('user.createDate <= :to', { to })
+      .andWhere('user.role = :role', { role })
       .getMany();
   }
 }

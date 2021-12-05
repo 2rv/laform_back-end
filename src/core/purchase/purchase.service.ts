@@ -350,21 +350,22 @@ export class PurchaseService {
     body.purchase.promoCode = promoCode;
     body.purchase.price = Number(price.toFixed(2));
 
-    let result;
-    let notAuthUserId: number;
-    const findUser: UserEntity = await this.userRepository.findOne({ email });
-    if (Boolean(findUser) === true && auth === false) {
-      result = { userExist: true };
-      notAuthUserId = findUser.id;
-    } else if (Boolean(findUser) === false) {
-      const user = await this.createUserAfterPurchase(email);
-      notAuthUserId = user.id;
-    }
+    // let result;
+    // let notAuthUserId: number;
+    // const findUser: UserEntity = await this.userRepository.findOne({ email });
+    // if (Boolean(findUser) === true && auth === false) {
+    //   result = { userExist: true };
+    //   notAuthUserId = findUser.id;
+    // } else if (Boolean(findUser) === false) {
+    //   const user = await this.createUserAfterPurchase(email);
+    //   notAuthUserId = user.id;
+    // }
 
     const purchase = await this.create(
       body.purchase,
       products,
-      auth ? userId : notAuthUserId,
+      //   auth ? userId : notAuthUserId,
+      userId,
       email,
     );
     const newPurchase = await this.purchaseRepository.save(purchase);
@@ -372,13 +373,14 @@ export class PurchaseService {
     await this.purchaseRepository.update(newPurchase.id, {
       orderNumber: await PurchaseEntity.generateOrderNumber(newPurchase._NID),
     });
-    await this.purchaseAwaitingPayment(newPurchase.id);
-    const purchaseData = await this.purchaseRepository.getAllForEmail(
-      newPurchase.id,
-    );
-    await this.mailService.sendAdminNewOrderInfo(purchaseData);
+    // await this.purchaseAwaitingPayment(newPurchase.id);
+    // const purchaseData = await this.purchaseRepository.getAllForEmail(
+    //   newPurchase.id,
+    // );
+    // await this.mailService.sendAdminNewOrderInfo(purchaseData);
 
-    return result;
+    // return result;
+    return null;
   }
 
   async createUserAfterPurchase(email: string): Promise<UserEntity> {

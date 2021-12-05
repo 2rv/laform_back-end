@@ -1,14 +1,4 @@
-import {
-  Controller,
-  Post,
-  UseGuards,
-  Get,
-  Body,
-  Param,
-  Delete,
-  Query,
-} from '@nestjs/common';
-
+import { Controller, UseGuards, Get, Query } from '@nestjs/common';
 import { StatisticsService } from './statistics.service';
 import { StatisticType } from './enum/statistic.enum';
 import { StatisticValidationPipe } from './pipe/statistic-type.pipe';
@@ -42,13 +32,21 @@ export class StatisticsController {
   ) {
     return await this.statisticsService.countStatistic(from, to, type);
   }
-
-  @Get('count-and-price/get')
+  @Get('general/get')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async purchasedProductsCountAndPrice(
+  async general(
+    @Query('from') from: Date,
+    @Query('to') to: Date,
     @Query(new StatisticValidationPipe()) type: StatisticType,
   ) {
-    return await this.statisticsService.purchasedProductsCountAndPriceStatistic(type);
+    return await this.statisticsService.generalStatistic(from, to, type);
+  }
+
+  @Get('user/get')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async user(@Query('from') from: Date, @Query('to') to: Date) {
+    return await this.statisticsService.userStatistic(from, to);
   }
 }

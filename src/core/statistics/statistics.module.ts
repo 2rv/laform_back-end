@@ -1,16 +1,18 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-
 import { StatisticsService } from './statistics.service';
 import { StatisticsController } from './statistics.controller';
-
 import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
-import { PurchaseModule } from '../purchase/purchase.module';
+import { PurchaseRepository } from '../purchase/purchase.repository';
+import { UserRepository } from '../user/user.repository';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([PurchaseProductRepository]),
-    PurchaseModule,
+    TypeOrmModule.forFeature([
+      PurchaseProductRepository,
+      PurchaseRepository,
+      UserRepository,
+    ]),
   ],
   providers: [StatisticsService],
   exports: [StatisticsService],
