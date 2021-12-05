@@ -4,6 +4,8 @@ export enum StatisticType {
   PrintedPatternProduct = 2,
   SewingProduct = 3,
   All = 9,
+  PrintProduct = 10,
+  ElectronicProduct = 11,
 }
 
 export enum StatisticError {
