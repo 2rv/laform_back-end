@@ -32,6 +32,7 @@ import { TermsOfUseModule } from './core/terms-of-use/terms-of-use.module';
 import { CompilationModule } from './core/compilation/compilation.module';
 
 import { SdekModule } from './core/sdek/sdek.module';
+import { PdfModule } from './core/pdf-convert/pdf.module';
 @Module({
   providers: [],
   imports: [
@@ -66,6 +67,7 @@ import { SdekModule } from './core/sdek/sdek.module';
     TermsOfUseModule,
     CompilationModule,
     SdekModule,
+    PdfModule,
   ],
 })
 export class AppModule {}
