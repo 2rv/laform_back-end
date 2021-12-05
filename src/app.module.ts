@@ -22,16 +22,18 @@ import { PromoCodeModule } from './core/promo-code/promo-code.module';
 import { MailModule } from './core/mail/mail.module';
 import { ProductOptionModule } from './core/product-option/product-option.module';
 import { CommentModule } from './core/comment/comment.module';
-import { AboutUsModule } from './core/about-us/about-us.module';
+import { AboutUsModule } from './core/faq-about-us/about-us.module';
 import { FaqModule } from './core/faq/faq.module';
 import { StatisticsModule } from './core/statistics/statistics.module';
 import { PaymentModule } from './core/payment/payment.module';
-import { PrivacyPolicyModule } from './core/privacy-policy/privacy-policy.module';
-import { LegalInformationModule } from './core/legal-information/legal-information.module';
-import { TermsOfUseModule } from './core/terms-of-use/terms-of-use.module';
+import { PrivacyPolicyModule } from './core/faq-privacy-policy/privacy-policy.module';
+import { LegalInformationModule } from './core/faq-legal-information/legal-information.module';
+import { TermsOfUseModule } from './core/faq-terms-of-use/terms-of-use.module';
 import { CompilationModule } from './core/compilation/compilation.module';
 
 import { SdekModule } from './core/sdek/sdek.module';
+import { FaqSizeModule } from './core/faq-size/faq-size.module';
+import { FaqDeliveryPaymentModule } from './core/faq-delivery-payment/faq-delivery-payment.module';
 @Module({
   providers: [],
   imports: [
@@ -66,6 +68,8 @@ import { SdekModule } from './core/sdek/sdek.module';
     TermsOfUseModule,
     CompilationModule,
     SdekModule,
+    FaqSizeModule,
+    FaqDeliveryPaymentModule,
   ],
 })
 export class AppModule {}

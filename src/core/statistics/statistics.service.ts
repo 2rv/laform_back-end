@@ -18,12 +18,17 @@ export class StatisticsService {
       to,
       type,
     );
-    const array = products.map((item) => {
+
+    const array = products.map((result) => {
+      const [day, month, year] = new Intl.DateTimeFormat()
+        .format(result.createDate)
+        .split('.');
       return {
-        date: new Intl.DateTimeFormat().format(item.createdDate),
-        price: +item.totalPrice * (+item.totalCount || +item.totalLength),
+        date: `${month}-${day}-${year}`,
+        price: +result.totalPrice * (+result.totalCount || +result.totalLength),
       };
     });
+
     return Object.values(
       array.reduce((r, e) => {
         if (!r[e.date]) r[e.date] = Object.assign({}, e);
@@ -39,12 +44,17 @@ export class StatisticsService {
       to,
       type,
     );
-    const array = products.map((item) => {
+
+    const array = products.map((result) => {
+      const [day, month, year] = new Intl.DateTimeFormat()
+        .format(result.createDate)
+        .split('.');
       return {
-        date: new Intl.DateTimeFormat().format(item.createdDate),
-        count: +item.totalCount || 1,
+        date: `${month}-${day}-${year}`,
+        count: +result.totalCount || 1,
       };
     });
+
     return Object.values(
       array.reduce((r, e) => {
         if (!r[e.date]) r[e.date] = Object.assign({}, e);
@@ -57,14 +67,15 @@ export class StatisticsService {
   async userStatistic(from: Date, to: Date) {
     const results = await this.userRepository.statistics(from, to);
 
-    const array = [];
-    for (let result of results) {
-      result.createDate = new Intl.DateTimeFormat().format(result.createDate);
-      const data = {
-        date: result.createDate,
+    const array = results.map((result) => {
+      const [day, month, year] = new Intl.DateTimeFormat()
+        .format(result.createDate)
+        .split('.');
+      return {
+        date: `${month}-${day}-${year}`,
       };
-      array.push(data);
-    }
+    });
+
     const counter = array.reduce((o, i) => {
       if (!o.hasOwnProperty(i.date)) {
         o[i.date] = 0;
@@ -72,7 +83,6 @@ export class StatisticsService {
       o[i.date]++;
       return o;
     }, {});
-
     return Object.keys(counter).map((date) => {
       return { date: date, users: counter[date] };
     });
@@ -127,6 +137,13 @@ export class StatisticsService {
     };
   }
 }
+
+// const array = products.map((item) => {
+//   return {
+//     date: new Intl.DateTimeFormat().format(item.createdDate),
+//     price: +item.totalPrice * (+item.totalCount || +item.totalLength),
+//   };
+// });
 
 // Count метод старый вариант
 // const array = [];

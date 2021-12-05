@@ -73,13 +73,13 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
           }
         }),
       )
-      .andWhere(
-        new Brackets((qb) => {
-          qb.where('options.optionVisibility = true').orWhere(
-            'sewing_product.optionType = 0',
-          );
-        }),
-      )
+      //   .andWhere(
+      //     new Brackets((qb) => {
+      //       qb.where('options.optionVisibility = true').orWhere(
+      //         'sewing_product.optionType = 0',
+      //       );
+      //     }),
+      //   )
       .getManyAndCount();
   }
   async findAllEn(
