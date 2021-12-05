@@ -43,6 +43,17 @@ export class StatisticsController {
     return await this.statisticsService.generalStatistic(from, to, type);
   }
 
+  @Get('pages/get')
+  // @Roles(USER_ROLE.ADMIN)
+  // @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async pages(
+    @Query('from') from: Date,
+    @Query('to') to: Date,
+    @Query(new StatisticValidationPipe()) type: StatisticType,
+  ) {
+    return await this.statisticsService.pageStatistic(from, to, type);
+  }
+
   @Get('user/get')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
