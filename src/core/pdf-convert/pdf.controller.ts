@@ -9,6 +9,10 @@ import {
   Post,
   Body,
 } from '@nestjs/common';
+import { Roles } from '../user/decorator/role.decorator';
+import { AuthGuard } from '@nestjs/passport';
+import { AccountGuard } from '../user/guard/account.guard';
+import { USER_ROLE } from '../user/enum/user-role.enum';
 
 const request = require('request-promise');
 const fs = require('fs');
@@ -17,9 +21,10 @@ const path = require('path');
 @Controller('pdf')
 export class PdfController {
   constructor(private sdekService: SdekService) {}
-  //localhost:4000/statistics/pdf
 
-  @Post('amazon')
+  @Post('aws')
+  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
   async amzaonPDF(@Body() body, @Res() res) {
     request
       .get({
@@ -58,6 +63,8 @@ export class PdfController {
   }
 
   @Post('sdek')
+  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
   async sdekPDF(@Body() body, @Res() res) {
     request
       .get({
