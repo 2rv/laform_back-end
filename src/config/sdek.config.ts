@@ -10,7 +10,7 @@ export const SdekConfig = {
   from_location: {
     code: 270,
     city: 'Москва',
-    adress: 'Пушкина 2',
+    address: 'ул. Пушкина 25',
   },
   weight: 300,
   height: 1,

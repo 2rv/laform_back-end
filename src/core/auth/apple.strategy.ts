@@ -36,7 +36,11 @@ export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
       idToken,
       id: id,
     };
-
+    // email: emails[0].value,
+    // firstName: name.givenName,
+    // lastName: name.familyName,
+    // accessToken,
+    // id: profile.id,
     cb(null, user);
   }
 }
