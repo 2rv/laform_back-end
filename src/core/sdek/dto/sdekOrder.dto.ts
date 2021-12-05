@@ -30,4 +30,8 @@ export class SdekOrderDto {
   @IsOptional()
   @IsString()
   code: string;
+
+  @IsOptional()
+  @IsNumber()
+  amount: number;
 }

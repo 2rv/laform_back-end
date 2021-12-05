@@ -15,6 +15,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { SdekBarcoderDto } from './dto/sdek.barcode.dto';
+import { isEthereumAddress } from 'class-validator';
 
 @Injectable()
 export class SdekService {
@@ -136,6 +137,13 @@ export class SdekService {
       code: SdekConfig.from_location.code,
     };
     body.from_location = data;
+    // const orderData: any = {
+    //   height: 10,
+    //   length: 10,
+    //   weight: 4000 * body.amount,
+    //   width: 10,
+    // };
+    // console.log(body.packages.push(orderData));
     const result = await fetch('https://api.edu.cdek.ru/v2/orders', {
       method: 'POST',
       body: JSON.stringify(body),
