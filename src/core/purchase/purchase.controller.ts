@@ -35,9 +35,8 @@ export class PurchaseController {
     @GetUser() user: UserEntity,
     @Body() body: CreatePurchaseDto,
   ) {
-    const AUTH = true;
     body.purchase.userId = user.id;
-    return await this.purchaseService.save(body, user.id, user.email, AUTH);
+    return await this.purchaseService.save(body, user.id, user.email);
   }
 
   @UsePipes(new ValidationPipe({ transform: true }))
@@ -45,7 +44,6 @@ export class PurchaseController {
   async saveForNotAuthUser(
     @Body(new ValidationPipe()) body: CreatePurchaseDto,
   ) {
-    const AUTH = false;
     const verified = await this.purchaseService.verifyUserByCodeAndEmail(
       body.purchase,
     );
@@ -55,7 +53,6 @@ export class PurchaseController {
         body,
         undefined,
         body.purchase.email,
-        AUTH,
       );
     } else {
       return verified;
