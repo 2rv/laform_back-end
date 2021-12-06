@@ -21,7 +21,7 @@ import { PaymentDto } from './dto/payment.dto';
 export class PaymentController {
   constructor(private paymentService: PaymentService) {}
 
-  @Post('/')
+  @Post('link/')
   @Roles(USER_ROLE.USER, USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async GetUnitpayLink(
@@ -30,5 +30,16 @@ export class PaymentController {
   ): Promise<any> {
     const url = await this.paymentService.getPayAnyWayLink(body, user);
     return url;
+  }
+
+  @Get('redirect')
+  async paymentRedirect(
+    @Res() res,
+    @Query('MNT_ID') MNT_ID: number,
+    @Query('MNT_TRANSACTION_ID') MNT_TRANSACTION_ID: number,
+    @Query('MNT_OPERATION_ID') MNT_OPERATION_ID: number,
+  ): Promise<any> {
+    const link = await this.paymentService.successLink(MNT_TRANSACTION_ID);
+    res.redirect(link);
   }
 }

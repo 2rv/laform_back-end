@@ -5,25 +5,28 @@ import * as md5 from 'md5';
 import { PaymentRepository } from './payment.repository';
 import { PayAnyWayConfig } from 'src/config/payanyway.config';
 import { PaymentDto } from './dto/payment.dto';
+import { PurchaseRepository } from '../purchase/purchase.repository';
+import { PURCHASE_STATUS } from '../purchase/enum/purchase.status';
 
 @Injectable()
 export class PaymentService {
   constructor(
     @InjectRepository(PaymentRepository)
     private paymentRepository: PaymentRepository,
+    private purchaseRepository: PurchaseRepository,
   ) {}
 
   async createTransaction(body): Promise<string> {
     return await this.paymentRepository.save(body);
   }
 
-  async getPayAnyWayLink(body: PaymentDto, user): Promise<string> {
+  async getPayAnyWayLink(body: PaymentDto, userId): Promise<string> {
     const signature = md5(
       PayAnyWayConfig.MNT_ID +
         body.orderNumber +
         body.amount +
         body.currency +
-        user.id +
+        userId +
         body.testMode +
         PayAnyWayConfig.MNT_INTEGRITY_CODE,
     );
@@ -41,10 +44,26 @@ export class PaymentService {
       `&MNT_TEST_MODE=` +
       body.testMode +
       `&MNT_SUBSCRIBER_ID=` +
-      user.id +
+      userId +
       `&MNT_SIGNATURE=` +
       signature;
 
     return await url;
+  }
+
+  async successLink(orderNumber: number): Promise<any> {
+    const success = 'https://laform-client.herokuapp.com/paid';
+    const fail = 'https://laform-client.herokuapp.com/not-paid';
+    const purchase = await this.purchaseRepository.findOne({
+      where: {
+        orderNumber: orderNumber,
+      },
+    });
+    if (purchase) {
+      await this.purchaseRepository.update(purchase.id, {
+        orderStatus: PURCHASE_STATUS.PAID,
+      });
+      return success;
+    } else return fail;
   }
 }
