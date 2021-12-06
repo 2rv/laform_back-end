@@ -15,6 +15,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { SdekBarcoderDto } from './dto/sdek.barcode.dto';
+import { SdekCalculateDto } from './dto/sdekCalculate.dto';
 
 @Injectable()
 export class SdekService {
@@ -40,13 +41,20 @@ export class SdekService {
     }
     return 'Bearer ' + result.access_token;
   }
-  async сalculationByTariffCode(body: SdekDto) {
-    const data = {
+  async сalculationByTariffCode(body: SdekCalculateDto) {
+    const fromLocation = {
       city: SdekConfig.from_location.city,
       adress: SdekConfig.from_location.address,
       code: SdekConfig.from_location.code,
     };
-    body.from_location = data;
+    const productProp = {
+      weight: SdekConfig.weight * body.amount,
+      height: SdekConfig.height,
+      width: SdekConfig.width,
+      length: SdekConfig.length,
+    };
+    body.packages.push(productProp);
+    body.from_location = fromLocation;
     const result: any = await fetch(
       'https://api.edu.cdek.ru/v2/calculator/tariff',
       {
@@ -260,11 +268,15 @@ export class SdekService {
         },
       );
       const url = await getUrlByPdf.json();
-      const data = {
-        url: url.entity.url,
-        token: await this.authInSdek(),
-      };
-      return data;
+      const response = await axios.get(url.entity.url, {
+        responseType: 'arraybuffer',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: await this.authInSdek(),
+        },
+      });
+      // console.log(response.data);
+      return response.data;
     } catch (err) {
       throw new InternalServerErrorException(err);
     }

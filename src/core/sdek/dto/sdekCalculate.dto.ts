@@ -28,6 +28,10 @@ export class SdekCalculateDto {
   code: string;
 
   @IsNotEmpty()
+  @IsNumber()
+  amount: number;
+
+  @IsNotEmpty()
   @IsArray()
   packages: SdekPackagesDto[];
 
