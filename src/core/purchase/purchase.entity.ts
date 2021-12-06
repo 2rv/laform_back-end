@@ -68,13 +68,6 @@ export class PurchaseEntity {
 
   @Column({
     type: 'varchar',
-    name: 'city',
-    nullable: true,
-  })
-  city!: string;
-
-  @Column({
-    type: 'varchar',
     name: 'phone',
   })
   phone!: string;
@@ -92,19 +85,6 @@ export class PurchaseEntity {
     { cascade: true },
   )
   purchaseProducts: PurchaseProductEntity[];
-
-  @Column({
-    type: 'varchar',
-    nullable: true,
-  })
-  promoCode?: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'type_of_delivery',
-    nullable: true,
-  })
-  typeOfDelivery!: string;
 
   @Column({
     type: 'bool',
@@ -132,6 +112,12 @@ export class PurchaseEntity {
     nullable: true,
   })
   address!: string;
+  @Column({
+    type: 'varchar',
+    name: 'city',
+    nullable: true,
+  })
+  city!: string;
 
   @Column({
     type: 'numeric',
@@ -146,6 +132,11 @@ export class PurchaseEntity {
   })
   price!: number;
 
+  @Column({
+    type: 'varchar',
+    nullable: true,
+  })
+  promoCode?: string;
   @Column({
     type: 'int',
     default: 0,
