@@ -186,4 +186,17 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
     }
     return await query.getMany();
   }
+
+  async printed(id): Promise<any[]> {
+    const query = await this.createQueryBuilder('purchase_product')
+      .leftJoin('purchase_product.patternProductId', 'patternProductId')
+      .leftJoin('purchase_product.purchase', 'purchase')
+
+      .andWhere(
+        'purchase_product.sewingProductId is not null OR patternProductId.type = 2',
+      )
+      .where('purchase.id = :id', { id });
+
+    return await query.getMany();
+  }
 }

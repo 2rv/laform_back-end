@@ -12,6 +12,7 @@ import {
   UploadedFile,
   UseInterceptors,
   UploadedFiles,
+  Res,
 } from '@nestjs/common';
 import { FileUploadService } from './file-upload.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -20,6 +21,7 @@ import { Roles } from '../user/decorator/role.decorator';
 import { USER_ROLE } from '../user/enum/user-role.enum';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { DeleteManyFilesDto } from './dto/delete-many-files';
+import { Duplex } from 'stream';
 
 @Controller('file')
 export class FileUploadController {
@@ -55,6 +57,21 @@ export class FileUploadController {
   @Get('get/:id')
   async getOne(@Param('id') id: string) {
     return await this.fileUploadService.getOne(id);
+  }
+
+  @Get('browser/get/:id')
+  async getInBrowser(@Param('id') id: string, @Res() res) {
+    // const stream = Readable.from(
+    //   await this.fileUploadService.getFileInBrowser(id),
+    // );
+    // это создавало поток но для axios или постман
+    // Кароче вообще нужно что бы файл открывался прям по ссылке из браузера
+    let stream = new Duplex();
+    stream.push(await this.fileUploadService.getFileInBrowser(id));
+    stream.push(null);
+    // res.header('Content-type', 'application/pdf');  // если пдф
+    res.header('Content-type', 'image/jpeg'); // если картинка
+    return stream.pipe(res);
   }
 
   @Get('get/')

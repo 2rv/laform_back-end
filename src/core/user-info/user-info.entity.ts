@@ -23,7 +23,6 @@ export class UserInfoEntity extends BaseEntity {
     type: 'varchar',
     name: 'full_name',
     nullable: true,
-    default: null,
   })
   fullName: string;
 
@@ -31,7 +30,6 @@ export class UserInfoEntity extends BaseEntity {
     type: 'varchar',
     name: 'phone',
     nullable: true,
-    default: null,
   })
   phone: string;
 
@@ -45,154 +43,65 @@ export class UserInfoEntity extends BaseEntity {
   facebookId: string;
 
   @Column({
-    type: 'varchar',
-    name: 'country',
+    type: 'json',
     nullable: true,
-    default: null,
   })
-  country: string;
-
+  country: {
+    country: string;
+    country_iso_code: string;
+    label: string;
+  };
   @Column({
-    type: 'varchar',
-    name: 'country_iso_code',
+    type: 'json',
     nullable: true,
-    default: null,
   })
-  country_iso_code: string;
-
+  city: {
+    city: string;
+    fias_id: string;
+    fias_level: string;
+    kladr_id: string;
+    label: string;
+    settlement: string;
+  };
   @Column({
-    type: 'varchar',
-    name: 'label_country',
+    type: 'json',
     nullable: true,
-    default: null,
   })
-  label_country: string;
-
+  street: {
+    fias_id: string;
+    fias_level: string;
+    label: string;
+    street: string;
+  };
   @Column({
-    type: 'varchar',
-    name: 'city',
+    type: 'json',
     nullable: true,
-    default: null,
   })
-  city: string;
-
+  house: {
+    fias_id: string;
+    fias_level: string;
+    house: string;
+    label: string;
+  };
   @Column({
-    type: 'varchar',
-    name: 'fias_id',
+    type: 'json',
     nullable: true,
-    default: null,
   })
-  fias_id: string;
-
+  postal_code: {
+    label: string;
+    postal_code: string;
+  };
   @Column({
-    type: 'varchar',
-    name: 'fias_level_city',
+    type: 'json',
     nullable: true,
-    default: null,
   })
-  fias_level_city: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'kladr_id',
-    nullable: true,
-    default: null,
-  })
-  kladr_id: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'label_city',
-    nullable: true,
-    default: null,
-  })
-  label_city: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'settlement',
-    nullable: true,
-    default: null,
-  })
-  settlement: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'fias_id_street',
-    nullable: true,
-    default: null,
-  })
-  fias_id_street: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'fias_level_street',
-    nullable: true,
-    default: null,
-  })
-  fias_level_street: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'label_street',
-    nullable: true,
-    default: null,
-  })
-  label_street: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'street',
-    nullable: true,
-    default: null,
-  })
-  street: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'fias_id_house',
-    nullable: true,
-    default: null,
-  })
-  fias_id_house: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'fias_level_house',
-    nullable: true,
-    default: null,
-  })
-  fias_level_house: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'house',
-    nullable: true,
-    default: null,
-  })
-  house: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'label_house',
-    nullable: true,
-    default: null,
-  })
-  label_house: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'label_postal_code',
-    nullable: true,
-    default: null,
-  })
-  label_postal_code: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'postal_code',
-    nullable: true,
-    default: null,
-  })
-  postal_code: string;
+  full_adress: {
+    country: string;
+    city: string;
+    settlement: string;
+    street: string;
+    house: string;
+    postal_code: string;
+    kladr_id: string;
+  };
 }

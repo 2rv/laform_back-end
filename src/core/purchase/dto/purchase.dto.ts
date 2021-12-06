@@ -7,6 +7,7 @@ import {
   IsEmail,
   IsPhoneNumber,
   IsMobilePhone,
+  IsBoolean,
 } from 'class-validator';
 
 export class PurchaseDto {
@@ -53,4 +54,20 @@ export class PurchaseDto {
   @IsOptional()
   @IsNumber()
   shippingPrice: number;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  sdek: boolean;
+
+  @IsOptional()
+  @IsNumber()
+  sdekTariffCode: number;
+
+  @IsOptional()
+  @IsNumber()
+  sdekCityCode: number;
+
+  @IsOptional()
+  @IsString()
+  address: string;
 }

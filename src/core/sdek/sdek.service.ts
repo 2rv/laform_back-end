@@ -137,7 +137,7 @@ export class SdekService {
     }
   }
 
-  async createOrder(body: SdekOrderDto) {
+  async createOrder(body: any) {
     const data = {
       city: SdekConfig.from_location.city,
       address: SdekConfig.from_location.address,
@@ -244,7 +244,7 @@ export class SdekService {
     }
     return result;
   }
-  async createPdfReceipt(body: SdekPdfDto) {
+  async createPdfReceipt(body: SdekPdfDto): Promise<Buffer> {
     try {
       const createPdf = await fetch('https://api.edu.cdek.ru/v2/print/orders', {
         method: 'POST',
@@ -255,7 +255,7 @@ export class SdekService {
         },
       });
       if (!createPdf) {
-        return [];
+        return undefined;
       }
       const result = await createPdf.json();
       const getUrlByPdf: any = await fetch(
@@ -275,7 +275,6 @@ export class SdekService {
           Authorization: await this.authInSdek(),
         },
       });
-      // console.log(response.data);
       return response.data;
     } catch (err) {
       throw new InternalServerErrorException(err);
