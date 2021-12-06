@@ -13,6 +13,7 @@ import { Roles } from '../user/decorator/role.decorator';
 import { AuthGuard } from '@nestjs/passport';
 import { AccountGuard } from '../user/guard/account.guard';
 import { USER_ROLE } from '../user/enum/user-role.enum';
+import axios from 'axios';
 
 // const request = require('request-promise');
 // const fs = require('fs');
@@ -62,6 +63,7 @@ export class PdfController {
   //     });
   // }
 
+
   // @Post('sdek')
   // @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
   // @UseGuards(AuthGuard('jwt'), AccountGuard)
@@ -105,4 +107,5 @@ export class PdfController {
   //       }
   //     });
   // }
+
 }

@@ -29,7 +29,7 @@ export class SdekDto {
 
   @IsNotEmpty()
   @IsArray()
-  packages: SdekPackagesDto[];
+  packages: SdekPackagesDto;
 
   @IsOptional()
   @IsNumber()

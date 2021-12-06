@@ -7,6 +7,7 @@ import { ProductOptionModule } from '../product-option/product-option.module';
 import { RecommendationModule } from '../recommendation/recommendation.module';
 import { PatternProductEntity } from './pattern-product.entity';
 import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
+import { PageNavigationRepository } from '../page-navigation/page-navigation.repository';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { PurchaseProductRepository } from '../purchase-product/purchase-product.
       PatternProductRepository,
       PatternProductEntity,
       PurchaseProductRepository,
+      PageNavigationRepository,
     ]),
   ],
   providers: [PatternProductService],

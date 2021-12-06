@@ -5,6 +5,7 @@ import { StatisticsController } from './statistics.controller';
 import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
 import { PurchaseRepository } from '../purchase/purchase.repository';
 import { UserRepository } from '../user/user.repository';
+import { PageNavigationRepository } from '../page-navigation/page-navigation.repository';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { UserRepository } from '../user/user.repository';
       PurchaseProductRepository,
       PurchaseRepository,
       UserRepository,
+      PageNavigationRepository,
     ]),
   ],
   providers: [StatisticsService],

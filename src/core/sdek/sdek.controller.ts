@@ -14,6 +14,7 @@ import {
   ValidationPipe,
   Patch,
   Param,
+  Res,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AccountGuard } from '../user/guard/account.guard';
@@ -67,8 +68,11 @@ export class SdekController {
   @Post('/order/create/pdf')
   @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async createPdfReceipt(@Body(new ValidationPipe()) body: SdekPdfDto) {
-    return this.sdekService.createPdfReceipt(body);
+  async createPdfReceipt(
+    @Body(new ValidationPipe()) body: SdekPdfDto,
+    @Res() res,
+  ) {
+    res.end(await this.sdekService.createPdfReceipt(body));
   }
 
   @Post('/order/courier')

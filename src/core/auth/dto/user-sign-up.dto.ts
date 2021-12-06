@@ -6,6 +6,7 @@ import {
   MaxLength,
   Matches,
   IsEmail,
+  IsOptional,
 } from 'class-validator';
 
 export class UserSignUpDto {
@@ -28,4 +29,7 @@ export class UserSignUpDto {
   @MinLength(8)
   @MaxLength(100)
   password: string;
+  
+  @IsOptional()
+  testData?: object;
 }

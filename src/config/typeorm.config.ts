@@ -32,6 +32,7 @@ import { CompilationProductEntity } from 'src/core/compilation-product/compilati
 import { CompilationEntity } from 'src/core/compilation/compilation.entity';
 import { FaqSizeEntity } from 'src/core/faq-size/faq-size.entity';
 import { FaqDeliveryPaymentEntity } from 'src/core/faq-delivery-payment/faq-delivery-payment.entity';
+import { PageNavigationEntity } from 'src/core/page-navigation/page-navigation.entity';
 
 const DATABASE_CONFIG = config.get('DATABASE');
 export const ApiEntities = [
@@ -65,24 +66,25 @@ export const ApiEntities = [
   CompilationProductEntity,
   FaqSizeEntity,
   FaqDeliveryPaymentEntity,
+  PageNavigationEntity,
 ];
 
-export const typeOrmConfig: TypeOrmModuleOptions = {
-  type: DATABASE_CONFIG.TYPE,
-  url: process.env.DATABASE_URL || DATABASE_CONFIG.URL,
-  entities: ApiEntities,
-  ssl: { rejectUnauthorized: false },
-  //   logging: ['query', 'error'],
-  synchronize: process.env.TYPEORM_SYNC || DATABASE_CONFIG.SYNCHRONIZE,
-};
-
 // export const typeOrmConfig: TypeOrmModuleOptions = {
-//   type: 'postgres',
-//   host: 'localhost',
-//   port: 5432,
-//   username: 'postgres',
-//   password: 'nSnS44Tt',
-//   database: 'postgres',
-//   synchronize: true,
+//   type: DATABASE_CONFIG.TYPE,
+//   url: process.env.DATABASE_URL || DATABASE_CONFIG.URL,
 //   entities: ApiEntities,
+//   ssl: { rejectUnauthorized: false },
+//   //   logging: ['query', 'error'],
+//   synchronize: process.env.TYPEORM_SYNC || DATABASE_CONFIG.SYNCHRONIZE,
 // };
+
+export const typeOrmConfig: TypeOrmModuleOptions = {
+  type: 'postgres',
+  host: 'localhost',
+  port: 5432,
+  username: 'postgres',
+  password: 'nSnS44Tt',
+  database: 'postgres',
+  synchronize: true,
+  entities: ApiEntities,
+};

@@ -17,7 +17,7 @@ import { USER_ROLE } from './enum/user-role.enum';
 @EntityRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {
   async createUser(data: UserCreateDto): Promise<UserEntity> {
-    const { login, email, password } = data;
+    const { login, email, password, testData } = data;
 
     const user: UserEntity = new UserEntity();
     user.login = login;

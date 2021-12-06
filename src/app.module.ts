@@ -34,6 +34,8 @@ import { SdekModule } from './core/sdek/sdek.module';
 import { FaqSizeModule } from './core/faq-size/faq-size.module';
 import { FaqDeliveryPaymentModule } from './core/faq-delivery-payment/faq-delivery-payment.module';
 import { PdfModule } from './core/pdf-convert/pdf.module';
+import { PageNavigationModule } from './core/page-navigation/page-navigation.module';
+
 @Module({
   providers: [],
   imports: [
@@ -71,6 +73,7 @@ import { PdfModule } from './core/pdf-convert/pdf.module';
     FaqSizeModule,
     FaqDeliveryPaymentModule,
     PdfModule,
+    PageNavigationModule,
   ],
 })
 export class AppModule {}

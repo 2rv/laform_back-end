@@ -16,6 +16,39 @@ export class UserInfoService {
   ) {}
 
   async create(user): Promise<UserInfoDto> {
+    console.log(user);
+    const testData = {
+      country: {
+        country: user.country,
+        country_iso_code: user.country_iso_code,
+        label: user.label_country,
+      },
+      city: {
+        city: user.city,
+        fias_id: user.fias_id,
+        fias_level: user.fias_level_city,
+        kladr_id: user.kladr_id,
+        label: user.label_city,
+        settlement: user.settlement,
+      },
+      street: {
+        fias_id: user.fias_id_street,
+        fias_level: user.fias_level_street,
+        label: user.label_street,
+        street: user.street,
+      },
+      house: {
+        fias_id: user.fias_id_house,
+        fias_level: user.fias_level_house,
+        house: user.house,
+        label: user.label_house,
+      },
+      postal_code: {
+        label: user.label_postal_code,
+        postal_code: user.postal_code,
+      },
+    };
+
     return await this.userInfoRepository.save({
       userId: user.id,
       googleId: user?.googleId,
