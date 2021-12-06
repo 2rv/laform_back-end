@@ -8,7 +8,4 @@ export class UserInfoUpdateDto {
   @IsOptional()
   @IsPhoneNumber('RU')
   phone: string;
-  
-  @IsOptional()
-  testData?: object;
 }

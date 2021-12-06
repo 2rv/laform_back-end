@@ -5,6 +5,4 @@ export interface UserInfoDto {
   googleId: string;
   appleId: string;
   facebookId: string;
-
-  testData?: object;
 }
