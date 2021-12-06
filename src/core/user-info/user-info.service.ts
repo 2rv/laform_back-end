@@ -38,7 +38,6 @@ export class UserInfoService {
         userId: user.id,
       },
     });
-    console.log(body);
     await this.userInfoRepository.update(result.id, body);
     return await this.findOne(user);
   }
