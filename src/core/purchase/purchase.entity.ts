@@ -115,18 +115,21 @@ export class PurchaseEntity {
   @Column({
     type: 'int',
     name: 'tariff_code',
+    nullable: true,
   })
   sdekTariffCode!: number;
 
   @Column({
     type: 'int',
     name: 'sdek_city_code',
+    nullable: true,
   })
   sdekCityCode!: number;
 
   @Column({
     type: 'varchar',
     name: 'address',
+    nullable: true,
   })
   address!: string;
 

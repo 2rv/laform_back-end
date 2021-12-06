@@ -137,7 +137,7 @@ export class SdekService {
     }
   }
 
-  async createOrder(body: SdekOrderDto) {
+  async createOrder(body: any) {
     const data = {
       city: SdekConfig.from_location.city,
       address: SdekConfig.from_location.address,

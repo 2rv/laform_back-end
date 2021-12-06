@@ -7,6 +7,8 @@ import { PayAnyWayConfig } from 'src/config/payanyway.config';
 import { PaymentDto } from './dto/payment.dto';
 import { PurchaseRepository } from '../purchase/purchase.repository';
 import { PURCHASE_STATUS } from '../purchase/enum/purchase.status';
+import { SdekService } from '../sdek/sdek.service';
+import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
 
 @Injectable()
 export class PaymentService {
@@ -14,6 +16,8 @@ export class PaymentService {
     @InjectRepository(PaymentRepository)
     private paymentRepository: PaymentRepository,
     private purchaseRepository: PurchaseRepository,
+    private sdekService: SdekService,
+    private purchaseProductRepository: PurchaseProductRepository,
   ) {}
 
   async createTransaction(body): Promise<string> {
@@ -50,7 +54,7 @@ export class PaymentService {
 
     return await url;
   }
-
+  //http://localhost:4000/payment/redirect?MNT_ID=123&MNT_TRANSACTION_ID=0000000014&MNT_OPERATION_ID=123123
   async successLink(orderNumber: number): Promise<any> {
     const success = 'https://laform-client.herokuapp.com/paid';
     const fail = 'https://laform-client.herokuapp.com/not-paid';
@@ -60,9 +64,59 @@ export class PaymentService {
       },
     });
     if (purchase) {
+      const items = [];
       await this.purchaseRepository.update(purchase.id, {
         orderStatus: PURCHASE_STATUS.PAID,
       });
+      if (purchase.sdek === true) {
+        const printedProducts = await this.purchaseProductRepository.printed(
+          purchase.id,
+        );
+        for (let printedProduct of printedProducts) {
+          let item = {
+            ware_key: '00055',
+            payment: {
+              value: 0,
+            },
+            name: printedProduct.id,
+            cost: 300,
+            amount: 1,
+            weight: 700,
+            url: 'www.item.ru',
+          };
+          items.push(item);
+        }
+        const data = {
+          tariff_code: purchase.sdekTariffCode,
+          to_location: {
+            code: purchase.sdekCityCode,
+            city: purchase.city,
+            address: purchase.address,
+          },
+          recipient: {
+            name: purchase.fullName,
+            phones: [
+              {
+                number: purchase.phone,
+              },
+            ],
+          },
+          packages: [
+            {
+              number: '2',
+              height: 10,
+              length: 10,
+              weight: 4000,
+              width: 10,
+              items: items,
+            },
+          ],
+        };
+
+        const s = await this.sdekService.createOrder(data);
+        console.log(s);
+        return success;
+      }
       return success;
     } else return fail;
   }

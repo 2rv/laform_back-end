@@ -373,7 +373,7 @@ export class PurchaseService {
     );
     const newPurchase = await this.purchaseRepository.save(purchase);
     await this.productUpdateData(purchase.purchaseProducts);
-    const s = await this.purchaseRepository.update(newPurchase.id, {
+    await this.purchaseRepository.update(newPurchase.id, {
       orderNumber: await PurchaseEntity.generateOrderNumber(newPurchase._NID),
     });
 
@@ -386,14 +386,17 @@ export class PurchaseService {
     // return result;
 
     const result = await this.purchaseRepository.findOne(newPurchase.id);
-    const payment = {
-      amount: result.price + '.00',
-      currency: Currency.RUB,
-      orderNumber: result.orderNumber.toString(),
-      testMode: 1,
-    };
-    return await this.paymentService.getPayAnyWayLink(payment, userId);
-    //return null;
+    if (result) {
+      const payment = {
+        amount: result.price + '.00',
+        currency: Currency.RUB,
+        orderNumber: result.id,
+        testMode: 1,
+      };
+      return await this.paymentService.getPayAnyWayLink(payment, userId);
+    }
+
+    return null;
   }
 
   async createUserAfterPurchase(email: string): Promise<UserEntity> {
