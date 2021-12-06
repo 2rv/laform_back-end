@@ -32,7 +32,7 @@ export class PaymentController {
     return url;
   }
 
-  @Get('/')
+  @Get('success/')
   async SuccessPaymentGet(
     @Query('MNT_ID') MNT_ID: number,
     @Query('MNT_TRANSACTION_ID') MNT_TRANSACTION_ID: number,
@@ -40,7 +40,7 @@ export class PaymentController {
   ): Promise<any> {
     return { GET: MNT_ID, MNT_TRANSACTION_ID, MNT_OPERATION_ID };
   }
-  @Post('/')
+  @Post('success/')
   async SuccessPaymentPost(
     @Query('MNT_ID') MNT_ID: number,
     @Query('MNT_TRANSACTION_ID') MNT_TRANSACTION_ID: number,
