@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { FileUploadDto, FilesUploadDto } from './dto/file-upload.dto';
 import { DeleteManyFilesDto } from './dto/delete-many-files';
+import axios from 'axios';
 
 @Injectable()
 export class FileUploadService {
@@ -39,6 +40,21 @@ export class FileUploadService {
       return await this.fileRepository.findOne(id);
     } catch (error) {
       throw new InternalServerErrorException(FILE_UPLOAD_ERROR.FILE_NOT_FOUND);
+    }
+  }
+
+  async getFileInBrowser(id: string): Promise<Buffer> {
+    try {
+      const { fileUrl } = await this.getOne(id);
+      const response = await axios.get(fileUrl, {
+        responseType: 'arraybuffer',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return response.data;
+    } catch (err) {
+      throw new InternalServerErrorException(err);
     }
   }
 
