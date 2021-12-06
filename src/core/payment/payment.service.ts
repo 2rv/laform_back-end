@@ -5,12 +5,15 @@ import * as md5 from 'md5';
 import { PaymentRepository } from './payment.repository';
 import { PayAnyWayConfig } from 'src/config/payanyway.config';
 import { PaymentDto } from './dto/payment.dto';
+import { PurchaseRepository } from '../purchase/purchase.repository';
+import { PURCHASE_STATUS } from '../purchase/enum/purchase.status';
 
 @Injectable()
 export class PaymentService {
   constructor(
     @InjectRepository(PaymentRepository)
     private paymentRepository: PaymentRepository,
+    private purchaseRepository: PurchaseRepository,
   ) {}
 
   async createTransaction(body): Promise<string> {
@@ -46,5 +49,21 @@ export class PaymentService {
       signature;
 
     return await url;
+  }
+
+  async successLink(orderNumber: number): Promise<any> {
+    const success = 'https://laform-client.herokuapp.com/paid';
+    const fail = 'https://laform-client.herokuapp.com/not-paid';
+    const purchase = await this.purchaseRepository.findOne({
+      where: {
+        orderNumber: orderNumber,
+      },
+    });
+    if (purchase) {
+      await this.purchaseRepository.update(purchase.id, {
+        orderStatus: PURCHASE_STATUS.PAID,
+      });
+      return success;
+    } else return fail;
   }
 }
