@@ -41,4 +41,67 @@ export class UserInfoEntity extends BaseEntity {
 
   @Column({ name: 'facebook_id', nullable: true })
   facebookId: string;
+
+  @Column({
+    type: 'json',
+    nullable: true,
+  })
+  country: {
+    country: string;
+    country_iso_code: string;
+    label: string;
+  };
+  @Column({
+    type: 'json',
+    nullable: true,
+  })
+  city: {
+    city: string;
+    fias_id: string;
+    fias_level: string;
+    kladr_id: string;
+    label: string;
+    settlement: string;
+  };
+  @Column({
+    type: 'json',
+    nullable: true,
+  })
+  street: {
+    fias_id: string;
+    fias_level: string;
+    label: string;
+    street: string;
+  };
+  @Column({
+    type: 'json',
+    nullable: true,
+  })
+  house: {
+    fias_id: string;
+    fias_level: string;
+    house: string;
+    label: string;
+  };
+  @Column({
+    type: 'json',
+    nullable: true,
+  })
+  postal_code: {
+    label: string;
+    postal_code: string;
+  };
+  @Column({
+    type: 'json',
+    nullable: true,
+  })
+  full_adress: {
+    country: string;
+    city: string;
+    settlement: string;
+    street: string;
+    house: string;
+    postal_code: string;
+    kladr_id: string;
+  };
 }
