@@ -107,6 +107,31 @@ export class PurchaseEntity {
   typeOfDelivery!: string;
 
   @Column({
+    type: 'bool',
+    name: 'sdek',
+  })
+  sdek!: boolean;
+
+  @Column({
+    type: 'int',
+    name: 'tariff_code',
+  })
+  sdekTariffCode!: number;
+
+  @Column({
+    type: 'int',
+    name: 'sdek_city_code',
+  })
+  sdekCityCode!: number;
+
+  @Column({
+    type: 'varchar',
+    name: 'address',
+    nullable: false,
+  })
+  address!: string;
+
+  @Column({
     type: 'numeric',
     name: 'shipping_price',
     nullable: true,
