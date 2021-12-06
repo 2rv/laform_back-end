@@ -15,7 +15,6 @@ import {
   Delete,
   Param,
   UsePipes,
-  Res,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AccountGuard } from '../user/guard/account.guard';
@@ -35,17 +34,10 @@ export class PurchaseController {
   async saveForUser(
     @GetUser() user: UserEntity,
     @Body() body: CreatePurchaseDto,
-    @Res() res,
   ) {
     const AUTH = true;
     body.purchase.userId = user.id;
-    const url = await this.purchaseService.save(
-      body,
-      user.id,
-      user.email,
-      AUTH,
-    );
-    res.redirect(url);
+    return await this.purchaseService.save(body, user.id, user.email, AUTH);
   }
 
   @UsePipes(new ValidationPipe({ transform: true }))
