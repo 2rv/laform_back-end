@@ -30,22 +30,22 @@ export class SdekController {
   constructor(private readonly sdekService: SdekService) {}
 
   @Get('/auth')
-  @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  // @Roles(USER_ROLE.ADMIN)
+  // @UseGuards(AuthGuard('jwt'), AccountGuard)
   async authInSdek() {
     return this.sdekService.authInSdek();
   }
 
   @Get('/city-code/:kladr')
-  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  // @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  // @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getCityCodeByKladr(@Param('kladr') kladr: string) {
     return this.sdekService.getCityCodeByKladr(kladr);
   }
 
   @Post('/calculator/tariff')
-  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  // @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  // @UseGuards(AuthGuard('jwt'), AccountGuard)
   async сalculationByTariffCode(
     @Body(new ValidationPipe()) body: SdekCalculateDto,
   ) {
@@ -53,22 +53,22 @@ export class SdekController {
   }
 
   @Post('/calculator/tarifflist')
-  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  // @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  // @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getTariffList(@Body(new ValidationPipe()) body: SdekDto) {
     return this.sdekService.getTariffList(body);
   }
 
   @Post('/order/create')
-  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  // @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  // @UseGuards(AuthGuard('jwt'), AccountGuard)
   async createOrder(@Body(new ValidationPipe()) body) {
     return this.sdekService.createOrder(body);
   }
 
   @Post('/order/create/pdf')
-  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  // @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  // @UseGuards(AuthGuard('jwt'), AccountGuard)
   async createPdfReceipt(
     @Body(new ValidationPipe()) body: SdekPdfDto,
     @Res() res,
@@ -78,36 +78,36 @@ export class SdekController {
   }
 
   @Post('/order/courier')
-  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  // @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  // @UseGuards(AuthGuard('jwt'), AccountGuard)
   async createCourier(@Body(new ValidationPipe()) body: SdekCourierDto) {
     return this.sdekService.createCourier(body);
   }
 
   @Post('/order/barcode')
-  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  // @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  // @UseGuards(AuthGuard('jwt'), AccountGuard)
   async createBarcode(@Body(new ValidationPipe()) body: SdekBarcoderDto) {
     return this.sdekService.createBarcode(body);
   }
 
   @Get('/order/:orderId')
-  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  // @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  // @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getOrder(@Param('orderId') orderId: string) {
     return this.sdekService.getOrder(orderId);
   }
 
   @Patch('/order/edit')
-  @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  // @Roles(USER_ROLE.ADMIN)
+  // @UseGuards(AuthGuard('jwt'), AccountGuard)
   async editOrder(@Body(new ValidationPipe()) body: SdekUpdateDto) {
     return this.sdekService.editOrder(body);
   }
 
   @Delete('/order/delete/:orderId')
-  @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  // @Roles(USER_ROLE.ADMIN)
+  // @UseGuards(AuthGuard('jwt'), AccountGuard)
   async deleteOrder(@Param('orderId') orderId: string) {
     return this.sdekService.deleteOrder(orderId);
   }
