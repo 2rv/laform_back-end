@@ -23,6 +23,7 @@ import { USER_ROLE } from '../user/enum/user-role.enum';
 import { SdekPdfDto } from './dto/sdekPdf.dto';
 import { SdekCourierDto } from './dto/sdek.courier.dto';
 import { SdekBarcoderDto } from './dto/sdek.barcode.dto';
+import { Readable } from 'stream';
 
 @Controller('sdek')
 export class SdekController {
@@ -72,7 +73,8 @@ export class SdekController {
     @Body(new ValidationPipe()) body: SdekPdfDto,
     @Res() res,
   ) {
-    res.end(await this.sdekService.createPdfReceipt(body));
+    const stream = Readable.from(await this.sdekService.createPdfReceipt(body));
+    stream.pipe(res);
   }
 
   @Post('/order/courier')
