@@ -31,4 +31,21 @@ export class PaymentController {
     const url = await this.paymentService.getPayAnyWayLink(body, user);
     return url;
   }
+
+  @Get('/')
+  async SuccessPaymentGet(
+    @Query('MNT_ID') MNT_ID: number,
+    @Query('MNT_TRANSACTION_ID') MNT_TRANSACTION_ID: number,
+    @Query('MNT_OPERATION_ID') MNT_OPERATION_ID: number,
+  ): Promise<any> {
+    return { GET: MNT_ID, MNT_TRANSACTION_ID, MNT_OPERATION_ID };
+  }
+  @Post('/')
+  async SuccessPaymentPost(
+    @Query('MNT_ID') MNT_ID: number,
+    @Query('MNT_TRANSACTION_ID') MNT_TRANSACTION_ID: number,
+    @Query('MNT_OPERATION_ID') MNT_OPERATION_ID: number,
+  ): Promise<any> {
+    return { POST: MNT_ID, MNT_TRANSACTION_ID, MNT_OPERATION_ID };
+  }
 }
