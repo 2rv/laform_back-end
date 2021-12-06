@@ -20,6 +20,7 @@ import { LangValidationPipe } from 'src/common/guards/lang.guard';
 import { PatternProductDto } from './dto/pattern-product.dto';
 import { GetAccount } from '../user/decorator/get-account.decorator';
 import { UserEntity } from '../user/user.entity';
+import { PageNavigationGuard } from '../page-navigation/guard/page-navigationt.guard';
 
 @Controller('pattern-product')
 export class PatternProductController {
@@ -86,11 +87,13 @@ export class PatternProductController {
 
   @Get('/get/:patternProductId')
   @UseGuards(PatternProductGuard)
+  @UseGuards(PageNavigationGuard)
   async getOne(@Query(new LangValidationPipe()) query, @Request() req) {
     return await this.patternProductService.getOne(req.patternProductId, query);
   }
   @Get('/auth/get/:patternProductId')
   @UseGuards(AuthGuard('jwt'), AccountGuard, PatternProductGuard)
+  @UseGuards(PageNavigationGuard)
   async getOneAuth(
     @Query(new LangValidationPipe()) query,
     @Request() req,

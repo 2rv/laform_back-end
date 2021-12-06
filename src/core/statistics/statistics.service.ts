@@ -3,6 +3,7 @@ import { PurchaseProductRepository } from '../purchase-product/purchase-product.
 import { StatisticType } from './enum/statistic.enum';
 import { PurchaseRepository } from '../purchase/purchase.repository';
 import { UserRepository } from '../user/user.repository';
+import { PageNavigationRepository } from '../page-navigation/page-navigation.repository';
 
 @Injectable()
 export class StatisticsService {
@@ -10,6 +11,7 @@ export class StatisticsService {
     private purchaseProductRepository: PurchaseProductRepository,
     private purchaseRepository: PurchaseRepository,
     private userRepository: UserRepository,
+    private pageNavigationRepository: PageNavigationRepository,
   ) {}
 
   async priceStatistic(from: Date, to: Date, type: StatisticType) {
@@ -126,5 +128,38 @@ export class StatisticsService {
       printCount, // цена по физическим товарам (только для общей статистики)
       electronicCount, // цена по электронным товарам (только для общей статистики)
     };
+  }
+
+  async pageStatistic(from: Date, to: Date, type: StatisticType) {
+    const products = await this.pageNavigationRepository.statistics(
+      from,
+      to,
+      type,
+    );
+
+    const array = products.map((result) => {
+      let id;
+      if (result.masterClassId) {
+        id = result.masterClassId.id;
+      }
+      if (result.patternProductId) {
+        id = result.patternProductId.id;
+      }
+      if (result.sewingProductId) {
+        id = result.sewingProductId.id;
+      }
+      return {
+        id: id,
+        count: +result.count || 1,
+      };
+    });
+
+    return Object.values(
+      array.reduce((r, e) => {
+        if (!r[e.id]) r[e.id] = Object.assign({}, e);
+        else r[e.id].count += e.count;
+        return r;
+      }, {}),
+    );
   }
 }
