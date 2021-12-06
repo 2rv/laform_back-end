@@ -32,7 +32,7 @@ export class PaymentController {
     return url;
   }
 
-  @Get('redirect/')
+  @Get('redirect')
   async paymentRedirect(
     @Res() res,
     @Query('MNT_ID') MNT_ID: number,
