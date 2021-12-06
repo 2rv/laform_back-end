@@ -13,6 +13,7 @@ import { MailModule } from '../mail/mail.module';
 import { PurchaseEntity } from './purchase.entity';
 import { UserRepository } from '../user/user.repository';
 import { UserInfoModule } from '../user-info/user-info.module';
+import { PaymentModule } from '../payment/payment.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { UserInfoModule } from '../user-info/user-info.module';
     PurchaseProductModule,
     MailModule,
     UserInfoModule,
+    PaymentModule,
     TypeOrmModule.forFeature([
       PurchaseRepository,
       UserRepository,

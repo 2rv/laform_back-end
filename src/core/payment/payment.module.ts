@@ -10,6 +10,7 @@ import { PurchaseRepository } from '../purchase/purchase.repository';
 @Module({
   controllers: [PaymentController],
   providers: [PaymentService],
+  exports: [PaymentService],
   imports: [
     TypeOrmModule.forFeature([
       UserEntity,

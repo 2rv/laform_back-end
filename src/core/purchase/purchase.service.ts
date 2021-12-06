@@ -31,6 +31,8 @@ import { UserRepository } from '../user/user.repository';
 import { UserEntity } from '../user/user.entity';
 import { generateVendorCode } from 'src/common/utils/vendor-coder';
 import { UserInfoService } from '../user-info/user-info.service';
+import { PaymentService } from '../payment/payment.service';
+import { Currency } from '../payment/enum/payment.enum';
 
 interface ProductParamsInfoType {
   title?: string;
@@ -64,6 +66,7 @@ export class PurchaseService {
     private mailService: MailService,
     private userInfoService: UserInfoService,
     private userRepository: UserRepository,
+    private paymentService: PaymentService,
   ) {}
 
   getPrice(props: getPriceProps): number {
@@ -370,9 +373,10 @@ export class PurchaseService {
     );
     const newPurchase = await this.purchaseRepository.save(purchase);
     await this.productUpdateData(purchase.purchaseProducts);
-    await this.purchaseRepository.update(newPurchase.id, {
+    const s = await this.purchaseRepository.update(newPurchase.id, {
       orderNumber: await PurchaseEntity.generateOrderNumber(newPurchase._NID),
     });
+
     // await this.purchaseAwaitingPayment(newPurchase.id);
     // const purchaseData = await this.purchaseRepository.getAllForEmail(
     //   newPurchase.id,
@@ -380,7 +384,16 @@ export class PurchaseService {
     // await this.mailService.sendAdminNewOrderInfo(purchaseData);
 
     // return result;
-    return null;
+
+    const result = await this.purchaseRepository.findOne(newPurchase.id);
+    const payment = {
+      amount: result.price + '.00',
+      currency: Currency.RUB,
+      orderNumber: result.orderNumber.toString(),
+      testMode: 1,
+    };
+    return await this.paymentService.getPayAnyWayLink(payment, userId);
+    //return null;
   }
 
   async createUserAfterPurchase(email: string): Promise<UserEntity> {
