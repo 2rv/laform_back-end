@@ -12,7 +12,6 @@ import { CacheModuleConfig } from 'src/config/cache.config';
 import { MailModule } from '../mail/mail.module';
 import { PurchaseEntity } from './purchase.entity';
 import { UserRepository } from '../user/user.repository';
-import { UserInfoModule } from '../user-info/user-info.module';
 import { PaymentModule } from '../payment/payment.module';
 
 @Module({
@@ -24,7 +23,6 @@ import { PaymentModule } from '../payment/payment.module';
     SewingProductModule,
     PurchaseProductModule,
     MailModule,
-    UserInfoModule,
     PaymentModule,
     TypeOrmModule.forFeature([
       PurchaseRepository,
