@@ -364,28 +364,15 @@ export class PurchaseService {
     //   notAuthUserId = user.id;
     // }
 
-    const purchase = await this.create(
-      body.purchase,
-      products,
-      //   auth ? userId : notAuthUserId,
-      userId,
-      email,
-    );
+    const purchase = await this.create(body.purchase, products, userId, email);
     const newPurchase = await this.purchaseRepository.save(purchase);
     await this.productUpdateData(purchase.purchaseProducts);
     await this.purchaseRepository.update(newPurchase.id, {
       orderNumber: await PurchaseEntity.generateOrderNumber(newPurchase._NID),
     });
 
-    // await this.purchaseAwaitingPayment(newPurchase.id);
-    // const purchaseData = await this.purchaseRepository.getAllForEmail(
-    //   newPurchase.id,
-    // );
-    // await this.mailService.sendAdminNewOrderInfo(purchaseData);
-
-    // return result;
-
     const result = await this.purchaseRepository.findOne(newPurchase.id);
+    await this.mailService.sendPurchaseInfo(newPurchase.email, newPurchase);
     if (result) {
       const payment = {
         amount: result.price + '.00',

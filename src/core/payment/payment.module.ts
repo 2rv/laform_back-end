@@ -8,12 +8,14 @@ import { PaymentService } from './payment.service';
 import { PurchaseRepository } from '../purchase/purchase.repository';
 import { SdekModule } from '../sdek/sdek.module';
 import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
   controllers: [PaymentController],
   providers: [PaymentService],
   exports: [PaymentService],
   imports: [
+    MailModule,
     SdekModule,
     TypeOrmModule.forFeature([
       UserEntity,

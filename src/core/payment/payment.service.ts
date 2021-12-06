@@ -9,6 +9,7 @@ import { PurchaseRepository } from '../purchase/purchase.repository';
 import { PURCHASE_STATUS } from '../purchase/enum/purchase.status';
 import { SdekService } from '../sdek/sdek.service';
 import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class PaymentService {
@@ -18,6 +19,7 @@ export class PaymentService {
     private purchaseRepository: PurchaseRepository,
     private sdekService: SdekService,
     private purchaseProductRepository: PurchaseProductRepository,
+    private mailService: MailService,
   ) {}
 
   async createTransaction(body): Promise<string> {
@@ -63,11 +65,13 @@ export class PaymentService {
         orderNumber: orderNumber,
       },
     });
+
     if (purchase) {
       const items = [];
       await this.purchaseRepository.update(purchase.id, {
         orderStatus: PURCHASE_STATUS.PAID,
       });
+      await this.mailService.sendPurchaseInfo(purchase.email, purchase);
       if (purchase.sdek === true) {
         const printedProducts = await this.purchaseProductRepository.printed(
           purchase.id,
@@ -117,6 +121,7 @@ export class PaymentService {
         console.log(s);
         return success;
       }
+
       return success;
     } else return fail;
   }
