@@ -357,6 +357,7 @@ export class PurchaseService {
         orderNumber: result.id,
         testMode: 1,
       };
+      await this.sendPurchaseInfo(result.id);
       return await this.paymentService.getPayAnyWayLink(payment, userId);
     }
 
