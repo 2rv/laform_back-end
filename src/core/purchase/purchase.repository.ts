@@ -71,7 +71,6 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
         'purchase.phone',
         'purchase.comment',
         'purchase.promoCode',
-        'purchase.typeOfDelivery',
         'purchase.shippingPrice',
         'purchase.price',
         'purchase.promoCodeDiscount',
@@ -167,7 +166,6 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
         'purchase.fullName',
         'purchase.city',
         'purchase.phone',
-        'purchase.typeOfDelivery',
         'purchase.comment',
         'purchase.price',
         'purchase.promoCode',
@@ -272,64 +270,3 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
     return await query.getMany();
   }
 }
-
-// Удалить если не используется
-//   async getPurchasesForPeriod(): Promise<PurchaseEntity[]> {
-//     return await this.createQueryBuilder('purchase')
-//       .loadRelationCountAndMap(
-//         'purchase.purchaseProductsCount',
-//         'purchase.purchaseProducts',
-//       )
-//       .orderBy('purchase.orderNumber', 'ASC')
-//       .select([
-//         'purchase.id',
-//         'purchase.createdDate',
-//         'purchase.shippingPrice',
-//         'purchase.price',
-//         'purchase.promoCodeDiscount',
-//       ])
-//       .getMany();
-//   }
-
-//   async getMasterClassPurchasesInfo(): Promise<PurchaseEntity[]> {
-//     return await this.createQueryBuilder('purchase')
-//       .leftJoin('purchase.purchaseProducts', 'purchase_products')
-//       .orderBy('purchase.orderNumber', 'ASC')
-//       .select([
-//         'purchase.id',
-//         'purchase.createdDate',
-//         'purchase_products.id',
-//         'purchase_products.createdDate',
-//         'purchase_products.totalCount',
-//         'purchase_products.totalDiscount',
-//         'purchase_products.totalPrice',
-//       ])
-//       .where('purchase_products.type = 0')
-//       .getMany();
-//   }
-
-//   async getStatisticsInfo(): Promise<PurchaseEntity[]> {
-//     return await this.createQueryBuilder('purchase')
-//       .loadRelationCountAndMap(
-//         'purchase.purchaseProductsCount',
-//         'purchase.purchaseProducts',
-//       )
-//       .leftJoin('purchase.purchaseProducts', 'purchase_products')
-//       .orderBy('purchase.orderNumber', 'ASC')
-//       .orderBy('purchase_products.createdDate', 'ASC')
-//       .select([
-//         'purchase.id',
-//         'purchase.createdDate',
-//         'purchase.shippingPrice',
-//         'purchase.price',
-//         'purchase.promoCodeDiscount',
-
-//         'purchase_products.id',
-//         'purchase_products.type',
-//         'purchase_products.createdDate',
-//         'purchase_products.totalCount',
-//         'purchase_products.totalDiscount',
-//         'purchase_products.totalPrice',
-//       ])
-//       .getMany();
-//   }

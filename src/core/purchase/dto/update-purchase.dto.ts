@@ -48,10 +48,6 @@ export class UpdatePurchaseDto {
 
   @IsOptional()
   @IsString()
-  typeOfDelivery: string;
-
-  @IsOptional()
-  @IsString()
   shippingPrice: string;
 
   @IsOptional()

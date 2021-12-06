@@ -512,7 +512,6 @@ export class PurchaseService {
     result.city = body.city;
     result.phone = body.phone;
     result.comment = body.comment;
-    result.typeOfDelivery = body.typeOfDelivery;
     result.price = price;
     //@ts-ignore
     result.purchaseProducts = products;
