@@ -120,7 +120,7 @@ export class MailService {
         subject: 'La`forme Patterns, информация о купленных продуктах',
         template: path.join(path.resolve(), 'src/templates/purchase-info.pug'),
         context: {
-          address: body.city,
+          address: body.address,
           fullName: body.fullName,
           phone: body.phone,
           price: Number(body.price) + (Number(body.shippingPrice) || 0),
@@ -146,7 +146,7 @@ export class MailService {
           'src/templates/admin-new-purchase-info.pug',
         ),
         context: {
-          address: body.city,
+          address: body.address,
           fullName: body.fullName,
           phone: body.phone,
           price: Number(body.price) + (Number(body.shippingPrice) || 0),
@@ -169,7 +169,7 @@ export class MailService {
         subject: 'La`forme Patterns, статус покупки был обновлен',
         template: path.join(path.resolve(), 'src/templates/purchase-info.pug'),
         context: {
-          address: body.city,
+          address: body.address,
           fullName: body.fullName,
           phone: body.phone,
           price: Number(body.price) + (Number(body.shippingPrice) || 0),
