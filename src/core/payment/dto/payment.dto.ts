@@ -18,10 +18,10 @@ export class PaymentDto {
   currency: Currency;
 
   @IsNotEmpty()
-  @IsNumber()
-  orderNumber: number;
+  @IsString()
+  orderNumber: string;
 
   @IsNotEmpty()
   @IsNumber()
-  testMode: boolean;
+  testMode: number;
 }

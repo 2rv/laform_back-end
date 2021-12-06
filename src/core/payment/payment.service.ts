@@ -20,13 +20,13 @@ export class PaymentService {
     return await this.paymentRepository.save(body);
   }
 
-  async getPayAnyWayLink(body: PaymentDto, user): Promise<string> {
+  async getPayAnyWayLink(body: PaymentDto, userId): Promise<string> {
     const signature = md5(
       PayAnyWayConfig.MNT_ID +
         body.orderNumber +
         body.amount +
         body.currency +
-        user.id +
+        userId +
         body.testMode +
         PayAnyWayConfig.MNT_INTEGRITY_CODE,
     );
@@ -44,7 +44,7 @@ export class PaymentService {
       `&MNT_TEST_MODE=` +
       body.testMode +
       `&MNT_SUBSCRIBER_ID=` +
-      user.id +
+      userId +
       `&MNT_SIGNATURE=` +
       signature;
 
