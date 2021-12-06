@@ -20,11 +20,8 @@ export class StatisticsService {
     );
 
     const array = products.map((result) => {
-      const [day, month, year] = new Intl.DateTimeFormat()
-        .format(result.createDate)
-        .split('.');
       return {
-        date: `${month}-${day}-${year}`,
+        date: new Intl.DateTimeFormat().format(result.createDate),
         price: +result.totalPrice * (+result.totalCount || +result.totalLength),
       };
     });
@@ -46,11 +43,8 @@ export class StatisticsService {
     );
 
     const array = products.map((result) => {
-      const [day, month, year] = new Intl.DateTimeFormat()
-        .format(result.createDate)
-        .split('.');
       return {
-        date: `${month}-${day}-${year}`,
+        date: new Intl.DateTimeFormat().format(result.createDate),
         count: +result.totalCount || 1,
       };
     });
@@ -68,11 +62,8 @@ export class StatisticsService {
     const results = await this.userRepository.statistics(from, to);
 
     const array = results.map((result) => {
-      const [day, month, year] = new Intl.DateTimeFormat()
-        .format(result.createDate)
-        .split('.');
       return {
-        date: `${month}-${day}-${year}`,
+        date: new Intl.DateTimeFormat().format(result.createDate),
       };
     });
 
@@ -137,69 +128,3 @@ export class StatisticsService {
     };
   }
 }
-
-// const array = products.map((item) => {
-//   return {
-//     date: new Intl.DateTimeFormat().format(item.createdDate),
-//     price: +item.totalPrice * (+item.totalCount || +item.totalLength),
-//   };
-// });
-
-// Count метод старый вариант
-// const array = [];
-// for (let result of results) {
-//   result.createdDate = new Intl.DateTimeFormat().format(result.createdDate);
-//   const data = {
-//     date: result.createdDate,
-//     count: +result.totalCount || 1,
-//   };
-//   array.push(data);
-// }
-//  const newArray = [
-//   {
-//     data: array,
-//   },
-// ];
-// const newData = newArray.map(({ data }) => {
-//   return {
-//     data: Object.values(
-//       data.reduce((r, e) => {
-//         if (!r[e.date]) r[e.date] = Object.assign({}, e);
-//         else r[e.date].count += e.count;
-//         return r;
-//       }, {}),
-//     ),
-//   };
-// });
-// return newData;
-
-// Price старый вариант
-// const array = [];
-// for (let result of results) {
-//   result.createdDate = new Intl.DateTimeFormat().format(result.createdDate);
-//   const data = {
-// 	date: result.createdDate,
-// 	price: +result.totalPrice,
-//   };
-//   array.push(data);
-// }
-
-// const newArray = [
-//   {
-// 	data: array,
-//   },
-// ];
-
-// const newData = newArray.map(({ data }) => {
-//   return {
-// 	data: Object.values(
-// 	  data.reduce((r, e) => {
-// 		if (!r[e.date]) r[e.date] = Object.assign({}, e);
-// 		else r[e.date].price += e.price;
-// 		return r;
-// 	  }, {}),
-// 	),
-//   };
-// });
-
-// return newData;
