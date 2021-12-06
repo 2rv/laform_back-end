@@ -3,6 +3,7 @@ import { PurchaseProductRepository } from '../purchase-product/purchase-product.
 import { StatisticType } from './enum/statistic.enum';
 import { PurchaseRepository } from '../purchase/purchase.repository';
 import { UserRepository } from '../user/user.repository';
+import { PageNavigationRepository } from '../page-navigation/page-navigation.repository';
 
 @Injectable()
 export class StatisticsService {
@@ -10,6 +11,7 @@ export class StatisticsService {
     private purchaseProductRepository: PurchaseProductRepository,
     private purchaseRepository: PurchaseRepository,
     private userRepository: UserRepository,
+    private pageNavigationRepository: PageNavigationRepository,
   ) {}
 
   async priceStatistic(from: Date, to: Date, type: StatisticType) {
@@ -20,11 +22,8 @@ export class StatisticsService {
     );
 
     const array = products.map((result) => {
-      const [day, month, year] = new Intl.DateTimeFormat()
-        .format(result.createDate)
-        .split('.');
       return {
-        date: `${month}-${day}-${year}`,
+        date: new Intl.DateTimeFormat().format(result.createDate),
         price: +result.totalPrice * (+result.totalCount || +result.totalLength),
       };
     });
@@ -46,11 +45,8 @@ export class StatisticsService {
     );
 
     const array = products.map((result) => {
-      const [day, month, year] = new Intl.DateTimeFormat()
-        .format(result.createDate)
-        .split('.');
       return {
-        date: `${month}-${day}-${year}`,
+        date: new Intl.DateTimeFormat().format(result.createDate),
         count: +result.totalCount || 1,
       };
     });
@@ -68,11 +64,8 @@ export class StatisticsService {
     const results = await this.userRepository.statistics(from, to);
 
     const array = results.map((result) => {
-      const [day, month, year] = new Intl.DateTimeFormat()
-        .format(result.createDate)
-        .split('.');
       return {
-        date: `${month}-${day}-${year}`,
+        date: new Intl.DateTimeFormat().format(result.createDate),
       };
     });
 
@@ -136,70 +129,37 @@ export class StatisticsService {
       electronicCount, // цена по электронным товарам (только для общей статистики)
     };
   }
+
+  async pageStatistic(from: Date, to: Date, type: StatisticType) {
+    const products = await this.pageNavigationRepository.statistics(
+      from,
+      to,
+      type,
+    );
+
+    const array = products.map((result) => {
+      let id;
+      if (result.masterClassId) {
+        id = result.masterClassId.id;
+      }
+      if (result.patternProductId) {
+        id = result.patternProductId.id;
+      }
+      if (result.sewingProductId) {
+        id = result.sewingProductId.id;
+      }
+      return {
+        id: id,
+        count: +result.count || 1,
+      };
+    });
+
+    return Object.values(
+      array.reduce((r, e) => {
+        if (!r[e.id]) r[e.id] = Object.assign({}, e);
+        else r[e.id].count += e.count;
+        return r;
+      }, {}),
+    );
+  }
 }
-
-// const array = products.map((item) => {
-//   return {
-//     date: new Intl.DateTimeFormat().format(item.createdDate),
-//     price: +item.totalPrice * (+item.totalCount || +item.totalLength),
-//   };
-// });
-
-// Count метод старый вариант
-// const array = [];
-// for (let result of results) {
-//   result.createdDate = new Intl.DateTimeFormat().format(result.createdDate);
-//   const data = {
-//     date: result.createdDate,
-//     count: +result.totalCount || 1,
-//   };
-//   array.push(data);
-// }
-//  const newArray = [
-//   {
-//     data: array,
-//   },
-// ];
-// const newData = newArray.map(({ data }) => {
-//   return {
-//     data: Object.values(
-//       data.reduce((r, e) => {
-//         if (!r[e.date]) r[e.date] = Object.assign({}, e);
-//         else r[e.date].count += e.count;
-//         return r;
-//       }, {}),
-//     ),
-//   };
-// });
-// return newData;
-
-// Price старый вариант
-// const array = [];
-// for (let result of results) {
-//   result.createdDate = new Intl.DateTimeFormat().format(result.createdDate);
-//   const data = {
-// 	date: result.createdDate,
-// 	price: +result.totalPrice,
-//   };
-//   array.push(data);
-// }
-
-// const newArray = [
-//   {
-// 	data: array,
-//   },
-// ];
-
-// const newData = newArray.map(({ data }) => {
-//   return {
-// 	data: Object.values(
-// 	  data.reduce((r, e) => {
-// 		if (!r[e.date]) r[e.date] = Object.assign({}, e);
-// 		else r[e.date].price += e.price;
-// 		return r;
-// 	  }, {}),
-// 	),
-//   };
-// });
-
-// return newData;

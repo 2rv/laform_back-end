@@ -21,6 +21,7 @@ import { LangValidationPipe } from 'src/common/guards/lang.guard';
 import { SewingProductDto } from './dto/sewing-product.dto';
 import { GetAccount } from '../user/decorator/get-account.decorator';
 import { UserEntity } from '../user/user.entity';
+import { PageNavigationGuard } from '../page-navigation/guard/page-navigationt.guard';
 
 @Controller('sewing-product')
 export class SewingProductController {
@@ -83,6 +84,7 @@ export class SewingProductController {
 
   @Get('/get/:sewingProductId')
   @UseGuards(SewingProductGuard)
+  @UseGuards(PageNavigationGuard)
   async getOne(
     @Query(new LangValidationPipe()) query,
     @Param('sewingProductId') sewingProductId: string,
@@ -91,6 +93,7 @@ export class SewingProductController {
   }
   @Get('/auth/get/:sewingProductId')
   @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
+  @UseGuards(PageNavigationGuard)
   async getOneAuth(
     @Query(new LangValidationPipe()) query,
     @Param('sewingProductId') sewingProductId: string,

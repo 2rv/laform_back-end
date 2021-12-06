@@ -60,7 +60,17 @@ export class SewingProductService {
       by = 'ASC';
     } else sort = '';
 
-    if (query === 'ru')
+    if (query === 'ru') {
+      if (allProductsPage === 'yes') {
+        return await this.sewingProductRepository.findAllForProductList(
+          size,
+          page,
+          sort,
+          by,
+          where,
+          category,
+        );
+      }
       return await this.sewingProductRepository.findAllRu(
         size,
         page,
@@ -68,9 +78,10 @@ export class SewingProductService {
         by,
         where,
         category,
-        allProductsPage,
       );
-    if (query === 'en')
+    }
+
+    if (query === 'en') {
       return await this.sewingProductRepository.findAllEn(
         size,
         page,
@@ -78,8 +89,8 @@ export class SewingProductService {
         by,
         where,
         category,
-        allProductsPage,
       );
+    }
   }
   async getAllAuth(
     query: string,
@@ -310,22 +321,3 @@ export class SewingProductService {
       return await this.sewingProductRepository.findOneForUpdate(id);
   }
 }
-
-// async getPinned(query: string): Promise<SewingProductEntity[]> {
-//     if (query === 'ru')
-//       return await this.sewingProductRepository.findPinnedRu();
-//     if (query === 'en')
-//       return await this.sewingProductRepository.findPinnedEn();
-//   }
-//   async getPinnedAuth(
-//     query: string,
-//     userId: number,
-//   ): Promise<SewingProductEntity[]> {
-//     if (query === 'ru')
-//       return await this.sewingProductRepository.findPinnedRuAuth(userId);
-//     if (query === 'en')
-//       return await this.sewingProductRepository.findPinnedEnAuth(userId);
-//   }
-//   async updatePinned(id: string, body: any) {
-//     await this.sewingProductRepository.update({ id }, body);
-//   }

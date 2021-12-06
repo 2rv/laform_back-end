@@ -20,6 +20,7 @@ import { LangValidationPipe } from 'src/common/guards/lang.guard';
 import { MasterClassDto } from './dto/master-class.dto';
 import { GetAccount } from '../user/decorator/get-account.decorator';
 import { UserEntity } from '../user/user.entity';
+import { PageNavigationGuard } from '../page-navigation/guard/page-navigationt.guard';
 
 @Controller('master-class')
 export class MasterClassController {
@@ -83,6 +84,7 @@ export class MasterClassController {
 
   @Get('/get/:masterClassId')
   @UseGuards(MasterClassGuard)
+  @UseGuards(PageNavigationGuard)
   async getOne(
     @Query(new LangValidationPipe()) query,
     @Param('masterClassId') masterClassId: string,
@@ -102,6 +104,7 @@ export class MasterClassController {
 
   @Get('/auth/get/:masterClassId')
   @UseGuards(AuthGuard('jwt'), AccountGuard, MasterClassGuard)
+  @UseGuards(PageNavigationGuard)
   async getOneAuth(
     @Query(new LangValidationPipe()) query,
     @Param('masterClassId') masterClassId: string,
