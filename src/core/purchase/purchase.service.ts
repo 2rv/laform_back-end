@@ -416,7 +416,7 @@ export class PurchaseService {
     result.orderStatus = body.orderStatus;
     result.email = body.email;
     result.fullName = body.fullName;
-    result.city = body.city;
+    result.address = body.address;
     result.phone = body.phone;
     result.comment = body.comment;
     result.price = price;
