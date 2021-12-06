@@ -10,6 +10,7 @@ import { PURCHASE_STATUS } from '../purchase/enum/purchase.status';
 import { SdekService } from '../sdek/sdek.service';
 import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
 import { MailService } from '../mail/mail.service';
+import { PurchaseService } from '../purchase/purchase.service';
 
 @Injectable()
 export class PaymentService {
@@ -19,7 +20,7 @@ export class PaymentService {
     private purchaseRepository: PurchaseRepository,
     private sdekService: SdekService,
     private purchaseProductRepository: PurchaseProductRepository,
-    private mailService: MailService,
+    private purchaseService: PurchaseService,
   ) {}
 
   async createTransaction(body): Promise<string> {
@@ -60,6 +61,7 @@ export class PaymentService {
   async successLink(orderNumber: number): Promise<any> {
     const success = 'https://laform-client.herokuapp.com/paid';
     const fail = 'https://laform-client.herokuapp.com/not-paid';
+
     const purchase = await this.purchaseRepository.findOne({
       where: {
         orderNumber: orderNumber,
@@ -71,11 +73,12 @@ export class PaymentService {
       await this.purchaseRepository.update(purchase.id, {
         orderStatus: PURCHASE_STATUS.PAID,
       });
-      await this.mailService.sendPurchaseInfo(purchase.email, purchase);
+
       if (purchase.sdek === true) {
         const printedProducts = await this.purchaseProductRepository.printed(
           purchase.id,
         );
+        await this.purchaseService.sendPurchaseInfo(purchase.id);
         for (let printedProduct of printedProducts) {
           let item = {
             ware_key: '00055',

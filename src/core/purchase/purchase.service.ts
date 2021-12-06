@@ -65,7 +65,6 @@ export class PurchaseService {
     private masterClassService: MasterClassService,
     private mailService: MailService,
     private userInfoService: UserInfoService,
-    private userRepository: UserRepository,
     private paymentService: PaymentService,
   ) {}
 
@@ -341,7 +340,6 @@ export class PurchaseService {
     body: CreatePurchaseDto,
     userId: number,
     email: string,
-    auth: boolean,
   ): Promise<any> {
     const { products, price } = await this.verifyProducts(
       body.purchaseProducts,
@@ -367,15 +365,15 @@ export class PurchaseService {
     const purchase = await this.create(body.purchase, products, userId, email);
     const newPurchase = await this.purchaseRepository.save(purchase);
     await this.productUpdateData(purchase.purchaseProducts);
+
     await this.purchaseRepository.update(newPurchase.id, {
       orderNumber: await PurchaseEntity.generateOrderNumber(newPurchase._NID),
     });
 
     const result = await this.purchaseRepository.findOne(newPurchase.id);
-    await this.mailService.sendPurchaseInfo(newPurchase.email, newPurchase);
     if (result) {
       const payment = {
-        amount: result.price + '.00',
+        amount: (+result.price).toFixed(2),
         currency: Currency.RUB,
         orderNumber: result.id,
         testMode: 1,
