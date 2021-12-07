@@ -7,6 +7,15 @@ import { ProductOptionService } from '../product-option/product-option.service';
 import { RecommendationService } from '../recommendation/recommendation.service';
 import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
 import { PURCHASE_ERROR } from '../purchase/enum/purchase.enum';
+import { CategoryRepository } from '../category/category.repository';
+import { FileUploadService } from '../file-upload/file-upload.service';
+import {
+  uploadImagesScript,
+  uploadFilesScript,
+} from 'src/common/utils/file-upload';
+import { FileUploadRepository } from '../file-upload/file-upload.repository';
+import { ProductOptionRepository } from '../product-option/product-option.repository';
+//import * as fs from 'fs';
 
 @Injectable()
 export class PatternProductService {
@@ -15,6 +24,10 @@ export class PatternProductService {
     private productOptionService: ProductOptionService,
     private recommendationService: RecommendationService,
     private purchaseProductRepository: PurchaseProductRepository,
+    private categoryRepository: CategoryRepository,
+    private fileUploadService: FileUploadService,
+    private fileRepository: FileUploadRepository,
+    private productOptionRepository: ProductOptionRepository,
   ) {}
 
   async create(body: PatternProductDto): Promise<PatternProductEntity> {
@@ -28,6 +41,102 @@ export class PatternProductService {
 
     return await this.patternProductRepository.save(body);
   }
+
+  async createMass(body: any): Promise<any> {
+    var fs = require('fs');
+    var content = fs.readFileSync('./output/products.json', 'utf-8');
+    var object = JSON.parse(content);
+
+    for (let s of object) {
+      console.log(s.vendor_code);
+      let cat = [];
+      for (let k of s.categories) {
+        const category = await this.categoryRepository.findOne({
+          where: {
+            categoryNameRu: k,
+          },
+        });
+        cat.push({ id: category.id });
+        // if (!category) {
+        //   await this.categoryRepository.save({
+        //     categoryNameRu: k,
+        //     type: '1',
+        //   });
+        // }
+      }
+      let arr = [];
+      for (let image of s.images) {
+        const imageName = image.substr(image.lastIndexOf('/') + 1);
+        const fileUrl = await uploadImagesScript(imageName);
+        const g = await this.fileRepository.save({ fileUrl: fileUrl });
+        arr.push(g);
+      }
+
+      const data = {
+        wpId: s.id,
+        vendorCode: s.vendor_code,
+        titleRu: s.name,
+        shortDescription: s.short_description,
+        descriptionRu: s.description,
+        type: 2,
+        categories: cat,
+        images: arr,
+      };
+      const res = await this.patternProductRepository.save(data);
+      for (let option of s.options) {
+        const fileUrl = await uploadFilesScript(option.file_name);
+
+        const newOption = {
+          vendorCode: option.vendor_code,
+          size: option.size,
+          price: option.price,
+          patternProductId: res,
+        };
+        const y = await this.productOptionRepository.save(newOption);
+        const i = await this.fileRepository.save({
+          fileUrl: fileUrl,
+          optionFilePdf: y.id,
+        });
+      }
+      //console.log(s);
+    }
+    // }
+    //   for (let image of s.images) {
+    //     const imageName = image.substr(image.lastIndexOf('/') + 1);
+    //     const fileUrl = await uploadImagesScript(imageName);
+    //     const g = await this.fileRepository.save({ fileUrl: fileUrl });
+    //     arr.push(g);
+    //   }
+    //   const data = {
+    //     wpId: s.id,
+    //     vendorCode: s.vendor_code,
+    //     titleRu: s.name,
+    //     shortDescription: s.short_description,
+    //     descriptionRu: s.description,
+    //     type: 2,
+    //     categories: [{ id: category.id }],
+    //     images: arr,
+    //   };
+    //   const res = await this.patternProductRepository.save(data);
+    //   for (let option of s.options) {
+    //     const fileUrl = await uploadFilesScript(option.file_name);
+
+    //     const newOption = {
+    //       vendorCode: option.vendor_code,
+    //       size: option.size,
+    //       price: option.price,
+    //       patternProductId: res,
+    //     };
+    //     const y = await this.productOptionRepository.save(newOption);
+    //     const i = await this.fileRepository.save({
+    //       fileUrl: fileUrl,
+    //       optionFilePdf: y.id,
+    //     });
+    //   }
+  }
+  //return object;
+
+  //return await this.patternProductRepository.save(body);
 
   async getAll(
     query: string,

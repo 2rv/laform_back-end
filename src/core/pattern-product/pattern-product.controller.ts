@@ -33,6 +33,13 @@ export class PatternProductController {
     return await this.patternProductService.create(body);
   }
 
+  @Get('/create/mass')
+  // @Roles(USER_ROLE.ADMIN)
+  // @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async saveMass(@Body() body) {
+    return await this.patternProductService.createMass(body);
+  }
+
   @Get('/get/')
   async getAll(
     @Query(new LangValidationPipe()) query: string,
