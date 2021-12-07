@@ -32,10 +32,6 @@ export class UpdatePurchaseDto {
   fullName: string;
 
   @IsOptional()
-  @IsString()
-  city: string;
-
-  @IsOptional()
   @IsPhoneNumber('RU')
   phone: string;
 
@@ -53,6 +49,10 @@ export class UpdatePurchaseDto {
   @IsOptional()
   @IsString()
   price: string;
+
+  @IsOptional()
+  @IsString()
+  address: string;
 }
 
 export class UpdatePurchaseProductDto {

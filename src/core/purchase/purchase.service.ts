@@ -3,7 +3,6 @@ import {
   BadRequestException,
   Inject,
   CACHE_MANAGER,
-  InternalServerErrorException,
 } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { PurchaseEntity } from './purchase.entity';
@@ -24,13 +23,8 @@ import { SewingProductEntity } from '../sewing-product/sewing-product.entity';
 import { PURCHASE_ERROR } from './enum/purchase.enum';
 import { VerifyByCodeDto } from './dto/verify-by-code.dto';
 import { MailService } from '../mail/mail.service';
-import { PURCHASE_STATUS } from './enum/purchase.status';
 import { UpdatePurchaseStatusDto } from './dto/update-purchase-status.dto';
 import { UpdatePurchaseDto } from './dto/update-purchase.dto';
-import { UserRepository } from '../user/user.repository';
-import { UserEntity } from '../user/user.entity';
-import { generateVendorCode } from 'src/common/utils/vendor-coder';
-import { UserInfoService } from '../user-info/user-info.service';
 import { PaymentService } from '../payment/payment.service';
 import { Currency } from '../payment/enum/payment.enum';
 
@@ -64,7 +58,6 @@ export class PurchaseService {
     private sewingProductService: SewingProductService,
     private masterClassService: MasterClassService,
     private mailService: MailService,
-    private userInfoService: UserInfoService,
     private paymentService: PaymentService,
   ) {}
 
@@ -178,7 +171,6 @@ export class PurchaseService {
       totalLength: result.totalLength,
     };
   }
-
   async verifyUserByCodeAndEmail(body: VerifyByCodeDto) {
     const codeResult: string = await this.cacheManager.get(
       `AuthBasketEmailCodeFor${body.email}`,
@@ -209,7 +201,6 @@ export class PurchaseService {
       }
     }
   }
-
   async verifyProducts(
     purchaseProducts: PurchaseProductDto[],
   ): Promise<VerifyPurchaseProductsDto> {
@@ -335,7 +326,6 @@ export class PurchaseService {
       email,
     });
   }
-
   async save(
     body: CreatePurchaseDto,
     userId: number,
@@ -350,17 +340,6 @@ export class PurchaseService {
     body.purchase.promoCodeDiscount = promoCodeDiscount;
     body.purchase.promoCode = promoCode;
     body.purchase.price = Number(price.toFixed(2));
-
-    // let result;
-    // let notAuthUserId: number;
-    // const findUser: UserEntity = await this.userRepository.findOne({ email });
-    // if (Boolean(findUser) === true && auth === false) {
-    //   result = { userExist: true };
-    //   notAuthUserId = findUser.id;
-    // } else if (Boolean(findUser) === false) {
-    //   const user = await this.createUserAfterPurchase(email);
-    //   notAuthUserId = user.id;
-    // }
 
     const purchase = await this.create(body.purchase, products, userId, email);
     const newPurchase = await this.purchaseRepository.save(purchase);
@@ -378,64 +357,12 @@ export class PurchaseService {
         orderNumber: result.id,
         testMode: 1,
       };
+      await this.sendPurchaseInfo(result.id);
       return await this.paymentService.getPayAnyWayLink(payment, userId);
     }
 
     return null;
   }
-
-  async createUserAfterPurchase(email: string): Promise<UserEntity> {
-    const user: UserEntity = new UserEntity();
-    const password = generateVendorCode();
-    const login = email.split('@')[0];
-    user.login = login;
-    user.email = email;
-    user.emailConfirmed = true;
-    user.password = await UserEntity.hashPassword(password);
-
-    try {
-      await user.save();
-      await this.userInfoService.create(user);
-      await this.mailService.sendPasswordForNewCreatedUserAfterPurchase({
-        email,
-        password,
-        login,
-      });
-
-      return user;
-    } catch {
-      throw new InternalServerErrorException();
-    }
-  }
-
-  async purchaseAwaitingPayment(purchaseId: string) {
-    await this.purchaseRepository.update(purchaseId, {
-      orderStatus: PURCHASE_STATUS.AWAITING_PAYMENT,
-    });
-    await this.sendPurchaseInfo(purchaseId);
-  }
-
-  async purchasePaid(purchaseId: string) {
-    await this.purchaseRepository.update(purchaseId, {
-      orderStatus: PURCHASE_STATUS.PAID,
-    });
-    await this.sendPurchaseInfo(purchaseId);
-  }
-
-  async purchaseAwaitinSend(purchaseId: string) {
-    await this.purchaseRepository.update(purchaseId, {
-      orderStatus: PURCHASE_STATUS.AWAITING_SEND,
-    });
-    await this.sendPurchaseInfo(purchaseId);
-  }
-
-  async purchaseSent(purchaseId: string) {
-    await this.purchaseRepository.update(purchaseId, {
-      orderStatus: PURCHASE_STATUS.SENT,
-    });
-    await this.sendPurchaseInfo(purchaseId);
-  }
-
   async sendPurchaseInfo(purchaseId) {
     const purchase = await this.purchaseRepository.getAllForEmail(purchaseId);
     await this.mailService.sendPurchaseInfo(purchase.email, purchase);
@@ -444,7 +371,6 @@ export class PurchaseService {
     const purchase = await this.purchaseRepository.getAllForEmail(purchaseId);
     await this.mailService.sendUpdatedPurchaseInfo(purchase.email, purchase);
   }
-
   async getAll(
     size: number,
     page: number,
@@ -461,15 +387,12 @@ export class PurchaseService {
   async getOne(id: string): Promise<PurchaseEntity> {
     return await this.purchaseRepository.getOne(id);
   }
-
   async getOneForUser(id: string, userId) {
     return await this.purchaseProductService.getOneProductForUser(id, userId);
   }
-
   async getOneMasterClass(id: string) {
     return await this.purchaseProductService.getOneMasterClass(id);
   }
-
   async updatePurchaseStatus(id: any, body: UpdatePurchaseStatusDto) {
     const result = await this.purchaseRepository.findOne({ id });
 
@@ -482,7 +405,6 @@ export class PurchaseService {
     });
     await this.sendUpdatedPurchaseInfo(result.id);
   }
-
   async update(id: any, body: UpdatePurchaseDto) {
     const result = await this.purchaseRepository.findOneOrFail({ id });
     if (!result) {
@@ -494,7 +416,7 @@ export class PurchaseService {
     result.orderStatus = body.orderStatus;
     result.email = body.email;
     result.fullName = body.fullName;
-    result.city = body.city;
+    result.address = body.address;
     result.phone = body.phone;
     result.comment = body.comment;
     result.price = price;
@@ -502,24 +424,41 @@ export class PurchaseService {
     result.purchaseProducts = products;
     return await this.purchaseRepository.save(result);
   }
-
   async delete(id: string) {
     return await this.purchaseRepository.delete(id);
   }
-
-  async getAllPurchasesStatistic() {
-    return await this.purchaseRepository.find();
-  }
-
-  async getTotalPurchasesPriceStatistic() {
-    const allPurchases = await this.getAllPurchasesStatistic();
-    const totalPurchasesPrice = allPurchases.reduce((acc, n) => {
-      return acc + (Number(n.price) + Number(n.shippingPrice));
-    }, 0);
-
-    return {
-      totalPurchasesPrice,
-      purchasesAverageCost: totalPurchasesPrice / allPurchases.length,
-    };
-  }
 }
+
+// let result;
+// let notAuthUserId: number;
+// const findUser: UserEntity = await this.userRepository.findOne({ email });
+// if (Boolean(findUser) === true && auth === false) {
+//   result = { userExist: true };
+//   notAuthUserId = findUser.id;
+// } else if (Boolean(findUser) === false) {
+//   const user = await this.createUserAfterPurchase(email);
+//   notAuthUserId = user.id;
+// }
+// async createUserAfterPurchase(email: string): Promise<UserEntity> {
+// 	const user: UserEntity = new UserEntity();
+// 	const password = generateVendorCode();
+// 	const login = email.split('@')[0];
+// 	user.login = login;
+// 	user.email = email;
+// 	user.emailConfirmed = true;
+// 	user.password = await UserEntity.hashPassword(password);
+
+// 	try {
+// 	  await user.save();
+// 	  await this.userInfoService.create(user);
+// 	  await this.mailService.sendPasswordForNewCreatedUserAfterPurchase({
+// 		email,
+// 		password,
+// 		login,
+// 	  });
+
+// 	  return user;
+// 	} catch {
+// 	  throw new InternalServerErrorException();
+// 	}
+//   }
