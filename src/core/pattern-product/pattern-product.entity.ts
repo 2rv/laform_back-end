@@ -144,8 +144,24 @@ export class PatternProductEntity {
   @Column({
     type: 'varchar',
     name: 'description_ru',
+    nullable: true,
   })
   descriptionRu!: string;
+
+  @Column({
+    type: 'varchar',
+    name: 'short_description',
+    nullable: true,
+  })
+  shortDescription!: string;
+
+  @Column({
+    type: 'int',
+    name: 'wp_id',
+    nullable: true,
+  })
+  wpId!: number;
+
   @Column({
     type: 'varchar',
     name: 'description_en',
