@@ -326,7 +326,7 @@ export class SdekService {
       if (result.entity.uuid == null) {
         return [];
       }
-      const getBarcode = await fetch(
+      const getBarcode: any = await fetch(
         'https://api.edu.cdek.ru/v2/print/barcodes/' + result.entity.uuid,
         {
           method: 'GET',
@@ -336,11 +336,15 @@ export class SdekService {
           },
         },
       );
-      const data = {
-        information: await getBarcode.json(),
-        token: await this.authInSdek(),
-      };
-      return data;
+      const pdfBarcode = await getBarcode.json();
+      const response = await axios.get(pdfBarcode.entity.url, {
+        responseType: 'arraybuffer',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: await this.authInSdek(),
+        },
+      });
+      return response.data;
     } catch (err) {
       throw new InternalServerErrorException(err);
     }
