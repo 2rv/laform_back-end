@@ -87,8 +87,12 @@ export class SdekController {
   @Post('/order/barcode')
   // @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
   // @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async createBarcode(@Body(new ValidationPipe()) body: SdekBarcoderDto) {
-    return this.sdekService.createBarcode(body);
+  async createBarcode(
+    @Body(new ValidationPipe()) body: SdekBarcoderDto,
+    @Res() res,
+  ) {
+    const stream = await this.sdekService.createBarcode(body);
+    res.end(stream);
   }
 
   @Get('/order/:orderId')
