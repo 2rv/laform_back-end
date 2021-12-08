@@ -169,7 +169,6 @@ export class AuthService {
     const findUserByEmail: UserEntity = await this.userRepository.findOne({
       email: body.email,
     });
-    console.log(body);
     if (Boolean(findUserByEmail) && !findUserByEmail.appleId) {
       findUserByEmail.appleId = body.id;
       await findUserByEmail.save();
