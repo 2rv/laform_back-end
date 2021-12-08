@@ -95,7 +95,7 @@ export class UserInfoEntity extends BaseEntity {
     type: 'json',
     nullable: true,
   })
-  full_adress: {
+  address: {
     country: string;
     city: string;
     settlement: string;
