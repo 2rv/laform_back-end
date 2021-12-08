@@ -143,24 +143,24 @@ export class PatternProductEntity {
 
   @Column({
     type: 'varchar',
-    name: 'description_ru',
+    name: 'material_old',
     nullable: true,
   })
-  descriptionRu!: string;
+  materialOld!: string;
 
   @Column({
     type: 'varchar',
-    name: 'short_description',
+    name: 'description_old',
     nullable: true,
   })
-  shortDescription!: string;
+  descriptionOld!: string;
 
   @Column({
     type: 'int',
-    name: 'wp_id',
+    name: 'wp_id_new',
     nullable: true,
   })
-  wpId!: number;
+  wpIdNew!: number;
 
   @Column({
     type: 'varchar',
@@ -169,6 +169,12 @@ export class PatternProductEntity {
   })
   descriptionEn!: string;
 
+  @Column({
+    type: 'varchar',
+    name: 'description_ru',
+    nullable: true,
+  })
+  descriptionRu!: string;
   @Column({
     type: 'varchar',
     name: 'modifier_ru',
