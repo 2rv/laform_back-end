@@ -21,7 +21,7 @@ export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
       // callbackURL: 'http://localhost:4000/auth/google/redirect',
     });
   }
-
+  
   async validate(
     accessToken,
     refreshToken,
