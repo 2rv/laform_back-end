@@ -1,4 +1,10 @@
-import { IsObject, IsOptional, IsPhoneNumber, IsString } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsObject,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+} from 'class-validator';
 
 export class UserInfoUpdateDto {
   @IsOptional()
@@ -51,5 +57,17 @@ export class UserInfoUpdateDto {
   postal_code: {
     label: string;
     postal_code: string;
+  };
+
+  @IsNotEmpty()
+  @IsObject()
+  address: {
+    country: string;
+    city: string;
+    settlement: string;
+    street: string;
+    house: string;
+    postal_code: string;
+    kladr_id: string;
   };
 }

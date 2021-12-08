@@ -39,4 +39,14 @@ export interface UserInfoDto {
     label: string;
     postal_code: string;
   };
+
+  address: {
+    country: string;
+    city: string;
+    settlement: string;
+    street: string;
+    house: string;
+    postal_code: string;
+    kladr_id: string;
+  };
 }
