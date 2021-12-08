@@ -351,16 +351,15 @@ export class PurchaseService {
 
     const result = await this.purchaseRepository.findOne(newPurchase.id);
     if (result) {
-      const payment = {
-        amount: (+result.price).toFixed(2),
-        currency: Currency.RUB,
-        orderNumber: result.id,
-        testMode: 1,
-      };
       await this.sendPurchaseInfo(result.id);
-      return await this.paymentService.getPayAnyWayLink(payment, userId);
+      //   const payment = {
+      //     amount: (+result.price).toFixed(2),
+      //     currency: Currency.RUB,
+      //     orderNumber: result.id,
+      //     testMode: 1,
+      //   };
+      //   return await this.paymentService.getPayAnyWayLink(payment, userId);
     }
-
     return null;
   }
   async sendPurchaseInfo(purchaseId) {

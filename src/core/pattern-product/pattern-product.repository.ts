@@ -75,13 +75,13 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
           }
         }),
       )
-      .andWhere(
-        new Brackets((qb) => {
-          qb.where('options.optionVisibility = true').orWhere(
-            'pattern_product.optionType = 0',
-          );
-        }),
-      )
+      //   .andWhere(
+      //     new Brackets((qb) => {
+      //       qb.where('options.optionVisibility = true').orWhere(
+      //         'pattern_product.optionType = 0',
+      //       );
+      //     }),
+      //   )
       .getManyAndCount();
   }
   async findAllEn(
