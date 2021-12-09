@@ -169,6 +169,11 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
         'purchase.comment',
         'purchase.price',
         'purchase.promoCode',
+        'purchase.sdek',
+        'purchase.sdekTariffCode',
+        'purchase.sdekCityCode',
+        'purchase.shippingPrice',
+
         'purchase.promoCodeDiscount',
 
         'purchase_products.id',

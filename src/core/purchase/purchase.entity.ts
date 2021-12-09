@@ -122,6 +122,7 @@ export class PurchaseEntity {
   @Column({
     type: 'numeric',
     name: 'shipping_price',
+    default: 0,
     nullable: true,
   })
   shippingPrice!: number;
