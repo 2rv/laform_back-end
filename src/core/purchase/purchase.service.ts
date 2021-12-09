@@ -348,6 +348,7 @@ export class PurchaseService {
     body.purchase.price = Number(price.toFixed(2));
 
     const purchase = await this.create(body.purchase, products, userId, email);
+
     const newPurchase = await this.purchaseRepository.save(purchase);
     await this.productUpdateData(purchase.purchaseProducts);
 
@@ -355,8 +356,14 @@ export class PurchaseService {
       orderNumber: await PurchaseEntity.generateOrderNumber(newPurchase._NID),
     });
 
-    const result = await this.purchaseRepository.findOne(newPurchase.id);
+    const result = await this.purchaseRepository.getOne(newPurchase.id);
     if (result) {
+      const payment = {
+        amount: (+result.price).toFixed(2),
+        currency: Currency.RUB,
+        orderNumber: result.orderNumber,
+        testMode: 1,
+      };
       if (result.sdek == true) {
         let amount = 0;
         for (let res of result.purchaseProducts) {
@@ -374,17 +381,13 @@ export class PurchaseService {
           packages: [],
           amount: amount,
         };
+
         const sum = await this.sdekService.сalculationByTariffCode(data);
         await this.purchaseRepository.update(result.id, {
           shippingPrice: sum.total_sum + 40,
         });
+        payment.amount = (+result.price + sum.total_sum + 40).toFixed(2);
       }
-      const payment = {
-        amount: (+result.price + +result.shippingPrice).toString() + '.00',
-        currency: Currency.RUB,
-        orderNumber: result.orderNumber,
-        testMode: 1,
-      };
       return await this.paymentService.getPayAnyWayLink(payment, userId);
     }
     return result;
