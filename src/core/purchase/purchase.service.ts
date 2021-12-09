@@ -3,6 +3,7 @@ import {
   BadRequestException,
   Inject,
   CACHE_MANAGER,
+  forwardRef,
 } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { PurchaseEntity } from './purchase.entity';
@@ -59,6 +60,7 @@ export class PurchaseService {
     private sewingProductService: SewingProductService,
     private masterClassService: MasterClassService,
     private mailService: MailService,
+    @Inject(forwardRef(() => PaymentService))
     private paymentService: PaymentService,
     private sdekService: SdekService,
   ) {}
@@ -375,7 +377,6 @@ export class PurchaseService {
           shippingPrice: sum.total_sum + 40,
         });
       }
-      await this.sendPurchaseInfo(result.id);
       const payment = {
         amount: (+result.price + +result.shippingPrice).toString() + '.00',
         currency: Currency.RUB,

@@ -8,6 +8,7 @@ import { PurchaseRepository } from '../purchase/purchase.repository';
 import { PURCHASE_STATUS } from '../purchase/enum/purchase.status';
 import { SdekService } from '../sdek/sdek.service';
 import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
+import { PurchaseService } from '../purchase/purchase.service';
 // import { PurchaseService } from '../purchase/purchase.service';
 
 @Injectable()
@@ -18,9 +19,9 @@ export class PaymentService {
     private purchaseRepository: PurchaseRepository,
     private sdekService: SdekService,
     private purchaseProductRepository: PurchaseProductRepository,
-  ) // @Inject(forwardRef(() => PurchaseService))
-  // private purchaseService: PurchaseService,
-  {}
+    @Inject(forwardRef(() => PurchaseService))
+    private purchaseService: PurchaseService, // @Inject(forwardRef(() => PurchaseService))
+  ) {}
 
   async createTransaction(body): Promise<string> {
     return await this.paymentRepository.save(body);
@@ -72,7 +73,7 @@ export class PaymentService {
       await this.purchaseRepository.update(purchase.id, {
         orderStatus: PURCHASE_STATUS.PAID,
       });
-      //   await this.purchaseService.sendPurchaseInfo(purchase.id);
+      await this.purchaseService.sendPurchaseInfo(purchase.id);
       if (purchase.sdek === true) {
         const printedProducts = await this.purchaseProductRepository.printed(
           purchase.id,
