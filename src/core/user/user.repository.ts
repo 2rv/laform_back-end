@@ -90,7 +90,7 @@ export class UserRepository extends Repository<UserEntity> {
         'user_info.id',
         'user_info.fullName',
         'user_info.phone',
-        'user_info.location',
+        'user_info.address',
 
         'comments',
         'comment_post',
