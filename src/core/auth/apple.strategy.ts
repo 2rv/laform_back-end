@@ -9,15 +9,15 @@ import * as path from 'path';
 export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
   constructor() {
     super({
-      clientID: AppleConfig.clientID,
-      teamID: AppleConfig.teamID,
-      callbackURL: AppleConfig.callbackURL,
-      keyID: AppleConfig.keyID,
+      // clientID: AppleConfig.clientID,
+      // teamID: AppleConfig.teamID,
+      // callbackURL: AppleConfig.callbackURL,
+      // keyID: AppleConfig.keyID,
       // privateKeyLocation: path.join(__dirname, '../../../config/AuthKey.p8'),
       //passReqToCallback: true,
-      scopes: 'accountName',
-      response_type: 'from_data',
-      response_mode: 'form_data',
+      defaultScopes: 'accountName',
+      responseType: 'from_data',
+      responseMode: 'form_data',
       // clientID: '1042068275751-c6pbac6s5l3bjvo73amvl77f3ol2e8dj.apps.googleusercontent.com',
       // clientSecret: 'pQRjjsvJLxydvHMESpajKikM',
       // callbackURL: 'http://localhost:4000/auth/google/redirect',
