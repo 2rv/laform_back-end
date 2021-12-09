@@ -356,6 +356,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'pattern_product.discount',
         'pattern_product.count',
         'pattern_product.isCount',
+        'pattern_product.materialOld',
+        'pattern_product.descriptionOld',
         'images',
         'categories.id',
         'categories.categoryNameRu',
@@ -417,6 +419,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'pattern_product.discount',
         'pattern_product.count',
         'pattern_product.isCount',
+        'pattern_product.materialOld',
+        'pattern_product.descriptionOld',
         'images',
         'categories.id',
         'categories.categoryNameEn',
@@ -517,6 +521,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'pattern_product.discount',
         'pattern_product.count',
         'pattern_product.isCount',
+        'pattern_product.materialOld',
+        'pattern_product.descriptionOld',
         'images',
         'categories.id',
         'categories.categoryNameRu',
@@ -618,6 +624,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'pattern_product.discount',
         'pattern_product.count',
         'pattern_product.isCount',
+        'pattern_product.materialOld',
+        'pattern_product.descriptionOld',
         'images',
         'categories.id',
         'categories.categoryNameEn',
@@ -805,6 +813,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'pattern_product.isCount',
         'pattern_product_filesPdf',
         'pattern_product.deleted',
+        'pattern_product.materialOld',
+        'pattern_product.descriptionOld',
         'options_filesPdf',
         'images',
         'categories.id',
@@ -825,133 +835,3 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .getOne();
   }
 }
-
-// async findPinnedRu(): Promise<PatternProductEntity[]> {
-//     return await this.createQueryBuilder('pattern_product')
-//       .leftJoin('pattern_product.images', 'images')
-//       .leftJoin('pattern_product.categories', 'categories')
-//       .leftJoin('pattern_product.options', 'options')
-//       .select([
-//         'pattern_product.id',
-//         'pattern_product.type',
-//         'pattern_product.optionType',
-//         'pattern_product.titleRu',
-//         'pattern_product.modifierRu',
-//         'pattern_product.complexity',
-//         'pattern_product.pinned',
-//         'pattern_product.vendorCode',
-//         'pattern_product.price',
-//         'pattern_product.discount',
-//         'pattern_product.count',
-//         'pattern_product.isCount',
-//         'images',
-//         'categories.id',
-//         'categories.categoryNameRu',
-//         'options.id',
-//         'options.price',
-//         'options.discount',
-//         'options.size',
-//         'options.count',
-//         'options.vendorCode',
-//       ])
-//       .where('pattern_product.deleted = false')
-//       .andWhere('pattern_product.pinned = true')
-//       .getMany();
-//   }
-//   async findPinnedEn(): Promise<PatternProductEntity[]> {
-//     return await this.createQueryBuilder('pattern_product')
-//       .leftJoin('pattern_product.images', 'images')
-//       .leftJoin('pattern_product.categories', 'categories')
-//       .leftJoin('pattern_product.options', 'options')
-//       .select([
-//         'pattern_product.id',
-//         'pattern_product.type',
-//         'pattern_product.optionType',
-//         'pattern_product.titleEn',
-//         'pattern_product.modifierEn',
-//         'pattern_product.complexity',
-//         'pattern_product.pinned',
-//         'pattern_product.vendorCode',
-//         'pattern_product.price',
-//         'pattern_product.discount',
-//         'pattern_product.count',
-//         'pattern_product.isCount',
-//         'images',
-//         'categories.id',
-//         'categories.categoryNameEn',
-//         'options.id',
-//         'options.price',
-//         'options.discount',
-//         'options.size',
-//         'options.count',
-//         'options.vendorCode',
-//       ])
-//       .where('pattern_product.deleted = false')
-//       .where('pattern_product.pinned = true')
-//       .getMany();
-//   }
-//   async findPinnedRuAuth(userId: number): Promise<PatternProductEntity[]> {
-//     return await this.createQueryBuilder('pattern_product')
-//       .leftJoin('pattern_product.images', 'images')
-//       .leftJoin('pattern_product.categories', 'categories')
-//       .leftJoin('pattern_product.options', 'options')
-//       .leftJoin('pattern_product.like', 'like', 'like.userId = :userId', {
-//         userId,
-//       })
-//       .select([
-//         'pattern_product.id',
-//         'pattern_product.type',
-//         'pattern_product.optionType',
-//         'pattern_product.titleRu',
-//         'pattern_product.modifierRu',
-//         'pattern_product.complexity',
-//         'pattern_product.pinned',
-//         'pattern_product.vendorCode',
-//         'pattern_product.price',
-//         'pattern_product.discount',
-//         'pattern_product.count',
-//         'pattern_product.isCount',
-//         'images',
-//         'categories.id',
-//         'categories.categoryNameRu',
-//         'options.id',
-//         'options.price',
-//         'options.discount',
-//         'options.size',
-//         'options.count',
-//         'options.vendorCode',
-//         'like',
-//       ])
-//       .where('pattern_product.deleted = false')
-//       .andWhere('pattern_product.pinned = true')
-//       .getMany();
-//   }
-//   async findPinnedEnAuth(userId: number): Promise<PatternProductEntity[]> {
-//     return await this.createQueryBuilder('pattern_product')
-//       .leftJoin('pattern_product.images', 'images')
-//       .leftJoin('pattern_product.categories', 'categories')
-//       .leftJoin('pattern_product.options', 'options')
-//       .leftJoin('pattern_product.like', 'like', 'like.userId = :userId', {
-//         userId,
-//       })
-//       .select([
-//         'pattern_product.id',
-//         'pattern_product.type',
-//         'pattern_product.titleEn',
-//         'pattern_product.modifierEn',
-//         'pattern_product.discount',
-//         'pattern_product.complexity',
-//         'pattern_product.pinned',
-//         'images',
-//         'categories.id',
-//         'categories.categoryNameEn',
-//         'sizes.id',
-//         'sizes.price',
-//         'sizes.size',
-//         'sizes.vendorCode',
-//         'like',
-//       ])
-//       .where('pattern_product.deleted = false')
-//       .andWhere('pattern_product.pinned = true')
-//       .getMany();
-//   }
