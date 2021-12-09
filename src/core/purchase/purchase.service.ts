@@ -29,6 +29,7 @@ import { UpdatePurchaseDto } from './dto/update-purchase.dto';
 import { PaymentService } from '../payment/payment.service';
 import { Currency } from '../payment/enum/payment.enum';
 import { SdekService } from '../sdek/sdek.service';
+import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
 
 interface ProductParamsInfoType {
   title?: string;
@@ -55,6 +56,7 @@ export class PurchaseService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private promoCodeService: PromoCodeService,
     private purchaseRepository: PurchaseRepository,
+    private purchaseProductRepository: PurchaseProductRepository,
     private purchaseProductService: PurchaseProductService,
     private patternProductService: PatternProductService,
     private sewingProductService: SewingProductService,
@@ -378,7 +380,7 @@ export class PurchaseService {
         });
       }
       const payment = {
-        amount: (100).toString() + '.00',
+        amount: (+result.price + +result.shippingPrice).toString() + '.00',
         currency: Currency.RUB,
         orderNumber: result.orderNumber,
         testMode: 1,
@@ -450,6 +452,10 @@ export class PurchaseService {
   }
   async delete(id: string) {
     return await this.purchaseRepository.delete(id);
+  }
+
+  async deleteProduct(id: string) {
+    return await this.purchaseProductRepository.delete(id);
   }
 }
 
