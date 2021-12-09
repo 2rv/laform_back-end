@@ -17,7 +17,6 @@ export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
         __dirname,
         '..',
         '..',
-        'ssl',
         '../../../config/AuthKey.p8',
       ),
       passReqToCallback: true,
