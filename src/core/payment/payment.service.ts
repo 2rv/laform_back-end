@@ -101,7 +101,6 @@ export class PaymentService {
           tariff_code: purchase.sdekTariffCode,
           to_location: {
             code: purchase.sdekCityCode,
-            city: purchase.city,
             address: purchase.address,
           },
           recipient: {

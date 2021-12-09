@@ -375,7 +375,6 @@ export class PurchaseService {
           tariff_code: result.sdekTariffCode,
           to_location: {
             code: result.sdekCityCode,
-            city: result.city,
             address: result.address,
           },
           packages: [],

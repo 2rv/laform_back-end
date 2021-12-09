@@ -112,12 +112,6 @@ export class PurchaseEntity {
     nullable: true,
   })
   address!: string;
-  @Column({
-    type: 'varchar',
-    name: 'city',
-    nullable: true,
-  })
-  city!: string;
 
   @Column({
     type: 'numeric',
