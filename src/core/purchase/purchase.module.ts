@@ -1,3 +1,4 @@
+import { SdekModule } from './../sdek/sdek.module';
 import { CacheModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PurchaseController } from './purchase.controller';
@@ -24,6 +25,7 @@ import { PaymentModule } from '../payment/payment.module';
     PurchaseProductModule,
     MailModule,
     PaymentModule,
+    SdekModule,
     TypeOrmModule.forFeature([
       PurchaseRepository,
       UserRepository,

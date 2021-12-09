@@ -41,7 +41,7 @@ export class SdekService {
     }
     return 'Bearer ' + result.access_token;
   }
-  async сalculationByTariffCode(body: SdekCalculateDto) {
+  async сalculationByTariffCode(body: any) {
     const fromLocation = {
       city: SdekConfig.from_location.city,
       adress: SdekConfig.from_location.address,

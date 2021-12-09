@@ -27,6 +27,7 @@ import { UpdatePurchaseStatusDto } from './dto/update-purchase-status.dto';
 import { UpdatePurchaseDto } from './dto/update-purchase.dto';
 import { PaymentService } from '../payment/payment.service';
 import { Currency } from '../payment/enum/payment.enum';
+import { SdekService } from '../sdek/sdek.service';
 
 interface ProductParamsInfoType {
   title?: string;
@@ -59,6 +60,7 @@ export class PurchaseService {
     private masterClassService: MasterClassService,
     private mailService: MailService,
     private paymentService: PaymentService,
+    private sdekService: SdekService,
   ) {}
 
   getPrice(props: getPriceProps): number {
@@ -351,16 +353,38 @@ export class PurchaseService {
 
     const result = await this.purchaseRepository.findOne(newPurchase.id);
     if (result) {
+      if (result.sdek == true) {
+        let amount = 0;
+        for (let res of result.purchaseProducts) {
+          if (res.type === 2 || res.type === 3) {
+            amount += +(res.totalCount * 1);
+          }
+        }
+        const data = {
+          tariff_code: result.sdekTariffCode,
+          to_location: {
+            code: result.sdekCityCode,
+            city: result.city,
+            address: result.address,
+          },
+          packages: [],
+          amount: amount,
+        };
+        const sum = await this.sdekService.сalculationByTariffCode(data);
+        await this.purchaseRepository.update(result.id, {
+          shippingPrice: sum.total_sum + 40,
+        });
+      }
       await this.sendPurchaseInfo(result.id);
-      //   const payment = {
-      //     amount: (+result.price).toFixed(2),
-      //     currency: Currency.RUB,
-      //     orderNumber: result.id,
-      //     testMode: 1,
-      //   };
-      //   return await this.paymentService.getPayAnyWayLink(payment, userId);
+      const payment = {
+        amount: (+result.price + +result.shippingPrice).toString() + '.00',
+        currency: Currency.RUB,
+        orderNumber: result.id,
+        testMode: 1,
+      };
+      return await this.paymentService.getPayAnyWayLink(payment, userId);
     }
-    return null;
+    return result;
   }
   async sendPurchaseInfo(purchaseId) {
     const purchase = await this.purchaseRepository.getAllForEmail(purchaseId);
