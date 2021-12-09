@@ -178,7 +178,7 @@ export class AuthService {
       appleId: body.idToken,
     });
 
-    if (Boolean(findUserByAppleId)) {
+    if (findUserByAppleId) {
       accessToken = await this.createJwt(findUserByAppleId);
     } else {
       const user = await this.userRepository.saveAppleUser({
