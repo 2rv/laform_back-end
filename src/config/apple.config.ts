@@ -7,4 +7,5 @@ export const AppleConfig = {
   teamID: APPLE_CONFIG.TEAM_ID,
   callbackURL: APPLE_CONFIG.CALLBACK_URL,
   keyID: APPLE_CONFIG.KEY_ID,
+  authKey: APPLE_CONFIG.AUTH_KEY,
 };

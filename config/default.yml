@@ -44,6 +44,7 @@ APPLE:
   KEY_ID: 'NWKUX58DQR'
   TEAM_ID: '59862PVTZ2'
   CALLBACK_URL: 'https://laform-api.herokuapp.com/auth/apple/redirect'
+  AUTH_KEY: './AuthKey.p8'
 
 PAY_ANY_WAY:
   MNT_ID: '72511945'

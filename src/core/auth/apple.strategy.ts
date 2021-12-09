@@ -18,7 +18,7 @@ export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
         '..',
         '..',
         'ssl',
-        'MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgKY6o3MxflJJRfuYLoSFVNuB5k5vKGJM6EUKVdfmhADSgCgYIKoZIzj0DAQehRANCAARK1GfPELruADH3FVwWO8EQ2RbtV711IFVjqZtBsR9YJuygB26DdxM0DpYw63tlaqLfOIQsup3cGKSpB1mK29zk',
+        AppleConfig.authKey,
       ),
       passReqToCallback: true,
       response_mode: 'form_post',
