@@ -33,6 +33,7 @@ import { CompilationEntity } from 'src/core/compilation/compilation.entity';
 import { FaqSizeEntity } from 'src/core/faq-size/faq-size.entity';
 import { FaqDeliveryPaymentEntity } from 'src/core/faq-delivery-payment/faq-delivery-payment.entity';
 import { PageNavigationEntity } from 'src/core/page-navigation/page-navigation.entity';
+import { FooterEntity } from 'src/core/footer/footer.entity';
 
 const DATABASE_CONFIG = config.get('DATABASE');
 export const ApiEntities = [
@@ -67,6 +68,7 @@ export const ApiEntities = [
   FaqSizeEntity,
   FaqDeliveryPaymentEntity,
   PageNavigationEntity,
+  FooterEntity,
 ];
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
