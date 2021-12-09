@@ -31,7 +31,7 @@ export class PaymentController {
     const url = await this.paymentService.getPayAnyWayLink(body, user);
     return url;
   }
-
+  //localhost:4000/payment/redirect?MNT_ID=123&MNT_TRANSACTION_ID=0000000056&MNT_OPERATION_ID=123123
   @Get('redirect')
   async paymentRedirect(
     @Res() res,

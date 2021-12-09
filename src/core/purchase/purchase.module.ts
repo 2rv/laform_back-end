@@ -1,5 +1,5 @@
 import { SdekModule } from './../sdek/sdek.module';
-import { CacheModule, Module } from '@nestjs/common';
+import { CacheModule, Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PurchaseController } from './purchase.controller';
 import { PurchaseRepository } from './purchase.repository';
@@ -14,6 +14,7 @@ import { MailModule } from '../mail/mail.module';
 import { PurchaseEntity } from './purchase.entity';
 import { UserRepository } from '../user/user.repository';
 import { PaymentModule } from '../payment/payment.module';
+import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
 
 @Module({
   imports: [
@@ -24,12 +25,13 @@ import { PaymentModule } from '../payment/payment.module';
     SewingProductModule,
     PurchaseProductModule,
     MailModule,
-    PaymentModule,
+    forwardRef(() => PaymentModule),
     SdekModule,
     TypeOrmModule.forFeature([
       PurchaseRepository,
       UserRepository,
       PurchaseEntity,
+      PurchaseProductRepository,
     ]),
   ],
   providers: [PurchaseService],

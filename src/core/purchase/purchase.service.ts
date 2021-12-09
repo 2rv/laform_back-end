@@ -3,6 +3,7 @@ import {
   BadRequestException,
   Inject,
   CACHE_MANAGER,
+  forwardRef,
 } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { PurchaseEntity } from './purchase.entity';
@@ -28,6 +29,7 @@ import { UpdatePurchaseDto } from './dto/update-purchase.dto';
 import { PaymentService } from '../payment/payment.service';
 import { Currency } from '../payment/enum/payment.enum';
 import { SdekService } from '../sdek/sdek.service';
+import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
 
 interface ProductParamsInfoType {
   title?: string;
@@ -54,11 +56,13 @@ export class PurchaseService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private promoCodeService: PromoCodeService,
     private purchaseRepository: PurchaseRepository,
+    private purchaseProductRepository: PurchaseProductRepository,
     private purchaseProductService: PurchaseProductService,
     private patternProductService: PatternProductService,
     private sewingProductService: SewingProductService,
     private masterClassService: MasterClassService,
     private mailService: MailService,
+    @Inject(forwardRef(() => PaymentService))
     private paymentService: PaymentService,
     private sdekService: SdekService,
   ) {}
@@ -344,6 +348,7 @@ export class PurchaseService {
     body.purchase.price = Number(price.toFixed(2));
 
     const purchase = await this.create(body.purchase, products, userId, email);
+
     const newPurchase = await this.purchaseRepository.save(purchase);
     await this.productUpdateData(purchase.purchaseProducts);
 
@@ -351,8 +356,14 @@ export class PurchaseService {
       orderNumber: await PurchaseEntity.generateOrderNumber(newPurchase._NID),
     });
 
-    const result = await this.purchaseRepository.findOne(newPurchase.id);
+    const result = await this.purchaseRepository.getOne(newPurchase.id);
     if (result) {
+      const payment = {
+        amount: (+result.price).toFixed(2),
+        currency: Currency.RUB,
+        orderNumber: result.orderNumber,
+        testMode: 1,
+      };
       if (result.sdek == true) {
         let amount = 0;
         for (let res of result.purchaseProducts) {
@@ -370,18 +381,13 @@ export class PurchaseService {
           packages: [],
           amount: amount,
         };
+
         const sum = await this.sdekService.сalculationByTariffCode(data);
         await this.purchaseRepository.update(result.id, {
           shippingPrice: sum.total_sum + 40,
         });
+        payment.amount = (+result.price + sum.total_sum + 40).toFixed(2);
       }
-      await this.sendPurchaseInfo(result.id);
-      const payment = {
-        amount: (+result.price + +result.shippingPrice).toString() + '.00',
-        currency: Currency.RUB,
-        orderNumber: result.id,
-        testMode: 1,
-      };
       return await this.paymentService.getPayAnyWayLink(payment, userId);
     }
     return result;
@@ -449,6 +455,10 @@ export class PurchaseService {
   }
   async delete(id: string) {
     return await this.purchaseRepository.delete(id);
+  }
+
+  async deleteProduct(id: string) {
+    return await this.purchaseProductRepository.delete(id);
   }
 }
 

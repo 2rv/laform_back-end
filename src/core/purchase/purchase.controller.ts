@@ -22,6 +22,7 @@ import { USER_ROLE } from '../user/enum/user-role.enum';
 import { Roles } from '../user/decorator/role.decorator';
 import { UserEntity } from '../user/user.entity';
 import { UpdatePurchaseStatusDto } from './dto/update-purchase-status.dto';
+import { PurchaseProductGuard } from '../purchase-product/guard/purchase-product.guard';
 
 @Controller('purchase')
 export class PurchaseController {
@@ -125,5 +126,12 @@ export class PurchaseController {
   @UseGuards(AuthGuard('jwt'), AccountGuard, PurchaseGuard)
   async delete(@Request() req) {
     return await this.purchaseService.delete(req.purchaseId);
+  }
+
+  @Delete('purchase-product/delete/:purchaseProductId')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard, PurchaseProductGuard)
+  async deleteProduct(@Request() req) {
+    return await this.purchaseService.deleteProduct(req.purchaseProductId);
   }
 }
