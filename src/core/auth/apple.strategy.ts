@@ -9,13 +9,13 @@ import * as path from 'path';
 export class AppleStrategy extends PassportStrategy(Strategy, 'apple') {
   constructor() {
     super({
-      // clientID: AppleConfig.clientID,
-      // teamID: AppleConfig.teamID,
-      // callbackURL: AppleConfig.callbackURL,
-      // keyID: AppleConfig.keyID,
-      // privateKeyLocation: path.join(__dirname, '../../../config/AuthKey.p8'),
-      //passReqToCallback: true,
-      defaultScopes: 'accountName',
+      clientID: AppleConfig.clientID,
+      teamID: AppleConfig.teamID,
+      callbackURL: AppleConfig.callbackURL,
+      keyID: AppleConfig.keyID,
+      privateKeyLocation: path.join(__dirname, '../../../config/AuthKey.p8'),
+      passReqToCallback: true,
+      scope: ['accountName', 'email', 'profile', 'name email'],
       responseType: 'from_data',
       responseMode: 'form_data',
       // clientID: '1042068275751-c6pbac6s5l3bjvo73amvl77f3ol2e8dj.apps.googleusercontent.com',
