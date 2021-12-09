@@ -379,7 +379,7 @@ export class PurchaseService {
       const payment = {
         amount: (+result.price + +result.shippingPrice).toString() + '.00',
         currency: Currency.RUB,
-        orderNumber: result.id,
+        orderNumber: result.orderNumber,
         testMode: 1,
       };
       return await this.paymentService.getPayAnyWayLink(payment, userId);
