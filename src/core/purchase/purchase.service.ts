@@ -395,6 +395,7 @@ export class PurchaseService {
   async sendPurchaseInfo(purchaseId) {
     const purchase = await this.purchaseRepository.getAllForEmail(purchaseId);
     await this.mailService.sendPurchaseInfo(purchase.email, purchase);
+    await this.mailService.sendAdminNewOrderInfo(purchase);
   }
   async sendUpdatedPurchaseInfo(purchaseId) {
     const purchase = await this.purchaseRepository.getAllForEmail(purchaseId);
