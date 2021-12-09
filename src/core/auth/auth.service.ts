@@ -171,7 +171,7 @@ export class AuthService {
       email: body.email,
     });
     if (Boolean(findUserByEmail) && !findUserByEmail.appleId) {
-      findUserByEmail.appleId = body.id;
+      findUserByEmail.appleId = body.idToken;
       await findUserByEmail.save();
     }
 
@@ -184,12 +184,13 @@ export class AuthService {
     } else {
       const user = await this.userRepository.saveAppleUser({
         email: body.email,
-        login: body.email.split('@')[0],
+        login: body.email,
         appleId: body.id,
       });
       await this.userInfoService.create(user);
       accessToken = await this.createJwt(user);
     }
+    // .split('@')[0],
     return { accessToken };
   }
 
