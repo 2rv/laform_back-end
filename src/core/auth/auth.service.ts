@@ -165,7 +165,7 @@ export class AuthService {
   }
 
   async signUpWithApple(body: any): Promise<LoginInfoDto> {
-    console.log(body);
+    console.log(body.idToken);
     let accessToken;
     const findUserByEmail: UserEntity = await this.userRepository.findOne({
       email: body.email,
