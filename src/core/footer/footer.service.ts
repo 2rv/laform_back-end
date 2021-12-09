@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { FooterDto } from './dto/footer.dto';
 import { FooterEntity } from './footer.entity';
 import { FooterRepository } from './footer.repository';
@@ -7,7 +7,11 @@ import { FooterRepository } from './footer.repository';
 export class FooterService {
   constructor(private footerRepository: FooterRepository) {}
 
-  async create(body: FooterDto): Promise<FooterEntity> {
+  async createOrUpate(body: FooterDto): Promise<any> {
+    const res = await this.footerRepository.find();
+    if (Boolean(res.length)) {
+      return await this.footerRepository.update(res[0].id, body);
+    }
     return await this.footerRepository.save(body);
   }
 

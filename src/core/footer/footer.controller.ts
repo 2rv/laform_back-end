@@ -6,7 +6,6 @@ import {
   UseGuards,
   ValidationPipe,
   Get,
-  Query,
   Delete,
   Patch,
 } from '@nestjs/common';
@@ -22,13 +21,13 @@ import { FooterDto } from './dto/footer.dto';
 export class FooterController {
   constructor(private readonly footerService: FooterService) {}
 
-  @Post('/create')
-  // @Roles(USER_ROLE.ADMIN)
-  // @UseGuards(AuthGuard('jwt'), AccountGuard)
+  @Post('/save')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
   async save(
     @Body(new ValidationPipe()) body: FooterDto,
   ): Promise<FooterEntity> {
-    return await this.footerService.create(body);
+    return await this.footerService.createOrUpate(body);
   }
 
   @Get('get/:id')
