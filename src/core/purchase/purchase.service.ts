@@ -378,7 +378,7 @@ export class PurchaseService {
         });
       }
       const payment = {
-        amount: (+result.price + +result.shippingPrice).toString() + '.00',
+        amount: (100).toString() + '.00',
         currency: Currency.RUB,
         orderNumber: result.orderNumber,
         testMode: 1,

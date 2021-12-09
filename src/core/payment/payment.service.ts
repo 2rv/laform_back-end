@@ -9,6 +9,7 @@ import { PURCHASE_STATUS } from '../purchase/enum/purchase.status';
 import { SdekService } from '../sdek/sdek.service';
 import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
 import { PurchaseService } from '../purchase/purchase.service';
+import { SdekConfig } from 'src/config/sdek.config';
 // import { PurchaseService } from '../purchase/purchase.service';
 
 @Injectable()
@@ -75,22 +76,26 @@ export class PaymentService {
       });
       await this.purchaseService.sendPurchaseInfo(purchase.id);
       if (purchase.sdek === true) {
-        const printedProducts = await this.purchaseProductRepository.printed(
-          purchase.id,
-        );
-        for (let printedProduct of printedProducts) {
-          let item = {
-            ware_key: '00055',
-            payment: {
-              value: 0,
-            },
-            name: printedProduct.id,
-            cost: 300,
-            amount: 1,
-            weight: 700,
-            url: 'www.item.ru',
-          };
-          items.push(item);
+        const product = await this.purchaseRepository.getOne(purchase.id);
+        let amount = 0;
+        for (let purchaseProduct of product.purchaseProducts) {
+          let count = 0;
+          if (purchaseProduct.type === 2 || purchaseProduct.type === 3) {
+            amount += +(purchaseProduct.totalCount * 1);
+            count = purchaseProduct.totalCount * 1;
+            let item = {
+              ware_key: '00055',
+              payment: {
+                value: 0,
+              },
+              name: product.id,
+              cost: 300,
+              amount: count,
+              weight: count * SdekConfig.weight,
+              url: 'www.laform.ru',
+            };
+            items.push(item);
+          }
         }
         const data = {
           tariff_code: purchase.sdekTariffCode,
@@ -110,17 +115,16 @@ export class PaymentService {
           packages: [
             {
               number: '2',
-              height: 10,
-              length: 10,
-              weight: 4000,
-              width: 10,
+              height: SdekConfig.height,
+              length: SdekConfig.length,
+              weight: amount * SdekConfig.weight,
+              width: SdekConfig.width,
               items: items,
             },
           ],
         };
 
         const s = await this.sdekService.createOrder(data);
-        console.log(s);
         return success;
       }
 
