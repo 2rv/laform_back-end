@@ -23,6 +23,7 @@ import { Roles } from '../user/decorator/role.decorator';
 import { UserEntity } from '../user/user.entity';
 import { UpdatePurchaseStatusDto } from './dto/update-purchase-status.dto';
 import { PurchaseProductGuard } from '../purchase-product/guard/purchase-product.guard';
+import { UpdatePurchaseDto } from './dto/update-purchase.dto';
 
 @Controller('purchase')
 export class PurchaseController {
@@ -117,7 +118,7 @@ export class PurchaseController {
   @Put('update/:purchaseId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, PurchaseGuard)
-  async update(@Body() body: any, @Request() req) {
+  async update(@Body() body: UpdatePurchaseDto, @Request() req) {
     return await this.purchaseService.update(req.purchaseId, body);
   }
 

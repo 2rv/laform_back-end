@@ -461,37 +461,3 @@ export class PurchaseService {
     return await this.purchaseProductRepository.delete(id);
   }
 }
-
-// let result;
-// let notAuthUserId: number;
-// const findUser: UserEntity = await this.userRepository.findOne({ email });
-// if (Boolean(findUser) === true && auth === false) {
-//   result = { userExist: true };
-//   notAuthUserId = findUser.id;
-// } else if (Boolean(findUser) === false) {
-//   const user = await this.createUserAfterPurchase(email);
-//   notAuthUserId = user.id;
-// }
-// async createUserAfterPurchase(email: string): Promise<UserEntity> {
-// 	const user: UserEntity = new UserEntity();
-// 	const password = generateVendorCode();
-// 	const login = email.split('@')[0];
-// 	user.login = login;
-// 	user.email = email;
-// 	user.emailConfirmed = true;
-// 	user.password = await UserEntity.hashPassword(password);
-
-// 	try {
-// 	  await user.save();
-// 	  await this.userInfoService.create(user);
-// 	  await this.mailService.sendPasswordForNewCreatedUserAfterPurchase({
-// 		email,
-// 		password,
-// 		login,
-// 	  });
-
-// 	  return user;
-// 	} catch {
-// 	  throw new InternalServerErrorException();
-// 	}
-//   }

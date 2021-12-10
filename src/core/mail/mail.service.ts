@@ -35,6 +35,22 @@ export class MailService {
         console.log(e);
       });
   }
+  async sendCodeForChangeMail(email: string, newEmail: string, code: string) {
+    return await this.mailerService
+      .sendMail({
+        to: email,
+        subject: 'Смена почты',
+        text: `Для смены почты на ${newEmail} перейдите по ссылке https://laform-client.herokuapp.com/auth/verificate-email/confirm?code=${code}`,
+        template: path.join(path.resolve(), 'src/templates/change-mail'),
+        context: {
+          email: newEmail,
+          code: code,
+        },
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
   async sendRecoveryMessage(body: any, code: string) {
     return await this.mailerService
       .sendMail({
@@ -184,7 +200,6 @@ export class MailService {
         console.log(e);
       });
   }
-
   async sendFeedback(body: any) {
     const recipients = await this.userRepository.find();
     return recipients.map(async (recipient) => {
@@ -201,27 +216,5 @@ export class MailService {
           .catch((e) => console.log(e));
       }
     });
-  }
-  async sendPasswordForNewCreatedUserAfterPurchase(data: {
-    email: string;
-    password: string;
-    login: string;
-  }) {
-    return await this.mailerService
-      .sendMail({
-        to: data.email,
-        subject: 'La`forme Patterns, данные для входа',
-        template: path.join(
-          path.resolve(),
-          'src/templates/data-new-created-user-after-purchase.pug',
-        ),
-        context: {
-          password: data.password,
-          login: data.login,
-        },
-      })
-      .catch((e) => {
-        console.log(e);
-      });
   }
 }

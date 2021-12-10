@@ -5,17 +5,15 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { Cache } from 'cache-manager';
-
 import { randomUUID } from 'src/common/utils/hash';
 import { MailService } from '../mail/mail.service';
 import { UserEntity } from '../user/user.entity';
 import { UserRepository } from '../user/user.repository';
-
 import { USER_VERIFICATION_ERROR } from './enum/user-verification-error.enum';
 import { UserVerificationEmailPayload } from './type/user-verification-email-payload.type';
-
-import { NotificationService } from '../notification/notification.service';
 import { PurchaseRepository } from '../purchase/purchase.repository';
+import { UserChangeEmailDto } from '../user/dto/user-change-email.dto';
+import { USER_ERROR } from '../user/enum/user-error.enum';
 
 @Injectable()
 export class UserVerificationService {
@@ -23,7 +21,6 @@ export class UserVerificationService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private userRepository: UserRepository,
     private mailService: MailService,
-    private notificationService: NotificationService,
     private purchaseRepository: PurchaseRepository,
   ) {}
 
@@ -48,7 +45,6 @@ export class UserVerificationService {
       { toMail: user.email },
       code,
     );
-    console.log(messageDate);
   }
 
   async confirmUserVerificationEmail(code: string): Promise<any> {
@@ -63,19 +59,39 @@ export class UserVerificationService {
 
     const user = await this.userRepository.findOne({ id: payload.userId });
     if (user.email !== payload.email) {
-      console.log('WRONG EMAIL IN CODE PAYLOAD');
       throw new BadRequestException(
         USER_VERIFICATION_ERROR.VERIFICATION_CODE_PAYLOAD_HAS_WRONG_EMAIL,
       );
     }
     const updatedUser = await this.userRepository.confirmEmailById(user);
-    // await this.notificationService.subscribeAuthtorized(updatedUser, {
-    //   subscribe: true,
-    // });
-
     await this.purchaseRepository.connectPurchasesToUser(updatedUser);
 
     this.cacheManager.del(code);
     return true;
+  }
+
+  async confirmChangeEmail(code: string): Promise<void> {
+    const rawPayload: string = await this.cacheManager.get(code);
+    if (!rawPayload) {
+      throw new BadRequestException(
+        USER_VERIFICATION_ERROR.USER_VERIFICATION_EMAIL_CODE_DOESNT_EXISTS,
+      );
+    }
+    const data: UserChangeEmailDto = JSON.parse(rawPayload);
+    const user = await this.userRepository.findOne(data.userId);
+    if (!Boolean(user)) {
+      throw new BadRequestException(USER_ERROR.USER_NOT_FOUND);
+    }
+    if (user.email === data.email) {
+      throw new BadRequestException(
+        USER_ERROR.MAIL_ALREADY_LINKED_TO_THIS_ACCOUNT,
+      );
+    }
+    try {
+      await this.userRepository.update(user.id, { email: data.email });
+      await this.cacheManager.del(code);
+    } catch (err) {
+      throw new BadRequestException();
+    }
   }
 }

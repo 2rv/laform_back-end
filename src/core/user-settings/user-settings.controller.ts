@@ -4,25 +4,26 @@ import {
   UseGuards,
   Body,
   ValidationPipe,
+  UsePipes,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-
 import { AccountGuard } from '../user/guard/account.guard';
 import { GetAccount } from '../user/decorator/get-account.decorator';
 import { UserEntity } from '../user/user.entity';
-
 import { UserSettingsUpdatePasswordDto } from './dto/user-settings-update-password.dto';
 import { PasswordGuard } from './guard/password.guard';
 import { UserSettingsService } from './user-settings.service';
+import { UserSettingsUpdateEmailDto } from './dto/user-settings-update-email.dto';
 
 @Controller('user/settings')
 export class UserSettingsController {
   constructor(private userSettingsService: UserSettingsService) {}
 
+  @UsePipes(new ValidationPipe({ transform: true }))
   @Patch('/password')
   @UseGuards(AuthGuard(), AccountGuard, PasswordGuard)
   updatePassword(
-    @Body(ValidationPipe)
+    @Body()
     userSettingsUpdatePasswordDto: UserSettingsUpdatePasswordDto,
     @GetAccount() user: UserEntity,
   ): Promise<void> {
@@ -32,12 +33,13 @@ export class UserSettingsController {
     );
   }
 
+  @UsePipes(new ValidationPipe({ transform: true }))
   @Patch('/email')
   @UseGuards(AuthGuard(), AccountGuard, PasswordGuard)
-  async updateUserEmail(
+  async changeEmail(
     @GetAccount() user: UserEntity,
-    @Body(ValidationPipe) data: any,
+    @Body() data: UserSettingsUpdateEmailDto,
   ): Promise<void> {
-    return this.userSettingsService.updateEmail(user, data);
+    return await this.userSettingsService.changeEmail(user, data);
   }
 }
