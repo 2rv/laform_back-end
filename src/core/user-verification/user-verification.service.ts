@@ -88,7 +88,10 @@ export class UserVerificationService {
       );
     }
     try {
-      await this.userRepository.update(user.id, { email: data.email });
+      await this.userRepository.update(user.id, {
+        email: data.email,
+        emailConfirmed: false,
+      });
       await this.cacheManager.del(code);
     } catch (err) {
       throw new BadRequestException();
