@@ -63,13 +63,13 @@ export class UserRecoveryService {
     const user = await this.userRepository.findOne(userId);
 
     try {
-      this.userRepository.changePassword(user, data);
+      await this.userRepository.changePassword(user, data);
     } catch (err) {
       throw new InternalServerErrorException(
         USER_RECOVERY_ERROR.USER_UPDATE_CREDENTIALS_ERROR,
       );
     }
 
-    this.cacheManager.del(code);
+    await this.cacheManager.del(code);
   }
 }

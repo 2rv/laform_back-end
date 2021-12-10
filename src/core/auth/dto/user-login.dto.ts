@@ -10,5 +10,6 @@ export class UserLoginDto {
 
   @IsNotEmpty()
   @IsString()
+  @Transform((value) => value.trim())
   password: string;
 }

@@ -1,4 +1,4 @@
-import { Controller, Param, Post, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
 import { GetAccount } from '../user/decorator/get-account.decorator';
@@ -11,7 +11,7 @@ import { UserVerificationService } from './user-verification.service';
 export class UserVerificationController {
   constructor(private userVerificationService: UserVerificationService) {}
 
-  @Post('/email')
+  @Get('/email')
   @UseGuards(AuthGuard(), AccountGuard)
   getEmailCode(@GetAccount() user: UserEntity): Promise<void> {
     return this.userVerificationService.getEmailVerificationCode(user);
@@ -20,5 +20,10 @@ export class UserVerificationController {
   @Post('/email/:code')
   async confirmEmailVerification(@Param('code') code: string): Promise<any> {
     return this.userVerificationService.confirmUserVerificationEmail(code);
+  }
+
+  @Get('/change-email/:code')
+  async confirmChangeEmail(@Param('code') code: string): Promise<void> {
+    return await this.userVerificationService.confirmChangeEmail(code);
   }
 }

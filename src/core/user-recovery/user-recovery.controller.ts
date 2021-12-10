@@ -21,12 +21,11 @@ export class UserRecoveryController {
     return this.userRecoveryService.getRecoveryCode(data);
   }
 
+  @UsePipes(new ValidationPipe({ transform: true }))
   @Post('change-credentials')
   async changeCredentials(
-    @Query('code')
-    code: string,
-    @Body(ValidationPipe)
-    data: UserRecoveryChangeCredentialsDto,
+    @Query('code') code: string,
+    @Body() data: UserRecoveryChangeCredentialsDto,
   ): Promise<void> {
     return this.userRecoveryService.changeCredentials(code, data);
   }

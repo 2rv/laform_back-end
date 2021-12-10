@@ -24,7 +24,6 @@ import { AccountDataDto } from './dto/account-data.dto';
 import { ClientConfig } from '../../config/client.config';
 import { AuthBasketForCodeDto } from './dto/auth-basket-code.dto';
 import { ViewAuthFilter } from '../user/guard/auth.filter';
-import * as util from 'util';
 
 @Controller('auth')
 export class AuthController {
@@ -44,7 +43,7 @@ export class AuthController {
   @UsePipes(new ValidationPipe({ transform: true }))
   @Post('/signup')
   async signUp(@Body() userSignUpDto: UserSignUpDto): Promise<LoginInfoDto> {
-    return this.authService.signUp(userSignUpDto);
+    return await this.authService.signUp(userSignUpDto);
   }
 
   @UsePipes(new ValidationPipe({ transform: true }))

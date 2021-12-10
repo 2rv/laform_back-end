@@ -6,7 +6,6 @@ import {
   IsOptional,
   IsEmail,
   IsPhoneNumber,
-  IsMobilePhone,
   IsBoolean,
 } from 'class-validator';
 
