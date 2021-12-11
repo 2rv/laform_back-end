@@ -1,17 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { FaqEntity } from './faq.entity';
 import { FaqRepository } from './faq.repository';
-import { CreateOrUpdateFaqDto } from './dto/create-or-update-faq.dto';
+import { FaqDatato } from './dto/faq.dto';
 
 @Injectable()
 export class FaqService {
   constructor(private faqRepository: FaqRepository) {}
 
-  async get(): Promise<FaqEntity> {
-    return await this.faqRepository.findOne({});
+  async get(name: string): Promise<FaqEntity> {
+    return await this.faqRepository.findOne({ name: name });
   }
 
-  async save(body: CreateOrUpdateFaqDto): Promise<void> {
-    await this.faqRepository.createOrUpdate(body);
+  async save(body: FaqDatato, name: string): Promise<void> {
+    const faqData = await this.faqRepository.findOne({ name: name });
+    if (Boolean(faqData)) {
+      await this.faqRepository.update(faqData.id, { data: body.data });
+    } else {
+      await this.faqRepository.save({ name: name, data: body.data });
+    }
   }
 }
