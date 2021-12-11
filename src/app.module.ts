@@ -22,17 +22,11 @@ import { PromoCodeModule } from './core/promo-code/promo-code.module';
 import { MailModule } from './core/mail/mail.module';
 import { ProductOptionModule } from './core/product-option/product-option.module';
 import { CommentModule } from './core/comment/comment.module';
-import { AboutUsModule } from './core/faq-about-us/about-us.module';
 import { FaqModule } from './core/faq/faq.module';
 import { StatisticsModule } from './core/statistics/statistics.module';
 import { PaymentModule } from './core/payment/payment.module';
-import { PrivacyPolicyModule } from './core/faq-privacy-policy/privacy-policy.module';
-import { LegalInformationModule } from './core/faq-legal-information/legal-information.module';
-import { TermsOfUseModule } from './core/faq-terms-of-use/terms-of-use.module';
 import { CompilationModule } from './core/compilation/compilation.module';
 import { SdekModule } from './core/sdek/sdek.module';
-import { FaqSizeModule } from './core/faq-size/faq-size.module';
-import { FaqDeliveryPaymentModule } from './core/faq-delivery-payment/faq-delivery-payment.module';
 import { PageNavigationModule } from './core/page-navigation/page-navigation.module';
 import { FooterModule } from './core/footer/footer.module';
 
@@ -61,17 +55,11 @@ import { FooterModule } from './core/footer/footer.module';
     PromoCodeModule,
     MailModule,
     CommentModule,
-    AboutUsModule,
     FaqModule,
     StatisticsModule,
     PaymentModule,
-    PrivacyPolicyModule,
-    LegalInformationModule,
-    TermsOfUseModule,
     CompilationModule,
     SdekModule,
-    FaqSizeModule,
-    FaqDeliveryPaymentModule,
     PageNavigationModule,
     FooterModule,
   ],
