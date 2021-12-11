@@ -36,10 +36,6 @@ export class UserEntity extends BaseEntity {
 
   @Column({ nullable: true })
   @Transform((value: string) => value?.trim())
-  newEmail: string;
-
-  @Column({ nullable: true })
-  @Transform((value: string) => value?.trim())
   password: string;
 
   @Column({

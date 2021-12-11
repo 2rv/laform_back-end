@@ -12,8 +12,6 @@ import { UserRepository } from '../user/user.repository';
 import { USER_VERIFICATION_ERROR } from './enum/user-verification-error.enum';
 import { UserVerificationEmailPayload } from './type/user-verification-email-payload.type';
 import { PurchaseRepository } from '../purchase/purchase.repository';
-import { UserChangeEmailDto } from '../user/dto/user-change-email.dto';
-import { USER_ERROR } from '../user/enum/user-error.enum';
 
 @Injectable()
 export class UserVerificationService {
@@ -68,33 +66,5 @@ export class UserVerificationService {
 
     this.cacheManager.del(code);
     return true;
-  }
-
-  async confirmChangeEmail(code: string): Promise<void> {
-    const rawPayload: string = await this.cacheManager.get(code);
-    if (!rawPayload) {
-      throw new BadRequestException(
-        USER_VERIFICATION_ERROR.USER_VERIFICATION_EMAIL_CODE_DOESNT_EXISTS,
-      );
-    }
-    const data: UserChangeEmailDto = JSON.parse(rawPayload);
-    const user = await this.userRepository.findOne(data.userId);
-    if (!Boolean(user)) {
-      throw new BadRequestException(USER_ERROR.USER_NOT_FOUND);
-    }
-    if (user.email === data.email) {
-      throw new BadRequestException(
-        USER_ERROR.MAIL_ALREADY_LINKED_TO_THIS_ACCOUNT,
-      );
-    }
-    try {
-      await this.userRepository.update(user.id, {
-        email: data.email,
-        emailConfirmed: false,
-      });
-      await this.cacheManager.del(code);
-    } catch (err) {
-      throw new BadRequestException();
-    }
   }
 }

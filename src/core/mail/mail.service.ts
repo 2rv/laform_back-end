@@ -35,16 +35,34 @@ export class MailService {
         console.log(e);
       });
   }
-  async sendCodeForChangeMail(email: string, newEmail: string, code: string) {
-    return await this.mailerService
+  async sendCodeForChangeMail(
+    email: string,
+    newEmail: string,
+    codeOld: string,
+    codeNew: string,
+  ) {
+    await this.mailerService
       .sendMail({
         to: email,
         subject: 'Смена почты',
-        text: `Для смены почты на ${newEmail} перейдите по ссылке https://laform-client.herokuapp.com/auth/verificate-email/confirm?code=${code}`,
+        text: `Код для смены почты на ${newEmail}: ${codeOld}`,
         template: path.join(path.resolve(), 'src/templates/change-mail'),
         context: {
           email: newEmail,
-          code: code,
+          code: codeOld,
+        },
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    await this.mailerService
+      .sendMail({
+        to: newEmail,
+        subject: 'Подтвердите почту',
+        text: `Код для подтверждения почты: ${codeNew}`,
+        template: path.join(path.resolve(), 'src/templates/change-mail-new'),
+        context: {
+          code: codeNew,
         },
       })
       .catch((e) => {

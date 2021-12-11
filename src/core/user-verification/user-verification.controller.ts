@@ -1,10 +1,8 @@
 import { Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-
 import { GetAccount } from '../user/decorator/get-account.decorator';
 import { AccountGuard } from '../user/guard/account.guard';
 import { UserEntity } from '../user/user.entity';
-
 import { UserVerificationService } from './user-verification.service';
 
 @Controller('user/verification')
@@ -20,10 +18,5 @@ export class UserVerificationController {
   @Post('/email/:code')
   async confirmEmailVerification(@Param('code') code: string): Promise<any> {
     return this.userVerificationService.confirmUserVerificationEmail(code);
-  }
-
-  @Get('/change-email/:code')
-  async confirmChangeEmail(@Param('code') code: string): Promise<void> {
-    return await this.userVerificationService.confirmChangeEmail(code);
   }
 }
