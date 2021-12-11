@@ -8,10 +8,11 @@ import { UserEntity } from '../user/user.entity';
 import { UserRepository } from '../user/user.repository';
 import { UserSettingsUpdatePasswordDto } from './dto/user-settings-update-password.dto';
 import { UserSettingsUpdateEmailDto } from './dto/user-settings-update-email.dto';
-import { randomUUID } from 'crypto';
 import { Cache } from 'cache-manager';
 import { MailService } from '../mail/mail.service';
 import { USER_ERROR } from '../user/enum/user-error.enum';
+import { generateVendorCode } from 'src/common/utils/vendor-coder';
+import { UserUpdateEmailRawDataDto } from '../auth/dto/user-update-email.dto';
 
 @Injectable()
 export class UserSettingsService {
@@ -41,16 +42,22 @@ export class UserSettingsService {
       );
     }
 
-    const newEmailData = {
-      userId: user.id,
+    const oldEmailData: UserUpdateEmailRawDataDto = {
       email: data.newEmail,
     };
-    const code = randomUUID();
-    await this.cacheManager.set(code, JSON.stringify(newEmailData));
+    const newEmailData: UserUpdateEmailRawDataDto = {
+      email: data.newEmail,
+    };
+    const codeOld = generateVendorCode().trim().toLocaleLowerCase();
+    const codeNew = generateVendorCode().trim().toLocaleLowerCase();
+    await this.cacheManager.set(codeOld, JSON.stringify(oldEmailData));
+    await this.cacheManager.set(codeNew, JSON.stringify(newEmailData));
+
     await this.mailService.sendCodeForChangeMail(
       user.email,
       data.newEmail,
-      code,
+      codeOld.toUpperCase(),
+      codeNew.toUpperCase(),
     );
   }
 }

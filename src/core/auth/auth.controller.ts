@@ -11,6 +11,8 @@ import {
   UseFilters,
   Delete,
   Query,
+  Param,
+  Put,
 } from '@nestjs/common';
 import { UserSignUpDto } from './dto/user-sign-up.dto';
 import { UserLoginDto } from './dto/user-login.dto';
@@ -24,6 +26,7 @@ import { AccountDataDto } from './dto/account-data.dto';
 import { ClientConfig } from '../../config/client.config';
 import { AuthBasketForCodeDto } from './dto/auth-basket-code.dto';
 import { ViewAuthFilter } from '../user/guard/auth.filter';
+import { UserUpdateEmailDto } from './dto/user-update-email.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -66,6 +69,16 @@ export class AuthController {
   @UseGuards(AuthGuard(), AccountGuard)
   checkUserConfirmed(@GetAccount() user: UserEntity): Promise<LoginInfoDto> {
     return this.authService.updateLogin(user);
+  }
+
+  @UsePipes(new ValidationPipe({ transform: true }))
+  @Put('/update-email')
+  @UseGuards(AuthGuard(), AccountGuard)
+  async confirmUpdateEmail(
+    @GetAccount() user: UserEntity,
+    @Body() body: UserUpdateEmailDto,
+  ): Promise<LoginInfoDto> {
+    return await this.authService.updateEmail(user, body);
   }
 
   @Get('/facebook')
