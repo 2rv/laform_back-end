@@ -9,12 +9,12 @@ import { FaqSizeService } from './faq-size.service';
 export class FaqSizeController {
   constructor(private faqSizeService: FaqSizeService) {}
 
-  @Get('get')
+  @Get('/')
   async get() {
     return await this.faqSizeService.get();
   }
 
-  @Post('save')
+  @Post('/')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async save(@Body() body) {

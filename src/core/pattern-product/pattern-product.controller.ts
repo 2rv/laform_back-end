@@ -166,16 +166,3 @@ export class PatternProductController {
     );
   }
 }
-
-// @Get('/pinned/get/')
-// async getPinned(@Query(new LangValidationPipe()) query: string) {
-//   return await this.patternProductService.getPinned(query);
-// }
-// @Get('/auth/pinned/get/')
-// @UseGuards(AuthGuard('jwt'), AccountGuard)
-// async getPinnedAuth(
-//   @Query(new LangValidationPipe()) query: string,
-//   @GetAccount() user: UserEntity,
-// ) {
-//   return await this.patternProductService.getPinnedAuth(query, user.id);
-// }
