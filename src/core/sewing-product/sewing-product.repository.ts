@@ -13,7 +13,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
     size: number = 30,
     page: number = 1,
     sort: string,
-    by: any = 'ASC',
+    by: 'DESC' | 'ASC' = 'DESC',
     where: string,
     category: string,
   ): Promise<[SewingProductEntity[], number]> {
@@ -84,7 +84,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
     size: number = 30,
     page: number = 1,
     sort: string,
-    by: any = 'ASC',
+    by: 'DESC' | 'ASC' = 'DESC',
     where: string,
     category: string,
   ): Promise<[SewingProductEntity[], number]> {
@@ -155,10 +155,9 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
     size: number = 30,
     page: number = 1,
     sort: string,
-    by: any = 'ASC',
+    by: 'DESC' | 'ASC' = 'DESC',
     where: string,
     category: string,
-    allProductsPage: string,
     userId: number,
   ): Promise<[SewingProductEntity[], number]> {
     return await this.createQueryBuilder('sewing_product')
@@ -201,7 +200,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .orderBy(sort, by)
       .take(size)
       .skip((page - 1) * size || 0)
-      .where(allProductsPage !== 'yes' && 'sewing_product.deleted = false')
+      .where('sewing_product.deleted = false')
       .andWhere(
         new Brackets((qb) => {
           if (where) {
@@ -215,9 +214,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
               category: category,
             });
           } else {
-            qb.where(
-              allProductsPage !== 'yes' && 'sewing_product.deleted = false',
-            );
+            qb.where('sewing_product.deleted = false');
           }
         }),
       )
@@ -234,10 +231,9 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
     size: number = 30,
     page: number = 1,
     sort: string,
-    by: any = 'ASC',
+    by: 'DESC' | 'ASC' = 'DESC',
     where: string,
     category: string,
-    allProductsPage: string,
     userId: number,
   ): Promise<[SewingProductEntity[], number]> {
     return await this.createQueryBuilder('sewing_product')
@@ -280,7 +276,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .orderBy(sort, by)
       .take(size)
       .skip((page - 1) * size || 0)
-      .where(allProductsPage !== 'yes' && 'sewing_product.deleted = false')
+      .where('sewing_product.deleted = false')
       .andWhere(
         new Brackets((qb) => {
           if (where) {
@@ -294,9 +290,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
               category: category,
             });
           } else {
-            qb.where(
-              allProductsPage !== 'yes' && 'sewing_product.deleted = false',
-            );
+            qb.where('sewing_product.deleted = false');
           }
         }),
       )
@@ -815,11 +809,11 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .where('sewing_product.id = :id', { id })
       .getOne();
   }
-  async findAllForProductList(
+  async findAllForAdmin(
     size: number = 30,
     page: number = 1,
     sort: string,
-    by: any = 'ASC',
+    by: 'DESC' | 'ASC' = 'DESC',
     where: string,
     category: string,
   ): Promise<[SewingProductEntity[], number]> {
@@ -858,7 +852,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .orderBy(sort, by)
       .take(size)
       .skip((page - 1) * size || 0)
-      .andWhere(
+      .where(
         new Brackets((qb) => {
           if (where) {
             qb.where('sewing_product.titleRu ILIKE :search', {

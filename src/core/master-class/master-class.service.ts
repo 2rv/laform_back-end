@@ -24,10 +24,10 @@ export class MasterClassService {
     size: number,
     page: number,
     sort: string,
-    by: string,
+    by: 'DESC' | 'ASC',
     where: string,
     category: string,
-    allProductsPage: string,
+    getAll: boolean,
   ): Promise<[MasterClassEntity[], number]> {
     if (sort === 'title') {
       if (query === 'ru') {
@@ -39,9 +39,19 @@ export class MasterClassService {
       sort = 'master_class.clickCount';
     } else if (sort === 'date') {
       sort = 'master_class.createdDate';
-      by = 'ASC';
     } else sort = '';
-    if (query === 'ru')
+
+    if (getAll) {
+      return await this.masterClassRepository.findAllForAdmin(
+        size,
+        page,
+        sort,
+        by,
+        where,
+        category,
+      );
+    }
+    if (query === 'ru') {
       return await this.masterClassRepository.findAllRu(
         size,
         page,
@@ -49,9 +59,10 @@ export class MasterClassService {
         by,
         where,
         category,
-        allProductsPage,
       );
-    if (query === 'en')
+    }
+
+    if (query === 'en') {
       return await this.masterClassRepository.findAllEn(
         size,
         page,
@@ -59,18 +70,17 @@ export class MasterClassService {
         by,
         where,
         category,
-        allProductsPage,
       );
+    }
   }
   async getAllAuth(
     query: string,
     size: number,
     page: number,
     sort: string,
-    by: string,
+    by: 'DESC' | 'ASC',
     where: string,
     category: string,
-    allProductsPage: string,
     userId: number,
   ): Promise<[MasterClassEntity[], number]> {
     if (sort === 'title') {
@@ -83,9 +93,8 @@ export class MasterClassService {
       sort = 'master_class.clickCount';
     } else if (sort === 'date') {
       sort = 'master_class.createdDate';
-      by = 'ASC';
     } else sort = '';
-    if (query === 'ru')
+    if (query === 'ru') {
       return await this.masterClassRepository.findAllRuAuth(
         size,
         page,
@@ -93,10 +102,11 @@ export class MasterClassService {
         by,
         where,
         category,
-        allProductsPage,
         userId,
       );
-    if (query === 'en')
+    }
+
+    if (query === 'en') {
       return await this.masterClassRepository.findAllEnAuth(
         size,
         page,
@@ -104,9 +114,9 @@ export class MasterClassService {
         by,
         where,
         category,
-        allProductsPage,
         userId,
       );
+    }
   }
   async getOne(id: string, query: string): Promise<MasterClassEntity> {
     if (query === 'ru') return await this.masterClassRepository.findOneRu(id);

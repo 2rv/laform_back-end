@@ -22,5 +22,5 @@ export class CategoryEntity {
     type: 'varchar',
     name: 'type',
   })
-  type!: string;
+  type!: '0' | '1' | '2' | '3' | '4';
 }

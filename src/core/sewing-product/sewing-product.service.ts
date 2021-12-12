@@ -44,10 +44,10 @@ export class SewingProductService {
     size: number,
     page: number,
     sort: string,
-    by: string,
+    by: 'DESC' | 'ASC',
     where: string,
     category: string,
-    allProductsPage: string,
+    getAll: boolean,
   ): Promise<[SewingProductEntity[], number]> {
     if (sort === 'title') {
       if (query === 'ru') {
@@ -59,20 +59,19 @@ export class SewingProductService {
       sort = 'sewing_product.clickCount';
     } else if (sort === 'date') {
       sort = 'sewing_product.createdDate';
-      by = 'ASC';
     } else sort = '';
 
+    if (getAll) {
+      return await this.sewingProductRepository.findAllForAdmin(
+        size,
+        page,
+        sort,
+        by,
+        where,
+        category,
+      );
+    }
     if (query === 'ru') {
-      if (allProductsPage === 'yes') {
-        return await this.sewingProductRepository.findAllForProductList(
-          size,
-          page,
-          sort,
-          by,
-          where,
-          category,
-        );
-      }
       return await this.sewingProductRepository.findAllRu(
         size,
         page,
@@ -82,7 +81,6 @@ export class SewingProductService {
         category,
       );
     }
-
     if (query === 'en') {
       return await this.sewingProductRepository.findAllEn(
         size,
@@ -99,10 +97,9 @@ export class SewingProductService {
     size: number,
     page: number,
     sort: string,
-    by: string,
+    by: 'DESC' | 'ASC',
     where: string,
     category: string,
-    allProductsPage: string,
     userId: number,
   ): Promise<[SewingProductEntity[], number]> {
     if (sort === 'title') {
@@ -115,10 +112,9 @@ export class SewingProductService {
       sort = 'sewing_product.clickCount';
     } else if (sort === 'date') {
       sort = 'sewing_product.createdDate';
-      by = 'ASC';
     } else sort = '';
 
-    if (query === 'ru')
+    if (query === 'ru') {
       return await this.sewingProductRepository.findAllRuAuth(
         size,
         page,
@@ -126,10 +122,10 @@ export class SewingProductService {
         by,
         where,
         category,
-        allProductsPage,
         userId,
       );
-    if (query === 'en')
+    }
+    if (query === 'en') {
       return await this.sewingProductRepository.findAllEnAuth(
         size,
         page,
@@ -137,9 +133,9 @@ export class SewingProductService {
         by,
         where,
         category,
-        allProductsPage,
         userId,
       );
+    }
   }
 
   async getOne(id: string, query: string): Promise<SewingProductEntity> {

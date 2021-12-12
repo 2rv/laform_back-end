@@ -13,10 +13,9 @@ export class PostRepository extends Repository<PostEntity> {
     size: number = 30,
     page: number = 1,
     sort: string,
-    by: any = 'ASC',
+    by: 'DESC' | 'ASC' = 'DESC',
     where: string,
     category: string,
-    allProductsPage: string,
   ): Promise<[PostEntity[], number]> {
     return await this.createQueryBuilder('post')
       .leftJoin('post.image', 'image')
@@ -38,7 +37,7 @@ export class PostRepository extends Repository<PostEntity> {
       .orderBy(sort, by)
       .take(size)
       .skip((page - 1) * size || 0)
-      .where(allProductsPage !== 'yes' && 'post.deleted = false')
+      .where('post.deleted = false')
       .andWhere(
         new Brackets((qb) => {
           if (where) {
@@ -52,7 +51,7 @@ export class PostRepository extends Repository<PostEntity> {
               category: category,
             });
           } else {
-            qb.where(allProductsPage !== 'yes' && 'post.deleted = false');
+            qb.where('post.deleted = false');
           }
         }),
       )
@@ -62,10 +61,9 @@ export class PostRepository extends Repository<PostEntity> {
     size: number = 30,
     page: number = 1,
     sort: string,
-    by: any = 'ASC',
+    by: 'DESC' | 'ASC' = 'DESC',
     where: string,
     category: string,
-    allProductsPage: string,
   ): Promise<[PostEntity[], number]> {
     return await this.createQueryBuilder('post')
       .leftJoin('post.image', 'image')
@@ -87,7 +85,7 @@ export class PostRepository extends Repository<PostEntity> {
       .orderBy(sort, by)
       .take(size)
       .skip((page - 1) * size || 0)
-      .where(allProductsPage !== 'yes' && 'post.deleted = false')
+      .where('post.deleted = false')
       .andWhere(
         new Brackets((qb) => {
           if (where) {
@@ -101,7 +99,7 @@ export class PostRepository extends Repository<PostEntity> {
               category: category,
             });
           } else {
-            qb.where(allProductsPage !== 'yes' && 'post.deleted = false');
+            qb.where('post.deleted = false');
           }
         }),
       )
@@ -111,10 +109,9 @@ export class PostRepository extends Repository<PostEntity> {
     size: number = 30,
     page: number = 1,
     sort: string,
-    by: any = 'ASC',
+    by: 'DESC' | 'ASC' = 'DESC',
     where: string,
     category: string,
-    allProductsPage: string,
     userId: number,
   ): Promise<[PostEntity[], number]> {
     return await this.createQueryBuilder('post')
@@ -139,7 +136,7 @@ export class PostRepository extends Repository<PostEntity> {
       .orderBy(sort, by)
       .take(size)
       .skip((page - 1) * size || 0)
-      .where(allProductsPage !== 'yes' && 'post.deleted = false')
+      .where('post.deleted = false')
       .andWhere(
         new Brackets((qb) => {
           if (where) {
@@ -153,7 +150,7 @@ export class PostRepository extends Repository<PostEntity> {
               category: category,
             });
           } else {
-            qb.where(allProductsPage !== 'yes' && 'post.deleted = false');
+            qb.where('post.deleted = false');
           }
         }),
       )
@@ -163,10 +160,9 @@ export class PostRepository extends Repository<PostEntity> {
     size: number = 30,
     page: number = 1,
     sort: string,
-    by: any = 'ASC',
+    by: 'DESC' | 'ASC' = 'DESC',
     where: string,
     category: string,
-    allProductsPage: string,
     userId: number,
   ): Promise<[PostEntity[], number]> {
     return await this.createQueryBuilder('post')
@@ -191,7 +187,7 @@ export class PostRepository extends Repository<PostEntity> {
       .orderBy(sort, by)
       .take(size)
       .skip((page - 1) * size || 0)
-      .where(allProductsPage !== 'yes' && 'post.deleted = false')
+      .where('post.deleted = false')
       .andWhere(
         new Brackets((qb) => {
           if (where) {
@@ -205,7 +201,7 @@ export class PostRepository extends Repository<PostEntity> {
               category: category,
             });
           } else {
-            qb.where(allProductsPage !== 'yes' && 'post.deleted = false');
+            qb.where('post.deleted = false');
           }
         }),
       )
@@ -506,89 +502,52 @@ export class PostRepository extends Repository<PostEntity> {
       .andWhere('like.userId = :userId', { userId })
       .getManyAndCount();
   }
-}
 
-// async findPinnedRu(): Promise<PostEntity[]> {
-//     return await this.createQueryBuilder('post')
-//       .leftJoin('post.image', 'image')
-//       .leftJoin('post.categories', 'categories')
-//       .select([
-//         'post.id',
-//         'post.type',
-//         'post.titleRu',
-//         'post.modifierRu',
-//         'post.modifierColor',
-//         'post.pinned',
-//         'post.createdDate',
-//         'post.vendorCode',
-//         'image',
-//         'categories.id',
-//         'categories.categoryNameRu',
-//       ])
-//       .where('post.pinned = true')
-//       .getMany();
-//   }
-//   async findPinnedEn(): Promise<PostEntity[]> {
-//     return await this.createQueryBuilder('post')
-//       .leftJoin('post.image', 'image')
-//       .leftJoin('post.categories', 'categories')
-//       .select([
-//         'post.id',
-//         'post.type',
-//         'post.titleEn',
-//         'post.modifierEn',
-//         'post.modifierColor',
-//         'post.pinned',
-//         'post.createdDate',
-//         'post.vendorCode',
-//         'image',
-//         'categories.id',
-//         'categories.categoryNameEn',
-//       ])
-//       .where('post.pinned = true')
-//       .getMany();
-//   }
-//   async findPinnedRuAuth(userId: number): Promise<PostEntity[]> {
-//     return await this.createQueryBuilder('post')
-//       .leftJoin('post.image', 'image')
-//       .leftJoin('post.categories', 'categories')
-//       .leftJoin('post.like', 'like', 'like.userId = :userId', { userId })
-//       .select([
-//         'post.id',
-//         'post.type',
-//         'post.titleRu',
-//         'post.modifierRu',
-//         'post.modifierColor',
-//         'post.pinned',
-//         'post.createdDate',
-//         'post.vendorCode',
-//         'image',
-//         'categories.id',
-//         'categories.categoryNameRu',
-//         'like',
-//       ])
-//       .where('post.pinned = true')
-//       .getMany();
-//   }
-//   async findPinnedEnAuth(userId: number): Promise<PostEntity[]> {
-//     return await this.createQueryBuilder('post')
-//       .leftJoin('post.image', 'image')
-//       .leftJoin('post.categories', 'categories')
-//       .leftJoin('post.like', 'like', 'like.userId = :userId', { userId })
-//       .select([
-//         'post.id',
-//         'post.type',
-//         'post.titleEn',
-//         'post.modifierEn',
-//         'post.modifierColor',
-//         'post.pinned',
-//         'post.createdDate',
-//         'post.vendorCode',
-//         'image',
-//         'categories.id',
-//         'categories.categoryNameEn',
-//         'like',
-//       ])
-//       .where('post.pinned = true')
-//       .getMany();
-//   }
+  async findAllForAdmin(
+    size: number = 30,
+    page: number = 1,
+    sort: string,
+    by: 'DESC' | 'ASC' = 'DESC',
+    where: string,
+    category: string,
+  ): Promise<[PostEntity[], number]> {
+    return await this.createQueryBuilder('post')
+      .leftJoin('post.image', 'image')
+      .leftJoin('post.categories', 'categories')
+      .select([
+        'post.id',
+        'post.type',
+        'post.titleRu',
+        'post.modifierRu',
+        'post.modifierColor',
+        'post.pinned',
+        'post.createdDate',
+        'post.vendorCode',
+        'post.deleted',
+        'image',
+        'categories.id',
+        'categories.categoryNameRu',
+      ])
+      .orderBy(sort, by)
+      .take(size)
+      .skip((page - 1) * size || 0)
+      .where(
+        new Brackets((qb) => {
+          if (where) {
+            qb.where('post.titleRu ILIKE :search', {
+              search: `%${where}%`,
+            }).orWhere('categories.categoryNameRu ILIKE :search', {
+              search: `%${where}%`,
+            });
+          } else if (category) {
+            qb.where('categories.categoryNameRu = :category', {
+              category: category,
+            });
+          } else {
+            qb.where('post.deleted = false');
+          }
+        }),
+      )
+      .getManyAndCount();
+  }
+}
