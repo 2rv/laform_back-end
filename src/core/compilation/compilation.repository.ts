@@ -33,6 +33,7 @@ export class CompilationRepository extends Repository<CompilationEntity> {
         'com_master_class.titleRu',
         'com_master_class.modifierRu',
         'com_master_class.discount',
+        'com_master_class.deleted',
         'com_master_class.price',
         'com_master_class_images',
 
@@ -48,6 +49,7 @@ export class CompilationRepository extends Repository<CompilationEntity> {
         'com_pattern_product.discount',
         'com_pattern_product.count',
         'com_pattern_product.isCount',
+        'com_pattern_product.deleted',
         'com_pattern_product_images',
         'com_pattern_product_options.id',
         'com_pattern_product_options.price',
@@ -66,6 +68,7 @@ export class CompilationRepository extends Repository<CompilationEntity> {
         'com_sewing_product.count',
         'com_sewing_product.isCount',
         'com_sewing_product.length',
+        'com_sewing_product.deleted',
         'com_sewing_product.isLength',
         'com_sewing_product_images',
         'com_sewing_product_options.id',
@@ -85,6 +88,9 @@ export class CompilationRepository extends Repository<CompilationEntity> {
         'com_post.vendorCode',
         'com_post_image',
       ])
+      .where(
+        'com_master_class.deleted = false OR com_sewing_product.deleted = false OR com_pattern_product.deleted = false',
+      )
       .getMany();
   }
 
@@ -152,6 +158,7 @@ export class CompilationRepository extends Repository<CompilationEntity> {
         'com_master_class.modifierRu',
         'com_master_class.discount',
         'com_master_class.price',
+        'com_master_class.deleted',
         'com_master_class_images',
         'com_master_class_like',
 
@@ -168,6 +175,7 @@ export class CompilationRepository extends Repository<CompilationEntity> {
         'com_pattern_product.count',
         'com_pattern_product.isCount',
         'com_pattern_product_images',
+        'com_pattern_product.deleted',
         'com_pattern_product_options.id',
         'com_pattern_product_options.price',
         'com_pattern_product_options.discount',
@@ -196,6 +204,7 @@ export class CompilationRepository extends Repository<CompilationEntity> {
         'com_sewing_product_options.length',
         'com_sewing_product_options.discount',
         'com_sewing_product_options.vendorCode',
+        'com_sewing_product.deleted',
         'com_sewing_product_like',
 
         'com_post.id',
@@ -207,6 +216,9 @@ export class CompilationRepository extends Repository<CompilationEntity> {
         'com_post_image',
         'com_post_like',
       ])
+      .where(
+        'com_master_class.deleted = false OR com_sewing_product.deleted = false OR com_pattern_product.deleted = false',
+      )
       .getMany();
   }
 }
