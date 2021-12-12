@@ -50,7 +50,7 @@ export class PatternProductController {
     @Query('where') where: string,
     @Query('type') type: string,
     @Query('category') category: string,
-    @Query('allProductsPage') allProductsPage: string,
+    @Query('getAll') getAll: boolean,
   ) {
     return await this.patternProductService.getAll(
       query,
@@ -61,7 +61,7 @@ export class PatternProductController {
       where,
       type,
       category,
-      allProductsPage,
+      getAll,
     );
   }
   @Get('/auth/get/')
@@ -75,7 +75,6 @@ export class PatternProductController {
     @Query('where') where: string,
     @Query('type') type: string,
     @Query('category') category: string,
-    @Query('allProductsPage') allProductsPage: string,
     @GetAccount() user: UserEntity,
   ) {
     return await this.patternProductService.getAllAuth(
@@ -87,7 +86,6 @@ export class PatternProductController {
       where,
       type,
       category,
-      allProductsPage,
       user.id,
     );
   }

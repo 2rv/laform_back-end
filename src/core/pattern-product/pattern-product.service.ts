@@ -147,7 +147,7 @@ export class PatternProductService {
     where: string,
     type: string,
     category: string,
-    allProductsPage: string,
+    getAll: boolean,
   ): Promise<[PatternProductEntity[], number]> {
     if (sort === 'title') {
       if (query === 'ru') {
@@ -166,7 +166,17 @@ export class PatternProductService {
     } else {
       type = '';
     }
-
+    if (getAll) {
+      return await this.patternProductRepository.findAllForAdmin(
+        size,
+        page,
+        sort,
+        by,
+        where,
+        type,
+        category,
+      );
+    }
     if (query === 'ru')
       return await this.patternProductRepository.findAllRu(
         size,
@@ -176,7 +186,6 @@ export class PatternProductService {
         where,
         type,
         category,
-        allProductsPage,
       );
     if (query === 'en')
       return await this.patternProductRepository.findAllEn(
@@ -187,7 +196,6 @@ export class PatternProductService {
         where,
         type,
         category,
-        allProductsPage,
       );
   }
   async getAllAuth(
@@ -199,13 +207,13 @@ export class PatternProductService {
     where: string,
     type: string,
     category: string,
-    allProductsPage: string,
     userId: number,
   ): Promise<[PatternProductEntity[], number]> {
     if (sort === 'title') {
       if (query === 'ru') {
         sort = 'pattern_product.titleRu';
-      } else if (query === 'en') {
+      }
+      if (query === 'en') {
         sort = 'pattern_product.titleEn';
       }
     } else if (sort === 'date') {
@@ -229,7 +237,6 @@ export class PatternProductService {
         where,
         type,
         category,
-        allProductsPage,
         userId,
       );
     if (query === 'en')
@@ -241,7 +248,6 @@ export class PatternProductService {
         where,
         type,
         category,
-        allProductsPage,
         userId,
       );
   }
@@ -423,19 +429,3 @@ export class PatternProductService {
       return await this.patternProductRepository.findOneForUpdate(id);
   }
 }
-
-// async getPinned(query: string): Promise<PatternProductEntity[]> {
-//     if (query === 'ru')
-//       return await this.patternProductRepository.findPinnedRu();
-//     if (query === 'en')
-//       return await this.patternProductRepository.findPinnedEn();
-//   }
-//   async getPinnedAuth(
-//     query: string,
-//     userId: number,
-//   ): Promise<PatternProductEntity[]> {
-//     if (query === 'ru')
-//       return await this.patternProductRepository.findPinnedRuAuth(userId);
-//     if (query === 'en')
-//       return await this.patternProductRepository.findPinnedEnAuth(userId);
-//   }

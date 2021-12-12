@@ -17,7 +17,6 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
     where: string,
     type: string,
     category: string,
-    allProductsPage: string,
   ): Promise<[PatternProductEntity[], number]> {
     return await this.createQueryBuilder('pattern_product')
       .leftJoin('pattern_product.images', 'images')
@@ -51,7 +50,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .orderBy(sort, by)
       .take(size)
       .skip((page - 1) * size || 0)
-      .where(allProductsPage !== 'yes' && 'pattern_product.deleted = false')
+      .where('pattern_product.deleted = false')
       .andWhere(
         new Brackets((qb) => {
           if (where) {
@@ -69,19 +68,17 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
               category: category,
             });
           } else {
-            qb.where(
-              allProductsPage !== 'yes' && 'pattern_product.deleted = false',
-            );
+            qb.where('pattern_product.deleted = false');
           }
         }),
       )
-      //   .andWhere(
-      //     new Brackets((qb) => {
-      //       qb.where('options.optionVisibility = true').orWhere(
-      //         'pattern_product.optionType = 0',
-      //       );
-      //     }),
-      //   )
+      .andWhere(
+        new Brackets((qb) => {
+          qb.where('options.optionVisibility = true').orWhere(
+            'pattern_product.optionType = 0',
+          );
+        }),
+      )
       .getManyAndCount();
   }
   async findAllEn(
@@ -92,7 +89,6 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
     where: string,
     type: string,
     category: string,
-    allProductsPage: string,
   ): Promise<[PatternProductEntity[], number]> {
     return await this.createQueryBuilder('pattern_product')
       .leftJoin('pattern_product.images', 'images')
@@ -126,7 +122,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .orderBy(sort, by)
       .take(size)
       .skip((page - 1) * size || 0)
-      .where(allProductsPage !== 'yes' && 'pattern_product.deleted = false')
+      .where('pattern_product.deleted = false')
       .andWhere(
         new Brackets((qb) => {
           if (where) {
@@ -144,9 +140,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
               category: category,
             });
           } else {
-            qb.where(
-              allProductsPage !== 'yes' && 'pattern_product.deleted = false',
-            );
+            qb.where('pattern_product.deleted = false');
           }
         }),
       )
@@ -167,7 +161,6 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
     where: string,
     type: string,
     category: string,
-    allProductsPage: string,
     userId: number,
   ): Promise<[PatternProductEntity[], number]> {
     return await this.createQueryBuilder('pattern_product')
@@ -206,7 +199,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .orderBy(sort, by)
       .take(size)
       .skip((page - 1) * size || 0)
-      .where(allProductsPage !== 'yes' && 'pattern_product.deleted = false')
+      .where('pattern_product.deleted = false')
       .andWhere(
         new Brackets((qb) => {
           if (where) {
@@ -224,9 +217,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
               category: category,
             });
           } else {
-            qb.where(
-              allProductsPage !== 'yes' && 'pattern_product.deleted = false',
-            );
+            qb.where('pattern_product.deleted = false');
           }
         }),
       )
@@ -247,7 +238,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
     where: string,
     type: string,
     category: string,
-    allProductsPage: string,
+
     userId: number,
   ): Promise<[PatternProductEntity[], number]> {
     return await this.createQueryBuilder('pattern_product')
@@ -286,7 +277,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .orderBy(sort, by)
       .take(size)
       .skip((page - 1) * size || 0)
-      .where(allProductsPage !== 'yes' && 'pattern_product.deleted = false')
+      .where('pattern_product.deleted = false')
       .andWhere(
         new Brackets((qb) => {
           if (where) {
@@ -304,9 +295,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
               category: category,
             });
           } else {
-            qb.where(
-              allProductsPage !== 'yes' && 'pattern_product.deleted = false',
-            );
+            qb.where('pattern_product.deleted = false');
           }
         }),
       )
@@ -833,5 +822,68 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .where('recommendations_post.deleted = false')
       .where('pattern_product.id = :id', { id })
       .getOne();
+  }
+
+  async findAllForAdmin(
+    size: number = 30,
+    page: number = 1,
+    sort: string,
+    by: any = 'ASC',
+    where: string,
+    type: string,
+    category: string,
+  ): Promise<[PatternProductEntity[], number]> {
+    return await this.createQueryBuilder('pattern_product')
+      .leftJoin('pattern_product.images', 'images')
+      .leftJoin('pattern_product.categories', 'categories')
+      .leftJoin('pattern_product.options', 'options')
+      .select([
+        'pattern_product.id',
+        'pattern_product.type',
+        'pattern_product.optionType',
+        'pattern_product.titleRu',
+        'pattern_product.modifierRu',
+        'pattern_product.complexity',
+        'pattern_product.pinned',
+        'pattern_product.vendorCode',
+        'pattern_product.price',
+        'pattern_product.discount',
+        'pattern_product.count',
+        'pattern_product.isCount',
+        'pattern_product.createdDate',
+        'pattern_product.deleted',
+        'images',
+        'categories.id',
+        'categories.categoryNameRu',
+        'options.id',
+        'options.price',
+        'options.discount',
+        'options.size',
+        'options.count',
+        'options.vendorCode',
+      ])
+      .orderBy(sort, by)
+      .take(size)
+      .skip((page - 1) * size || 0)
+      .where(
+        new Brackets((qb) => {
+          if (where) {
+            qb.where('pattern_product.titleRu ILIKE :search', {
+              search: `%${where}%`,
+            }).orWhere('categories.categoryNameRu ILIKE :search', {
+              search: `%${where}%`,
+            });
+          } else if (type) {
+            qb.where('pattern_product.type = :type', {
+              type: type,
+            });
+          } else if (category) {
+            qb.where('categories.categoryNameRu = :category', {
+              category: category,
+            });
+          }
+        }),
+      )
+      .getManyAndCount();
   }
 }

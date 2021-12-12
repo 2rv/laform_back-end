@@ -41,7 +41,7 @@ export class PostController {
     @Query('by') by: any,
     @Query('where') where: string,
     @Query('category') category: string,
-    @Query('allProductsPage') allProductsPage: string,
+    @Query('getAll') getAll: boolean,
   ) {
     return await this.postService.getAll(
       query,
@@ -51,7 +51,7 @@ export class PostController {
       by,
       where,
       category,
-      allProductsPage,
+      getAll,
     );
   }
   @Get('/auth/get/')
@@ -64,7 +64,6 @@ export class PostController {
     @Query('by') by: any,
     @Query('where') where: string,
     @Query('category') category: string,
-    @Query('allProductsPage') allProductsPage: string,
     @GetAccount() user: UserEntity,
   ) {
     return await this.postService.getAllAuth(
@@ -75,7 +74,6 @@ export class PostController {
       by,
       where,
       category,
-      allProductsPage,
       user.id,
     );
   }

@@ -28,7 +28,7 @@ export class PostService {
     by: string,
     where: string,
     category: string,
-    allProductsPage: string,
+    getAll: boolean,
   ): Promise<[PostEntity[], number]> {
     if (sort === 'title') {
       if (query === 'ru') {
@@ -41,7 +41,18 @@ export class PostService {
       by = 'ASC';
     } else sort = '';
 
-    if (query === 'ru')
+    if (getAll) {
+      return await this.postRepository.findAllForAdmin(
+        size,
+        page,
+        sort,
+        by,
+        where,
+        category,
+      );
+    }
+
+    if (query === 'ru') {
       return await this.postRepository.findAllRu(
         size,
         page,
@@ -49,9 +60,9 @@ export class PostService {
         by,
         where,
         category,
-        allProductsPage,
       );
-    if (query === 'en')
+    }
+    if (query === 'en') {
       return await this.postRepository.findAllEn(
         size,
         page,
@@ -59,8 +70,8 @@ export class PostService {
         by,
         where,
         category,
-        allProductsPage,
       );
+    }
   }
   async getAllAuth(
     query: string,
@@ -70,7 +81,6 @@ export class PostService {
     by: string,
     where: string,
     category: string,
-    allProductsPage: string,
     userId: number,
   ): Promise<[PostEntity[], number]> {
     if (sort === 'title') {
@@ -84,7 +94,7 @@ export class PostService {
       by = 'ASC';
     } else sort = '';
 
-    if (query === 'ru')
+    if (query === 'ru') {
       return await this.postRepository.findAllRuAuth(
         size,
         page,
@@ -92,10 +102,10 @@ export class PostService {
         by,
         where,
         category,
-        allProductsPage,
         userId,
       );
-    if (query === 'en')
+    }
+    if (query === 'en') {
       return await this.postRepository.findAllEnAuth(
         size,
         page,
@@ -103,9 +113,9 @@ export class PostService {
         by,
         where,
         category,
-        allProductsPage,
         userId,
       );
+    }
   }
   async getOne(id: string, query: string): Promise<PostEntity> {
     if (query === 'ru') return await this.postRepository.findOneRu(id);
