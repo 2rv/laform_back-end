@@ -122,7 +122,7 @@ export class AuthController {
     //   accessToken: req.user.accessToken,
     // };
     //return res.send(req);
-    console.log(req.user);
+    console.log(req.user.body.user.email);
     const token = await this.authService.signUpWithApple(req.user);
     const clientUrl = req.hostname.includes('localhost')
       ? `${req.protocol}://localhost:3000`
