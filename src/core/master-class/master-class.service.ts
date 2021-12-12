@@ -35,6 +35,8 @@ export class MasterClassService {
       } else if (query === 'en') {
         sort = 'master_class.titleEn';
       }
+    } else if (sort === 'clicks') {
+      sort = 'master_class.clickCount';
     } else if (sort === 'date') {
       sort = 'master_class.createdDate';
       by = 'ASC';
@@ -88,6 +90,8 @@ export class MasterClassService {
       } else if (query === 'en') {
         sort = 'master_class.titleEn';
       }
+    } else if (sort === 'clicks') {
+      sort = 'master_class.clickCount';
     } else if (sort === 'date') {
       sort = 'master_class.createdDate';
       by = 'ASC';

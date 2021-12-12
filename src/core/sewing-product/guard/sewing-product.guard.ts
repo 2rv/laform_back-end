@@ -30,7 +30,9 @@ export class SewingProductGuard implements CanActivate {
     }
 
     request.sewingProductId = params.sewingProductId;
-
+    await this.sewingProductRepository.update(params.sewingProduct, {
+      clickCount: sewingProduct.clickCount + 1,
+    });
     return true;
   }
 }

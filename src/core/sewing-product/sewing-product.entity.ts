@@ -46,6 +46,13 @@ export class SewingProductEntity {
   })
   vendorCode: string;
 
+  @Column({
+    type: 'int',
+    name: 'click_count',
+    default: 0,
+  })
+  clickCount?: number;
+
   @CreateDateColumn({
     name: 'created_date',
     readonly: true,

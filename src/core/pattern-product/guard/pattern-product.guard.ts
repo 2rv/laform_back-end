@@ -30,7 +30,9 @@ export class PatternProductGuard implements CanActivate {
     }
 
     request.patternProductId = params.patternProductId;
-
+    await this.patternProductRepository.update(params.patternProductId, {
+      clickCount: patternProduct.clickCount + 1,
+    });
     return true;
   }
 }

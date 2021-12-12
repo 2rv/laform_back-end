@@ -217,6 +217,14 @@ export class PatternProductEntity {
   count!: number;
 
   @Column({
+    type: 'int',
+    name: 'click_count',
+    default: 0,
+    nullable: true,
+  })
+  clickCount?: number;
+
+  @Column({
     type: 'bool',
     name: 'is_count',
     default: false,
