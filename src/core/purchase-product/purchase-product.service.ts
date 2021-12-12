@@ -16,6 +16,14 @@ export class PurchaseProductService {
     return await this.purchaseProductRepository.getOneMasterClass(id);
   }
 
+  async getOnePaymentMasterClass(id: string) {
+    const s = await this.purchaseProductRepository.getOnePaymentMasterClass(id);
+    if (!s) {
+      return [];
+    }
+    return s;
+  }
+
   async update(id: any, body: any) {
     return await this.purchaseProductRepository.update(id, body);
   }

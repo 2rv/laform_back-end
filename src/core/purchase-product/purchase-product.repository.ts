@@ -139,6 +139,17 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
       .where('purchase_product.id = :id', { id })
       .getOne();
   }
+  async getOnePaymentMasterClass(id: string): Promise<PurchaseProductEntity> {
+    const now = new Date();
+    console.log(now);
+    return await this.createQueryBuilder('purchase_product')
+      .leftJoinAndSelect('purchase_product.masterClassId', 'masterClass')
+      .leftJoinAndSelect('masterClass.images', 'masterClassImages')
+      .leftJoinAndSelect('masterClass.categories', 'masterClassCategories')
+      .where('purchase_product.id = :id', { id })
+      .andWhere('purchase_product.expired_date >= :now', { now })
+      .getOne();
+  }
 
   async statistics(from: Date, to: Date, type: StatisticType): Promise<any[]> {
     let query = await this.createQueryBuilder('purchase_product')

@@ -20,7 +20,6 @@ import { LangValidationPipe } from 'src/common/guards/lang.guard';
 import { PatternProductDto } from './dto/pattern-product.dto';
 import { GetAccount } from '../user/decorator/get-account.decorator';
 import { UserEntity } from '../user/user.entity';
-import { PageNavigationGuard } from '../page-navigation/guard/page-navigationt.guard';
 
 @Controller('pattern-product')
 export class PatternProductController {
