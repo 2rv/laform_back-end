@@ -8,10 +8,8 @@ import {
 import { Cache } from 'cache-manager';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
-
 import { UserEntity } from '../user/user.entity';
 import { UserRepository } from '../user/user.repository';
-
 import { AUTH_ERROR } from './enum/auth-error.enum';
 import { UserSignUpDto } from './dto/user-sign-up.dto';
 import { UserLoginDto } from './dto/user-login.dto';
@@ -21,6 +19,10 @@ import { JwtPayload } from './interface/jwt-payload.interface';
 import { AuthRepository } from './auth.repository';
 import { UserInfoService } from '../user-info/user-info.service';
 import { AuthBasketForCodeDto } from './dto/auth-basket-code.dto';
+import {
+  UserUpdateEmailDto,
+  UserUpdateEmailRawDataDto,
+} from './dto/user-update-email.dto';
 
 @Injectable()
 export class AuthService {
@@ -73,6 +75,35 @@ export class AuthService {
       return { accessToken };
     } else {
       throw new BadRequestException(AUTH_ERROR.USER_NOT_CONFIRMED);
+    }
+  }
+
+  async updateEmail(
+    user: UserEntity,
+    body: UserUpdateEmailDto,
+  ): Promise<LoginInfoDto> {
+    const oldRawData: string = await this.cacheManager.get(body.codeOldEmail);
+    const newRawData: string = await this.cacheManager.get(body.codeNewEmail);
+    if (!oldRawData) {
+      throw new BadRequestException(AUTH_ERROR.UPDATE_OLD_CODE_INCORRECT);
+    }
+    if (!newRawData) {
+      throw new BadRequestException(AUTH_ERROR.UPDATE_NEW_CODE_INCORRECT);
+    }
+    const newData: UserUpdateEmailRawDataDto = JSON.parse(newRawData);
+    const oldData: UserUpdateEmailRawDataDto = JSON.parse(oldRawData);
+    if (oldData.email !== newData.email) {
+      throw new BadRequestException(AUTH_ERROR.CODES_IS_INCORRECT);
+    }
+    try {
+      await this.userRepository.update(user.id, { email: newData.email });
+      await this.cacheManager.del(body.codeOldEmail);
+      await this.cacheManager.del(body.codeNewEmail);
+      user.email = newData.email;
+      const accessToken = await this.createJwt(user);
+      return { accessToken };
+    } catch (err) {
+      throw new BadRequestException();
     }
   }
 

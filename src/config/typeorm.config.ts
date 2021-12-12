@@ -21,17 +21,11 @@ import {
   CommentEntity,
   SubCommentEntity,
 } from 'src/core/comment/comment.entity';
-import { AboutUsEntity } from 'src/core/faq-about-us/about-us.entity';
 import { ProductOptionEntity } from 'src/core/product-option/product-option.entity';
 import { FaqEntity } from 'src/core/faq/faq.entity';
 import { PaymentEntity } from 'src/core/payment/payment.entity';
-import { PrivacyPolicyEntity } from 'src/core/faq-privacy-policy/privacy-policy.entity';
-import { LegalInformationEntity } from 'src/core/faq-legal-information/legal-information.entity';
-import { TermsOfUseEntity } from 'src/core/faq-terms-of-use/terms-of-use.entity';
 import { CompilationProductEntity } from 'src/core/compilation-product/compilation-product.entity';
 import { CompilationEntity } from 'src/core/compilation/compilation.entity';
-import { FaqSizeEntity } from 'src/core/faq-size/faq-size.entity';
-import { FaqDeliveryPaymentEntity } from 'src/core/faq-delivery-payment/faq-delivery-payment.entity';
 import { PageNavigationEntity } from 'src/core/page-navigation/page-navigation.entity';
 import { FooterEntity } from 'src/core/footer/footer.entity';
 
@@ -57,16 +51,10 @@ export const ApiEntities = [
   SubCommentEntity,
   RecommendationEntity,
   RecommendationProductEntity,
-  AboutUsEntity,
   FaqEntity,
   PaymentEntity,
-  PrivacyPolicyEntity,
-  LegalInformationEntity,
-  TermsOfUseEntity,
   CompilationEntity,
   CompilationProductEntity,
-  FaqSizeEntity,
-  FaqDeliveryPaymentEntity,
   PageNavigationEntity,
   FooterEntity,
 ];

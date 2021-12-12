@@ -5,16 +5,12 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { Cache } from 'cache-manager';
-
 import { randomUUID } from 'src/common/utils/hash';
 import { MailService } from '../mail/mail.service';
 import { UserEntity } from '../user/user.entity';
 import { UserRepository } from '../user/user.repository';
-
 import { USER_VERIFICATION_ERROR } from './enum/user-verification-error.enum';
 import { UserVerificationEmailPayload } from './type/user-verification-email-payload.type';
-
-import { NotificationService } from '../notification/notification.service';
 import { PurchaseRepository } from '../purchase/purchase.repository';
 
 @Injectable()
@@ -23,7 +19,6 @@ export class UserVerificationService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private userRepository: UserRepository,
     private mailService: MailService,
-    private notificationService: NotificationService,
     private purchaseRepository: PurchaseRepository,
   ) {}
 
@@ -48,7 +43,6 @@ export class UserVerificationService {
       { toMail: user.email },
       code,
     );
-    console.log(messageDate);
   }
 
   async confirmUserVerificationEmail(code: string): Promise<any> {
@@ -63,16 +57,11 @@ export class UserVerificationService {
 
     const user = await this.userRepository.findOne({ id: payload.userId });
     if (user.email !== payload.email) {
-      console.log('WRONG EMAIL IN CODE PAYLOAD');
       throw new BadRequestException(
         USER_VERIFICATION_ERROR.VERIFICATION_CODE_PAYLOAD_HAS_WRONG_EMAIL,
       );
     }
     const updatedUser = await this.userRepository.confirmEmailById(user);
-    // await this.notificationService.subscribeAuthtorized(updatedUser, {
-    //   subscribe: true,
-    // });
-
     await this.purchaseRepository.connectPurchasesToUser(updatedUser);
 
     this.cacheManager.del(code);

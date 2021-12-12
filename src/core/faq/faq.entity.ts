@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 interface IFaq {
@@ -12,9 +13,15 @@ export class FaqEntity {
   id: string;
 
   @Column({
+    type: 'varchar',
+  })
+  @Transform((value: string) => value.trim().toLowerCase())
+  name: string;
+
+  @Column({
     type: 'json',
-    name: 'faq',
+    name: 'data',
     nullable: true,
   })
-  faq: IFaq;
+  data: IFaq;
 }

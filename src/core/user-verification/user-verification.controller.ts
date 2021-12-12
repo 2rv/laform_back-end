@@ -1,17 +1,15 @@
-import { Controller, Param, Post, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-
 import { GetAccount } from '../user/decorator/get-account.decorator';
 import { AccountGuard } from '../user/guard/account.guard';
 import { UserEntity } from '../user/user.entity';
-
 import { UserVerificationService } from './user-verification.service';
 
 @Controller('user/verification')
 export class UserVerificationController {
   constructor(private userVerificationService: UserVerificationService) {}
 
-  @Post('/email')
+  @Get('/email')
   @UseGuards(AuthGuard(), AccountGuard)
   getEmailCode(@GetAccount() user: UserEntity): Promise<void> {
     return this.userVerificationService.getEmailVerificationCode(user);

@@ -1,11 +1,11 @@
 import { IsNotEmpty, IsObject } from 'class-validator';
 
-export class CreateOrUpdateFaqSizeDto {
+export class FaqDatato {
   @IsNotEmpty()
   @IsObject()
   data: {
-    blocks: [];
     time: number;
+    blocks: any;
     version: string;
   };
 }

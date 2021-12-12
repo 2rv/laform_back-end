@@ -4,20 +4,19 @@ import {
   ConflictException,
   InternalServerErrorException,
 } from '@nestjs/common';
-
 import { USER_ERROR } from './enum/user-error.enum';
-import { UserCreateDto } from './dto/user-create.dto';
-import { UserChangePasswordDto } from './dto/user-change-password.dto';
 import { UserEntity } from './user.entity';
 import { CreateGoogleUseDto } from './dto/create-user-google.dto';
 import { CreateFacebookUseDto } from './dto/create-user-facebook.dto';
 import { CreateAppleUseDto } from './dto/create-user-apple.dto';
 import { USER_ROLE } from './enum/user-role.enum';
+import { UserSignUpDto } from '../auth/dto/user-sign-up.dto';
+import { UserRecoveryChangeCredentialsDto } from '../user-recovery/dto/user-recovery-change-password.dto';
 
 @EntityRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {
-  async createUser(data: UserCreateDto): Promise<UserEntity> {
-    const { login, email, password, testData } = data;
+  async createUser(data: UserSignUpDto): Promise<UserEntity> {
+    const { login, email, password } = data;
 
     const user: UserEntity = new UserEntity();
     user.login = login;
@@ -134,7 +133,7 @@ export class UserRepository extends Repository<UserEntity> {
 
   async changePassword(
     user: UserEntity,
-    data: UserChangePasswordDto,
+    data: UserRecoveryChangeCredentialsDto,
   ): Promise<void> {
     const { password } = data;
 
@@ -144,21 +143,6 @@ export class UserRepository extends Repository<UserEntity> {
       await user.save();
     } catch (err) {
       throw new InternalServerErrorException();
-    }
-  }
-
-  async changeEmail(user: UserEntity, email: string): Promise<void> {
-    user.email = email;
-    user.emailConfirmed = false;
-    user.notificationEmail = false;
-    try {
-      await user.save();
-    } catch (err) {
-      if (err.code === '23505') {
-        throw new BadRequestException(USER_ERROR.EMAIL_ALREADY_IN_USE);
-      } else {
-        throw new InternalServerErrorException();
-      }
     }
   }
 

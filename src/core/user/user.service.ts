@@ -18,6 +18,7 @@ export class UserService {
   async getUserEmail(user: UserEntity): Promise<UserGetEmailDto> {
     const userGetEmailDto: UserGetEmailDto = {
       email: user.email,
+      emailConfirmed: user.emailConfirmed,
     };
     return userGetEmailDto;
   }

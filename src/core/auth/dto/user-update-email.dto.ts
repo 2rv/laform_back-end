@@ -1,15 +1,22 @@
 import { Transform } from 'class-transformer';
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class UserLoginDto {
+export class UserUpdateEmailDto {
   @IsNotEmpty()
   @IsString()
   @Transform((login) => login.toLowerCase())
   @Transform((value) => value.trim())
-  login: string;
+  codeOldEmail: string;
 
   @IsNotEmpty()
   @IsString()
+  @Transform((login) => login.toLowerCase())
   @Transform((value) => value.trim())
-  password: string;
+  codeNewEmail: string;
+}
+
+export class UserUpdateEmailRawDataDto {
+  @IsNotEmpty()
+  @IsString()
+  email: string;
 }

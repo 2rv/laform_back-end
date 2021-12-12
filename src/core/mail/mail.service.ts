@@ -35,6 +35,40 @@ export class MailService {
         console.log(e);
       });
   }
+  async sendCodeForChangeMail(
+    email: string,
+    newEmail: string,
+    codeOld: string,
+    codeNew: string,
+  ) {
+    await this.mailerService
+      .sendMail({
+        to: email,
+        subject: 'Смена почты',
+        text: `Код для смены почты на ${newEmail}: ${codeOld}`,
+        template: path.join(path.resolve(), 'src/templates/change-mail'),
+        context: {
+          email: newEmail,
+          code: codeOld,
+        },
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    await this.mailerService
+      .sendMail({
+        to: newEmail,
+        subject: 'Подтвердите почту',
+        text: `Код для подтверждения почты: ${codeNew}`,
+        template: path.join(path.resolve(), 'src/templates/change-mail-new'),
+        context: {
+          code: codeNew,
+        },
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
   async sendRecoveryMessage(body: any, code: string) {
     return await this.mailerService
       .sendMail({
@@ -184,7 +218,6 @@ export class MailService {
         console.log(e);
       });
   }
-
   async sendFeedback(body: any) {
     const recipients = await this.userRepository.find();
     return recipients.map(async (recipient) => {
@@ -201,27 +234,5 @@ export class MailService {
           .catch((e) => console.log(e));
       }
     });
-  }
-  async sendPasswordForNewCreatedUserAfterPurchase(data: {
-    email: string;
-    password: string;
-    login: string;
-  }) {
-    return await this.mailerService
-      .sendMail({
-        to: data.email,
-        subject: 'La`forme Patterns, данные для входа',
-        template: path.join(
-          path.resolve(),
-          'src/templates/data-new-created-user-after-purchase.pug',
-        ),
-        context: {
-          password: data.password,
-          login: data.login,
-        },
-      })
-      .catch((e) => {
-        console.log(e);
-      });
   }
 }

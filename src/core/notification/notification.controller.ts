@@ -5,8 +5,8 @@ import {
   Body,
   ValidationPipe,
   UseGuards,
+  UsePipes,
 } from '@nestjs/common';
-
 import { NotificationSubscribeUnauthtorizedDto } from './dto/notification-subscribe-unathtorized.dto';
 import { NotificationSubscribeDto } from './dto/notification-subscribe.dto';
 import { SubscriptionDto } from './dto/subscription.dto';
@@ -20,9 +20,10 @@ import { AccountGuard } from '../user/guard/account.guard';
 export class NotificationController {
   constructor(private notificationService: NotificationService) {}
 
+  @UsePipes(new ValidationPipe({ transform: true }))
   @Post('/subscribe-unauthorized')
   async subscribeUnauthtorized(
-    @Body(ValidationPipe)
+    @Body()
     notificationSubscribeUnauthtorizedDto: NotificationSubscribeUnauthtorizedDto,
   ): Promise<void> {
     return this.notificationService.subscribeUnauthtorized(
