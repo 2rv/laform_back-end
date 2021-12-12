@@ -24,7 +24,7 @@ export class MasterClassService {
     size: number,
     page: number,
     sort: string,
-    by: string,
+    by: 'DESC' | 'ASC',
     where: string,
     category: string,
     getAll: boolean,
@@ -39,7 +39,6 @@ export class MasterClassService {
       sort = 'master_class.clickCount';
     } else if (sort === 'date') {
       sort = 'master_class.createdDate';
-      by = 'ASC';
     } else sort = '';
 
     if (getAll) {
@@ -79,7 +78,7 @@ export class MasterClassService {
     size: number,
     page: number,
     sort: string,
-    by: string,
+    by: 'DESC' | 'ASC',
     where: string,
     category: string,
     userId: number,
@@ -94,7 +93,6 @@ export class MasterClassService {
       sort = 'master_class.clickCount';
     } else if (sort === 'date') {
       sort = 'master_class.createdDate';
-      by = 'ASC';
     } else sort = '';
     if (query === 'ru') {
       return await this.masterClassRepository.findAllRuAuth(

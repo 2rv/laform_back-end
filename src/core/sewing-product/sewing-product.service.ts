@@ -44,7 +44,7 @@ export class SewingProductService {
     size: number,
     page: number,
     sort: string,
-    by: string,
+    by: 'DESC' | 'ASC',
     where: string,
     category: string,
     getAll: boolean,
@@ -59,7 +59,6 @@ export class SewingProductService {
       sort = 'sewing_product.clickCount';
     } else if (sort === 'date') {
       sort = 'sewing_product.createdDate';
-      by = 'ASC';
     } else sort = '';
 
     if (getAll) {
@@ -98,7 +97,7 @@ export class SewingProductService {
     size: number,
     page: number,
     sort: string,
-    by: string,
+    by: 'DESC' | 'ASC',
     where: string,
     category: string,
     userId: number,
@@ -113,7 +112,6 @@ export class SewingProductService {
       sort = 'sewing_product.clickCount';
     } else if (sort === 'date') {
       sort = 'sewing_product.createdDate';
-      by = 'ASC';
     } else sort = '';
 
     if (query === 'ru') {

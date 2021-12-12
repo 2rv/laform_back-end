@@ -143,7 +143,7 @@ export class PatternProductService {
     size: number,
     page: number,
     sort: string,
-    by: string,
+    by: 'DESC' | 'ASC',
     where: string,
     type: string,
     category: string,
@@ -157,7 +157,6 @@ export class PatternProductService {
       }
     } else if (sort === 'date') {
       sort = 'pattern_product.createdDate';
-      by = 'ASC';
     } else if (sort === 'clicks') {
       sort = 'pattern_product.clickCount';
     } else sort = '';
@@ -205,7 +204,7 @@ export class PatternProductService {
     size: number,
     page: number,
     sort: string,
-    by: string,
+    by: 'DESC' | 'ASC',
     where: string,
     type: string,
     category: string,
@@ -220,7 +219,6 @@ export class PatternProductService {
       }
     } else if (sort === 'date') {
       sort = 'pattern_product.createdDate';
-      by = 'ASC';
     } else if (sort === 'clicks') {
       sort = 'pattern_product.clickCount';
     } else sort = '';

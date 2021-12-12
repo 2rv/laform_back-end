@@ -125,7 +125,7 @@ export class UserRepository extends Repository<UserEntity> {
         'user.facebookId',
         'user.createDate',
       ])
-      .orderBy('user.createDate', 'ASC')
+      .orderBy('user.createDate', 'DESC')
       .take(size)
       .skip((page - 1) * size || 0)
       .getManyAndCount();

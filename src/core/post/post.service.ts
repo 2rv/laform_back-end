@@ -25,7 +25,7 @@ export class PostService {
     size: number,
     page: number,
     sort: string,
-    by: string,
+    by: 'DESC' | 'ASC',
     where: string,
     category: string,
     getAll: boolean,
@@ -38,7 +38,6 @@ export class PostService {
       }
     } else if (sort === 'date') {
       sort = 'post.createdDate';
-      by = 'ASC';
     } else sort = '';
 
     if (getAll) {
@@ -78,7 +77,7 @@ export class PostService {
     size: number,
     page: number,
     sort: string,
-    by: string,
+    by: 'DESC' | 'ASC',
     where: string,
     category: string,
     userId: number,
@@ -91,7 +90,6 @@ export class PostService {
       }
     } else if (sort === 'date') {
       sort = 'post.createdDate';
-      by = 'ASC';
     } else sort = '';
 
     if (query === 'ru') {
