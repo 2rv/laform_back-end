@@ -55,6 +55,8 @@ export class SewingProductService {
       } else if (query === 'en') {
         sort = 'sewing_product.titleEn';
       }
+    } else if (sort === 'clicks') {
+      sort = 'sewing_product.clickCount';
     } else if (sort === 'date') {
       sort = 'sewing_product.createdDate';
       by = 'ASC';
@@ -109,6 +111,8 @@ export class SewingProductService {
       } else if (query === 'en') {
         sort = 'sewing_product.titleEn';
       }
+    } else if (sort === 'clicks') {
+      sort = 'sewing_product.clickCount';
     } else if (sort === 'date') {
       sort = 'sewing_product.createdDate';
       by = 'ASC';

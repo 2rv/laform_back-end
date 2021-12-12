@@ -158,6 +158,8 @@ export class PatternProductService {
     } else if (sort === 'date') {
       sort = 'pattern_product.createdDate';
       by = 'ASC';
+    } else if (sort === 'clicks') {
+      sort = 'pattern_product.clickCount';
     } else sort = '';
     if (type === 'printed') {
       type = '2';
@@ -211,6 +213,8 @@ export class PatternProductService {
     } else if (sort === 'date') {
       sort = 'pattern_product.createdDate';
       by = 'ASC';
+    } else if (sort === 'clicks') {
+      sort = 'pattern_product.clickCount';
     } else sort = '';
     if (type === 'printed') {
       type = '2';
