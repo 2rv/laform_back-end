@@ -21,16 +21,32 @@ export class CategoryRepository extends Repository<CategoryEntity> {
   }
 
   async findAllRu(type: string): Promise<CategoryEntity[]> {
-    return await this.createQueryBuilder('category')
-      .select(['category.id', 'category.categoryNameRu'])
-      .where('category.type = :type', { type })
-      .getMany();
+    let query = await this.createQueryBuilder('category').select([
+      'category.id',
+      'category.categoryNameRu',
+    ]);
+    if (type === '12') {
+      query.where('category.type = :type', { type: '1' });
+      query.orWhere('category.type = :type', { type: '2' });
+    } else {
+      query.where('category.type = :type', { type });
+    }
+    return await query.getMany();
   }
 
   async findAllEn(type: string): Promise<CategoryEntity[]> {
-    return await this.createQueryBuilder('category')
-      .select(['category.id', 'category.categoryNameRu'])
-      .where('category.type = :type', { type })
-      .getMany();
+    let query = await this.createQueryBuilder('category').select([
+      'category.id',
+      'category.categoryNameEn',
+    ]);
+    if ((type = '12')) {
+      query.where('category.type = :type', { type });
+    } else if ((type = '1')) {
+      query.where('category.type = :type', { type });
+    } else {
+      query.where('category.type = :type', { type });
+    }
+
+    return await query.getMany();
   }
 }

@@ -15,5 +15,5 @@ export class CategoryDto {
 
   @IsOptional()
   @IsString()
-  type!: string;
+  type!: '0' | '1' | '2' | '3' | '4';
 }

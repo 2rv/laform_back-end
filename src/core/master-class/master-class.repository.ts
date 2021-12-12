@@ -13,10 +13,9 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
     size: number = 30,
     page: number = 1,
     sort: string,
-    by: any = 'ASC',
+    by: 'DESC' | 'ASC' = 'DESC',
     where: string,
     category: string,
-    allProductsPage: string,
   ): Promise<[MasterClassEntity[], number]> {
     return await this.createQueryBuilder('master_class')
       .leftJoin('master_class.images', 'images')
@@ -32,6 +31,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'master_class.price',
         'master_class.pinned',
         'master_class.deleted',
+        'master_class.clickCount',
         'images',
         'categories.id',
         'categories.categoryNameRu',
@@ -39,8 +39,8 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
       .orderBy(sort, by)
       .take(size)
       .skip((page - 1) * size || 0)
-      .where(allProductsPage !== 'yes' && 'master_class.deleted = false')
-      .where(
+      .where('master_class.deleted = false')
+      .andWhere(
         new Brackets((qb) => {
           if (where) {
             qb.where('master_class.titleRu ILIKE :search', {
@@ -53,9 +53,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
               category: category,
             });
           } else {
-            qb.where(
-              allProductsPage !== 'yes' && 'master_class.deleted = false',
-            );
+            qb.where('master_class.deleted = false');
           }
         }),
       )
@@ -65,10 +63,9 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
     size: number = 30,
     page: number = 1,
     sort: string,
-    by: any = 'ASC',
+    by: 'DESC' | 'ASC' = 'DESC',
     where: string,
     category: string,
-    allProductsPage: string,
   ): Promise<[MasterClassEntity[], number]> {
     return await this.createQueryBuilder('master_class')
       .leftJoin('master_class.images', 'images')
@@ -84,6 +81,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'master_class.price',
         'master_class.pinned',
         'master_class.deleted',
+        'master_class.clickCount',
         'images',
         'categories.id',
         'categories.categoryNameEn',
@@ -91,7 +89,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
       .orderBy(sort, by)
       .take(size)
       .skip((page - 1) * size || 0)
-      .where(allProductsPage !== 'yes' && 'master_class.deleted = false')
+      .where('master_class.deleted = false')
       .andWhere(
         new Brackets((qb) => {
           if (where) {
@@ -105,9 +103,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
               category: category,
             });
           } else {
-            qb.where(
-              allProductsPage !== 'yes' && 'master_class.deleted = false',
-            );
+            qb.where('master_class.deleted = false');
           }
         }),
       )
@@ -117,10 +113,9 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
     size: number = 30,
     page: number = 1,
     sort: string,
-    by: any,
+    by: 'DESC' | 'ASC' = 'DESC',
     where: string,
     category: string,
-    allProductsPage: string,
     userId: number,
   ): Promise<[MasterClassEntity[], number]> {
     return await this.createQueryBuilder('master_class')
@@ -140,6 +135,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'master_class.price',
         'master_class.pinned',
         'master_class.deleted',
+        'master_class.clickCount',
         'images',
         'categories.id',
         'categories.categoryNameRu',
@@ -148,7 +144,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
       .orderBy(sort, by)
       .take(size)
       .skip((page - 1) * size || 0)
-      .where(allProductsPage !== 'yes' && 'master_class.deleted = false')
+      .where('master_class.deleted = false')
       .andWhere(
         new Brackets((qb) => {
           if (where) {
@@ -162,9 +158,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
               category: category,
             });
           } else {
-            qb.where(
-              allProductsPage !== 'yes' && 'master_class.deleted = false',
-            );
+            qb.where('master_class.deleted = false');
           }
         }),
       )
@@ -174,10 +168,9 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
     size: number = 30,
     page: number = 1,
     sort: string,
-    by: any = 'ASC',
+    by: 'DESC' | 'ASC' = 'DESC',
     where: string,
     category: string,
-    allProductsPage: string,
     userId: number,
   ): Promise<[MasterClassEntity[], number]> {
     return await this.createQueryBuilder('master_class')
@@ -197,6 +190,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         'master_class.price',
         'master_class.pinned',
         'master_class.deleted',
+        'master_class.clickCount',
         'images',
         'categories.id',
         'categories.categoryNameEn',
@@ -205,7 +199,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
       .orderBy(sort, by)
       .take(size)
       .skip((page - 1) * size || 0)
-      .where(allProductsPage !== 'yes' && 'master_class.deleted = false')
+      .where('master_class.deleted = false')
       .andWhere(
         new Brackets((qb) => {
           if (where) {
@@ -219,9 +213,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
               category: category,
             });
           } else {
-            qb.where(
-              allProductsPage !== 'yes' && 'master_class.deleted = false',
-            );
+            qb.where('master_class.deleted = false');
           }
         }),
       )
@@ -584,97 +576,51 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
       .where('master_class.id = :id', { id })
       .getOne();
   }
-}
 
-// async findPinnedRu(): Promise<MasterClassEntity[]> {
-//     return await this.createQueryBuilder('master_class')
-//       .leftJoin('master_class.images', 'images')
-//       .leftJoin('master_class.categories', 'categories')
-//       .select([
-//         'master_class.id',
-//         'master_class.type',
-//         'master_class.vendorCode',
-//         'master_class.createdDate',
-//         'master_class.titleRu',
-//         'master_class.modifierRu',
-//         'master_class.discount',
-//         'master_class.price',
-//         'master_class.pinned',
-//         'images',
-//         'categories.id',
-//         'categories.categoryNameRu',
-//       ])
-//       .where('master_class.pinned = true')
-//       .getMany();
-//   }
-//   async findPinnedEn(): Promise<MasterClassEntity[]> {
-//     return await this.createQueryBuilder('master_class')
-//       .leftJoin('master_class.images', 'images')
-//       .leftJoin('master_class.categories', 'categories')
-//       .select([
-//         'master_class.id',
-//         'master_class.type',
-//         'master_class.vendorCode',
-//         'master_class.createdDate',
-//         'master_class.titleEn',
-//         'master_class.modifierEn',
-//         'master_class.discount',
-//         'master_class.price',
-//         'master_class.pinned',
-//         'images',
-//         'categories.id',
-//         'categories.categoryNameEn',
-//       ])
-//       .where('master_class.pinned = true')
-//       .getMany();
-//   }
-//   async findPinnedRuAuth(userId: number): Promise<MasterClassEntity[]> {
-//     return await this.createQueryBuilder('master_class')
-//       .leftJoin('master_class.images', 'images')
-//       .leftJoin('master_class.categories', 'categories')
-//       .leftJoin('master_class.like', 'like', 'like.userId = :userId', {
-//         userId,
-//       })
-//       .select([
-//         'master_class.id',
-//         'master_class.type',
-//         'master_class.vendorCode',
-//         'master_class.createdDate',
-//         'master_class.titleRu',
-//         'master_class.modifierRu',
-//         'master_class.discount',
-//         'master_class.price',
-//         'master_class.pinned',
-//         'images',
-//         'categories.id',
-//         'categories.categoryNameRu',
-//         'like',
-//       ])
-//       .where('master_class.pinned = true')
-//       .getMany();
-//   }
-//   async findPinnedEnAuth(userId: number): Promise<MasterClassEntity[]> {
-//     return await this.createQueryBuilder('master_class')
-//       .leftJoin('master_class.images', 'images')
-//       .leftJoin('master_class.categories', 'categories')
-//       .leftJoin('master_class.like', 'like', 'like.userId = :userId', {
-//         userId,
-//       })
-//       .select([
-//         'master_class.id',
-//         'master_class.type',
-//         'master_class.vendorCode',
-//         'master_class.createdDate',
-//         'master_class.titleEn',
-//         'master_class.modifierEn',
-//         'master_class.discount',
-//         'master_class.price',
-//         'master_class.pinned',
-//         'images',
-//         'categories.id',
-//         'categories.categoryNameEn',
-//         'like',
-//       ])
-//       .where('master_class.pinned = true')
-//       .getMany();
-//   }
+  async findAllForAdmin(
+    size: number = 30,
+    page: number = 1,
+    sort: string,
+    by: 'DESC' | 'ASC' = 'DESC',
+    where: string,
+    category: string,
+  ): Promise<[MasterClassEntity[], number]> {
+    return await this.createQueryBuilder('master_class')
+      .leftJoin('master_class.images', 'images')
+      .leftJoin('master_class.categories', 'categories')
+      .select([
+        'master_class.id',
+        'master_class.type',
+        'master_class.vendorCode',
+        'master_class.createdDate',
+        'master_class.titleRu',
+        'master_class.modifierRu',
+        'master_class.discount',
+        'master_class.price',
+        'master_class.pinned',
+        'master_class.deleted',
+        'images',
+        'categories.id',
+        'categories.categoryNameRu',
+      ])
+      .orderBy(sort, by)
+      .take(size)
+      .skip((page - 1) * size || 0)
+      .where(
+        new Brackets((qb) => {
+          if (where) {
+            qb.where('master_class.titleRu ILIKE :search', {
+              search: `%${where}%`,
+            }).orWhere('categories.categoryNameRu ILIKE :search', {
+              search: `%${where}%`,
+            });
+          } else if (category) {
+            qb.where('categories.categoryNameRu = :category', {
+              category: category,
+            });
+          }
+        }),
+      )
+      .getManyAndCount();
+  }
+}

@@ -14,7 +14,7 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
         'purchase.purchaseProductsCount',
         'purchase.purchaseProducts',
       )
-      .orderBy('purchase.orderNumber', 'ASC')
+      .orderBy('purchase.orderNumber', 'DESC')
       .take(size)
       .skip((page - 1) * size || 0)
       .select(['purchase', 'user.id'])
@@ -32,7 +32,7 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
         'purchase.purchaseProductsCount',
         'purchase.purchaseProducts',
       )
-      .orderBy('purchase.orderNumber', 'ASC')
+      .orderBy('purchase.orderNumber', 'DESC')
       .take(size)
       .skip((page - 1) * size || 0)
       .where('purchase.userId = :userId', { userId })

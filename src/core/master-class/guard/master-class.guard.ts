@@ -26,6 +26,9 @@ export class MasterClassGuard implements CanActivate {
     if (!masterClass) {
       throw new BadRequestException(MASTER_CLASS_ERROR.MASTER_CLASS_NOT_FOUND);
     }
+    await this.masterClassRepository.update(params.masterClassId, {
+      clickCount: masterClass.clickCount + 1,
+    });
     return true;
   }
 }
