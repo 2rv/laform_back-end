@@ -419,8 +419,8 @@ export class PurchaseService {
   async getOneForUser(id: string, userId) {
     return await this.purchaseProductService.getOneProductForUser(id, userId);
   }
-  async getOneMasterClass(id: string) {
-    return await this.purchaseProductService.getOneMasterClass(id);
+  async getOnePaymentMasterClass(id: string) {
+    return await this.purchaseProductService.getOnePaymentMasterClass(id);
   }
   async updatePurchaseStatus(id: any, body: UpdatePurchaseStatusDto) {
     const result = await this.purchaseRepository.findOne({ id });

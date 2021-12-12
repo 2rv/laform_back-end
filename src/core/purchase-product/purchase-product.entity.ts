@@ -97,6 +97,19 @@ export class PurchaseProductEntity {
   totalDiscount: number;
 
   @Column({
+    type: 'bool',
+    name: 'is_open',
+    default: false,
+  })
+  isOpen: boolean;
+
+  @Column({
+    name: 'expired_date',
+    nullable: true,
+  })
+  expiredDate: Date;
+
+  @Column({
     type: 'numeric',
     name: 'total_price',
   })

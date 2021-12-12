@@ -75,8 +75,17 @@ export class PaymentService {
         orderStatus: PURCHASE_STATUS.PAID,
       });
       await this.purchaseService.sendPurchaseInfo(purchase.id);
+      const product = await this.purchaseRepository.getOne(purchase.id);
+      for (let purchaseProduct of product.purchaseProducts) {
+        if (purchaseProduct.type === 0) {
+          const expired = new Date();
+          expired.setMonth(expired.getMonth() + 6);
+          await this.purchaseProductRepository.update(purchaseProduct.id, {
+            expiredDate: expired,
+          });
+        }
+      }
       if (purchase.sdek === true) {
-        const product = await this.purchaseRepository.getOne(purchase.id);
         let amount = 0;
         for (let purchaseProduct of product.purchaseProducts) {
           let count = 0;
@@ -126,7 +135,6 @@ export class PaymentService {
         const s = await this.sdekService.createOrder(data);
         return success;
       }
-
       return success;
     } else return fail;
   }

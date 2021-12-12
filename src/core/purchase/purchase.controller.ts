@@ -79,8 +79,8 @@ export class PurchaseController {
   }
 
   @Get('/user/get/master-class/:purchaseId')
-  async getOneMasterClass(@Param('purchaseId') purchaseId: string) {
-    return await this.purchaseService.getOneMasterClass(purchaseId);
+  async getOnePaymentMasterClass(@Param('purchaseId') purchaseId: string) {
+    return await this.purchaseService.getOnePaymentMasterClass(purchaseId);
   }
 
   @Get('/get/')
