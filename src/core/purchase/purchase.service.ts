@@ -371,7 +371,7 @@ export class PurchaseService {
             amount += +(res.totalCount * 1);
           }
         }
-        const data = {
+        const data: any = {
           tariff_code: result.sdekTariffCode,
           to_location: {
             code: result.sdekCityCode,

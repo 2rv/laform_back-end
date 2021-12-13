@@ -1,352 +1,287 @@
-import { SdekConfig } from 'src/config/sdek.config';
-import { SdekDto } from './dto/sdek.dto';
-import fetch from 'cross-fetch';
-import { stringify } from 'querystring';
-import { SdekUpdateDto } from './dto/sdekUpdate.dto';
-import { SdekPackagesDto } from './dto/sdekPackages.dto';
-import { SdekOrderDto } from './dto/sdekOrder.dto';
-import axios from 'axios';
-import { SdekPdfDto } from './dto/sdekPdf.dto';
-import { SdekCourierDto } from './dto/sdek.courier.dto';
-
 import {
   Injectable,
   BadRequestException,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { SdekBarcoderDto } from './dto/sdek.barcode.dto';
-import { SdekCalculateDto } from './dto/sdekCalculate.dto';
+import axios from 'axios';
+import { SdekConfig } from 'src/config/sdek.config';
+
+import { СdekPdfOrBarcodeDto } from './dto/сdek-pdf-barcode.dto';
+import {
+  CdekTariffListDto,
+  TariffCodesType,
+  TariffType,
+} from './dto/cdek-tarifflist';
+import { CdekTariffCodeDto, CdekTariffByCode } from './dto/cdek-tariff-code';
+import {
+  CdekCreateOrderDto,
+  CdekOrderResponseDto,
+  CdekUpdateOrderDto,
+} from './dto/cdek-order';
+import { CdekCourierDto } from './dto/cdek.courier.dto';
+
+// тестовая среда имеет api.edu в url
+// если вдруг будут ошибки МБ это поможет 'Content-Type': 'application/json',
+
+export const axiosCdek = axios.create({
+  baseURL: 'https://api.cdek.ru/v2',
+});
+export const axiosTestCdek = axios.create({
+  baseURL: 'https://api.edu.cdek.ru/v2',
+});
 
 @Injectable()
 export class SdekService {
   async authInSdek(): Promise<string> {
-    const data = {
-      grant_type: SdekConfig.grant_type,
-      client_id: SdekConfig.clientID,
-      client_secret: SdekConfig.clientSecret,
-    };
-    const result = await fetch('https://api.edu.cdek.ru/v2/oauth/token', {
+    const result = await axiosCdek({
       method: 'POST',
-      body: stringify(data),
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .catch((err) => {
-        throw new InternalServerErrorException(err);
-      });
-    if (result.errors) {
-      throw new BadRequestException(result.errors);
-    }
-    return 'Bearer ' + result.access_token;
+      url: 'oauth/token',
+      params: {
+        grant_type: 'client_credentials',
+        client_id: SdekConfig.clientID,
+        client_secret: SdekConfig.clientSecret,
+      },
+    });
+    return 'Bearer ' + result.data.access_token;
   }
-  async сalculationByTariffCode(body: any) {
-    const fromLocation = {
-      city: SdekConfig.from_location.city,
-      adress: SdekConfig.from_location.address,
-      code: SdekConfig.from_location.code,
-    };
-    const productProp = {
-      weight: SdekConfig.weight * body.amount,
-      height: SdekConfig.height,
-      width: SdekConfig.width,
-      length: SdekConfig.length,
-    };
-    body.packages.push(productProp);
-    body.from_location = fromLocation;
-    const result: any = await fetch(
-      'https://api.edu.cdek.ru/v2/calculator/tariff',
+  async getCityCodeByKladr(kladr_code: string) {
+    const resultCity = await axios.post(
+      `https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/delivery`,
       {
-        method: 'POST',
-        body: JSON.stringify(body),
+        query: kladr_code,
+      },
+      {
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: await this.authInSdek(),
+          Authorization: SdekConfig.dadataToken,
         },
       },
-    )
-      .then((data) => {
-        return data.json();
-      })
-      .catch((err) => {
-        throw new InternalServerErrorException(err);
-      });
-    if (result.errors) {
-      throw new BadRequestException(result.errors);
-    }
-    return result;
-  }
-  async getTariffList(body: SdekDto) {
-    const data = {
-      city: SdekConfig.from_location.city,
-      adress: SdekConfig.from_location.address,
-      code: SdekConfig.from_location.code,
-    };
-    body.from_location = data;
-    const result = await fetch(
-      'https://api.edu.cdek.ru/v2/calculator/tarifflist',
-      {
-        method: 'POST',
-        body: JSON.stringify(body),
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: await this.authInSdek(),
-        },
+    );
+    const suggestions = resultCity.data.suggestions;
+    if (!suggestions.length) return [];
+    const result = await axiosCdek({
+      url: `deliverypoints`,
+      params: {
+        city_code: suggestions[0].data.cdek_id,
       },
-    )
-      .then((res) => {
-        return res.json();
-      })
-      .catch((err) => {
-        throw new InternalServerErrorException(err);
-      });
-    if (result.errors) {
-      throw new BadRequestException(result.errors);
-    }
-    return result;
-  }
-
-  async getCityCodeByKladr(kladr_code) {
-    try {
-      const cityByKladrCode = await axios.post(
-        `https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/delivery`,
-        {
-          query: kladr_code,
-        },
-        {
-          headers: {
-            Authorization: SdekConfig.tokenByKladr,
-          },
-        },
-      );
-      if (cityByKladrCode.data.suggestions == '') {
-        return [];
-      }
-      const getOffices = await axios.get(
-        `https://api.cdek.ru/v2/deliverypoints?city_code=${cityByKladrCode.data.suggestions[0].data.cdek_id}`,
-        {
-          headers: {
-            Authorization: await this.authInSdek(),
-          },
-        },
-      );
-      return getOffices.data || [];
-    } catch (err) {
-      throw new InternalServerErrorException(err);
-    }
-  }
-
-  async createOrder(body: any) {
-    const data = {
-      city: SdekConfig.from_location.city,
-      address: SdekConfig.from_location.address,
-      code: SdekConfig.from_location.code,
-    };
-    body.from_location = data;
-    const result = await fetch('https://api.edu.cdek.ru/v2/orders', {
-      method: 'POST',
-      body: JSON.stringify(body),
       headers: {
-        'Content-Type': 'application/json',
         Authorization: await this.authInSdek(),
       },
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .catch((err) => {
-        throw new InternalServerErrorException(err);
-      });
-    if (result.error) {
-      throw new InternalServerErrorException(result);
-    }
-    if (result.requests) {
-      for (let exception of result.requests) {
-        if (exception.errors) {
-          throw new BadRequestException(exception.errors);
-        }
-      }
-    }
-    return result;
+    });
+    return result.data;
   }
+  async getTariffList(body: CdekTariffListDto): Promise<TariffType[]> {
+    const result: TariffCodesType = await axiosCdek({
+      method: 'POST',
+      url: 'calculator/tarifflist',
+      data: {
+        from_location: {
+          city: SdekConfig.from_location.city,
+          adress: SdekConfig.from_location.address,
+          code: SdekConfig.from_location.code,
+        },
+        type: 1,
+        date: body.date,
+        lang: body.lang,
+        to_location: body.to_location,
+        packages: body.packages,
+      },
+      headers: {
+        Authorization: await this.authInSdek(),
+      },
+    });
+    if (result.data.errors) {
+      throw new BadRequestException(result.data.errors);
+    }
+    const exeption = [136, 137, 233, 234];
+    return result.data.tariff_codes.filter((item) =>
+      exeption.includes(item.tariff_code),
+    );
+  }
+  async сalculationByTariffCode(
+    body: CdekTariffCodeDto,
+  ): Promise<CdekTariffByCode> {
+    const result: { data: CdekTariffByCode } = await axiosCdek({
+      method: 'POST',
+      url: '/calculator/tariff',
+      data: {
+        from_location: {
+          city: SdekConfig.from_location.city,
+          adress: SdekConfig.from_location.address,
+          code: SdekConfig.from_location.code,
+        },
+        type: 1,
+        date: body.date,
+        tariff_code: body.tariff_code,
+        to_location: body.to_location,
+        packages: body.packages,
+      },
+      headers: {
+        Authorization: await this.authInSdek(),
+      },
+    });
+    if (result.data.errors) {
+      throw new BadRequestException(result.data.errors);
+    }
+    return result.data;
+  }
+  async createOrder(body: CdekCreateOrderDto): Promise<CdekOrderResponseDto> {
+    const result: { data: CdekOrderResponseDto } = await axiosTestCdek({
+      method: 'POST',
+      url: '/orders',
+      headers: {
+        Authorization: await this.authInSdek(),
+      },
+      data: {
+        from_location: {
+          city: SdekConfig.from_location.city,
+          adress: SdekConfig.from_location.address,
+          code: SdekConfig.from_location.code,
+        },
+        type: 1,
+        number: body.number,
+        tariff_code: body.tariff_code,
+        comment: body.comment,
+        shipment_point: body.shipment_point,
+        delivery_point: body.delivery_point,
+        recipient: body.recipient,
+        to_location: body.to_location,
+        packages: body.packages,
+      },
+    });
+
+    result.data.requests.forEach((item) => {
+      if (!!item.errors.length) {
+        throw new InternalServerErrorException('В заказе ошибка');
+      }
+    });
+    return result.data;
+  }
+  // Желательно дописать возращаемое значение сюда потому что это не дело
+  // getOrder возращает номер заказа - cdek_number - очень полезная штука
   async getOrder(id: string) {
-    const result = await fetch('https://api.edu.cdek.ru/v2/orders/' + `${id}`, {
+    const result = await axiosTestCdek({
       method: 'GET',
+      url: `/orders/${id}`,
       headers: {
         Authorization: await this.authInSdek(),
       },
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .catch((err) => {
-        throw new InternalServerErrorException(err);
-      });
-    return result;
+    });
+    return result.data;
   }
-  async editOrder(body: SdekUpdateDto) {
-    const data: SdekPackagesDto = {
-      height: SdekConfig.height,
-      length: SdekConfig.length,
-      weight: SdekConfig.weight,
-      width: SdekConfig.width,
-    };
-    body.packages.push(data);
-    const result = await fetch('https://api.edu.cdek.ru/v2/orders', {
+  async editOrder(body: CdekUpdateOrderDto): Promise<CdekOrderResponseDto> {
+    const result: { data: CdekOrderResponseDto } = await axiosTestCdek({
       method: 'PATCH',
-      body: JSON.stringify(body),
+      url: '/orders',
       headers: {
-        'Content-Type': 'application/json',
         Authorization: await this.authInSdek(),
       },
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .catch((err) => {
-        throw new InternalServerErrorException(err);
-      });
-    if (result.error) {
-      throw new InternalServerErrorException(result);
-    }
-    if (result.requests) {
-      for (let exception of result.requests) {
-        if (exception.errors) {
-          throw new BadRequestException(exception.errors);
-        }
-      }
-    }
-    return result;
+      data: {
+        // from_location: {
+        //   adress: body.from_location?.address, // только если надо
+        // },
+        uuid: body.uuid,
+        cdek_number: body.cdek_number,
+        number: body.number,
+        tariff_code: body.tariff_code,
+        comment: body.comment,
+        shipment_point: body.shipment_point,
+        delivery_point: body.delivery_point,
+        recipient: body.recipient,
+        to_location: body.to_location,
+        packages: body.packages,
+      },
+    });
+    return result.data;
   }
-  async deleteOrder(id: string) {
-    const result = await fetch('https://api.edu.cdek.ru/v2/orders/' + `${id}`, {
+  async deleteOrder(id: string): Promise<CdekOrderResponseDto> {
+    const result: { data: CdekOrderResponseDto } = await axiosTestCdek({
+      url: `/orders/${id}`,
       method: 'DELETE',
       headers: {
         Authorization: await this.authInSdek(),
       },
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .catch((err) => {
-        throw new InternalServerErrorException(err);
-      });
-    if (result.error) {
-      throw new InternalServerErrorException(result);
-    }
-    if (result.requests) {
-      for (let exception of result.requests) {
-        if (exception.errors) {
-          throw new BadRequestException(exception.errors);
-        }
-      }
-    }
-    return result;
+      data: {},
+    });
+    return result.data;
   }
-  async createPdfReceipt(body: SdekPdfDto): Promise<Buffer> {
-    try {
-      const createPdf = await fetch('https://api.edu.cdek.ru/v2/print/orders', {
-        method: 'POST',
-        body: JSON.stringify(body),
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: await this.authInSdek(),
-        },
-      });
-      if (!createPdf) {
-        return undefined;
-      }
-      const result = await createPdf.json();
-      const getUrlByPdf: any = await fetch(
-        'https://api.edu.cdek.ru/v2/print/orders/' + result.entity.uuid,
-        {
-          method: 'GET',
-          headers: {
-            Authorization: await this.authInSdek(),
-          },
-        },
-      );
-      const url = await getUrlByPdf.json();
-      const response = await axios.get(url.entity.url, {
-        responseType: 'arraybuffer',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: await this.authInSdek(),
-        },
-      });
-      return response.data;
-    } catch (err) {
-      throw new InternalServerErrorException(err);
-    }
+  async createPdfReceipt(body: СdekPdfOrBarcodeDto): Promise<Buffer> {
+    // Ссылка на файл с квитанцией к заказу/заказам доступна в течение 1 часа.
+    const createRes: { data: CdekOrderResponseDto } = await axiosTestCdek({
+      url: '/print/orders',
+      method: 'POST',
+      headers: {
+        Authorization: await this.authInSdek(),
+      },
+      data: body,
+    });
+    const getRes: { data: CdekOrderResponseDto } = await axiosTestCdek({
+      url: `/print/orders/${createRes.data.entity.uuid}`,
+      method: 'GET',
+      headers: {
+        Authorization: await this.authInSdek(),
+      },
+    });
+    const result = await axiosTestCdek({
+      url: getRes.data.entity.url,
+      method: 'GET',
+      responseType: 'arraybuffer',
+      headers: {
+        Authorization: await this.authInSdek(),
+      },
+    });
+    return result.data; // arrayBuffer будующего pdf
   }
-  async createCourier(body: SdekCourierDto) {
-    try {
-      const createCourier = await fetch('https://api.edu.cdek.ru/v2/intakes', {
-        method: 'POST',
-        body: JSON.stringify(body),
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: await this.authInSdek(),
-        },
-      });
-      const result = await createCourier.json();
-      if (result.entity.uuid == null) {
-        return [];
-      }
-      const getInformation = await fetch(
-        'https://api.edu.cdek.ru/v2/intakes/' + result.entity.uuid,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: await this.authInSdek(),
-          },
-        },
-      );
-      return getInformation.json();
-    } catch (err) {
-      throw new InternalServerErrorException(err);
-    }
+  async createBarcode(body: СdekPdfOrBarcodeDto): Promise<Buffer> {
+    // Ссылка на файл с ШК местом к заказу/заказам доступна в течение 1 часа.
+    const createRes: { data: CdekOrderResponseDto } = await axiosTestCdek({
+      url: '/print/barcodes',
+      method: 'POST',
+      headers: {
+        Authorization: await this.authInSdek(),
+      },
+      data: body,
+    });
+    const getRes: { data: CdekOrderResponseDto } = await axiosTestCdek({
+      url: `/print/barcodes/${createRes.data.entity.uuid}`,
+      method: 'GET',
+      headers: {
+        Authorization: await this.authInSdek(),
+      },
+    });
+    const result = await axiosTestCdek({
+      url: getRes.data.entity.url,
+      method: 'GET',
+      responseType: 'arraybuffer',
+      headers: {
+        Authorization: await this.authInSdek(),
+      },
+    });
+    return result.data; // arrayBuffer будующего Штрих кода pdf
   }
-  async createBarcode(body: SdekBarcoderDto) {
-    try {
-      const createBarcode = await fetch(
-        'https://api.edu.cdek.ru/v2/print/barcodes',
-        {
-          method: 'POST',
-          body: JSON.stringify(body),
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: await this.authInSdek(),
-          },
-        },
-      );
-      const result = await createBarcode.json();
-      if (result.entity.uuid == null) {
-        return [];
-      }
-      const getBarcode: any = await fetch(
-        'https://api.edu.cdek.ru/v2/print/barcodes/' + result.entity.uuid,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: await this.authInSdek(),
-          },
-        },
-      );
-      const pdfBarcode = await getBarcode.json();
-      const response = await axios.get(pdfBarcode.entity.url, {
-        responseType: 'arraybuffer',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: await this.authInSdek(),
-        },
-      });
-      return response.data;
-    } catch (err) {
-      throw new InternalServerErrorException(err);
-    }
+
+  async createCourier(body: CdekCourierDto) {
+    const createRes: { data: CdekOrderResponseDto } = await axiosTestCdek({
+      url: '/intakes',
+      method: 'POST',
+      data: {
+        cdek_number: body.cdek_number,
+        intake_date: body.intake_date,
+        intake_time_from: body.intake_time_from,
+        intake_time_to: body.intake_time_to,
+        comment: body.comment,
+        need_call: body.need_call,
+      },
+      headers: {
+        Authorization: await this.authInSdek(),
+      },
+    });
+    const result = await axiosTestCdek({
+      url: `intakes/${createRes.data.entity.uuid}`,
+      method: 'GET',
+      headers: {
+        Authorization: await this.authInSdek(),
+      },
+    });
+    return result.data;
   }
 }

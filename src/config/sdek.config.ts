@@ -1,16 +1,18 @@
 import * as config from 'config';
 
-const SDEK_CONFIG = config.get('SDEK');
+const СDEK_CONFIG = config.get('СDEK');
+const DADATA_CONFIG = config.get('DADATA');
 
 export const SdekConfig = {
-  grant_type: SDEK_CONFIG.GRANT_TYPE,
-  clientID: SDEK_CONFIG.CLIENT_ID,
-  clientSecret: SDEK_CONFIG.CLIENT_SECRET,
-  tokenByKladr: 'Token 47277a98629b84336b47c3b23b49f7d67bce9f77',
+  grant_type: СDEK_CONFIG.GRANT_TYPE,
+  clientID: СDEK_CONFIG.CLIENT_ID,
+  clientSecret: СDEK_CONFIG.CLIENT_SECRET,
+  dadataToken: DADATA_CONFIG.TOKEN,
   from_location: {
-    code: 270,
-    city: 'Москва',
-    address: 'ул. Пушкина 25',
+    code: 137,
+    city: 'Санкт-Петербург',
+    address: '199106, Санкт-Петербург, ул. Новгородская, д.23, лит.А',
+    postal_code: 230203,
   },
   weight: 300,
   height: 1,
