@@ -60,8 +60,3 @@ DADATA:
   GRANT_TYPE: 'client_credentials'
   CLIENT_ID: 'HgRJCBnBLVdkCTmyeDnY6GNFrHHE8Drd'
   CLIENT_SECRET: 'E3JultNk8fSVAf6Y2sIi9IU3ftqYIFsd'
-# TEST_SDEK:
-#   GRANT_TYPE: 'client_credentials'
-#   CLIENT_ID: 'HgRJCBnBLVdkCTmyeDnY6GNFrHHE8Drd'
-#   CLIENT_SECRET: 'E3JultNk8fSVAf6Y2sIi9IU3ftqYIFsd'
-

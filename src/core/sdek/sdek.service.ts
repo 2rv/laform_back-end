@@ -21,7 +21,7 @@ import {
 import { CdekCourierDto } from './dto/cdek.courier.dto';
 
 // тестовая среда имеет api.edu в url
-// если вдруг будут ошибки МБ это поможет 'Content-Type': 'application/json',
+// если вдруг будут ошибки в запросах МБ это поможет 'Content-Type': 'application/json',
 
 export const axiosCdek = axios.create({
   baseURL: 'https://api.cdek.ru/v2',
@@ -124,6 +124,12 @@ export class SdekService {
     }
     return result.data;
   }
+
+  // Должно быть на тестовой среде иначе капзда
+  // Если будут ошибки авторизации надо
+  // Добавить метод authInSdekTest
+  // Поставить туда TestSdekConfig он уже настроеный
+  // И использовать axiosTestCdek
   async createOrder(body: CdekCreateOrderDto): Promise<CdekOrderResponseDto> {
     const result: { data: CdekOrderResponseDto } = await axiosTestCdek({
       method: 'POST',
