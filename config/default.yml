@@ -53,7 +53,10 @@ PAY_ANY_WAY:
 CLIENT:
   URL: 'https://laform-client.herokuapp.com'
 
-SDEK :
-  GRANT_TYPE : 'client_credentials'
-  CLIENT_ID: 'EMscd6r9JnFiQ3bLoyjJY6eM78JrJceI'
-  CLIENT_SECRET: 'PjLZkKBHEiLK3YsjtNrt3TGNG0ahs3kG'
+DADATA:
+  TOKEN: 'Token 47277a98629b84336b47c3b23b49f7d67bce9f77'
+
+СDEK:
+  GRANT_TYPE: 'client_credentials'
+  CLIENT_ID: 'HgRJCBnBLVdkCTmyeDnY6GNFrHHE8Drd'
+  CLIENT_SECRET: 'E3JultNk8fSVAf6Y2sIi9IU3ftqYIFsd'

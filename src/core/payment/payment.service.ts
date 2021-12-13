@@ -10,7 +10,7 @@ import { SdekService } from '../sdek/sdek.service';
 import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
 import { PurchaseService } from '../purchase/purchase.service';
 import { SdekConfig } from 'src/config/sdek.config';
-// import { PurchaseService } from '../purchase/purchase.service';
+import { CdekCreateOrderDto } from '../sdek/dto/cdek-order';
 
 @Injectable()
 export class PaymentService {
@@ -21,7 +21,7 @@ export class PaymentService {
     private sdekService: SdekService,
     private purchaseProductRepository: PurchaseProductRepository,
     @Inject(forwardRef(() => PurchaseService))
-    private purchaseService: PurchaseService, // @Inject(forwardRef(() => PurchaseService))
+    private purchaseService: PurchaseService,
   ) {}
 
   async createTransaction(body): Promise<string> {
@@ -101,12 +101,12 @@ export class PaymentService {
               cost: 300,
               amount: count,
               weight: count * SdekConfig.weight,
-              url: 'www.laform.ru',
+              url: 'https://laform-client.herokuapp.com/',
             };
             items.push(item);
           }
         }
-        const data = {
+        const data: CdekCreateOrderDto = {
           tariff_code: purchase.sdekTariffCode,
           to_location: {
             code: purchase.sdekCityCode,
@@ -125,7 +125,7 @@ export class PaymentService {
               number: '2',
               height: SdekConfig.height,
               length: SdekConfig.length,
-              weight: amount * SdekConfig.weight,
+              weight: SdekConfig.weight * amount,
               width: SdekConfig.width,
               items: items,
             },

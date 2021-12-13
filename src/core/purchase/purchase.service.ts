@@ -357,6 +357,8 @@ export class PurchaseService {
     });
 
     const result = await this.purchaseRepository.getOne(newPurchase.id);
+    console.log(result.comment);
+
     if (result) {
       const payment = {
         amount: (+result.price).toFixed(2),
@@ -371,7 +373,7 @@ export class PurchaseService {
             amount += +(res.totalCount * 1);
           }
         }
-        const data = {
+        const data: any = {
           tariff_code: result.sdekTariffCode,
           to_location: {
             code: result.sdekCityCode,

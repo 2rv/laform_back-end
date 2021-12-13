@@ -1,15 +1,19 @@
 import { IsString, IsNumber, IsOptional, IsNotEmpty } from 'class-validator';
 
-export class SdekLocationDto {
+export class CdekLocationDto {
   @IsNotEmpty()
   @IsNumber()
   code: number;
 
   @IsOptional()
   @IsString()
-  city: string;
+  postal_code?: string;
 
   @IsOptional()
   @IsString()
-  address: string;
+  city?: string;
+
+  @IsOptional()
+  @IsString()
+  address?: string;
 }
