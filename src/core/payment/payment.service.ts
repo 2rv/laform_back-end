@@ -101,7 +101,7 @@ export class PaymentService {
               cost: 300,
               amount: count,
               weight: count * SdekConfig.weight,
-              url: 'www.laform.ru',
+              url: 'https://laform-client.herokuapp.com/',
             };
             items.push(item);
           }

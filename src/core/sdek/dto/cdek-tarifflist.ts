@@ -38,9 +38,13 @@ export class CdekTariffListDto {
   @Type(() => CdekLocationDto)
   to_location: CdekLocationDto;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsArray()
-  packages: CdekPackageDto;
+  packages: CdekPackageDto[];
+
+  @IsOptional()
+  @IsNumber()
+  amount: number;
 }
 
 export interface TariffType {

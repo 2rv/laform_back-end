@@ -70,6 +70,11 @@ export class SdekService {
     return result.data;
   }
   async getTariffList(body: CdekTariffListDto): Promise<TariffType[]> {
+    if (!body.packages || !body.packages.length) {
+      body.packages = [...Array(body.amount || 1).keys()].map(() => ({
+        weight: SdekConfig.weight,
+      }));
+    }
     const result: TariffCodesType = await axiosCdek({
       method: 'POST',
       url: 'calculator/tarifflist',
@@ -100,6 +105,12 @@ export class SdekService {
   async сalculationByTariffCode(
     body: CdekTariffCodeDto,
   ): Promise<CdekTariffByCode> {
+    if (!body.packages || !body.packages.length) {
+      body.packages = [...Array(body.amount || 1).keys()].map(() => ({
+        weight: SdekConfig.weight,
+      }));
+    }
+
     const result: { data: CdekTariffByCode } = await axiosCdek({
       method: 'POST',
       url: '/calculator/tariff',

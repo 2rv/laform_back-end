@@ -357,6 +357,8 @@ export class PurchaseService {
     });
 
     const result = await this.purchaseRepository.getOne(newPurchase.id);
+    console.log(result.comment);
+
     if (result) {
       const payment = {
         amount: (+result.price).toFixed(2),
