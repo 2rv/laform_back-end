@@ -87,17 +87,6 @@ export class MasterClassController {
   ) {
     return await this.masterClassService.getOne(masterClassId, query);
   }
-
-  @Get('/get/for-update/:masterClassId')
-  @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard, MasterClassGuard)
-  async getOneForUpdate(
-    @Query(new LangValidationPipe()) query,
-    @Param('masterClassId') masterClassId: string,
-  ) {
-    return await this.masterClassService.getOneForUpdate(masterClassId, query);
-  }
-
   @Get('/auth/get/:masterClassId')
   @UseGuards(AuthGuard('jwt'), AccountGuard, MasterClassGuard)
   async getOneAuth(
@@ -149,27 +138,14 @@ export class MasterClassController {
   ) {
     return await this.masterClassService.disable(masterClassId, body.deleted);
   }
+
+  @Get('/get/for-update/:masterClassId')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard, MasterClassGuard)
+  async getOneForAdmin(
+    @Query(new LangValidationPipe()) query,
+    @Param('masterClassId') masterClassId: string,
+  ) {
+    return await this.masterClassService.getOneForAdmin(masterClassId, query);
+  }
 }
-
-// @Get('/pinned/get/')
-// async getPinned(@Query(new LangValidationPipe()) query: string) {
-//   return await this.masterClassService.getPinned(query);
-// }
-
-// @Get('/auth/pinned/get/')
-// @UseGuards(AuthGuard('jwt'), AccountGuard)
-// async getPinnedAuth(
-//   @Query(new LangValidationPipe()) query: string,
-//   @GetAccount() user: UserEntity,
-// ) {
-//   return await this.masterClassService.getPinnedAuth(query, user.id);
-// }
-// @Put('/update-pinned/:masterClassId')
-// @Roles(USER_ROLE.ADMIN)
-// @UseGuards(AuthGuard('jwt'), AccountGuard, MasterClassGuard)
-// async updatePinned(
-//   @Param('masterClassId') masterClassId: string,
-//   @Body() body: any,
-// ) {
-//   return await this.masterClassService.updatePinned(masterClassId, body);
-// }

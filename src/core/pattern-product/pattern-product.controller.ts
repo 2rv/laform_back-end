@@ -108,6 +108,22 @@ export class PatternProductController {
     );
   }
 
+  @Get('/liked/get/')
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getLiked(
+    @Query(new LangValidationPipe()) query: string,
+    @Query('size') size: number,
+    @Query('page') page: number,
+    @GetAccount() user: UserEntity,
+  ) {
+    return await this.patternProductService.getLiked(
+      user.id,
+      query,
+      size,
+      page,
+    );
+  }
+
   @Put('/update/:patternProductId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, PatternProductGuard)
@@ -129,22 +145,6 @@ export class PatternProductController {
     return await this.patternProductService.disable(
       req.patternProductId,
       body.deleted,
-    );
-  }
-
-  @Get('/liked/get/')
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async getLiked(
-    @Query(new LangValidationPipe()) query: string,
-    @Query('size') size: number,
-    @Query('page') page: number,
-    @GetAccount() user: UserEntity,
-  ) {
-    return await this.patternProductService.getLiked(
-      user.id,
-      query,
-      size,
-      page,
     );
   }
 
