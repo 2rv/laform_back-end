@@ -531,7 +531,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
       .getManyAndCount();
   }
 
-  async findOneRuForUpdate(id: string): Promise<MasterClassEntity> {
+  async getOneForAdmin(id: string): Promise<MasterClassEntity> {
     return await this.createQueryBuilder('master_class')
       .leftJoin('master_class.images', 'images')
       .leftJoin('master_class.categories', 'categories')

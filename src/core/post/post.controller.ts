@@ -126,23 +126,3 @@ export class PostController {
     return await this.postService.disable(id, body.deleted);
   }
 }
-
-// @Get('/pinned/get/')
-// async getPinned(@Query(new LangValidationPipe()) query: string) {
-//   return await this.postService.getPinned(query);
-// }
-// @Get('/auth/pinned/get/')
-// @UseGuards(AuthGuard('jwt'), AccountGuard)
-// async getPinnedAuth(
-//   @Query(new LangValidationPipe()) query: string,
-//   @GetAccount() user: UserEntity,
-// ) {
-//   return await this.postService.getPinnedAuth(query, user.id);
-// }
-
-// @Put('/update-pinned/:postId')
-// @Roles(USER_ROLE.ADMIN)
-// @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard)
-// async updatePinned(@Param('postId') id: string, @Body() body: any) {
-//   return await this.postService.updatePinned(id, body);
-// }

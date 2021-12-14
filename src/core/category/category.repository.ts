@@ -25,9 +25,8 @@ export class CategoryRepository extends Repository<CategoryEntity> {
       'category.id',
       'category.categoryNameRu',
     ]);
-    if (type === '12') {
-      query.where('category.type = :type', { type: '1' });
-      query.orWhere('category.type = :type', { type: '2' });
+    if (type === '1' || type === '2') {
+      query.where('category.type = :type', { type: '2' });
     } else {
       query.where('category.type = :type', { type });
     }
@@ -39,14 +38,11 @@ export class CategoryRepository extends Repository<CategoryEntity> {
       'category.id',
       'category.categoryNameEn',
     ]);
-    if ((type = '12')) {
-      query.where('category.type = :type', { type });
-    } else if ((type = '1')) {
-      query.where('category.type = :type', { type });
+    if (type === '1' || type === '2') {
+      query.where('category.type = :type', { type: '2' });
     } else {
       query.where('category.type = :type', { type });
     }
-
     return await query.getMany();
   }
 }

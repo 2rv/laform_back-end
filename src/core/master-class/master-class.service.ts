@@ -122,11 +122,6 @@ export class MasterClassService {
     if (query === 'ru') return await this.masterClassRepository.findOneRu(id);
     if (query === 'en') return await this.masterClassRepository.findOneEn(id);
   }
-  async getOneForUpdate(id: string, query: string): Promise<MasterClassEntity> {
-    if (query === 'ru') {
-      return await this.masterClassRepository.findOneRuForUpdate(id);
-    }
-  }
   async getOneAuth(
     id: string,
     query: string,
@@ -179,6 +174,9 @@ export class MasterClassService {
   async disable(id: string, deleted: boolean) {
     await this.masterClassRepository.update({ id }, { deleted });
   }
+  async getOneForAdmin(id: string, query: string): Promise<MasterClassEntity> {
+    return await this.masterClassRepository.getOneForAdmin(id);
+  }
   async getPriceAndDiscount(
     masterClass: MasterClassEntity,
   ): Promise<{ totalPrice: number; totalDiscount: number }> {
@@ -191,20 +189,3 @@ export class MasterClassService {
     };
   }
 }
-
-// async getPinned(query: string): Promise<MasterClassEntity[]> {
-//     if (query === 'ru') return await this.masterClassRepository.findPinnedRu();
-//     if (query === 'en') return await this.masterClassRepository.findPinnedEn();
-//   }
-//   async getPinnedAuth(
-//     query: string,
-//     userId: number,
-//   ): Promise<MasterClassEntity[]> {
-//     if (query === 'ru')
-//       return await this.masterClassRepository.findPinnedRuAuth(userId);
-//     if (query === 'en')
-//       return await this.masterClassRepository.findPinnedEnAuth(userId);
-//   }
-//   async updatePinned(id: string, body: any) {
-//     await this.masterClassRepository.update({ id }, body);
-//   }

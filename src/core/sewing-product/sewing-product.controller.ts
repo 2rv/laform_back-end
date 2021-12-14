@@ -154,26 +154,3 @@ export class SewingProductController {
     );
   }
 }
-
-// @Get('/pinned/get/')
-// async getPinned(@Query(new LangValidationPipe()) query: string) {
-//   return await this.sewingProductService.getPinned(query);
-// }
-// @Get('/auth/pinned/get/')
-// @UseGuards(AuthGuard('jwt'), AccountGuard)
-// async getPinnedAuth(
-//   @Query(new LangValidationPipe()) query: string,
-//   @GetAccount() user: UserEntity,
-// ) {
-//   return await this.sewingProductService.getPinnedAuth(query, user.id);
-// }
-
-// @Put('/update-pinned/:sewingProductId')
-// @Roles(USER_ROLE.ADMIN)
-// @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
-// async updatePinned(
-//   @Param('sewingProductId') sewingProductId: string,
-//   @Body() body: any,
-// ) {
-//   return await this.sewingProductService.updatePinned(sewingProductId, body);
-// }
