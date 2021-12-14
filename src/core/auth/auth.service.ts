@@ -213,9 +213,10 @@ export class AuthService {
     } else {
       const user = await this.userRepository.saveAppleUser({
         email: body.user.email,
-        login: body.user.email.split('@')[0],
+        login: body.user.email,
         appleId: body.code,
       });
+      // .split('@')[0],
       await this.userInfoService.create(user);
       accessToken = await this.createJwt(user);
     }
