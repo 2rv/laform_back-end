@@ -196,7 +196,6 @@ export class AuthService {
   }
 
   async signUpWithApple(body: any): Promise<LoginInfoDto> {
-    // console.log(body.body.user.email);
     let accessToken;
     // const findUserByEmail: any = await this.userRepository.find();
     // if (Boolean(findUserByEmail) && !findUserByEmail.appleId) {
@@ -206,21 +205,20 @@ export class AuthService {
     // findUserByEmail.appleId = body.idToken;
     // await findUserByEmail.save();
     const findUserByAppleId: UserEntity = await this.userRepository.findOne({
-      appleId: body.idToken,
+      appleId: body.code,
     });
 
     if (findUserByAppleId) {
       accessToken = await this.createJwt(findUserByAppleId);
     } else {
       const user = await this.userRepository.saveAppleUser({
-        email: body.email,
-        login: body.email,
-        appleId: body.idToken,
+        email: body.user,
+        login: body.user,
+        appleId: body.code,
       });
       await this.userInfoService.create(user);
       accessToken = await this.createJwt(user);
     }
-    // .split('@')[0],
     return { accessToken };
   }
 
