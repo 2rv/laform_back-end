@@ -207,12 +207,13 @@ export class AuthService {
     const findUserByAppleId: UserEntity = await this.userRepository.findOne({
       email: body.user.email,
     });
+    const getEmail = JSON.parse(body.user);
 
     if (findUserByAppleId) {
       accessToken = await this.createJwt(findUserByAppleId);
     } else {
       const user = await this.userRepository.saveAppleUser({
-        email: body.user.email,
+        email: getEmail.email,
         login: body.user.email,
         appleId: body.code,
       });
