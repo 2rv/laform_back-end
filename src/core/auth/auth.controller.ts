@@ -89,32 +89,22 @@ export class AuthController {
   @UseGuards(AuthGuard('facebook'))
   @UseFilters(ViewAuthFilter)
   async facebookLoginRedirect(@Req() req, @Res() res) {
-    const clientUrl = req.hostname.includes('localhost')
-      ? `${req.protocol}://localhost:3000`
-      : ClientConfig.url;
-
     const token = await this.authService.signUpWithFacebook(req.user);
     return res.redirect(
-      `${clientUrl}/social-auth-access?data=${token.accessToken}`,
+      `${ClientConfig.url}/social-auth-access?data=${token.accessToken}`,
     );
   }
 
   @Get('/google')
   @UseGuards(AuthGuard('google'))
-  async googleAuth() {
-    console.log('google');
-  }
+  async googleAuth() {}
 
   @Get('/google/redirect')
   @UseGuards(AuthGuard('google'))
   async googleAuthRedirect(@Req() req, @Res() res) {
     const token = await this.authService.signUpWithGoogle(req.user);
-    const clientUrl = req.hostname.includes('localhost')
-      ? `${req.protocol}://localhost:3000`
-      : ClientConfig.url;
-
     return res.redirect(
-      `${clientUrl}/social-auth-access?data=${token.accessToken}`,
+      `${ClientConfig.url}/social-auth-access?data=${token.accessToken}`,
     );
   }
   @Get('/apple')
