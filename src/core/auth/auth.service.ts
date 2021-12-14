@@ -197,13 +197,13 @@ export class AuthService {
 
   async signUpWithApple(body: any): Promise<LoginInfoDto> {
     let accessToken;
-    const getEmail = JSON.parse(body.user + '');
     const findUserByAppleId: UserEntity = await this.userRepository.findOne({
       appleId: body.code,
     });
     if (findUserByAppleId) {
       accessToken = await this.createJwt(findUserByAppleId);
     } else {
+      const getEmail = JSON.parse(body.user + '');
       const user = await this.userRepository.saveAppleUser({
         email: getEmail.email,
         login: getEmail.email.split('@')[0],
