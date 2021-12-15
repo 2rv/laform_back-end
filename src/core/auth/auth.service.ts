@@ -134,6 +134,7 @@ export class AuthService {
   }
 
   async signUpWithGoogle(body: any): Promise<LoginInfoDto> {
+    console.log(body);
     let accessToken;
     const findUserByEmail: UserEntity = await this.userRepository.findOne({
       email: body.email,
