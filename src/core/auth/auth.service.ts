@@ -161,7 +161,7 @@ export class AuthService {
         login: body.email.split('@')[0],
         googleId: body.id,
       });
-      await this.userInfoService.create(user);
+      await this.userInfoService.create(user, body.fullName);
       accessToken = await this.createJwt(user);
     }
     console.log(body);

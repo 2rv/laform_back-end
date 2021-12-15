@@ -15,13 +15,13 @@ export class UserInfoService {
     private userInfoRepository: Repository<UserInfoEntity>,
   ) {}
 
-  async create(user): Promise<UserInfoDto> {
+  async create(user, fullName?: string): Promise<UserInfoDto> {
     return await this.userInfoRepository.save({
       userId: user.id,
       googleId: user?.googleId,
       appleId: user?.appleId,
       facebookId: user?.facebookId,
-      fullName: user?.fullName,
+      fullName: fullName,
     });
   }
 
