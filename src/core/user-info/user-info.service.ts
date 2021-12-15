@@ -21,6 +21,7 @@ export class UserInfoService {
       googleId: user?.googleId,
       appleId: user?.appleId,
       facebookId: user?.facebookId,
+      fullName: user?.fullName,
     });
   }
 
