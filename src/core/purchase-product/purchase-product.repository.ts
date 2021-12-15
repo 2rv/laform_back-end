@@ -147,7 +147,7 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
       .leftJoinAndSelect('masterClass.images', 'masterClassImages')
       .leftJoinAndSelect('masterClass.categories', 'masterClassCategories')
       .where('purchase_product.id = :id', { id })
-      .andWhere('purchase_product.expired_date >= :now', { now })
+      .andWhere('purchase_product.expiredDate >= :now', { now })
       .getOne();
   }
 
