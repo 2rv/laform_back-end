@@ -133,8 +133,12 @@ export class AuthService {
     return accountData;
   }
 
-  async signUpWithGoogle(body: any): Promise<LoginInfoDto> {
-    console.log(body);
+  async signUpWithGoogle(body: {
+    id: string;
+    email: string;
+    fullName: string;
+    accessToken: string;
+  }): Promise<LoginInfoDto> {
     let accessToken;
     const findUserByEmail: UserEntity = await this.userRepository.findOne({
       email: body.email,
@@ -160,7 +164,7 @@ export class AuthService {
       await this.userInfoService.create(user);
       accessToken = await this.createJwt(user);
     }
-
+    console.log(body);
     return { accessToken };
   }
 
