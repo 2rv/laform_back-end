@@ -97,7 +97,13 @@ export class AuthController {
 
   @Get('/google')
   @UseGuards(AuthGuard('google'))
-  async googleAuth() {}
+  async googleAuth(...data) {
+    try {
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   @Get('/google/redirect')
   @UseGuards(AuthGuard('google'))
