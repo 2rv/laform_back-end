@@ -15,7 +15,7 @@ export class UserVerificationController {
     return this.userVerificationService.getEmailVerificationCode(user);
   }
 
-  @Post('/email/:code')
+  @Get('/email/:code')
   async confirmEmailVerification(@Param('code') code: string): Promise<any> {
     return this.userVerificationService.confirmUserVerificationEmail(code);
   }
