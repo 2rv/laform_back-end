@@ -20,8 +20,6 @@ export class FaqController {
 
   @Get('/:name')
   async get(@Param('name') name: string) {
-    console.log(name);
-
     return await this.faqService.get(name.trim().toLocaleLowerCase());
   }
 

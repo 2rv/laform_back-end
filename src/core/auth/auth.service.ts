@@ -164,7 +164,6 @@ export class AuthService {
       await this.userInfoService.create(user, body.fullName);
       accessToken = await this.createJwt(user);
     }
-    console.log(body);
     return { accessToken };
   }
 

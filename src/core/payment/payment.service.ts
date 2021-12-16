@@ -79,8 +79,7 @@ export class PaymentService {
       for (let purchaseProduct of product.purchaseProducts) {
         if (purchaseProduct.type === 0) {
           const expired = new Date();
-          //   expired.setMonth(expired.getMonth() + 6);
-          expired.setMinutes(expired.getMinutes() + 5);
+          expired.setMonth(expired.getMonth() + 6);
           await this.purchaseProductRepository.update(purchaseProduct.id, {
             expiredDate: expired,
           });
