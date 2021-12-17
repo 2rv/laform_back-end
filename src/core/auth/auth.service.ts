@@ -69,13 +69,27 @@ export class AuthService {
     return this.jwtService.sign(payload);
   }
 
-  async updateLogin(user: UserEntity): Promise<LoginInfoDto> {
-    if (user.emailConfirmed) {
-      const accessToken = await this.createJwt(user);
-      return { accessToken };
-    } else {
-      throw new BadRequestException(AUTH_ERROR.USER_NOT_CONFIRMED);
+  async confirmEmailByCode(
+    user: UserEntity,
+    code: string,
+  ): Promise<LoginInfoDto> {
+    const rawPayload: string = await this.cacheManager.get(user.email + code);
+
+    if (!rawPayload) {
+      throw new BadRequestException(AUTH_ERROR.CODES_IS_INCORRECT);
     }
+
+    const payload = JSON.parse(rawPayload);
+
+    if (user.email !== payload.email) {
+      throw new BadRequestException(AUTH_ERROR.CODES_IS_INCORRECT);
+    }
+
+    await this.userRepository.confirmEmailById(user);
+    await this.cacheManager.del(user.email + code);
+    const accessToken = await this.createJwt(user);
+    console.log(`${user.email} is confirmed by ${code}`);
+    return { accessToken };
   }
 
   async updateEmail(

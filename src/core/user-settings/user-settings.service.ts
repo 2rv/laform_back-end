@@ -13,6 +13,7 @@ import { MailService } from '../mail/mail.service';
 import { USER_ERROR } from '../user/enum/user-error.enum';
 import { generateVendorCode } from 'src/common/utils/vendor-coder';
 import { UserUpdateEmailRawDataDto } from '../auth/dto/user-update-email.dto';
+import { UserVerificationEmailPayload } from './dto/user-verification-email-payload.type';
 
 @Injectable()
 export class UserSettingsService {
@@ -58,6 +59,23 @@ export class UserSettingsService {
       data.newEmail,
       codeOld.toUpperCase(),
       codeNew.toUpperCase(),
+    );
+  }
+
+  async sendVerifCodeToEmail(user: UserEntity): Promise<void> {
+    if (user.emailConfirmed) {
+      throw new BadRequestException(USER_ERROR.EMAIL_ALREADY_CONFIRMED);
+    }
+    const data: UserVerificationEmailPayload = {
+      email: user.email,
+      userId: user.id,
+    };
+    const code = generateVendorCode().toLowerCase();
+    await this.cacheManager.set(user.email + code, JSON.stringify(data));
+    console.log(`${user.email} verification code: ${code}`);
+    await this.mailService.sendVerificationCodeToEmail(
+      user.email,
+      code.toUpperCase(),
     );
   }
 }

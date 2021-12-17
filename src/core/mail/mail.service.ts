@@ -19,15 +19,17 @@ export class MailService {
     private userRepository: UserRepository,
   ) {}
 
-  async sendMessage(body: any, code: string) {
+  async sendVerificationCodeToEmail(email: string, code: string) {
     return await this.mailerService
       .sendMail({
-        to: body.toMail,
-        subject: 'Подтверждение регистрации',
-        text: `Для подтверждения регистрации перейдите по ссылке http://localhost:3000/auth/verificate-email/confirm?code=${code}`,
-        template: path.join(path.resolve(), 'src/templates/mail.pug'),
+        to: email,
+        subject: 'Код подтверждение регистрации',
+        text: `Код подтверждения регистрации: ${code}`,
+        template: path.join(
+          path.resolve(),
+          'src/templates/verificate-email.pug',
+        ),
         context: {
-          mail: body.toMail,
           code: code,
         },
       })
@@ -69,15 +71,17 @@ export class MailService {
         console.log(e);
       });
   }
-  async sendRecoveryMessage(body: any, code: string) {
+  async sendRecoveryLinkToEmail(email: string, code: string) {
     return await this.mailerService
       .sendMail({
-        to: body.toMail,
-        subject: 'Смена пароля',
-        text: `Для смены пароля перейдите по ссылке http://localhost:3000/auth/change-password?code=${code}`,
-        template: path.join(path.resolve(), 'src/templates/recovery.pug'),
+        to: email,
+        subject: 'Восстаноление пароля',
+        text: `Для смены пароля перейдите по ссылке https://laform-client.herokuapp.com/auth/change-password?code=${code}`,
+        template: path.join(
+          path.resolve(),
+          'src/templates/recovery-account.pug',
+        ),
         context: {
-          mail: body.toMail,
           code: code,
         },
       })
@@ -85,6 +89,7 @@ export class MailService {
         console.log(e);
       });
   }
+
   async sendNotification(body: { subject: string; html: string }) {
     const recipients = await this.userRepository.find();
     return recipients.map(async (recipient) => {

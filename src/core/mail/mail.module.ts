@@ -9,7 +9,6 @@ import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import * as path from 'path';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { NotificationEntity } from '../notification/notification.entity';
 import { CacheModuleConfig } from 'src/config/cache.config';
 import { UserRepository } from '../user/user.repository';
 
@@ -36,7 +35,7 @@ import { UserRepository } from '../user/user.repository';
         },
       },
     }),
-    TypeOrmModule.forFeature([NotificationEntity, UserRepository]),
+    TypeOrmModule.forFeature([UserRepository]),
   ],
   providers: [MailService],
   controllers: [MailController],

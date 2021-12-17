@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  Patch,
   Put,
   Query,
   UseGuards,
@@ -46,15 +47,23 @@ export class UserController {
     return await this.userService.updateOne(userId, body);
   }
 
-  @Get('/notification-email')
+  @Get('/subscribe-status')
   @UseGuards(AuthGuard(), AccountGuard)
   async getNotificationEmailStatus(@GetAccount() user: UserEntity) {
-    return await this.userService.getUserNotificationEmail(user);
+    return user.notificationEmail;
   }
 
-  @Put('unsubscribe-notification')
+  @Patch('/subscribe-update')
   @UseGuards(AuthGuard(), AccountGuard)
-  async unsubscribeNotification(@Query('code') code: string) {
-    return await this.userService.unsubscribeNotification(code);
+  async updateSubscribeStatus(
+    @GetAccount() user: UserEntity,
+    @Body() body: { notificationEmail: boolean },
+  ) {
+    return await this.userService.updateSubscribe(user.id, body);
+  }
+
+  @Put('/unsubscribe')
+  async unsubscribe(@Query('code') code: string) {
+    return await this.userService.unsubscribe(code);
   }
 }

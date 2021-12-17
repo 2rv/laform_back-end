@@ -65,12 +65,6 @@ export class AuthController {
     return this.authService.getAccountInfo(user);
   }
 
-  @Get('/update-login')
-  @UseGuards(AuthGuard(), AccountGuard)
-  checkUserConfirmed(@GetAccount() user: UserEntity): Promise<LoginInfoDto> {
-    return this.authService.updateLogin(user);
-  }
-
   @UsePipes(new ValidationPipe({ transform: true }))
   @Put('/update-email')
   @UseGuards(AuthGuard(), AccountGuard)
@@ -79,6 +73,15 @@ export class AuthController {
     @Body() body: UserUpdateEmailDto,
   ): Promise<LoginInfoDto> {
     return await this.authService.updateEmail(user, body);
+  }
+
+  @Get('/confirm-email/:code')
+  @UseGuards(AuthGuard(), AccountGuard)
+  async confirmEmailByCode(
+    @GetAccount() user: UserEntity,
+    @Param('code') code: string,
+  ): Promise<LoginInfoDto> {
+    return this.authService.confirmEmailByCode(user, code.toLowerCase());
   }
 
   @Get('/facebook')
@@ -91,7 +94,7 @@ export class AuthController {
   async facebookLoginRedirect(@Req() req, @Res() res) {
     const token = await this.authService.signUpWithFacebook(req.user);
     return res.redirect(
-      `${ClientConfig.url}/social-auth-access?data=${token.accessToken}`,
+      `${ClientConfig.url}/auth/social-access?data=${token.accessToken}`,
     );
   }
 
@@ -104,7 +107,7 @@ export class AuthController {
   async googleAuthRedirect(@Req() req, @Res() res) {
     const token = await this.authService.signUpWithGoogle(req.user);
     return res.redirect(
-      `${ClientConfig.url}/social-auth-access?data=${token.accessToken}`,
+      `${ClientConfig.url}/auth/social-access?data=${token.accessToken}`,
     );
   }
   @Get('/apple')
@@ -116,7 +119,7 @@ export class AuthController {
   async appleAuthRedirect(@Body() body, @Res() res) {
     const token = await this.authService.signUpWithApple(body);
     return res.redirect(
-      `${ClientConfig.url}/social-auth-access?data=${token.accessToken}`,
+      `${ClientConfig.url}/auth/social-access?data=${token.accessToken}`,
     );
   }
 }

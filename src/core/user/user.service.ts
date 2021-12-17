@@ -35,20 +35,23 @@ export class UserService {
     return await this.userRepository.update(id, body);
   }
 
-  async getUserNotificationEmail(user: UserEntity): Promise<boolean> {
-    return user.notificationEmail;
+  async updateSubscribe(
+    id: number,
+    body: { notificationEmail: boolean },
+  ): Promise<any> {
+    return await this.userRepository.update(id, {
+      notificationEmail: body.notificationEmail,
+    });
   }
 
-  async unsubscribeNotification(code: string): Promise<any> {
+  async unsubscribe(code: string): Promise<void> {
     const rawPayload: string = await this.cacheManager.get(code);
-
     if (rawPayload) {
       const { email } = JSON.parse(rawPayload);
       await this.userRepository.update({ email }, { notificationEmail: false });
     } else {
       throw new InternalServerErrorException();
     }
-
-    this.cacheManager.del(code);
+    await this.cacheManager.del(code);
   }
 }

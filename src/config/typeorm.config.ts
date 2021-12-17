@@ -2,7 +2,6 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as config from 'config';
 
 import { UserEntity } from '../core/user/user.entity';
-import { NotificationEntity } from '../core/notification/notification.entity';
 import { UserInfoEntity } from '../core/user-info/user-info.entity';
 import { FileUploadEntity } from 'src/core/file-upload/file-upload.entity';
 import { CategoryEntity } from 'src/core/category/category.entity';
@@ -33,8 +32,6 @@ const DATABASE_CONFIG = config.get('DATABASE');
 export const ApiEntities = [
   UserEntity,
   UserInfoEntity,
-  NotificationEntity,
-  NotificationEntity,
   CategoryEntity,
   FileUploadEntity,
   PostEntity,
@@ -59,22 +56,22 @@ export const ApiEntities = [
   FooterEntity,
 ];
 
-export const typeOrmConfig: TypeOrmModuleOptions = {
-  type: DATABASE_CONFIG.TYPE,
-  url: process.env.DATABASE_URL || DATABASE_CONFIG.URL,
-  entities: ApiEntities,
-  ssl: { rejectUnauthorized: false },
-  //   logging: ['query', 'error'],
-  synchronize: process.env.TYPEORM_SYNC || DATABASE_CONFIG.SYNCHRONIZE,
-};
-
 // export const typeOrmConfig: TypeOrmModuleOptions = {
-//   type: 'postgres',
-//   host: 'localhost',
-//   port: 5432,
-//   username: 'postgres',
-//   password: 'pasha1neo',
-//   database: 'laforme',
-//   synchronize: true,
+//   type: DATABASE_CONFIG.TYPE,
+//   url: process.env.DATABASE_URL || DATABASE_CONFIG.URL,
 //   entities: ApiEntities,
+//   ssl: { rejectUnauthorized: false },
+//   //   logging: ['query', 'error'],
+//   synchronize: process.env.TYPEORM_SYNC || DATABASE_CONFIG.SYNCHRONIZE,
 // };
+
+export const typeOrmConfig: TypeOrmModuleOptions = {
+  type: 'postgres',
+  host: 'localhost',
+  port: 5432,
+  username: 'postgres',
+  password: 'pasha1neo',
+  database: 'laforme',
+  synchronize: true,
+  entities: ApiEntities,
+};
