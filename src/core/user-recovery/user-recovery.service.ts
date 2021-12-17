@@ -26,47 +26,37 @@ export class UserRecoveryService {
     private mailService: MailService,
   ) {}
 
-  async getRecoveryCode({ email }: UserRecoveryDto): Promise<void> {
+  async sendRecoveryLinkToEmail({ email }: UserRecoveryDto): Promise<void> {
     const user = await this.userRepository.findOne({ email });
     if (!user) throw new BadRequestException(USER_ERROR.USER_NOT_FOUND);
-
     const payload: UserRecoveryGetCodeDto = {
       email: user.email,
       userId: user.id,
     };
-
     const code = randomUUID();
-
     await this.cacheManager.set(code, JSON.stringify(payload));
-
     console.log(`Generated recovery code: ${code}`);
-    const messageDate = await this.mailService.sendRecoveryMessage(
-      { toMail: user.email },
-      code,
-    );
+    await this.mailService.sendRecoveryLinkToEmail(user.email, code);
   }
 
-  async changeCredentials(
+  async changePassword(
     code: string,
     data: UserRecoveryChangeCredentialsDto,
   ): Promise<void> {
     if (!code) {
       throw new BadRequestException(USER_RECOVERY_ERROR.TOKEN_DOESNT_EXISTS);
     }
-
     const rawPayload: string = await this.cacheManager.get(code);
     if (!rawPayload) {
       throw new BadRequestException(USER_RECOVERY_ERROR.TOKEN_DOESNT_EXISTS);
     }
-
     const { userId }: UserRecoveryGetCodeDto = JSON.parse(rawPayload);
     const user = await this.userRepository.findOne(userId);
-
     try {
       await this.userRepository.changePassword(user, data);
     } catch (err) {
       throw new InternalServerErrorException(
-        USER_RECOVERY_ERROR.USER_UPDATE_CREDENTIALS_ERROR,
+        USER_RECOVERY_ERROR.CHANGE_PASSWORD_ERROR,
       );
     }
 

@@ -8,7 +8,6 @@ import { AuthModule } from './core/auth/auth.module';
 import { UserSettingsModule } from './core/user-settings/user-settings.module';
 import { NotificationModule } from './core/notification/notification.module';
 import { UserRecoveryModule } from './core/user-recovery/user-recovery.module';
-import { UserVerificationModule } from './core/user-verification/user-verification.module';
 import { UserModule } from './core/user/user.module';
 import { UserInfoModule } from './core/user-info/user-info.module';
 import { FileUploadModule } from './core/file-upload/file-upload.module';
@@ -39,7 +38,6 @@ import { FooterModule } from './core/footer/footer.module';
     UserSettingsModule,
     NotificationModule,
     UserRecoveryModule,
-    UserVerificationModule,
     UserModule,
     UserInfoModule,
     FileUploadModule,

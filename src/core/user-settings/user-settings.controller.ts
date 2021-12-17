@@ -5,6 +5,7 @@ import {
   Body,
   ValidationPipe,
   UsePipes,
+  Get,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AccountGuard } from '../user/guard/account.guard';
@@ -41,5 +42,11 @@ export class UserSettingsController {
     @Body() data: UserSettingsUpdateEmailDto,
   ): Promise<void> {
     return await this.userSettingsService.changeEmail(user, data);
+  }
+
+  @Get('/email')
+  @UseGuards(AuthGuard(), AccountGuard)
+  sendVerifCodeToEmail(@GetAccount() user: UserEntity): Promise<void> {
+    return this.userSettingsService.sendVerifCodeToEmail(user);
   }
 }
