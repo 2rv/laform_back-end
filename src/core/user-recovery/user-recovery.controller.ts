@@ -6,7 +6,6 @@ import {
   Query,
   UsePipes,
 } from '@nestjs/common';
-
 import { UserRecoveryService } from './user-recovery.service';
 import { UserRecoveryDto } from './dto/user-recovery.dto';
 import { UserRecoveryChangeCredentialsDto } from './dto/user-recovery-change-password.dto';
@@ -16,17 +15,17 @@ export class UserRecoveryController {
   constructor(private userRecoveryService: UserRecoveryService) {}
 
   @UsePipes(new ValidationPipe({ transform: true }))
-  @Post()
-  async getRecoveryCode(@Body() data: UserRecoveryDto): Promise<void> {
-    return this.userRecoveryService.getRecoveryCode(data);
+  @Post('/')
+  async sendRecoveryLinkToEmail(@Body() data: UserRecoveryDto): Promise<void> {
+    return this.userRecoveryService.sendRecoveryLinkToEmail(data);
   }
 
   @UsePipes(new ValidationPipe({ transform: true }))
-  @Post('change-credentials')
-  async changeCredentials(
+  @Post('change-password')
+  async changePassword(
     @Query('code') code: string,
     @Body() data: UserRecoveryChangeCredentialsDto,
   ): Promise<void> {
-    return this.userRecoveryService.changeCredentials(code, data);
+    return this.userRecoveryService.changePassword(code, data);
   }
 }

@@ -65,12 +65,6 @@ export class AuthController {
     return this.authService.getAccountInfo(user);
   }
 
-  @Get('/update-login')
-  @UseGuards(AuthGuard(), AccountGuard)
-  checkUserConfirmed(@GetAccount() user: UserEntity): Promise<LoginInfoDto> {
-    return this.authService.updateLogin(user);
-  }
-
   @UsePipes(new ValidationPipe({ transform: true }))
   @Put('/update-email')
   @UseGuards(AuthGuard(), AccountGuard)
@@ -79,6 +73,15 @@ export class AuthController {
     @Body() body: UserUpdateEmailDto,
   ): Promise<LoginInfoDto> {
     return await this.authService.updateEmail(user, body);
+  }
+
+  @Get('/confirm-email/:code')
+  @UseGuards(AuthGuard(), AccountGuard)
+  async confirmEmailByCode(
+    @GetAccount() user: UserEntity,
+    @Param('code') code: string,
+  ): Promise<LoginInfoDto> {
+    return this.authService.confirmEmailByCode(user, code.toLowerCase());
   }
 
   @Get('/facebook')
@@ -91,26 +94,20 @@ export class AuthController {
   async facebookLoginRedirect(@Req() req, @Res() res) {
     const token = await this.authService.signUpWithFacebook(req.user);
     return res.redirect(
-      `${ClientConfig.url}/social-auth-access?data=${token.accessToken}`,
+      `${ClientConfig.url}/auth/social-access?data=${token.accessToken}`,
     );
   }
 
   @Get('/google')
   @UseGuards(AuthGuard('google'))
-  async googleAuth(...data) {
-    try {
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  async googleAuth() {}
 
   @Get('/google/redirect')
   @UseGuards(AuthGuard('google'))
   async googleAuthRedirect(@Req() req, @Res() res) {
     const token = await this.authService.signUpWithGoogle(req.user);
     return res.redirect(
-      `${ClientConfig.url}/social-auth-access?data=${token.accessToken}`,
+      `${ClientConfig.url}/auth/social-access?data=${token.accessToken}`,
     );
   }
   @Get('/apple')
@@ -123,7 +120,7 @@ export class AuthController {
     console.log(req.user.idToken);
     const token = await this.authService.signUpWithApple(req.user);
     return res.redirect(
-      `${ClientConfig.url}/social-auth-access?data=${token.accessToken}`,
+      `${ClientConfig.url}/auth/social-access?data=${token.accessToken}`,
     );
   }
 }

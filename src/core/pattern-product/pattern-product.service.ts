@@ -48,7 +48,6 @@ export class PatternProductService {
     var object = JSON.parse(content);
 
     for (let s of object) {
-      console.log(s.vendor_code);
       let cat = [];
       for (let k of s.categories) {
         const category = await this.categoryRepository.findOne({

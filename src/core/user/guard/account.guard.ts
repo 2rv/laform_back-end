@@ -34,7 +34,6 @@ export class AccountGuard implements CanActivate {
       const index = roles.indexOf(role);
       return index !== -1;
     }
-    // console.log(user);
     request.userAccount = user;
 
     return true;

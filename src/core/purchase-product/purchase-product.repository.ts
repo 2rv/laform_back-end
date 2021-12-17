@@ -141,7 +141,6 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
   }
   async getOnePaymentMasterClass(id: string): Promise<PurchaseProductEntity> {
     const now = new Date();
-    console.log(now);
     return await this.createQueryBuilder('purchase_product')
       .leftJoinAndSelect('purchase_product.masterClassId', 'masterClass')
       .leftJoinAndSelect('masterClass.images', 'masterClassImages')

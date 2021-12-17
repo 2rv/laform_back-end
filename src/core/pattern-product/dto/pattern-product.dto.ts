@@ -35,14 +35,14 @@ export class PatternProductDto {
   @IsString()
   titleEn: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   descriptionRu: string;
   @IsOptional()
   @IsString()
   descriptionEn: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsObject()
   materialRu: {
     blocks: [];
