@@ -6,7 +6,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/typeorm.config';
 import { AuthModule } from './core/auth/auth.module';
 import { UserSettingsModule } from './core/user-settings/user-settings.module';
-import { NotificationModule } from './core/notification/notification.module';
 import { UserRecoveryModule } from './core/user-recovery/user-recovery.module';
 import { UserModule } from './core/user/user.module';
 import { UserInfoModule } from './core/user-info/user-info.module';
@@ -36,7 +35,6 @@ import { FooterModule } from './core/footer/footer.module';
     AuthModule,
     ProductOptionModule,
     UserSettingsModule,
-    NotificationModule,
     UserRecoveryModule,
     UserModule,
     UserInfoModule,
