@@ -1,14 +1,14 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { PurchaseProductEntity } from './purchase-product.entity';
 import { StatisticType } from '../statistics/enum/statistic.enum';
-
+import { PURCHASE_STATUS } from '../purchase/enum/purchase.status';
 @EntityRepository(PurchaseProductEntity)
 export class PurchaseProductRepository extends Repository<PurchaseProductEntity> {
   async getOneProductForUser(
     id: string,
     userId: number,
-    orderStatus: number,
   ): Promise<PurchaseProductEntity> {
+    const orderStatus: number = PURCHASE_STATUS.PAID;
     return await this.createQueryBuilder('purchase_product')
       .leftJoin('purchase_product.purchase', 'purchase')
 
@@ -139,21 +139,21 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
         'master_class_images',
         'master_class_categories',
       ])
-
       .where('purchase_product.id = :id', { id })
       .getOne();
   }
   async getOnePaymentMasterClass(
     id: string,
-    orderStatus: number,
   ): Promise<PurchaseProductEntity> {
+    const orderStatus: number = PURCHASE_STATUS.PAID;
     const now = new Date();
     return await this.createQueryBuilder('purchase_product')
+      .leftJoin('purchase_product.purchase', 'purchase')
       .leftJoinAndSelect('purchase_product.masterClassId', 'masterClass')
       .leftJoinAndSelect('masterClass.images', 'masterClassImages')
       .leftJoinAndSelect('masterClass.categories', 'masterClassCategories')
       .where('purchase_product.id = :id', { id })
-      // .where('purchase.orderStatus = :orderStatus', { orderStatus })
+      .where('purchase.orderStatus = :orderStatus', { orderStatus })
       .andWhere('purchase_product.expiredDate >= :now', { now })
       .getOne();
   }

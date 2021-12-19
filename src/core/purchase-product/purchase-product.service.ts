@@ -5,18 +5,16 @@ import { PurchaseProductRepository } from './purchase-product.repository';
 export class PurchaseProductService {
   constructor(private purchaseProductRepository: PurchaseProductRepository) {}
 
-  async getOneProductForUser(id: string, userId: number, orderStatus: number) {
+  async getOneProductForUser(id: string, userId: number) {
     return await this.purchaseProductRepository.getOneProductForUser(
       id,
       userId,
-      orderStatus,
     );
   }
 
-  async getOnePaymentMasterClass(id: string, orderStatus: number) {
+  async getOnePaymentMasterClass(id: string) {
     const s = await this.purchaseProductRepository.getOnePaymentMasterClass(
       id,
-      orderStatus,
     );
     if (!s) {
       return [];

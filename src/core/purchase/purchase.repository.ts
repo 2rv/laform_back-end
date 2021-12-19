@@ -1,7 +1,7 @@
 import { PurchaseEntity } from './purchase.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { UserEntity } from '../user/user.entity';
-
+import { PURCHASE_STATUS } from './enum/purchase.status';
 @EntityRepository(PurchaseEntity)
 export class PurchaseRepository extends Repository<PurchaseEntity> {
   async getAll(
@@ -25,8 +25,8 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
     size: number = 30,
     page: number = 1,
     userId,
-    orderStatus: number,
   ): Promise<[PurchaseEntity[], number]> {
+    const orderStatus: number = PURCHASE_STATUS.PAID;
     return await this.createQueryBuilder('purchase')
       .leftJoin('purchase.userId', 'user')
       .loadRelationCountAndMap(

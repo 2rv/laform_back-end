@@ -428,30 +428,25 @@ export class PurchaseService {
     page: number,
     userId,
   ): Promise<[PurchaseEntity[], number]> {
-    const orderStatus: number = PURCHASE_STATUS.PAID;
     return await this.purchaseRepository.getAllForUser(
       size,
       page,
       userId,
-      orderStatus,
     );
   }
   async getOne(id: string): Promise<PurchaseEntity> {
     return await this.purchaseRepository.getOne(id);
   }
   async getOneForUser(id: string, userId) {
-    const orderStatus: number = PURCHASE_STATUS.PAID;
+  
     return await this.purchaseProductService.getOneProductForUser(
       id,
-      userId,
-      orderStatus,
+      userId
     );
   }
   async getOnePaymentMasterClass(id: string) {
-    const orderStatus: number = PURCHASE_STATUS.PAID;
     return await this.purchaseProductService.getOnePaymentMasterClass(
       id,
-      orderStatus,
     );
   }
   async updatePurchaseStatus(id: any, body: UpdatePurchaseStatusDto) {
