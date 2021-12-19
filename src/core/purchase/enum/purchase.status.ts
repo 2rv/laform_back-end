@@ -22,7 +22,7 @@ export const PURCHASE_STATUS_INFO = {
 };
 
 export enum DELIVERY_TYPE {
-  SDEK = 1,
-  POST_OFFICE = 2,
-  PICKUP = 3,
+  POST_OFFICE = 0,
+  PICKUP = 1,
+  SDEK = 2,
 }
