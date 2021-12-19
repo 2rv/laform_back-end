@@ -96,8 +96,11 @@ export class AuthService {
     user: UserEntity,
     body: UserUpdateEmailDto,
   ): Promise<LoginInfoDto> {
-    const oldRawData: string = await this.cacheManager.get(body.codeOldEmail);
-    const newRawData: string = await this.cacheManager.get(body.codeNewEmail);
+    if (!user.emailConfirmed) body.codeOldEmail = body.codeNewEmail;
+    console.log(body);
+
+    let oldRawData: string = await this.cacheManager.get(body.codeOldEmail);
+    let newRawData: string = await this.cacheManager.get(body.codeNewEmail);
     if (!oldRawData) {
       throw new BadRequestException(AUTH_ERROR.UPDATE_OLD_CODE_INCORRECT);
     }
