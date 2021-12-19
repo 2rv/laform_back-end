@@ -11,7 +11,7 @@ import {
 import { PurchaseProductEntity } from '../purchase-product/purchase-product.entity';
 import { UserEntity } from '../user/user.entity';
 import { IsEmail } from 'class-validator';
-import { PURCHASE_STATUS } from './enum/purchase.status';
+import { PURCHASE_STATUS, DELIVERY_TYPE } from './enum/purchase.status';
 
 @Entity({ name: 'purchase' })
 export class PurchaseEntity {
@@ -46,6 +46,13 @@ export class PurchaseEntity {
     nullable: false,
   })
   orderStatus: PURCHASE_STATUS;
+
+  @Column({
+    type: 'enum',
+    enum: DELIVERY_TYPE,
+    nullable: false,
+  })
+  deliveryType: DELIVERY_TYPE;
 
   @ManyToOne(() => UserEntity, (user: UserEntity) => user.purchase)
   @JoinColumn({

@@ -20,3 +20,9 @@ export const PURCHASE_STATUS_INFO = {
   7: 'Вовращен отправителю',
   8: 'Возвращен по гарантии',
 };
+
+export enum DELIVERY_TYPE {
+  SDEK = 1,
+  POST_OFFICE = 2,
+  PICKUP = 3,
+}

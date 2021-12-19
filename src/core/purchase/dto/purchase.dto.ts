@@ -7,8 +7,9 @@ import {
   IsEmail,
   IsPhoneNumber,
   IsBoolean,
+  IsEnum,
 } from 'class-validator';
-
+import { DELIVERY_TYPE } from './../enum/purchase.status';
 export class PurchaseDto {
   @IsOptional()
   @IsNumber()
@@ -69,4 +70,8 @@ export class PurchaseDto {
   @IsOptional()
   @IsString()
   address: string;
+
+  @IsOptional()
+  @IsEnum(DELIVERY_TYPE)
+  deliveryType: DELIVERY_TYPE;
 }

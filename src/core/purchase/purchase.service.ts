@@ -30,6 +30,7 @@ import { PaymentService } from '../payment/payment.service';
 import { Currency } from '../payment/enum/payment.enum';
 import { SdekService } from '../sdek/sdek.service';
 import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
+import { DELIVERY_TYPE } from './enum/purchase.status';
 
 interface ProductParamsInfoType {
   title?: string;
@@ -358,14 +359,25 @@ export class PurchaseService {
 
     const result = await this.purchaseRepository.getOne(newPurchase.id);
     if (result) {
+      let sumOfDelivery = 0;
+
       const payment = {
         amount: (+result.price).toFixed(2),
         currency: Currency.RUB,
         orderNumber: result.orderNumber,
         testMode: 1,
       };
-      if (result.sdek == true) {
+      if (result.deliveryType == DELIVERY_TYPE.POST_OFFICE) {
+        sumOfDelivery = 400;
+        payment.amount = (+result.price + sumOfDelivery).toFixed(2);
+      }
+      if (result.deliveryType == DELIVERY_TYPE.PICKUP) {
+        sumOfDelivery = 0;
+        payment.amount = (+result.price + sumOfDelivery).toFixed(2);
+      }
+      if (result.deliveryType == DELIVERY_TYPE.SDEK) {
         let amount = 0;
+        sumOfDelivery = 40;
         for (let res of result.purchaseProducts) {
           if (res.type === 2 || res.type === 3) {
             amount += +(res.totalCount * 1);
@@ -383,10 +395,15 @@ export class PurchaseService {
 
         const sum = await this.sdekService.сalculationByTariffCode(data);
         await this.purchaseRepository.update(result.id, {
-          shippingPrice: sum.total_sum + 40,
+          shippingPrice: sum.total_sum + sumOfDelivery,
         });
-        payment.amount = (+result.price + sum.total_sum + 40).toFixed(2);
+        payment.amount = (
+          +result.price +
+          sum.total_sum +
+          sumOfDelivery
+        ).toFixed(2);
       }
+
       return await this.paymentService.getPayAnyWayLink(payment, userId);
     }
     return result;
