@@ -37,29 +37,40 @@ export class UserSettingsService {
     user: UserEntity,
     data: UserSettingsUpdateEmailDto,
   ): Promise<void> {
+    const userIsExist = await this.userRepository.findOne({
+      email: data.newEmail,
+    });
+    if (userIsExist) {
+      throw new BadRequestException(USER_ERROR.EMAIL_ALREADY_IN_USE);
+    }
+    const passwordIsValid = user.validatePassword(data.password);
+    if (!passwordIsValid) {
+      throw new BadRequestException(USER_ERROR.ACCESS_DENIED);
+    }
     if (user.email === data.newEmail) {
       throw new BadRequestException(
         USER_ERROR.MAIL_ALREADY_LINKED_TO_THIS_ACCOUNT,
       );
     }
-
-    const oldEmailData: UserUpdateEmailRawDataDto = {
-      email: data.newEmail,
-    };
     const newEmailData: UserUpdateEmailRawDataDto = {
       email: data.newEmail,
     };
-    const codeOld = generateVendorCode().trim().toLocaleLowerCase();
-    const codeNew = generateVendorCode().trim().toLocaleLowerCase();
-    await this.cacheManager.set(codeOld, JSON.stringify(oldEmailData));
+
+    let codeOld = generateVendorCode().trim().toLocaleLowerCase();
+    let codeNew = generateVendorCode().trim().toLocaleLowerCase();
+    if (!user.emailConfirmed) codeOld = codeNew;
+    console.log(codeOld, codeNew);
+
+    await this.cacheManager.set(codeOld, JSON.stringify(newEmailData));
     await this.cacheManager.set(codeNew, JSON.stringify(newEmailData));
 
-    await this.mailService.sendCodeForChangeMail(
-      user.email,
-      data.newEmail,
-      codeOld.toUpperCase(),
-      codeNew.toUpperCase(),
-    );
+    await this.mailService.sendCodeForChangeMail({
+      oldEmail: user.email,
+      newEmail: data.newEmail,
+      codeOld: codeOld.toUpperCase(),
+      codeNew: codeNew.toUpperCase(),
+      emailConfirmed: user.emailConfirmed,
+    });
   }
 
   async sendVerifCodeToEmail(user: UserEntity): Promise<void> {

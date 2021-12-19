@@ -10,6 +10,7 @@ import { PurchaseEntity } from '../purchase/purchase.entity';
 import { PURCHASE_STATUS_INFO } from '../purchase/enum/purchase.status';
 import { USER_ROLE } from '../user/enum/user-role.enum';
 import { generateAuthCode } from 'src/common/utils/generate-auth-code';
+import { SendCodeForChangeDto } from './dto/send-code-for-change.dto';
 
 @Injectable()
 export class MailService {
@@ -37,26 +38,26 @@ export class MailService {
         console.log(e);
       });
   }
-  async sendCodeForChangeMail(
-    email: string,
-    newEmail: string,
-    codeOld: string,
-    codeNew: string,
-  ) {
-    await this.mailerService
-      .sendMail({
-        to: email,
-        subject: 'Смена почты',
-        text: `Код для смены почты на ${newEmail}: ${codeOld}`,
-        template: path.join(path.resolve(), 'src/templates/change-mail'),
-        context: {
-          email: newEmail,
-          code: codeOld,
-        },
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+  async sendCodeForChangeMail(data: SendCodeForChangeDto) {
+    const { oldEmail, newEmail, codeOld, codeNew, emailConfirmed } = data;
+
+    if (emailConfirmed) {
+      await this.mailerService
+        .sendMail({
+          to: oldEmail,
+          subject: 'Смена почты',
+          text: `Код для смены почты на ${newEmail}: ${codeOld}`,
+          template: path.join(path.resolve(), 'src/templates/change-mail'),
+          context: {
+            email: newEmail,
+            code: codeOld,
+          },
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+
     await this.mailerService
       .sendMail({
         to: newEmail,
