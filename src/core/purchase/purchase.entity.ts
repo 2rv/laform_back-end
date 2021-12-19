@@ -50,7 +50,7 @@ export class PurchaseEntity {
   @Column({
     type: 'enum',
     enum: DELIVERY_TYPE,
-    nullable: false,
+    nullable: true,
   })
   deliveryType: DELIVERY_TYPE;
 

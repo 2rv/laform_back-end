@@ -7,6 +7,7 @@ import {
   Post,
   Body,
   Res,
+  Param,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AccountGuard } from '../user/guard/account.guard';
@@ -29,6 +30,19 @@ export class PaymentController {
     @Body() body: PaymentDto,
   ): Promise<any> {
     const url = await this.paymentService.getPayAnyWayLink(body, user);
+    return url;
+  }
+  @Get('link/:purchaseId')
+  @Roles(USER_ROLE.USER, USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async GetPayAnyWayLinkByPurchaseId(
+    @GetUser() user: UserEntity,
+    @Param('purchaseId') purchaseId : string,
+  ): Promise<any> {
+    const url = await this.paymentService.getPayAnyWayLinkByPurchaseId(
+      purchaseId,
+      user,
+    );
     return url;
   }
   //localhost:4000/payment/redirect?MNT_ID=123&MNT_TRANSACTION_ID=0000000056&MNT_OPERATION_ID=123123
