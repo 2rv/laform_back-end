@@ -7,6 +7,7 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
   async getOneProductForUser(
     id: string,
     userId: number,
+    orderStatus: number,
   ): Promise<PurchaseProductEntity> {
     return await this.createQueryBuilder('purchase_product')
       .leftJoin('purchase_product.purchase', 'purchase')
@@ -100,6 +101,9 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
       ])
 
       .where('purchase_product.id = :id', { id })
+      .where('purchase.orderStatus = :orderStatus', {
+        orderStatus,
+      })
       .andWhere('purchase.userId = :userId', { userId })
       .getOne();
   }
@@ -139,13 +143,17 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
       .where('purchase_product.id = :id', { id })
       .getOne();
   }
-  async getOnePaymentMasterClass(id: string): Promise<PurchaseProductEntity> {
+  async getOnePaymentMasterClass(
+    id: string,
+    orderStatus: number,
+  ): Promise<PurchaseProductEntity> {
     const now = new Date();
     return await this.createQueryBuilder('purchase_product')
       .leftJoinAndSelect('purchase_product.masterClassId', 'masterClass')
       .leftJoinAndSelect('masterClass.images', 'masterClassImages')
       .leftJoinAndSelect('masterClass.categories', 'masterClassCategories')
       .where('purchase_product.id = :id', { id })
+      // .where('purchase.orderStatus = :orderStatus', { orderStatus })
       .andWhere('purchase_product.expiredDate >= :now', { now })
       .getOne();
   }

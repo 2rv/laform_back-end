@@ -25,6 +25,7 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
     size: number = 30,
     page: number = 1,
     userId,
+    orderStatus: number,
   ): Promise<[PurchaseEntity[], number]> {
     return await this.createQueryBuilder('purchase')
       .leftJoin('purchase.userId', 'user')
@@ -35,7 +36,12 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
       .orderBy('purchase.orderNumber', 'DESC')
       .take(size)
       .skip((page - 1) * size || 0)
-      .where('purchase.userId = :userId', { userId })
+      .where('purchase.userId = :userId', {
+        userId,
+      })
+      .where('purchase.orderStatus = :orderStatus', {
+        orderStatus,
+      })
       .getManyAndCount();
   }
 
@@ -260,6 +266,7 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
         's_p_options.discount',
       ])
       .where('purchase.id = :id', { id })
+
       .getOne();
   }
 

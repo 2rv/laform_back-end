@@ -30,7 +30,7 @@ import { PaymentService } from '../payment/payment.service';
 import { Currency } from '../payment/enum/payment.enum';
 import { SdekService } from '../sdek/sdek.service';
 import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
-import { DELIVERY_TYPE } from './enum/purchase.status';
+import { DELIVERY_TYPE, PURCHASE_STATUS } from './enum/purchase.status';
 
 interface ProductParamsInfoType {
   title?: string;
@@ -428,16 +428,31 @@ export class PurchaseService {
     page: number,
     userId,
   ): Promise<[PurchaseEntity[], number]> {
-    return await this.purchaseRepository.getAllForUser(size, page, userId);
+    const orderStatus: number = PURCHASE_STATUS.PAID;
+    return await this.purchaseRepository.getAllForUser(
+      size,
+      page,
+      userId,
+      orderStatus,
+    );
   }
   async getOne(id: string): Promise<PurchaseEntity> {
     return await this.purchaseRepository.getOne(id);
   }
   async getOneForUser(id: string, userId) {
-    return await this.purchaseProductService.getOneProductForUser(id, userId);
+    const orderStatus: number = PURCHASE_STATUS.PAID;
+    return await this.purchaseProductService.getOneProductForUser(
+      id,
+      userId,
+      orderStatus,
+    );
   }
   async getOnePaymentMasterClass(id: string) {
-    return await this.purchaseProductService.getOnePaymentMasterClass(id);
+    const orderStatus: number = PURCHASE_STATUS.PAID;
+    return await this.purchaseProductService.getOnePaymentMasterClass(
+      id,
+      orderStatus,
+    );
   }
   async updatePurchaseStatus(id: any, body: UpdatePurchaseStatusDto) {
     const result = await this.purchaseRepository.findOne({ id });
