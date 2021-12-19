@@ -143,21 +143,25 @@ export class MasterClassService {
     if (query === 'en')
       return await this.masterClassRepository.findLikedEn(userId, size, page);
   }
-  async update(id: string, body: MasterClassDto) {
-    if (!Boolean(body.vendorCode)) {
-      body.vendorCode = MasterClassEntity.getVendorCode();
-    }
-    const masterClass: MasterClassEntity =
-      await this.masterClassRepository.findOneOrFail(id, {
-        relations: ['recommendation'],
-      });
+  // async update(id: string, body: MasterClassDto) {
+  //   if (!Boolean(body.vendorCode)) {
+  //     body.vendorCode = MasterClassEntity.getVendorCode();
+  //   }
+  //   const masterClass: MasterClassEntity =
+  //     await this.masterClassRepository.findOneOrFail(id, {
+  //       relations: ['recommendation'],
+  //     });
 
-    if (masterClass.recommendation?.id) {
-      await this.recommendationService.delete(masterClass.recommendation.id);
-    }
+  //   if (masterClass.recommendation?.id) {
+  //     await this.recommendationService.delete(masterClass.recommendation.id);
+  //   }
 
-    Object.assign(masterClass, { ...body });
-    return await this.masterClassRepository.save(masterClass);
+  //   Object.assign(masterClass, { ...body });
+  //   return await this.masterClassRepository.save(masterClass);
+  // }
+  async update(id: string, body: any) {
+    body.id = id;
+    return await this.masterClassRepository.save(body);
   }
   async delete(id: string) {
     const masterClass = await this.masterClassRepository.findOneOrFail(id);
