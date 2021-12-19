@@ -1,4 +1,9 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as md5 from 'md5';
 import { PaymentRepository } from './payment.repository';
@@ -11,6 +16,7 @@ import { PurchaseProductRepository } from '../purchase-product/purchase-product.
 import { PurchaseService } from '../purchase/purchase.service';
 import { SdekConfig } from 'src/config/sdek.config';
 import { CdekCreateOrderDto } from '../sdek/dto/cdek-order';
+import { PURCHASE_ERROR } from '../purchase/enum/purchase.enum';
 
 @Injectable()
 export class PaymentService {
@@ -53,6 +59,49 @@ export class PaymentService {
       body.testMode +
       `&MNT_SUBSCRIBER_ID=` +
       userId +
+      `&MNT_SIGNATURE=` +
+      signature;
+
+    return await url;
+  }
+  async getPayAnyWayLinkByPurchaseId(id: string, user): Promise<string> {
+    const purchase = await this.purchaseRepository.findOne({
+      where: {
+        id: id,
+        userId: user,
+        orderStatus: PURCHASE_STATUS.CREATED,
+      },
+    });
+    if (!purchase) {
+      throw new BadRequestException(PURCHASE_ERROR.PURCHASE_NOT_FOUND);
+    }
+
+    const amount = (+purchase.price + +purchase.shippingPrice).toFixed(2);
+    const currency = 'RUB';
+    const testMode = 1;
+    const signature = md5(
+      PayAnyWayConfig.MNT_ID +
+        purchase.orderNumber +
+        amount +
+        currency +
+        user.id +
+        testMode +
+        PayAnyWayConfig.MNT_INTEGRITY_CODE,
+    );
+    const url =
+      PayAnyWayConfig.PAY_URL +
+      `MNT_ID=` +
+      PayAnyWayConfig.MNT_ID +
+      `&MNT_AMOUNT=` +
+      amount +
+      `&MNT_TRANSACTION_ID=` +
+      purchase.orderNumber +
+      `&MNT_CURRENCY_CODE=` +
+      currency +
+      `&MNT_TEST_MODE=` +
+      testMode +
+      `&MNT_SUBSCRIBER_ID=` +
+      user.id +
       `&MNT_SIGNATURE=` +
       signature;
 
