@@ -1,11 +1,25 @@
-import { IsNotEmpty, IsString, IsOptional, IsBoolean } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsNotEmpty,
+  IsString,
+  IsOptional,
+  IsBoolean,
+  IsObject,
+  ValidateNested,
+} from 'class-validator';
+import { FileDto } from 'src/core/file-upload/dto/file-dto';
 
 export class SliderDto {
+  @IsNotEmpty()
+  @ValidateNested()
+  @Type(() => FileDto)
+  imageUrl: FileDto;
+
   @IsNotEmpty()
   @IsString()
   headingTextRu: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   headingTextEn: string;
 

@@ -4,7 +4,6 @@ import {
   IsOptional,
   IsBoolean,
   IsArray,
-  ArrayMinSize,
   IsObject,
   IsNumber,
   Min,

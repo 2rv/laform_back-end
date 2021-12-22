@@ -21,6 +21,7 @@ export class SliderEntity {
   @Column({
     type: 'varchar',
     name: 'heading_text_en',
+    nullable: true,
   })
   headingTextEn!: string;
 
@@ -73,9 +74,9 @@ export class SliderEntity {
   buttonTextColor!: string;
 
   @Column({
-    type: 'varchar',
+    type: 'bool',
     name: 'is_have_button',
-    nullable: true,
+    default: false,
   })
   isHaveButton!: boolean;
 }

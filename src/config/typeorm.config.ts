@@ -70,8 +70,8 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
 //   host: 'localhost',
 //   port: 5432,
 //   username: 'postgres',
-//   password: 'nSnS44Tt',
-//   database: 'postgres',
+//   password: 'pasha1neo',
+//   database: 'laforme',
 //   synchronize: true,
 //   entities: ApiEntities,
 // };

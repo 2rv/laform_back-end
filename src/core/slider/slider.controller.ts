@@ -47,7 +47,7 @@ export class SliderController {
   @Put('update/:sliderId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, SliderGuard)
-  async update(@Param('sliderId') id: string, @Body() body: any) {
+  async update(@Param('sliderId') id: string, @Body() body: SliderDto) {
     return await this.sliderService.update(id, body);
   }
 
