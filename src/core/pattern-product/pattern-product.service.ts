@@ -292,24 +292,12 @@ export class PatternProductService {
   }
 
   async update(id: string, body: PatternProductDto) {
-    if (!Boolean(body.vendorCode)) {
-      body.vendorCode = PatternProductEntity.getVendorCode();
-    }
+    body.id = id;
     body.options = body.options.map((item, index) => {
       item.vendorCode = `${body.vendorCode}-${item.size || index}`;
       return item;
     });
-
-    const patternProduct: PatternProductEntity =
-      await this.patternProductRepository.findOneOrFail(id, {
-        relations: ['recommendation'],
-      });
-
-    if (patternProduct.recommendation?.id) {
-      await this.recommendationService.delete(patternProduct.recommendation.id);
-    }
-    Object.assign(patternProduct, { ...body });
-    return await this.patternProductRepository.save(patternProduct);
+    return await this.patternProductRepository.save(body);
   }
 
   async delete(id: string) {

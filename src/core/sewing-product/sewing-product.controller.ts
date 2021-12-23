@@ -80,7 +80,6 @@ export class SewingProductController {
   }
 
   @Get('/get/:sewingProductId')
-  @UseGuards(SewingProductGuard)
   async getOne(
     @Query(new LangValidationPipe()) query,
     @Param('sewingProductId') sewingProductId: string,
@@ -88,7 +87,7 @@ export class SewingProductController {
     return await this.sewingProductService.getOne(sewingProductId, query);
   }
   @Get('/auth/get/:sewingProductId')
-  @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getOneAuth(
     @Query(new LangValidationPipe()) query,
     @Param('sewingProductId') sewingProductId: string,
@@ -114,7 +113,7 @@ export class SewingProductController {
 
   @Put('/update/:sewingProductId')
   @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
   async update(
     @Param('sewingProductId') sewingProductId: string,
     @Body() body: SewingProductDto,
@@ -124,7 +123,7 @@ export class SewingProductController {
 
   @Put('/disable/:sewingProductId')
   @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
   async disable(
     @Param('sewingProductId') sewingProductId: string,
     @Body() body: { deleted: boolean },
@@ -136,14 +135,14 @@ export class SewingProductController {
   }
   @Delete('/delete/:sewingProductId')
   @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
   async delete(@Param('sewingProductId') sewingProductId: string) {
     return await this.sewingProductService.delete(sewingProductId);
   }
 
   @Get('/get/for-update/:sewingProductId')
   @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getOneForUpdate(
     @Query(new LangValidationPipe()) query,
     @Param('sewingProductId') sewingProductId: string,

@@ -47,6 +47,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'options.size',
         'options.count',
         'options.vendorCode',
+        'options.optionVisibility',
       ])
       .orderBy(sort, by)
       .take(size)
@@ -120,6 +121,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'options.size',
         'options.count',
         'options.vendorCode',
+        'options.optionVisibility',
       ])
       .orderBy(sort, by)
       .take(size)
@@ -197,6 +199,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'options.size',
         'options.count',
         'options.vendorCode',
+        'options.optionVisibility',
         'like',
       ])
       .orderBy(sort, by)
@@ -276,6 +279,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'options.size',
         'options.count',
         'options.vendorCode',
+        'options.optionVisibility',
         'like',
       ])
       .orderBy(sort, by)
@@ -361,6 +365,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'options.size',
         'options.count',
         'options.vendorCode',
+        'options.optionVisibility',
         ...recommendationsRu,
       ])
       .where('recommendations_sewing_product.deleted = false')
@@ -425,6 +430,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'options.size',
         'options.count',
         'options.vendorCode',
+        'options.optionVisibility',
         ...recommendationsEn,
       ])
       .where('recommendations_sewing_product.deleted = false')
@@ -527,6 +533,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'options.size',
         'options.count',
         'options.vendorCode',
+        'options.optionVisibility',
         'like',
 
         ...recommendationsRuAuth,
@@ -630,6 +637,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'options.size',
         'options.count',
         'options.vendorCode',
+        'options.optionVisibility',
         'like',
 
         ...recommendationsEnAuth,
@@ -681,6 +689,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'options.size',
         'options.count',
         'options.vendorCode',
+        'options.optionVisibility',
         'like',
       ])
       .take(size)
@@ -728,6 +737,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'options.size',
         'options.count',
         'options.vendorCode',
+        'options.optionVisibility',
         'like',
       ])
       .take(size)
@@ -810,7 +820,6 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'pattern_product.deleted',
         'pattern_product.materialOld',
         'pattern_product.descriptionOld',
-        'options_filesPdf',
         'images',
         'categories.id',
         'categories.categoryNameRu',
@@ -820,12 +829,10 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'options.size',
         'options.count',
         'options.vendorCode',
+        'options_filesPdf',
+        'options.optionVisibility',
         ...recommendationsRu,
       ])
-      .where('recommendations_sewing_product.deleted = false')
-      .where('recommendations_master_class.deleted = false')
-      .where('recommendations_pattern_product.deleted = false')
-      .where('recommendations_post.deleted = false')
       .where('pattern_product.id = :id', { id })
       .getOne();
   }
@@ -867,6 +874,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         'options.size',
         'options.count',
         'options.vendorCode',
+        'options.optionVisibility',
       ])
       .orderBy(sort, by)
       .take(size)
