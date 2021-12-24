@@ -8,6 +8,7 @@ import {
   IsNumber,
   Min,
   Max,
+  IsUUID,
 } from 'class-validator';
 import { CategoryDto } from 'src/core/category/dto/category.dto';
 import { FileDto } from 'src/core/file-upload/dto/file-dto';
@@ -15,14 +16,14 @@ import { CreateRecommendationDto } from 'src/core/recommendation/dto/create-reco
 
 export class PostDto {
   @IsOptional()
+  @IsUUID()
+  id: string;
+
+  @IsOptional()
   @IsNumber()
   @Min(4)
   @Max(4)
   type: number;
-
-  @IsOptional()
-  @IsBoolean()
-  pinned: boolean;
 
   @IsNotEmpty()
   @IsObject()

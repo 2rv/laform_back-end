@@ -2,165 +2,77 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { MasterClassRepository } from './master-class.repository';
 import { MasterClassEntity } from './master-class.entity';
 import { MasterClassDto } from './dto/master-class.dto';
-import { RecommendationService } from '../recommendation/recommendation.service';
 import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
 import { PURCHASE_ERROR } from '../purchase/enum/purchase.enum';
+import {
+  findAllMasterClassParamsDto,
+  findOneMasterClassParamsDto,
+} from './dto/master-class-find-params.dto';
 
 @Injectable()
 export class MasterClassService {
   constructor(
     private masterClassRepository: MasterClassRepository,
-    private recommendationService: RecommendationService,
     private purchaseProductRepository: PurchaseProductRepository,
   ) {}
+
+  async getAll(
+    params: findAllMasterClassParamsDto,
+  ): Promise<[MasterClassEntity[], number]> {
+    if (params.sort === 'title') {
+      params.sort = 'master_class.titleRu';
+    } else if (params.sort === 'date') {
+      params.sort = 'master_class.createdDate';
+    } else if (params.sort === 'clicks') {
+      params.sort = 'master_class.clickCount';
+    } else {
+      params.sort = '';
+    }
+
+    if (params.getAll) {
+      return await this.masterClassRepository.findAllForAdmin(params);
+    }
+
+    return await this.masterClassRepository.findAll(params);
+  }
+
+  async getOne(
+    params: findOneMasterClassParamsDto,
+  ): Promise<MasterClassEntity> {
+    return await this.masterClassRepository.findOneProduct(params);
+  }
+
+  async getLiked(
+    params: findAllMasterClassParamsDto,
+  ): Promise<[MasterClassEntity[], number]> {
+    if (params.sort === 'title') {
+      params.sort = 'master_class.titleRu';
+    } else if (params.sort === 'date') {
+      params.sort = 'master_class.createdDate';
+    } else if (params.sort === 'clicks') {
+      params.sort = 'master_class.clickCount';
+    } else {
+      params.sort = '';
+    }
+
+    return await this.masterClassRepository.findLiked(params);
+  }
+
+  async getOneForAdmin(id: string): Promise<MasterClassEntity> {
+    return await this.masterClassRepository.getOneForAdmin(id);
+  }
+
   async save(body: MasterClassDto): Promise<MasterClassEntity> {
     if (!Boolean(body.vendorCode)) {
       body.vendorCode = MasterClassEntity.getVendorCode();
     }
     return await this.masterClassRepository.save(body);
   }
-  async getAll(
-    query: string,
-    size: number,
-    page: number,
-    sort: string,
-    by: 'DESC' | 'ASC',
-    where: string,
-    category: string,
-    getAll: boolean,
-  ): Promise<[MasterClassEntity[], number]> {
-    if (sort === 'title') {
-      if (query === 'ru') {
-        sort = 'master_class.titleRu';
-      } else if (query === 'en') {
-        sort = 'master_class.titleEn';
-      }
-    } else if (sort === 'clicks') {
-      sort = 'master_class.clickCount';
-    } else if (sort === 'date') {
-      sort = 'master_class.createdDate';
-    } else sort = '';
-
-    if (getAll) {
-      return await this.masterClassRepository.findAllForAdmin(
-        size,
-        page,
-        sort,
-        by,
-        where,
-        category,
-      );
-    }
-    if (query === 'ru') {
-      return await this.masterClassRepository.findAllRu(
-        size,
-        page,
-        sort,
-        by,
-        where,
-        category,
-      );
-    }
-
-    if (query === 'en') {
-      return await this.masterClassRepository.findAllEn(
-        size,
-        page,
-        sort,
-        by,
-        where,
-        category,
-      );
-    }
-  }
-  async getAllAuth(
-    query: string,
-    size: number,
-    page: number,
-    sort: string,
-    by: 'DESC' | 'ASC',
-    where: string,
-    category: string,
-    userId: number,
-  ): Promise<[MasterClassEntity[], number]> {
-    if (sort === 'title') {
-      if (query === 'ru') {
-        sort = 'master_class.titleRu';
-      } else if (query === 'en') {
-        sort = 'master_class.titleEn';
-      }
-    } else if (sort === 'clicks') {
-      sort = 'master_class.clickCount';
-    } else if (sort === 'date') {
-      sort = 'master_class.createdDate';
-    } else sort = '';
-    if (query === 'ru') {
-      return await this.masterClassRepository.findAllRuAuth(
-        size,
-        page,
-        sort,
-        by,
-        where,
-        category,
-        userId,
-      );
-    }
-
-    if (query === 'en') {
-      return await this.masterClassRepository.findAllEnAuth(
-        size,
-        page,
-        sort,
-        by,
-        where,
-        category,
-        userId,
-      );
-    }
-  }
-  async getOne(id: string, query: string): Promise<MasterClassEntity> {
-    if (query === 'ru') return await this.masterClassRepository.findOneRu(id);
-    if (query === 'en') return await this.masterClassRepository.findOneEn(id);
-  }
-  async getOneAuth(
-    id: string,
-    query: string,
-    userId: number,
-  ): Promise<MasterClassEntity> {
-    if (query === 'ru')
-      return await this.masterClassRepository.findOneRuAuth(id, userId);
-    if (query === 'en')
-      return await this.masterClassRepository.findOneEnAuth(id, userId);
-  }
-  async getLiked(
-    userId: number,
-    query: string,
-    size: number,
-    page: number,
-  ): Promise<[MasterClassEntity[], number]> {
-    if (query === 'ru')
-      return await this.masterClassRepository.findLikedRu(userId, size, page);
-    if (query === 'en')
-      return await this.masterClassRepository.findLikedEn(userId, size, page);
-  }
-  // async update(id: string, body: MasterClassDto) {
-  //   if (!Boolean(body.vendorCode)) {
-  //     body.vendorCode = MasterClassEntity.getVendorCode();
-  //   }
-  //   const masterClass: MasterClassEntity =
-  //     await this.masterClassRepository.findOneOrFail(id, {
-  //       relations: ['recommendation'],
-  //     });
-
-  //   if (masterClass.recommendation?.id) {
-  //     await this.recommendationService.delete(masterClass.recommendation.id);
-  //   }
-
-  //   Object.assign(masterClass, { ...body });
-  //   return await this.masterClassRepository.save(masterClass);
-  // }
-  async update(id: string, body: any) {
+  async update(id: string, body: MasterClassDto) {
     body.id = id;
+    if (!Boolean(body.vendorCode)) {
+      body.vendorCode = MasterClassEntity.getVendorCode();
+    }
     return await this.masterClassRepository.save(body);
   }
   async delete(id: string) {
@@ -178,9 +90,7 @@ export class MasterClassService {
   async disable(id: string, deleted: boolean) {
     await this.masterClassRepository.update({ id }, { deleted });
   }
-  async getOneForAdmin(id: string, query: string): Promise<MasterClassEntity> {
-    return await this.masterClassRepository.getOneForAdmin(id);
-  }
+
   async getPriceAndDiscount(
     masterClass: MasterClassEntity,
   ): Promise<{ totalPrice: number; totalDiscount: number }> {

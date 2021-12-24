@@ -132,17 +132,16 @@ export class PostEntity {
 
   @Column({
     type: 'bool',
-    name: 'pinned',
-    nullable: true,
-    default: false,
-  })
-  pinned?: boolean;
-
-  @Column({
-    type: 'bool',
     name: 'deleted',
     default: false,
     nullable: true,
   })
   deleted?: boolean;
+
+  @Column({
+    type: 'bool',
+    name: 'in_english',
+    default: false,
+  })
+  inEnglish?: boolean;
 }

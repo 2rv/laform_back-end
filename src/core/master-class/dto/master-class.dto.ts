@@ -10,21 +10,22 @@ import {
   ArrayMinSize,
   ArrayMaxSize,
   IsObject,
+  IsUUID,
 } from 'class-validator';
 import { CategoryDto } from 'src/core/category/dto/category.dto';
 import { FileDto } from 'src/core/file-upload/dto/file-dto';
 import { CreateRecommendationDto } from 'src/core/recommendation/dto/create-recommendation.dto';
 
 export class MasterClassDto {
+  @IsNotEmpty()
+  @IsUUID()
+  id: string;
+
   @IsOptional()
   @IsNumber()
   @Min(0)
   @Max(0)
   type: number;
-
-  @IsOptional()
-  @IsBoolean()
-  pinned: boolean;
 
   @IsOptional()
   @IsBoolean()

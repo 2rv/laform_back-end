@@ -3,14 +3,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { MasterClassController } from './master-class.controller';
 import { MasterClassService } from './master-class.service';
 import { MasterClassRepository } from './master-class.repository';
-import { RecommendationModule } from '../recommendation/recommendation.module';
 import { MasterClassEntity } from './master-class.entity';
 import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
 import { PageNavigationRepository } from '../page-navigation/page-navigation.repository';
 
 @Module({
   imports: [
-    RecommendationModule,
     TypeOrmModule.forFeature([
       MasterClassRepository,
       MasterClassEntity,

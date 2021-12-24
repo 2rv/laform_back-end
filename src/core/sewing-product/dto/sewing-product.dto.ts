@@ -11,6 +11,7 @@ import {
   ArrayMaxSize,
   IsBoolean,
   IsObject,
+  IsUUID,
 } from 'class-validator';
 import { CategoryDto } from 'src/core/category/dto/category.dto';
 import { FileDto } from 'src/core/file-upload/dto/file-dto';
@@ -19,8 +20,8 @@ import { CreateRecommendationDto } from 'src/core/recommendation/dto/create-reco
 
 export class SewingProductDto {
   @IsOptional()
-  @IsBoolean()
-  pinned: boolean;
+  @IsUUID()
+  id?: string;
 
   @IsNotEmpty()
   @IsString()
