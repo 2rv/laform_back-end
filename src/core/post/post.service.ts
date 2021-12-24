@@ -2,17 +2,46 @@ import { PostEntity } from './post.entity';
 import { Injectable } from '@nestjs/common';
 import { PostDto } from './dto/post.dto';
 import { PostRepository } from './post.repository';
-import { FileUploadService } from '../file-upload/file-upload.service';
-import { RecommendationService } from '../recommendation/recommendation.service';
-import { AwsConfig } from '../../config/aws.config';
+import {
+  findAllPostParamsDto,
+  findOnePostParamsDto,
+} from './dto/post-find-params.dto';
 
 @Injectable()
 export class PostService {
-  constructor(
-    private postRepository: PostRepository,
-    private fileUploadService: FileUploadService,
-    private recommendationService: RecommendationService,
-  ) {}
+  constructor(private postRepository: PostRepository) {}
+
+  async getAll(params: findAllPostParamsDto): Promise<[PostEntity[], number]> {
+    if (params.sort === 'title') {
+      params.sort = 'post.titleRu';
+    } else if (params.sort === 'date') {
+      params.sort = 'post.createdDate';
+    } else {
+      params.sort = '';
+    }
+
+    if (params.getAll) {
+      return await this.postRepository.findAllForAdmin(params);
+    }
+    return await this.postRepository.findAll(params);
+  }
+
+  async getOne(params: findOnePostParamsDto): Promise<PostEntity> {
+    return await this.postRepository.findOneProduct(params);
+  }
+
+  async getLiked(
+    params: findAllPostParamsDto,
+  ): Promise<[PostEntity[], number]> {
+    if (params.sort === 'title') {
+      params.sort = 'post.titleRu';
+    } else if (params.sort === 'date') {
+      params.sort = 'post.createdDate';
+    } else {
+      params.sort = '';
+    }
+    return await this.postRepository.findLiked(params);
+  }
 
   async create(body: PostDto): Promise<PostEntity> {
     if (!Boolean(body.vendorCode)) {
@@ -20,141 +49,12 @@ export class PostService {
     }
     return await this.postRepository.save(body);
   }
-  async getAll(
-    query: string,
-    size: number,
-    page: number,
-    sort: string,
-    by: 'DESC' | 'ASC',
-    where: string,
-    category: string,
-    getAll: boolean,
-  ): Promise<[PostEntity[], number]> {
-    if (sort === 'title') {
-      if (query === 'ru') {
-        sort = 'post.titleRu';
-      } else if (query === 'en') {
-        sort = 'post.titleEn';
-      }
-    } else if (sort === 'date') {
-      sort = 'post.createdDate';
-    } else sort = '';
-
-    if (getAll) {
-      return await this.postRepository.findAllForAdmin(
-        size,
-        page,
-        sort,
-        by,
-        where,
-        category,
-      );
-    }
-
-    if (query === 'ru') {
-      return await this.postRepository.findAllRu(
-        size,
-        page,
-        sort,
-        by,
-        where,
-        category,
-      );
-    }
-    if (query === 'en') {
-      return await this.postRepository.findAllEn(
-        size,
-        page,
-        sort,
-        by,
-        where,
-        category,
-      );
-    }
-  }
-  async getAllAuth(
-    query: string,
-    size: number,
-    page: number,
-    sort: string,
-    by: 'DESC' | 'ASC',
-    where: string,
-    category: string,
-    userId: number,
-  ): Promise<[PostEntity[], number]> {
-    if (sort === 'title') {
-      if (query === 'ru') {
-        sort = 'post.titleRu';
-      } else if (query === 'en') {
-        sort = 'post.titleEn';
-      }
-    } else if (sort === 'date') {
-      sort = 'post.createdDate';
-    } else sort = '';
-
-    if (query === 'ru') {
-      return await this.postRepository.findAllRuAuth(
-        size,
-        page,
-        sort,
-        by,
-        where,
-        category,
-        userId,
-      );
-    }
-    if (query === 'en') {
-      return await this.postRepository.findAllEnAuth(
-        size,
-        page,
-        sort,
-        by,
-        where,
-        category,
-        userId,
-      );
-    }
-  }
-  async getOne(id: string, query: string): Promise<PostEntity> {
-    if (query === 'ru') return await this.postRepository.findOneRu(id);
-    if (query === 'en') return await this.postRepository.findOneEn(id);
-  }
-  async getOneAuth(
-    id: string,
-    query: string,
-    userId: number,
-  ): Promise<PostEntity> {
-    if (query === 'ru')
-      return await this.postRepository.findOneRuAuth(id, userId);
-    if (query === 'en')
-      return await this.postRepository.findOneEnAuth(id, userId);
-  }
-  async getLiked(
-    userId: number,
-    query: string,
-    size: number,
-    page: number,
-  ): Promise<[PostEntity[], number]> {
-    if (query === 'ru')
-      return await this.postRepository.findLikedRu(userId, size, page);
-    if (query === 'en')
-      return await this.postRepository.findLikedEn(userId, size, page);
-  }
   async update(id: string, body: PostDto) {
+    body.id = id;
     if (!Boolean(body.vendorCode)) {
       body.vendorCode = PostEntity.getVendorCode();
     }
-    const post: PostEntity = await this.postRepository.findOneOrFail(id, {
-      relations: ['image'],
-    });
-    if (body.image.id !== post.image.id) {
-      await this.fileUploadService.delete(post.image.id);
-    }
-    if (post.recommendation?.id) {
-      await this.recommendationService.delete(post.recommendation.id);
-    }
-    Object.assign(post, { ...body });
-    return await this.postRepository.save(post);
+    return await this.postRepository.save(body);
   }
   async delete(id: string) {
     const post = await this.postRepository.findOneOrFail(id);
@@ -164,17 +64,3 @@ export class PostService {
     await this.postRepository.update({ id }, { deleted });
   }
 }
-
-// async updatePinned(id: string, body: any) {
-//     await this.postRepository.update({ id }, body);
-//   }
-//   async getPinned(query: string): Promise<PostEntity[]> {
-//     if (query === 'ru') return await this.postRepository.findPinnedRu();
-//     if (query === 'en') return await this.postRepository.findPinnedEn();
-//   }
-//   async getPinnedAuth(query: string, userId: number): Promise<PostEntity[]> {
-//     if (query === 'ru')
-//       return await this.postRepository.findPinnedRuAuth(userId);
-//     if (query === 'en')
-//       return await this.postRepository.findPinnedEnAuth(userId);
-//   }

@@ -9,7 +9,6 @@ import {
   Put,
   Query,
   Delete,
-  Request,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AccountGuard } from '../user/guard/account.guard';
@@ -21,31 +20,25 @@ import { LangValidationPipe } from 'src/common/guards/lang.guard';
 import { SewingProductDto } from './dto/sewing-product.dto';
 import { GetAccount } from '../user/decorator/get-account.decorator';
 import { UserEntity } from '../user/user.entity';
+import { LangType } from 'src/common/enum/lang.enum';
 
 @Controller('sewing-product')
 export class SewingProductController {
   constructor(private sewingProductService: SewingProductService) {}
 
-  @Post('/create/')
-  @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async save(@Body(new ValidationPipe()) body: SewingProductDto) {
-    return await this.sewingProductService.create(body);
-  }
-
   @Get('/get/')
   async getAll(
-    @Query(new LangValidationPipe()) query: string,
-    @Query('size') size: number,
+    @Query(new LangValidationPipe()) lang: LangType,
+    @Query('size') size: number = 30,
+    @Query('page') page: number = 1,
+    @Query('by') by: 'DESC' | 'ASC' = 'DESC',
     @Query('sort') sort: string,
-    @Query('page') page: number,
-    @Query('by') by: 'DESC' | 'ASC',
     @Query('where') where: string,
     @Query('category') category: string,
     @Query('getAll') getAll: boolean,
   ) {
-    return await this.sewingProductService.getAll(
-      query,
+    return await this.sewingProductService.getAll({
+      lang,
       size,
       page,
       sort,
@@ -53,78 +46,93 @@ export class SewingProductController {
       where,
       category,
       getAll,
-    );
+    });
   }
   @Get('/auth/get/')
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getAllAuth(
-    @Query(new LangValidationPipe()) query: string,
-    @Query('size') size: number,
+    @Query(new LangValidationPipe()) lang: LangType,
+    @Query('size') size: number = 30,
+    @Query('page') page: number = 1,
+    @Query('by') by: 'DESC' | 'ASC' = 'DESC',
     @Query('sort') sort: string,
-    @Query('page') page: number,
-    @Query('by') by: 'DESC' | 'ASC',
     @Query('where') where: string,
     @Query('category') category: string,
     @GetAccount() user: UserEntity,
   ) {
-    return await this.sewingProductService.getAllAuth(
-      query,
+    return await this.sewingProductService.getAll({
+      lang,
       size,
       page,
       sort,
       by,
       where,
       category,
-      user.id,
-    );
+      userId: user.id,
+    });
   }
-
-  @Get('/get/:sewingProductId')
-  @UseGuards(SewingProductGuard)
-  async getOne(
-    @Query(new LangValidationPipe()) query,
-    @Param('sewingProductId') sewingProductId: string,
-  ) {
-    return await this.sewingProductService.getOne(sewingProductId, query);
-  }
-  @Get('/auth/get/:sewingProductId')
-  @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
-  async getOneAuth(
-    @Query(new LangValidationPipe()) query,
-    @Param('sewingProductId') sewingProductId: string,
-    @GetAccount() user: UserEntity,
-  ) {
-    return await this.sewingProductService.getOneAuth(
-      sewingProductId,
-      query,
-      user.id,
-    );
-  }
-
   @Get('/liked/get/')
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getLiked(
-    @Query(new LangValidationPipe()) query: string,
-    @Query('size') size: number,
-    @Query('page') page: number,
+    @Query(new LangValidationPipe()) lang: LangType,
+    @Query('size') size: number = 30,
+    @Query('page') page: number = 1,
+    @Query('by') by: 'DESC' | 'ASC' = 'DESC',
+    @Query('sort') sort: string,
+    @Query('where') where: string,
+    @Query('category') category: string,
     @GetAccount() user: UserEntity,
   ) {
-    return await this.sewingProductService.getLiked(user.id, query, size, page);
+    return await this.sewingProductService.getLiked({
+      lang,
+      size,
+      page,
+      sort,
+      by,
+      where,
+      category,
+      userId: user.id,
+    });
   }
 
+  @Get('/get/:sewingProductId')
+  async getOne(@Param('sewingProductId') id: string) {
+    return await this.sewingProductService.getOne({ id });
+  }
+  @Get('/auth/get/:sewingProductId')
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getOneAuth(
+    @Param('sewingProductId') id: string,
+    @GetAccount() user: UserEntity,
+  ) {
+    return await this.sewingProductService.getOne({ id, userId: user.id });
+  }
+
+  @Get('/get/for-update/:sewingProductId')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getOneForUpdate(@Param('sewingProductId') id: string) {
+    return await this.sewingProductService.getOneForUpdate(id);
+  }
+
+  @Post('/create/')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async save(@Body(new ValidationPipe()) body: SewingProductDto) {
+    return await this.sewingProductService.create(body);
+  }
   @Put('/update/:sewingProductId')
   @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
   async update(
     @Param('sewingProductId') sewingProductId: string,
     @Body() body: SewingProductDto,
   ) {
     return await this.sewingProductService.update(sewingProductId, body);
   }
-
   @Put('/disable/:sewingProductId')
   @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
   async disable(
     @Param('sewingProductId') sewingProductId: string,
     @Body() body: { deleted: boolean },
@@ -136,21 +144,8 @@ export class SewingProductController {
   }
   @Delete('/delete/:sewingProductId')
   @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
   async delete(@Param('sewingProductId') sewingProductId: string) {
     return await this.sewingProductService.delete(sewingProductId);
-  }
-
-  @Get('/get/for-update/:sewingProductId')
-  @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
-  async getOneForUpdate(
-    @Query(new LangValidationPipe()) query,
-    @Param('sewingProductId') sewingProductId: string,
-  ) {
-    return await this.sewingProductService.getOneForUpdate(
-      sewingProductId,
-      query,
-    );
   }
 }

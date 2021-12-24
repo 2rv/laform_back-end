@@ -19,8 +19,8 @@ import { CreateRecommendationDto } from 'src/core/recommendation/dto/create-reco
 
 export class PatternProductDto {
   @IsOptional()
-  @IsBoolean()
-  pinned: boolean;
+  @IsString()
+  id: string;
 
   @IsNotEmpty()
   @IsNumber()

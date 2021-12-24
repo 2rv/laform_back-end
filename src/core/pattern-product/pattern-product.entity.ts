@@ -4,7 +4,6 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   OneToOne,
-  JoinColumn,
   ManyToMany,
   JoinTable,
   CreateDateColumn,
@@ -233,14 +232,15 @@ export class PatternProductEntity {
 
   @Column({
     type: 'bool',
-    name: 'pinned',
-    default: false,
-  })
-  pinned?: boolean;
-  @Column({
-    type: 'bool',
     name: 'deleted',
     default: false,
   })
   deleted?: boolean;
+
+  @Column({
+    type: 'bool',
+    name: 'in_english',
+    default: false,
+  })
+  inEnglish?: boolean;
 }

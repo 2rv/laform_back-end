@@ -4,7 +4,6 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   OneToOne,
-  JoinColumn,
   JoinTable,
   ManyToMany,
   CreateDateColumn,
@@ -188,16 +187,18 @@ export class SewingProductEntity {
     default: false,
   })
   isLength?: boolean;
-  @Column({
-    type: 'bool',
-    name: 'pinned',
-    default: false,
-  })
-  pinned?: boolean;
+
   @Column({
     type: 'bool',
     name: 'deleted',
     default: false,
   })
   deleted?: boolean;
+
+  @Column({
+    type: 'bool',
+    name: 'in_english',
+    default: false,
+  })
+  inEnglish?: boolean;
 }

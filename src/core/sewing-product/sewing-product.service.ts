@@ -4,18 +4,63 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { SewingProductDto } from './dto/sewing-product.dto';
 import { ProductOptionEntity } from '../product-option/product-option.entity';
 import { ProductOptionService } from '../product-option/product-option.service';
-import { RecommendationService } from '../recommendation/recommendation.service';
 import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
 import { PURCHASE_ERROR } from '../purchase/enum/purchase.enum';
+import {
+  findAllSewingProductParamsDto,
+  findOneSewingProductParamsDto,
+} from './dto/sewing-product-find-params.dto';
 
 @Injectable()
 export class SewingProductService {
   constructor(
     private sewingProductRepository: SewingProductRepository,
     private productOptionService: ProductOptionService,
-    private recommendationService: RecommendationService,
     private purchaseProductRepository: PurchaseProductRepository,
   ) {}
+
+  async getAll(
+    params: findAllSewingProductParamsDto,
+  ): Promise<[SewingProductEntity[], number]> {
+    if (params.sort === 'title') {
+      params.sort = 'sewing_product.titleRu';
+    } else if (params.sort === 'date') {
+      params.sort = 'sewing_product.createdDate';
+    } else if (params.sort === 'clicks') {
+      params.sort = 'sewing_product.clickCount';
+    } else {
+      params.sort = '';
+    }
+
+    if (params.getAll) {
+      return await this.sewingProductRepository.findAllForAdmin(params);
+    }
+    return await this.sewingProductRepository.findAll(params);
+  }
+
+  async getLiked(
+    params: findAllSewingProductParamsDto,
+  ): Promise<[SewingProductEntity[], number]> {
+    if (params.sort === 'title') {
+      params.sort = 'sewing_product.titleRu';
+    } else if (params.sort === 'date') {
+      params.sort = 'sewing_product.createdDate';
+    } else if (params.sort === 'clicks') {
+      params.sort = 'sewing_product.clickCount';
+    } else {
+      params.sort = '';
+    }
+    return await this.sewingProductRepository.findLiked(params);
+  }
+
+  async getOne(
+    params: findOneSewingProductParamsDto,
+  ): Promise<SewingProductEntity> {
+    return await this.sewingProductRepository.findOneProduct(params);
+  }
+  async getOneForUpdate(id: string): Promise<SewingProductEntity> {
+    return await this.sewingProductRepository.findOneForUpdate(id);
+  }
 
   async create(body: SewingProductDto): Promise<SewingProductEntity> {
     if (!Boolean(body.vendorCode)) {
@@ -38,137 +83,13 @@ export class SewingProductService {
 
     return await this.sewingProductRepository.save(body);
   }
-
-  async getAll(
-    query: string,
-    size: number,
-    page: number,
-    sort: string,
-    by: 'DESC' | 'ASC',
-    where: string,
-    category: string,
-    getAll: boolean,
-  ): Promise<[SewingProductEntity[], number]> {
-    if (sort === 'title') {
-      if (query === 'ru') {
-        sort = 'sewing_product.titleRu';
-      } else if (query === 'en') {
-        sort = 'sewing_product.titleEn';
-      }
-    } else if (sort === 'clicks') {
-      sort = 'sewing_product.clickCount';
-    } else if (sort === 'date') {
-      sort = 'sewing_product.createdDate';
-    } else sort = '';
-
-    if (getAll) {
-      return await this.sewingProductRepository.findAllForAdmin(
-        size,
-        page,
-        sort,
-        by,
-        where,
-        category,
-      );
-    }
-    if (query === 'ru') {
-      return await this.sewingProductRepository.findAllRu(
-        size,
-        page,
-        sort,
-        by,
-        where,
-        category,
-      );
-    }
-    if (query === 'en') {
-      return await this.sewingProductRepository.findAllEn(
-        size,
-        page,
-        sort,
-        by,
-        where,
-        category,
-      );
-    }
-  }
-  async getAllAuth(
-    query: string,
-    size: number,
-    page: number,
-    sort: string,
-    by: 'DESC' | 'ASC',
-    where: string,
-    category: string,
-    userId: number,
-  ): Promise<[SewingProductEntity[], number]> {
-    if (sort === 'title') {
-      if (query === 'ru') {
-        sort = 'sewing_product.titleRu';
-      } else if (query === 'en') {
-        sort = 'sewing_product.titleEn';
-      }
-    } else if (sort === 'clicks') {
-      sort = 'sewing_product.clickCount';
-    } else if (sort === 'date') {
-      sort = 'sewing_product.createdDate';
-    } else sort = '';
-
-    if (query === 'ru') {
-      return await this.sewingProductRepository.findAllRuAuth(
-        size,
-        page,
-        sort,
-        by,
-        where,
-        category,
-        userId,
-      );
-    }
-    if (query === 'en') {
-      return await this.sewingProductRepository.findAllEnAuth(
-        size,
-        page,
-        sort,
-        by,
-        where,
-        category,
-        userId,
-      );
-    }
-  }
-
-  async getOne(id: string, query: string): Promise<SewingProductEntity> {
-    if (query === 'ru') return await this.sewingProductRepository.findOneRu(id);
-    if (query === 'en') return await this.sewingProductRepository.findOneEn(id);
-  }
-  async getOneAuth(
-    id: string,
-    query: string,
-    userId: number,
-  ): Promise<SewingProductEntity> {
-    if (query === 'ru')
-      return await this.sewingProductRepository.findOneRuAuth(id, userId);
-    if (query === 'en')
-      return await this.sewingProductRepository.findOneEnAuth(id, userId);
-  }
-
-  async getLiked(
-    userId: number,
-    query: string,
-    size: number,
-    page: number,
-  ): Promise<[SewingProductEntity[], number]> {
-    if (query === 'ru')
-      return await this.sewingProductRepository.findLikedRu(userId, size, page);
-    if (query === 'en')
-      return await this.sewingProductRepository.findLikedEn(userId, size, page);
-  }
-
   async update(id: string, body: SewingProductDto) {
+    body.id = id;
+
     if (!Boolean(body.vendorCode)) {
       body.vendorCode = SewingProductEntity.getVendorCode();
     }
+
     body.options = body.options.map((item, index) => {
       if (body.optionType === 1) {
         item.vendorCode = `${body.vendorCode}-${item.size || index}-${
@@ -184,16 +105,8 @@ export class SewingProductService {
       return item;
     });
 
-    const sewingProduct: SewingProductEntity =
-      await this.sewingProductRepository.findOneOrFail(id);
-
-    if (sewingProduct.recommendation?.id) {
-      await this.recommendationService.delete(sewingProduct.recommendation.id);
-    }
-    Object.assign(sewingProduct, { ...body });
-    return await this.sewingProductRepository.save(sewingProduct);
+    return await this.sewingProductRepository.save(body);
   }
-
   async delete(id: string) {
     const sewingProduct = await this.sewingProductRepository.findOneOrFail(id);
     const wasPurchased = await this.purchaseProductRepository.findOne({
@@ -206,11 +119,9 @@ export class SewingProductService {
       await this.sewingProductRepository.delete(id);
     }
   }
-
   async disable(id: string, deleted: boolean) {
     await this.sewingProductRepository.update({ id }, { deleted });
   }
-
   async getPriceAndDiscountAndCountAndLength(
     sewingProduct: SewingProductEntity,
     option: ProductOptionEntity,
@@ -250,7 +161,6 @@ export class SewingProductService {
       isLength: result.isLength,
     };
   }
-
   async updateCountOrLength(
     sewingProduct: SewingProductEntity,
     option: ProductOptionEntity,
@@ -311,13 +221,5 @@ export class SewingProductService {
         });
       }
     }
-  }
-
-  async getOneForUpdate(
-    id: string,
-    query: string,
-  ): Promise<SewingProductEntity> {
-    if (query === 'ru')
-      return await this.sewingProductRepository.findOneForUpdate(id);
   }
 }

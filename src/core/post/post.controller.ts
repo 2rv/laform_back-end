@@ -20,31 +20,25 @@ import { Roles } from '../user/decorator/role.decorator';
 import { LangValidationPipe } from '../../common/guards/lang.guard';
 import { GetAccount } from '../user/decorator/get-account.decorator';
 import { UserEntity } from '../user/user.entity';
+import { LangType } from 'src/common/enum/lang.enum';
 
 @Controller('post')
 export class PostController {
   constructor(private postService: PostService) {}
 
-  @Post('/create/')
-  @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async save(@Body(new ValidationPipe()) body: PostDto) {
-    return await this.postService.create(body);
-  }
-
   @Get('/get/')
   async getAll(
-    @Query(new LangValidationPipe()) query: string,
-    @Query('size') size: number,
+    @Query(new LangValidationPipe()) lang: LangType,
+    @Query('size') size: number = 30,
+    @Query('page') page: number = 1,
+    @Query('by') by: 'DESC' | 'ASC' = 'DESC',
     @Query('sort') sort: string,
-    @Query('page') page: number,
-    @Query('by') by: 'DESC' | 'ASC',
     @Query('where') where: string,
     @Query('category') category: string,
     @Query('getAll') getAll: boolean,
   ) {
-    return await this.postService.getAll(
-      query,
+    return await this.postService.getAll({
+      lang,
       size,
       page,
       sort,
@@ -52,57 +46,80 @@ export class PostController {
       where,
       category,
       getAll,
-    );
+    });
   }
+
   @Get('/auth/get/')
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getAllAuth(
-    @Query(new LangValidationPipe()) query: string,
-    @Query('size') size: number,
+    @Query(new LangValidationPipe()) lang: LangType,
+    @Query('size') size: number = 30,
+    @Query('page') page: number = 1,
+    @Query('by') by: 'DESC' | 'ASC' = 'DESC',
     @Query('sort') sort: string,
-    @Query('page') page: number,
-    @Query('by') by: 'DESC' | 'ASC',
     @Query('where') where: string,
     @Query('category') category: string,
     @GetAccount() user: UserEntity,
   ) {
-    return await this.postService.getAllAuth(
-      query,
+    return await this.postService.getAll({
+      lang,
       size,
       page,
       sort,
       by,
       where,
       category,
-      user.id,
-    );
+      userId: user.id,
+    });
   }
+
   @Get('/get/:postId')
   @UseGuards(PostGuard)
-  async getOne(
-    @Query(new LangValidationPipe()) query: string,
-    @Param('postId') id: string,
-  ) {
-    return await this.postService.getOne(id, query);
+  async getOne(@Param('postId') id: string) {
+    return await this.postService.getOne({ id });
   }
+
   @Get('/auth/get/:postId')
   @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard)
   async getOneAuth(
-    @Query(new LangValidationPipe()) query: string,
     @Param('postId') id: string,
     @GetAccount() user: UserEntity,
   ) {
-    return await this.postService.getOneAuth(id, query, user.id);
+    return await this.postService.getOne({
+      id,
+      userId: user.id,
+    });
   }
+
   @Get('/liked/get/')
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getLiked(
-    @Query(new LangValidationPipe()) query: string,
-    @Query('size') size: number,
-    @Query('page') page: number,
+    @Query(new LangValidationPipe()) lang: LangType,
+    @Query('size') size: number = 30,
+    @Query('page') page: number = 1,
+    @Query('by') by: 'DESC' | 'ASC' = 'DESC',
+    @Query('sort') sort: string,
+    @Query('where') where: string,
+    @Query('category') category: string,
     @GetAccount() user: UserEntity,
   ) {
-    return await this.postService.getLiked(user.id, query, size, page);
+    return await this.postService.getLiked({
+      lang,
+      size,
+      page,
+      sort,
+      by,
+      where,
+      category,
+      userId: user.id,
+    });
+  }
+
+  @Post('/create/')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async save(@Body(new ValidationPipe()) body: PostDto) {
+    return await this.postService.create(body);
   }
   @Put('/update/:postId')
   @Roles(USER_ROLE.ADMIN)

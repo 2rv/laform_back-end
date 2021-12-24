@@ -16,7 +16,6 @@ import { CommentEntity } from '../comment/comment.entity';
 import { RecommendationProductEntity } from '../recommendation-product/recommendation-product.entity';
 import { RecommendationEntity } from '../recommendation/recommendation.entity';
 import { generateVendorCode } from 'src/common/utils/vendor-coder';
-import { CompilationEntity } from '../compilation/compilation.entity';
 import { CompilationProductEntity } from '../compilation-product/compilation-product.entity';
 
 @Entity({ name: 'master_class' })
@@ -44,7 +43,7 @@ export class MasterClassEntity {
     default: 0,
   })
   clickCount?: number;
-  
+
   @CreateDateColumn({
     name: 'created_date',
     readonly: true,
@@ -193,15 +192,15 @@ export class MasterClassEntity {
 
   @Column({
     type: 'bool',
-    name: 'pinned',
-    default: false,
-  })
-  pinned?: boolean;
-
-  @Column({
-    type: 'bool',
     name: 'deleted',
     default: false,
   })
   deleted?: boolean;
+
+  @Column({
+    type: 'bool',
+    name: 'in_english',
+    default: false,
+  })
+  inEnglish?: boolean;
 }

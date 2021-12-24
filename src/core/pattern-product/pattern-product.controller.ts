@@ -8,7 +8,7 @@ import {
   Put,
   Query,
   Delete,
-  Request,
+  Param,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AccountGuard } from '../user/guard/account.guard';
@@ -20,39 +20,26 @@ import { LangValidationPipe } from 'src/common/guards/lang.guard';
 import { PatternProductDto } from './dto/pattern-product.dto';
 import { GetAccount } from '../user/decorator/get-account.decorator';
 import { UserEntity } from '../user/user.entity';
+import { LangType } from 'src/common/enum/lang.enum';
 
 @Controller('pattern-product')
 export class PatternProductController {
-  constructor(private readonly patternProductService: PatternProductService) {}
-
-  @Post('/create/')
-  @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async save(@Body(new ValidationPipe()) body: PatternProductDto) {
-    return await this.patternProductService.create(body);
-  }
-
-  @Get('/create/mass')
-  // @Roles(USER_ROLE.ADMIN)
-  // @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async saveMass(@Body() body) {
-    return await this.patternProductService.createMass(body);
-  }
+  constructor(private patternProductService: PatternProductService) {}
 
   @Get('/get/')
   async getAll(
-    @Query(new LangValidationPipe()) query: string,
-    @Query('size') size: number,
-    @Query('sort') sort: string,
-    @Query('page') page: number,
-    @Query('by') by: 'DESC' | 'ASC',
+    @Query(new LangValidationPipe()) lang: LangType,
+    @Query('size') size: number = 30,
+    @Query('page') page: number = 1,
+    @Query('by') by: 'DESC' | 'ASC' = 'DESC',
+    @Query('sort') sort: string = 'date',
     @Query('where') where: string,
-    @Query('type') type: string,
+    @Query('type') type: 'printed' | 'electronic',
     @Query('category') category: string,
     @Query('getAll') getAll: boolean,
   ) {
-    return await this.patternProductService.getAll(
-      query,
+    return await this.patternProductService.getAll({
+      lang,
       size,
       page,
       sort,
@@ -61,23 +48,24 @@ export class PatternProductController {
       type,
       category,
       getAll,
-    );
+    });
   }
+
   @Get('/auth/get/')
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getAllAuth(
-    @Query(new LangValidationPipe()) query: string,
-    @Query('size') size: number,
+    @Query(new LangValidationPipe()) lang: LangType,
+    @Query('size') size: number = 30,
+    @Query('page') page: number = 1,
+    @Query('by') by: 'DESC' | 'ASC' = 'DESC',
     @Query('sort') sort: string,
-    @Query('page') page: number,
-    @Query('by') by: 'DESC' | 'ASC',
     @Query('where') where: string,
-    @Query('type') type: string,
+    @Query('type') type: 'printed' | 'electronic' | '',
     @Query('category') category: string,
     @GetAccount() user: UserEntity,
   ) {
-    return await this.patternProductService.getAllAuth(
-      query,
+    return await this.patternProductService.getAll({
+      lang,
       size,
       page,
       sort,
@@ -85,79 +73,94 @@ export class PatternProductController {
       where,
       type,
       category,
-      user.id,
-    );
+      userId: user.id,
+    });
   }
 
   @Get('/get/:patternProductId')
   @UseGuards(PatternProductGuard)
-  async getOne(@Query(new LangValidationPipe()) query, @Request() req) {
-    return await this.patternProductService.getOne(req.patternProductId, query);
+  async getOne(@Param('patternProductId') id: string) {
+    return await this.patternProductService.getOne({
+      id,
+    });
   }
+
   @Get('/auth/get/:patternProductId')
   @UseGuards(AuthGuard('jwt'), AccountGuard, PatternProductGuard)
   async getOneAuth(
-    @Query(new LangValidationPipe()) query,
-    @Request() req,
+    @Param('patternProductId') id: string,
     @GetAccount() user: UserEntity,
   ) {
-    return await this.patternProductService.getOneAuth(
-      req.patternProductId,
-      query,
-      user.id,
-    );
+    return await this.patternProductService.getOne({
+      id,
+      userId: user.id,
+    });
   }
 
   @Get('/liked/get/')
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getLiked(
-    @Query(new LangValidationPipe()) query: string,
-    @Query('size') size: number,
-    @Query('page') page: number,
+    @Query(new LangValidationPipe()) lang: LangType,
+    @Query('size') size: number = 30,
+    @Query('page') page: number = 1,
+    @Query('by') by: 'DESC' | 'ASC' = 'DESC',
+    @Query('sort') sort: string,
+    @Query('where') where: string,
+    @Query('type') type: 'printed' | 'electronic' | '',
+    @Query('category') category: string,
     @GetAccount() user: UserEntity,
   ) {
-    return await this.patternProductService.getLiked(
-      user.id,
-      query,
+    return await this.patternProductService.getLiked({
+      lang,
       size,
       page,
-    );
-  }
-
-  @Put('/update/:patternProductId')
-  @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard, PatternProductGuard)
-  async update(@Request() req, @Body() body: PatternProductDto) {
-    return await this.patternProductService.update(req.patternProductId, body);
-  }
-
-  @Delete('/delete/:patternProductId')
-  @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard, PatternProductGuard)
-  async delete(@Request() req) {
-    return await this.patternProductService.delete(req.patternProductId);
-  }
-
-  @Put('/disable/:patternProductId')
-  @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard, PatternProductGuard)
-  async disable(@Request() req, @Body() body: { deleted: boolean }) {
-    return await this.patternProductService.disable(
-      req.patternProductId,
-      body.deleted,
-    );
+      sort,
+      by,
+      where,
+      type,
+      category,
+      userId: user.id,
+    });
   }
 
   @Get('/get/for-update/:patternProductId')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard, PatternProductGuard)
-  async getOneForUpdate(
-    @Query(new LangValidationPipe()) query,
-    @Request() req,
+  async getOneForUpdate(@Param('patternProductId') id: string) {
+    return await this.patternProductService.getOneForUpdate(id);
+  }
+
+  @Post('/create/')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async save(@Body(new ValidationPipe()) body: PatternProductDto) {
+    return await this.patternProductService.create(body);
+  }
+
+  @Put('/update/:patternProductId')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard, PatternProductGuard)
+  async update(
+    @Param('patternProductId') id: string,
+    @Body() body: PatternProductDto,
   ) {
-    return await this.patternProductService.getOneForUpdate(
-      req.patternProductId,
-      query,
-    );
+    return await this.patternProductService.update(id, body);
+  }
+
+  @Delete('/delete/:patternProductId')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard, PatternProductGuard)
+  async delete(@Param('patternProductId') id: string) {
+    return await this.patternProductService.delete(id);
+  }
+
+  @Put('/disable/:patternProductId')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard, PatternProductGuard)
+  async disable(
+    @Param('patternProductId') id: string,
+    @Body() body: { deleted: boolean },
+  ) {
+    return await this.patternProductService.disable(id, body.deleted);
   }
 }

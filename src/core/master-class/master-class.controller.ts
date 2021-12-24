@@ -20,31 +20,25 @@ import { LangValidationPipe } from 'src/common/guards/lang.guard';
 import { MasterClassDto } from './dto/master-class.dto';
 import { GetAccount } from '../user/decorator/get-account.decorator';
 import { UserEntity } from '../user/user.entity';
+import { LangType } from 'src/common/enum/lang.enum';
 
 @Controller('master-class')
 export class MasterClassController {
   constructor(private readonly masterClassService: MasterClassService) {}
 
-  @Post('/create/')
-  @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async save(@Body(new ValidationPipe()) body: MasterClassDto) {
-    return await this.masterClassService.save(body);
-  }
-
   @Get('/get/')
   async getAll(
-    @Query(new LangValidationPipe()) query: string,
-    @Query('size') size: number,
+    @Query(new LangValidationPipe()) lang: LangType,
+    @Query('size') size: number = 30,
+    @Query('page') page: number = 1,
+    @Query('by') by: 'DESC' | 'ASC' = 'DESC',
     @Query('sort') sort: string,
-    @Query('page') page: number,
-    @Query('by') by: 'DESC' | 'ASC',
     @Query('where') where: string,
     @Query('category') category: string,
     @Query('getAll') getAll: boolean,
   ) {
-    return await this.masterClassService.getAll(
-      query,
+    return await this.masterClassService.getAll({
+      lang,
       size,
       page,
       sort,
@@ -52,64 +46,88 @@ export class MasterClassController {
       where,
       category,
       getAll,
-    );
+    });
   }
 
   @Get('/auth/get/')
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getAllAuth(
-    @Query(new LangValidationPipe()) query: string,
-    @Query('size') size: number,
+    @Query(new LangValidationPipe()) lang: LangType,
+    @Query('size') size: number = 30,
+    @Query('page') page: number = 1,
+    @Query('by') by: 'DESC' | 'ASC' = 'DESC',
     @Query('sort') sort: string,
-    @Query('page') page: number,
-    @Query('by') by: 'DESC' | 'ASC',
     @Query('where') where: string,
     @Query('category') category: string,
     @GetAccount() user: UserEntity,
   ) {
-    return await this.masterClassService.getAllAuth(
-      query,
+    return await this.masterClassService.getAll({
+      lang,
       size,
       page,
       sort,
       by,
       where,
       category,
-      user.id,
-    );
+      userId: user.id,
+    });
   }
 
   @Get('/get/:masterClassId')
   @UseGuards(MasterClassGuard)
-  async getOne(
-    @Query(new LangValidationPipe()) query,
-    @Param('masterClassId') masterClassId: string,
-  ) {
-    return await this.masterClassService.getOne(masterClassId, query);
+  async getOne(@Param('masterClassId') id: string) {
+    return await this.masterClassService.getOne({
+      id,
+    });
   }
   @Get('/auth/get/:masterClassId')
   @UseGuards(AuthGuard('jwt'), AccountGuard, MasterClassGuard)
   async getOneAuth(
-    @Query(new LangValidationPipe()) query,
-    @Param('masterClassId') masterClassId: string,
+    @Param('masterClassId') id: string,
     @GetAccount() user: UserEntity,
   ) {
-    return await this.masterClassService.getOneAuth(
-      masterClassId,
-      query,
-      user.id,
-    );
+    return await this.masterClassService.getOne({
+      id,
+      userId: user.id,
+    });
   }
 
   @Get('/liked/get/')
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getLiked(
-    @Query(new LangValidationPipe()) query: string,
-    @Query('size') size: number,
-    @Query('page') page: number,
+    @Query(new LangValidationPipe()) lang: LangType,
+    @Query('size') size: number = 30,
+    @Query('page') page: number = 1,
+    @Query('by') by: 'DESC' | 'ASC' = 'DESC',
+    @Query('sort') sort: string,
+    @Query('where') where: string,
+    @Query('category') category: string,
     @GetAccount() user: UserEntity,
   ) {
-    return await this.masterClassService.getLiked(user.id, query, size, page);
+    return await this.masterClassService.getLiked({
+      lang,
+      size,
+      page,
+      sort,
+      by,
+      where,
+      category,
+      userId: user.id,
+    });
+  }
+
+  @Get('/get/for-update/:masterClassId')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard, MasterClassGuard)
+  async getOneForAdmin(@Param('masterClassId') id: string) {
+    return await this.masterClassService.getOneForAdmin(id);
+  }
+
+  @Post('/create/')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async save(@Body(new ValidationPipe()) body: MasterClassDto) {
+    return await this.masterClassService.save(body);
   }
 
   @Put('/update/:masterClassId')
@@ -137,15 +155,5 @@ export class MasterClassController {
     @Body() body: { deleted: boolean },
   ) {
     return await this.masterClassService.disable(masterClassId, body.deleted);
-  }
-
-  @Get('/get/for-update/:masterClassId')
-  @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard, MasterClassGuard)
-  async getOneForAdmin(
-    @Query(new LangValidationPipe()) query,
-    @Param('masterClassId') masterClassId: string,
-  ) {
-    return await this.masterClassService.getOneForAdmin(masterClassId, query);
   }
 }
