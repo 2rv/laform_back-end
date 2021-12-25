@@ -281,7 +281,6 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
           'options.count',
           'options.vendorCode',
           'options.optionVisibility',
-          ,
         ].concat(recommendations),
       )
 
