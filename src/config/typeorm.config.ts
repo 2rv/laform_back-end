@@ -73,5 +73,6 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
 //   password: 'pasha1neo',
 //   database: 'laforme',
 //   synchronize: true,
+//   logging: ['error'],
 //   entities: ApiEntities,
 // };
