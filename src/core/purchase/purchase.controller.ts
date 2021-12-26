@@ -85,8 +85,8 @@ export class PurchaseController {
   }
 
   @Get('/get/')
-  //@Roles(USER_ROLE.ADMIN)
-  //@UseGuards(AuthGuard('jwt'), AccountGuard)
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getAll(
     @Query('size') size: number,
     @Query('page') page: number,
