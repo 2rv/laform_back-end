@@ -21,6 +21,7 @@ import { PatternProductDto } from './dto/pattern-product.dto';
 import { GetAccount } from '../user/decorator/get-account.decorator';
 import { UserEntity } from '../user/user.entity';
 import { LangType } from 'src/common/enum/lang.enum';
+import { PatternProductClickCountGuard } from './guard/pattern-product-click-count.guard';
 
 @Controller('pattern-product')
 export class PatternProductController {
@@ -78,7 +79,7 @@ export class PatternProductController {
   }
 
   @Get('/get/:patternProductId')
-  @UseGuards(PatternProductGuard)
+  @UseGuards(PatternProductGuard, PatternProductClickCountGuard)
   async getOne(@Param('patternProductId') id: string) {
     return await this.patternProductService.getOne({
       id,
@@ -86,7 +87,12 @@ export class PatternProductController {
   }
 
   @Get('/auth/get/:patternProductId')
-  @UseGuards(AuthGuard('jwt'), AccountGuard, PatternProductGuard)
+  @UseGuards(
+    AuthGuard('jwt'),
+    AccountGuard,
+    PatternProductGuard,
+    PatternProductClickCountGuard,
+  )
   async getOneAuth(
     @Param('patternProductId') id: string,
     @GetAccount() user: UserEntity,

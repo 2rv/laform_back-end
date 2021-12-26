@@ -21,6 +21,7 @@ import { LangValidationPipe } from '../../common/guards/lang.guard';
 import { GetAccount } from '../user/decorator/get-account.decorator';
 import { UserEntity } from '../user/user.entity';
 import { LangType } from 'src/common/enum/lang.enum';
+import { PostClickCountGuard } from './guard/post-click-count.guard';
 
 @Controller('post')
 export class PostController {
@@ -74,13 +75,13 @@ export class PostController {
   }
 
   @Get('/get/:postId')
-  @UseGuards(PostGuard)
+  @UseGuards(PostGuard, PostClickCountGuard)
   async getOne(@Param('postId') id: string) {
     return await this.postService.getOne({ id });
   }
 
   @Get('/auth/get/:postId')
-  @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard)
+  @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard, PostClickCountGuard)
   async getOneAuth(
     @Param('postId') id: string,
     @GetAccount() user: UserEntity,

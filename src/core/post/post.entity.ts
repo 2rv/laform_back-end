@@ -139,6 +139,13 @@ export class PostEntity {
   deleted?: boolean;
 
   @Column({
+    type: 'int',
+    name: 'click_count',
+    default: 0,
+  })
+  clickCount?: number;
+
+  @Column({
     type: 'bool',
     name: 'in_english',
     default: false,

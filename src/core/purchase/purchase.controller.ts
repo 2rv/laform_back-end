@@ -1,3 +1,4 @@
+import { PURCHASE_STATUS } from './enum/purchase.status';
 import { GetUser } from './../user/decorator/get-account.decorator';
 import { PurchaseGuard } from './guard/purchase.guard';
 import { CreatePurchaseDto } from './dto/create-purchase.dto';
@@ -86,8 +87,22 @@ export class PurchaseController {
   @Get('/get/')
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async getAll(@Query('size') size: number, @Query('page') page: number) {
-    return await this.purchaseService.getAll(size, page);
+  async getAll(
+    @Query('size') size: number,
+    @Query('page') page: number,
+    @Query('from') from: Date,
+    @Query('to') to: Date,
+    @Query('status') status: PURCHASE_STATUS,
+    @Query('orderNumber') orderNumber: string,
+  ) {
+    return await this.purchaseService.getAll(
+      size,
+      page,
+      from,
+      to,
+      status,
+      orderNumber,
+    );
   }
 
   @Get('/user/get/')
@@ -97,8 +112,20 @@ export class PurchaseController {
     @GetUser() user: UserEntity,
     @Query('size') size: number,
     @Query('page') page: number,
+    @Query('from') from: Date,
+    @Query('to') to: Date,
+    @Query('status') status: PURCHASE_STATUS,
+    @Query('orderNumber') orderNumber: string,
   ) {
-    return await this.purchaseService.getAllForUser(size, page, user.id);
+    return await this.purchaseService.getAllForUser(
+      size,
+      page,
+      from,
+      to,
+      status,
+      orderNumber,
+      user.id,
+    );
   }
 
   @Put('update-status/:purchaseId')
