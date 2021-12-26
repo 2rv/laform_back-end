@@ -284,12 +284,10 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
         ].concat(recommendations),
       )
 
-      .where('recommendations_sewing_product.deleted = false')
-      .where('recommendations_master_class.deleted = false')
-      .where('recommendations_pattern_product.deleted = false')
-      .where('recommendations_post.deleted = false')
-
-      .where('pattern_product.deleted = false')
+      .andWhere(
+        'rec_sewing_product.deleted = false OR rec_master_class.deleted = false OR rec_pattern_product.deleted = false OR rec_post.deleted = false',
+      )
+      .andWhere('pattern_product.deleted = false')
       .andWhere('pattern_product.id = :id', { id })
       .andWhere(
         new Brackets((qb) => {
