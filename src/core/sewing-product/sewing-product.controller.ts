@@ -21,6 +21,7 @@ import { SewingProductDto } from './dto/sewing-product.dto';
 import { GetAccount } from '../user/decorator/get-account.decorator';
 import { UserEntity } from '../user/user.entity';
 import { LangType } from 'src/common/enum/lang.enum';
+import { SewingProductClickCountGuard } from './guard/sewing-product-click-count.guard';
 
 @Controller('sewing-product')
 export class SewingProductController {
@@ -96,11 +97,17 @@ export class SewingProductController {
   }
 
   @Get('/get/:sewingProductId')
+  @UseGuards(SewingProductGuard, SewingProductClickCountGuard)
   async getOne(@Param('sewingProductId') id: string) {
     return await this.sewingProductService.getOne({ id });
   }
   @Get('/auth/get/:sewingProductId')
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  @UseGuards(
+    AuthGuard('jwt'),
+    AccountGuard,
+    SewingProductGuard,
+    SewingProductClickCountGuard,
+  )
   async getOneAuth(
     @Param('sewingProductId') id: string,
     @GetAccount() user: UserEntity,
@@ -110,7 +117,7 @@ export class SewingProductController {
 
   @Get('/get/for-update/:sewingProductId')
   @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
   async getOneForUpdate(@Param('sewingProductId') id: string) {
     return await this.sewingProductService.getOneForUpdate(id);
   }
@@ -123,7 +130,7 @@ export class SewingProductController {
   }
   @Put('/update/:sewingProductId')
   @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
   async update(
     @Param('sewingProductId') sewingProductId: string,
     @Body() body: SewingProductDto,
@@ -132,7 +139,7 @@ export class SewingProductController {
   }
   @Put('/disable/:sewingProductId')
   @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
   async disable(
     @Param('sewingProductId') sewingProductId: string,
     @Body() body: { deleted: boolean },
@@ -144,7 +151,7 @@ export class SewingProductController {
   }
   @Delete('/delete/:sewingProductId')
   @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  @UseGuards(AuthGuard('jwt'), AccountGuard, SewingProductGuard)
   async delete(@Param('sewingProductId') sewingProductId: string) {
     return await this.sewingProductService.delete(sewingProductId);
   }
