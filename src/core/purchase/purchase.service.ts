@@ -426,11 +426,19 @@ export class PurchaseService {
   async getAllForUser(
     size: number,
     page: number,
+    from: Date,
+    to: Date,
+    status: PURCHASE_STATUS,
+    orderNumber: string,
     userId,
   ): Promise<[PurchaseEntity[], number]> {
     return await this.purchaseRepository.getAllForUser(
       size,
       page,
+      from,
+      to,
+      status,
+      orderNumber,
       userId,
     );
   }
@@ -438,16 +446,10 @@ export class PurchaseService {
     return await this.purchaseRepository.getOne(id);
   }
   async getOneForUser(id: string, userId) {
-  
-    return await this.purchaseProductService.getOneProductForUser(
-      id,
-      userId
-    );
+    return await this.purchaseProductService.getOneProductForUser(id, userId);
   }
   async getOnePaymentMasterClass(id: string) {
-    return await this.purchaseProductService.getOnePaymentMasterClass(
-      id,
-    );
+    return await this.purchaseProductService.getOnePaymentMasterClass(id);
   }
   async updatePurchaseStatus(id: any, body: UpdatePurchaseStatusDto) {
     const result = await this.purchaseRepository.findOne({ id });
