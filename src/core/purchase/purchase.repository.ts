@@ -7,8 +7,12 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
   async getAll(
     size: number = 30,
     page: number = 1,
+    from: Date,
+    to: Date,
+    status: PURCHASE_STATUS,
+    orderNumber: string,
   ): Promise<[PurchaseEntity[], number]> {
-    return await this.createQueryBuilder('purchase')
+    let query = await this.createQueryBuilder('purchase')
       .leftJoin('purchase.userId', 'user')
       .loadRelationCountAndMap(
         'purchase.purchaseProductsCount',
@@ -17,8 +21,24 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
       .orderBy('purchase.orderNumber', 'DESC')
       .take(size)
       .skip((page - 1) * size || 0)
-      .select(['purchase', 'user.id'])
-      .getManyAndCount();
+      .select(['purchase', 'user.id']);
+
+    if (orderNumber) {
+      query.andWhere('purchase.orderNumber like :orderNumber', {
+        orderNumber: `%${orderNumber}%`,
+      });
+    }
+    if (status) {
+      query.where('purchase.orderStatus = :status', {
+        status,
+      });
+    }
+    if (from && to) {
+      query
+        .andWhere('purchase.created_date >= :from', { from })
+        .andWhere('purchase.created_date <= :to', { to });
+    }
+    return await query.getManyAndCount();
   }
 
   async getAllForUser(

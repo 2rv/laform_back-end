@@ -420,8 +420,19 @@ export class PurchaseService {
   async getAll(
     size: number,
     page: number,
+    from: Date,
+    to: Date,
+    status: PURCHASE_STATUS,
+    orderNumber: string,
   ): Promise<[PurchaseEntity[], number]> {
-    return await this.purchaseRepository.getAll(size, page);
+    return await this.purchaseRepository.getAll(
+      size,
+      page,
+      from,
+      to,
+      status,
+      orderNumber,
+    );
   }
   async getAllForUser(
     size: number,

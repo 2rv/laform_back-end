@@ -85,10 +85,24 @@ export class PurchaseController {
   }
 
   @Get('/get/')
-  @Roles(USER_ROLE.ADMIN)
-  @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async getAll(@Query('size') size: number, @Query('page') page: number) {
-    return await this.purchaseService.getAll(size, page);
+  //@Roles(USER_ROLE.ADMIN)
+  //@UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getAll(
+    @Query('size') size: number,
+    @Query('page') page: number,
+    @Query('from') from: Date,
+    @Query('to') to: Date,
+    @Query('status') status: PURCHASE_STATUS,
+    @Query('orderNumber') orderNumber: string,
+  ) {
+    return await this.purchaseService.getAll(
+      size,
+      page,
+      from,
+      to,
+      status,
+      orderNumber,
+    );
   }
 
   @Get('/user/get/')
