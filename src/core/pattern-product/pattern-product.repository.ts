@@ -281,21 +281,19 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
           'options.count',
           'options.vendorCode',
           'options.optionVisibility',
+          'rec_sewing_product_options.optionVisibility',
+          'rec_pattern_product_options.optionVisibility',
         ].concat(recommendations),
       )
+      .andWhere('rec_sewing_product_options.optionVisibility = true')
+      .andWhere('rec_pattern_product_options.optionVisibility = true')
 
       .andWhere(
-        'rec_sewing_product.deleted = false OR rec_master_class.deleted = false OR rec_pattern_product.deleted = false OR rec_post.deleted = false',
+        'rec_sewing_product.deleted = false OR rec_master_class.deleted = false OR rec_pattern_product.deleted = false OR rec_post.deleted = false OR rec_sewing_product_options.optionVisibility = true',
       )
       .andWhere('pattern_product.deleted = false')
-      .andWhere('pattern_product.id = :id', { id })
-      .andWhere(
-        new Brackets((qb) => {
-          qb.where('options.optionVisibility = true').orWhere(
-            'pattern_product.optionType = 0',
-          );
-        }),
-      );
+      .andWhere('options.optionVisibility = true')
+      .andWhere('pattern_product.id = :id', { id });
 
     if (userId) {
       query
