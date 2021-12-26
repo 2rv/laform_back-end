@@ -21,6 +21,7 @@ import { MasterClassDto } from './dto/master-class.dto';
 import { GetAccount } from '../user/decorator/get-account.decorator';
 import { UserEntity } from '../user/user.entity';
 import { LangType } from 'src/common/enum/lang.enum';
+import { MasterClassClickCountGuard } from './guard/master-class-click-count.guard copy';
 
 @Controller('master-class')
 export class MasterClassController {
@@ -74,14 +75,19 @@ export class MasterClassController {
   }
 
   @Get('/get/:masterClassId')
-  @UseGuards(MasterClassGuard)
+  @UseGuards(MasterClassGuard, MasterClassClickCountGuard)
   async getOne(@Param('masterClassId') id: string) {
     return await this.masterClassService.getOne({
       id,
     });
   }
   @Get('/auth/get/:masterClassId')
-  @UseGuards(AuthGuard('jwt'), AccountGuard, MasterClassGuard)
+  @UseGuards(
+    AuthGuard('jwt'),
+    AccountGuard,
+    MasterClassGuard,
+    MasterClassClickCountGuard,
+  )
   async getOneAuth(
     @Param('masterClassId') id: string,
     @GetAccount() user: UserEntity,
