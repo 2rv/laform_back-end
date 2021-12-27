@@ -47,20 +47,9 @@ export class FileUploadService {
     }
   }
 
-  async getFileInBrowser(id: string, userId): Promise<any> {
+  async getFileInBrowser(id: string): Promise<any> {
     try {
       const file = await this.fileRepository.getOne(id);
-
-      const purchaseProduct =
-        await this.purchaseProductRepository.getOneOptionForUser(
-          file.optionFilePdf.id,
-          userId,
-        );
-      if (purchaseProduct) {
-        await this.purchaseProductRepository.update(purchaseProduct.id, {
-          isOpen: true,
-        });
-      }
       const fileType = file.fileUrl.slice(file.fileUrl.lastIndexOf('.') + 1);
 
       const response = await axios.get(file.fileUrl, {
