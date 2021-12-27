@@ -26,10 +26,6 @@ export class PostService {
     return await this.postRepository.findAll(params);
   }
 
-  async getOne(params: findOnePostParamsDto): Promise<PostEntity> {
-    return await this.postRepository.findOneProduct(params);
-  }
-
   async getLiked(
     params: findAllPostParamsDto,
   ): Promise<[PostEntity[], number]> {
@@ -41,6 +37,13 @@ export class PostService {
       params.sort = '';
     }
     return await this.postRepository.findLiked(params);
+  }
+
+  async getOne(params: findOnePostParamsDto): Promise<PostEntity> {
+    return await this.postRepository.findOneProduct(params);
+  }
+  async getOneForAdmin(id: string): Promise<PostEntity> {
+    return await this.postRepository.findOneForAdmin(id);
   }
 
   async create(body: PostDto): Promise<PostEntity> {

@@ -19,7 +19,6 @@ export class PostRepository extends Repository<PostEntity> {
         'post.type',
         'post.titleRu',
         'post.modifierRu',
-        'post.modifierColor',
         'post.createdDate',
         'post.vendorCode',
         'post.deleted',
@@ -56,6 +55,97 @@ export class PostRepository extends Repository<PostEntity> {
     return await query.getManyAndCount();
   }
 
+  async findLiked(
+    params: findAllPostParamsDto,
+  ): Promise<[PostEntity[], number]> {
+    const { size, page, sort, by, where, category, lang, userId } = params;
+
+    let query = await this.createQueryBuilder('post')
+      .leftJoin('post.image', 'image')
+      .leftJoin('post.categories', 'categories')
+      .leftJoin('post.like', 'like', 'like.userId = :userId', {
+        userId,
+      })
+      .select([
+        'post.id',
+        'post.type',
+        'post.titleRu',
+        'post.modifierRu',
+        'post.createdDate',
+        'post.vendorCode',
+        'post.deleted',
+        'post.inEnglish',
+        'post.clickCount',
+        'image',
+        'categories.id',
+        'categories.categoryNameRu',
+        'like',
+      ])
+      .take(size)
+      .skip((page - 1) * size || 0)
+      .orderBy(sort, by)
+
+      .where('post.deleted = false')
+      .andWhere('post.inEnglish = :lang', { lang: lang === 'en' })
+      .andWhere('like.userId = :userId', { userId });
+
+    if (where) {
+      query.andWhere('post.titleRu ILIKE :search', {
+        search: `%${where}%`,
+      });
+    }
+
+    if (category) {
+      query.andWhere('categories.categoryNameRu = :category', {
+        category: category,
+      });
+    }
+
+    return await query.getManyAndCount();
+  }
+
+  async findAllForAdmin(
+    params: findAllPostParamsDto,
+  ): Promise<[PostEntity[], number]> {
+    const { size, page, sort, by, where, category, lang } = params;
+    let query = await this.createQueryBuilder('post')
+      .leftJoin('post.image', 'image')
+      .leftJoin('post.categories', 'categories')
+      .select([
+        'post.id',
+        'post.type',
+        'post.titleRu',
+        'post.modifierRu',
+        'post.createdDate',
+        'post.vendorCode',
+        'post.clickCount',
+        'post.deleted',
+        'post.inEnglish',
+        'image',
+        'categories.id',
+        'categories.categoryNameRu',
+      ])
+      .orderBy(sort, by)
+      .take(size)
+      .skip((page - 1) * size || 0)
+
+      .where('post.inEnglish = :lang', { lang: lang === 'en' });
+
+    if (where) {
+      query.andWhere('post.titleRu ILIKE :search', {
+        search: `%${where}%`,
+      });
+    }
+
+    if (category) {
+      query.andWhere('categories.categoryNameRu = :category', {
+        category: category,
+      });
+    }
+
+    return await query.getManyAndCount();
+  }
+
   async findOneProduct(params: findOnePostParamsDto): Promise<PostEntity> {
     const { id, userId } = params;
     let query = await this.createQueryBuilder('post')
@@ -83,7 +173,6 @@ export class PostRepository extends Repository<PostEntity> {
           'post.type',
           'post.titleRu',
           'post.modifierRu',
-          'post.modifierColor',
           'post.articleRu',
           'post.createdDate',
           'post.vendorCode',
@@ -145,96 +234,44 @@ export class PostRepository extends Repository<PostEntity> {
     return await query.getOne();
   }
 
-  async findLiked(
-    params: findAllPostParamsDto,
-  ): Promise<[PostEntity[], number]> {
-    const { size, page, sort, by, where, category, lang, userId } = params;
-
-    let query = await this.createQueryBuilder('post')
+  async findOneForAdmin(id: string): Promise<PostEntity> {
+    return await this.createQueryBuilder('post')
       .leftJoin('post.image', 'image')
       .leftJoin('post.categories', 'categories')
-      .leftJoin('post.like', 'like', 'like.userId = :userId', {
-        userId,
-      })
-      .select([
-        'post.id',
-        'post.type',
-        'post.titleRu',
-        'post.modifierRu',
-        'post.modifierColor',
-        'post.createdDate',
-        'post.vendorCode',
-        'post.deleted',
-        'post.inEnglish',
-        'post.clickCount',
-        'image',
-        'categories.id',
-        'categories.categoryNameRu',
-        'like',
-      ])
-      .take(size)
-      .skip((page - 1) * size || 0)
-      .orderBy(sort, by)
+      .leftJoin('post.recommendation', 'recommendation')
+      .leftJoin('recommendation.recommendationProducts', 'recommendations')
 
-      .where('post.deleted = false')
-      .andWhere('post.inEnglish = :lang', { lang: lang === 'en' })
-      .andWhere('like.userId = :userId', { userId });
+      .leftJoin('recommendations.masterClassId', 'rec_master_class')
+      .leftJoin('recommendations.postId', 'rec_post')
+      .leftJoin('recommendations.patternProductId', 'rec_pattern_product')
+      .leftJoin('recommendations.sewingProductId', 'rec_sewing_product')
 
-    if (where) {
-      query.andWhere('post.titleRu ILIKE :search', {
-        search: `%${where}%`,
-      });
-    }
+      .leftJoin('rec_master_class.images', 'rec_master_class_images')
+      .leftJoin('rec_pattern_product.images', 'rec_pattern_product_images')
+      .leftJoin('rec_sewing_product.images', 'rec_sewing_product_images')
+      .leftJoin('rec_post.image', 'rec_post_image')
 
-    if (category) {
-      query.andWhere('categories.categoryNameRu = :category', {
-        category: category,
-      });
-    }
+      .leftJoin('rec_pattern_product.options', 'rec_pattern_product_options')
+      .leftJoin('rec_sewing_product.options', 'rec_sewing_product_options')
 
-    return await query.getManyAndCount();
-  }
-
-  async findAllForAdmin(
-    params: findAllPostParamsDto,
-  ): Promise<[PostEntity[], number]> {
-    const { size, page, sort, by, where, category, lang } = params;
-    let query = await this.createQueryBuilder('post')
-      .leftJoin('post.image', 'image')
-      .leftJoin('post.categories', 'categories')
-      .select([
-        'post.id',
-        'post.type',
-        'post.titleRu',
-        'post.modifierRu',
-        'post.modifierColor',
-        'post.createdDate',
-        'post.vendorCode',
-        'post.clickCount',
-        'post.deleted',
-        'post.inEnglish',
-        'image',
-        'categories.id',
-        'categories.categoryNameRu',
-      ])
-      .orderBy(sort, by)
-      .take(size)
-      .skip((page - 1) * size || 0)
-
-      .where('post.inEnglish = :lang', { lang: lang === 'en' });
-
-    if (where) {
-      query.andWhere('post.titleRu ILIKE :search', {
-        search: `%${where}%`,
-      });
-    }
-
-    if (category) {
-      query.andWhere('categories.categoryNameRu = :category', {
-        category: category,
-      });
-    }
-
-    return await query.getManyAndCount();
+      .select(
+        [
+          'post.id',
+          'post.vendorCode',
+          'post.createdDate',
+          'post.type',
+          'post.titleRu',
+          'post.modifierRu',
+          'post.articleRu',
+          'post.deleted',
+          'post.inEnglish',
+          'post.clickCount',
+          'image',
+          'categories.id',
+          'categories.categoryNameRu',
+        ].concat(recommendations),
+      )
+      .where('post.id = :id', { id })
+      .getOne();
   }
 }

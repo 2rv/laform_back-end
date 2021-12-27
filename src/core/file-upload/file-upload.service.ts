@@ -1,3 +1,4 @@
+import { PurchaseProductRepository } from './../purchase-product/purchase-product.repository';
 import { FileUploadRepository } from './file-upload.repository';
 import { uploadFile } from './../../common/utils/file-upload';
 import { FILE_UPLOAD_ERROR } from './enum/file-upload-error.enum';
@@ -13,7 +14,10 @@ import axios from 'axios';
 
 @Injectable()
 export class FileUploadService {
-  constructor(private fileRepository: FileUploadRepository) {}
+  constructor(
+    private fileRepository: FileUploadRepository,
+    private purchaseProductRepository: PurchaseProductRepository,
+  ) {}
 
   async create(file: FileUploadDto): Promise<FileUploadEntity> {
     const fileUrl = await uploadFile(file);
@@ -43,16 +47,19 @@ export class FileUploadService {
     }
   }
 
-  async getFileInBrowser(id: string): Promise<Buffer> {
+  async getFileInBrowser(id: string): Promise<any> {
     try {
-      const { fileUrl } = await this.getOne(id);
-      const response = await axios.get(fileUrl, {
+      const file = await this.fileRepository.getOne(id);
+      const fileType = file.fileUrl.slice(file.fileUrl.lastIndexOf('.') + 1);
+
+      const response = await axios.get(file.fileUrl, {
         responseType: 'arraybuffer',
         headers: {
           'Content-Type': 'application/json',
         },
       });
-      return response.data;
+
+      return { result: response.data, fileType };
     } catch (err) {
       throw new InternalServerErrorException(err);
     }

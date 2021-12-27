@@ -22,6 +22,8 @@ import { USER_ROLE } from '../user/enum/user-role.enum';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { DeleteManyFilesDto } from './dto/delete-many-files';
 import { Duplex } from 'stream';
+import { GetUser } from '../user/decorator/get-account.decorator';
+import { UserEntity } from '../user/user.entity';
 
 @Controller('file')
 export class FileUploadController {
@@ -60,19 +62,47 @@ export class FileUploadController {
   }
 
   @Get('browser/get/:id')
+  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getInBrowser(@Param('id') id: string, @Res() res) {
-    // const stream = Readable.from(
-    //   await this.fileUploadService.getFileInBrowser(id),
-    // );
-    // это создавало поток но для axios или постман
-    // Кароче вообще нужно что бы файл открывался прям по ссылке из браузера
     let stream = new Duplex();
-    stream.push(await this.fileUploadService.getFileInBrowser(id));
+    const { result, fileType } = await this.fileUploadService.getFileInBrowser(
+      id,
+    );
+    stream.push(result);
     stream.push(null);
-    // res.header('Content-type', 'application/pdf');  // если пдф
-    res.header('Content-type', 'image/jpeg'); // если картинка
+    if (
+      fileType === 'ZIP' ||
+      fileType === 'zip' ||
+      fileType === 'pdf' ||
+      fileType === 'PDF'
+    ) {
+      res.header('Content-type', 'application/' + fileType); // если пдф
+    }
     return stream.pipe(res);
   }
+
+  // @Get('browser/purchase/get/:id')
+  // async getPurchaseProductInBrowser(
+  //   @Param('id') id: string,
+  //   @Res() res,
+  // ) {
+  //   let stream = new Duplex();
+  //   const { result, fileType } = await this.fileUploadService.getFileInBrowser(
+  //     id,
+  //   );
+  //   stream.push(result);
+  //   stream.push(null);
+  //   if (
+  //     fileType === 'ZIP' ||
+  //     fileType === 'zip' ||
+  //     fileType === 'pdf' ||
+  //     fileType === 'PDF'
+  //   ) {
+  //     res.header('Content-type', 'application/' + fileType); // если пдф
+  //   }
+  //   return stream.pipe(res);
+  // }
 
   @Get('get/')
   @Roles(USER_ROLE.ADMIN)
