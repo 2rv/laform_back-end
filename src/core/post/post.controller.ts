@@ -74,24 +74,6 @@ export class PostController {
     });
   }
 
-  @Get('/get/:postId')
-  @UseGuards(PostGuard, PostClickCountGuard)
-  async getOne(@Param('postId') id: string) {
-    return await this.postService.getOne({ id });
-  }
-
-  @Get('/auth/get/:postId')
-  @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard, PostClickCountGuard)
-  async getOneAuth(
-    @Param('postId') id: string,
-    @GetAccount() user: UserEntity,
-  ) {
-    return await this.postService.getOne({
-      id,
-      userId: user.id,
-    });
-  }
-
   @Get('/liked/get/')
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getLiked(
@@ -114,6 +96,31 @@ export class PostController {
       category,
       userId: user.id,
     });
+  }
+
+  @Get('/get/:postId')
+  @UseGuards(PostGuard, PostClickCountGuard)
+  async getOne(@Param('postId') id: string) {
+    return await this.postService.getOne({ id });
+  }
+
+  @Get('/auth/get/:postId')
+  @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard, PostClickCountGuard)
+  async getOneAuth(
+    @Param('postId') id: string,
+    @GetAccount() user: UserEntity,
+  ) {
+    return await this.postService.getOne({
+      id,
+      userId: user.id,
+    });
+  }
+
+  @Get('/get/for-update/:postId')
+  @Roles(USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard, PostGuard)
+  async getOneForAdmin(@Param('postId') id: string) {
+    return await this.postService.getOneForAdmin(id);
   }
 
   @Post('/create/')

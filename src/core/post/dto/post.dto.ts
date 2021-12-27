@@ -51,10 +51,6 @@ export class PostDto {
   @IsString()
   modifierEn: string;
 
-  @IsOptional()
-  @IsString()
-  modifierColor: string;
-
   @IsNotEmpty()
   @IsObject()
   articleRu: {
