@@ -66,11 +66,22 @@ export class FileUploadController {
     // );
     // это создавало поток но для axios или постман
     // Кароче вообще нужно что бы файл открывался прям по ссылке из браузера
+    //localhost:4000/file/browser/get
     let stream = new Duplex();
-    stream.push(await this.fileUploadService.getFileInBrowser(id));
+    const { result, fileType } = await this.fileUploadService.getFileInBrowser(
+      id,
+    );
+    stream.push(result);
     stream.push(null);
-    // res.header('Content-type', 'application/pdf');  // если пдф
-    res.header('Content-type', 'image/jpeg'); // если картинка
+    if (
+      fileType === 'ZIP' ||
+      fileType === 'zip' ||
+      fileType === 'pdf' ||
+      fileType === 'PDF'
+    ) {
+      res.header('Content-type', 'application/' + fileType); // если пдф
+    }
+
     return stream.pipe(res);
   }
 
