@@ -107,7 +107,20 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
       .andWhere('purchase.userId = :userId', { userId })
       .getOne();
   }
-
+  async getOneOptionForUser(
+    optionId: any,
+    userId: number,
+  ): Promise<PurchaseProductEntity> {
+    const orderStatus: number = PURCHASE_STATUS.PAID;
+    return await this.createQueryBuilder('purchase_product')
+      .leftJoinAndSelect('purchase_product.purchase', 'purchase')
+      .where('purchase_product.optionId = :optionId', { optionId })
+      .andWhere('purchase.orderStatus = :orderStatus', {
+        orderStatus,
+      })
+      .andWhere('purchase.userId = :userId', { userId })
+      .getOne();
+  }
   async getOneMasterClass(id: string): Promise<PurchaseProductEntity> {
     return await this.createQueryBuilder('purchase_product')
       .leftJoin('purchase_product.masterClassId', 'master_class')
@@ -142,9 +155,7 @@ export class PurchaseProductRepository extends Repository<PurchaseProductEntity>
       .where('purchase_product.id = :id', { id })
       .getOne();
   }
-  async getOnePaymentMasterClass(
-    id: string,
-  ): Promise<PurchaseProductEntity> {
+  async getOnePaymentMasterClass(id: string): Promise<PurchaseProductEntity> {
     const orderStatus: number = PURCHASE_STATUS.PAID;
     const now = new Date();
     return await this.createQueryBuilder('purchase_product')

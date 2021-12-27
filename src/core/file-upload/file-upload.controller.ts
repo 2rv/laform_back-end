@@ -22,6 +22,8 @@ import { USER_ROLE } from '../user/enum/user-role.enum';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { DeleteManyFilesDto } from './dto/delete-many-files';
 import { Duplex } from 'stream';
+import { GetUser } from '../user/decorator/get-account.decorator';
+import { UserEntity } from '../user/user.entity';
 
 @Controller('file')
 export class FileUploadController {
@@ -60,16 +62,17 @@ export class FileUploadController {
   }
 
   @Get('browser/get/:id')
-  async getInBrowser(@Param('id') id: string, @Res() res) {
-    // const stream = Readable.from(
-    //   await this.fileUploadService.getFileInBrowser(id),
-    // );
-    // это создавало поток но для axios или постман
-    // Кароче вообще нужно что бы файл открывался прям по ссылке из браузера
-    //localhost:4000/file/browser/get
+  @Roles(USER_ROLE.ADMIN, USER_ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), AccountGuard)
+  async getInBrowser(
+    @GetUser() user: UserEntity,
+    @Param('id') id: string,
+    @Res() res,
+  ) {
     let stream = new Duplex();
     const { result, fileType } = await this.fileUploadService.getFileInBrowser(
       id,
+      user.id,
     );
     stream.push(result);
     stream.push(null);
@@ -81,7 +84,6 @@ export class FileUploadController {
     ) {
       res.header('Content-type', 'application/' + fileType); // если пдф
     }
-
     return stream.pipe(res);
   }
 
