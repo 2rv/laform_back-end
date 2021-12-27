@@ -62,7 +62,7 @@ export class FileUploadController {
   }
 
   @Get('browser/get/:id')
-  @Roles(USER_ROLE.ADMIN, USER_ROLE.ADMIN)
+  @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async getInBrowser(
     @GetUser() user: UserEntity,
