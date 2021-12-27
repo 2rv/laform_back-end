@@ -23,7 +23,7 @@ export class StatisticsService {
 
     const array = products.map((result) => {
       return {
-        date: new Intl.DateTimeFormat().format(result.createDate),
+        date: new Intl.DateTimeFormat().format(result.createdDate),
         price: +result.totalPrice * (+result.totalCount || +result.totalLength),
       };
     });
@@ -43,10 +43,9 @@ export class StatisticsService {
       to,
       type,
     );
-
     const array = products.map((result) => {
       return {
-        date: new Intl.DateTimeFormat().format(result.createDate),
+        date: new Intl.DateTimeFormat().format(result.createdDate),
         count: +result.totalCount || 1,
       };
     });
@@ -68,7 +67,6 @@ export class StatisticsService {
         date: new Intl.DateTimeFormat().format(result.createDate),
       };
     });
-
     const counter = array.reduce((o, i) => {
       if (!o.hasOwnProperty(i.date)) {
         o[i.date] = 0;
