@@ -64,15 +64,10 @@ export class FileUploadController {
   @Get('browser/get/:id')
   @Roles(USER_ROLE.ADMIN, USER_ROLE.USER)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async getInBrowser(
-    @GetUser() user: UserEntity,
-    @Param('id') id: string,
-    @Res() res,
-  ) {
+  async getInBrowser(@Param('id') id: string, @Res() res) {
     let stream = new Duplex();
     const { result, fileType } = await this.fileUploadService.getFileInBrowser(
       id,
-      user.id,
     );
     stream.push(result);
     stream.push(null);
@@ -86,6 +81,28 @@ export class FileUploadController {
     }
     return stream.pipe(res);
   }
+
+  // @Get('browser/purchase/get/:id')
+  // async getPurchaseProductInBrowser(
+  //   @Param('id') id: string,
+  //   @Res() res,
+  // ) {
+  //   let stream = new Duplex();
+  //   const { result, fileType } = await this.fileUploadService.getFileInBrowser(
+  //     id,
+  //   );
+  //   stream.push(result);
+  //   stream.push(null);
+  //   if (
+  //     fileType === 'ZIP' ||
+  //     fileType === 'zip' ||
+  //     fileType === 'pdf' ||
+  //     fileType === 'PDF'
+  //   ) {
+  //     res.header('Content-type', 'application/' + fileType); // если пдф
+  //   }
+  //   return stream.pipe(res);
+  // }
 
   @Get('get/')
   @Roles(USER_ROLE.ADMIN)
