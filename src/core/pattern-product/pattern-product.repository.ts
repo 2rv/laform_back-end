@@ -1,5 +1,5 @@
 import { PatternProductEntity } from './pattern-product.entity';
-import { Brackets, EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, Repository } from 'typeorm';
 import { recommendations } from '../recommendation/recommendation.select';
 import {
   findAllPatternParamsDto,
@@ -52,11 +52,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .where('pattern_product.deleted = false')
       .andWhere('pattern_product.inEnglish = :lang', { lang: lang === 'en' })
       .andWhere(
-        new Brackets((qb) => {
-          qb.where('options.optionVisibility = true').orWhere(
-            'pattern_product.optionType = 0',
-          );
-        }),
+        'options.optionVisibility = true OR pattern_product.optionType = 0',
       );
 
     if (where) {
@@ -138,11 +134,7 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .andWhere('pattern_product.inEnglish = :lang', { lang: lang === 'en' })
       .andWhere('like.userId = :userId', { userId })
       .andWhere(
-        new Brackets((qb) => {
-          qb.where('options.optionVisibility = true').orWhere(
-            'pattern_product.optionType = 0',
-          );
-        }),
+        'options.optionVisibility = true OR pattern_product.optionType = 0',
       );
 
     if (where) {
@@ -285,15 +277,17 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
           'rec_pattern_product_options.optionVisibility',
         ].concat(recommendations),
       )
-      .andWhere('rec_sewing_product_options.optionVisibility = true')
-      .andWhere('rec_pattern_product_options.optionVisibility = true')
-
-      .andWhere(
-        'rec_sewing_product.deleted = false OR rec_master_class.deleted = false OR rec_pattern_product.deleted = false OR rec_post.deleted = false OR rec_sewing_product_options.optionVisibility = true',
-      )
+      .where('pattern_product.id = :id', { id })
       .andWhere('pattern_product.deleted = false')
-      .andWhere('options.optionVisibility = true')
-      .andWhere('pattern_product.id = :id', { id });
+      .andWhere(
+        'options.optionVisibility = true OR pattern_product.optionType = 0',
+      );
+    //   .andWhere('rec_sewing_product_options.optionVisibility = true')
+    //   .andWhere('rec_pattern_product_options.optionVisibility = true')
+
+    //   .andWhere(
+    //     'rec_sewing_product.deleted = false OR rec_master_class.deleted = false OR rec_pattern_product.deleted = false OR rec_post.deleted = false OR rec_sewing_product_options.optionVisibility = true',
+    //   )
 
     if (userId) {
       query
