@@ -56,6 +56,8 @@ export class CompilationRepository extends Repository<CompilationEntity> {
         'com_pattern_product_options.size',
         'com_pattern_product_options.count',
         'com_pattern_product_options.vendorCode',
+        'com_pattern_product.optionType',
+        'com_pattern_product_options.optionVisibility',
 
         'com_sewing_product.id',
         'com_sewing_product.titleRu',
@@ -78,6 +80,8 @@ export class CompilationRepository extends Repository<CompilationEntity> {
         'com_sewing_product_options.length',
         'com_sewing_product_options.discount',
         'com_sewing_product_options.vendorCode',
+        'com_sewing_product.optionType',
+        'com_sewing_product_options.optionVisibility',
 
         'com_post.id',
         'com_post.type',
@@ -182,6 +186,9 @@ export class CompilationRepository extends Repository<CompilationEntity> {
         'com_pattern_product_options.vendorCode',
         'com_pattern_product_like',
 
+        'com_pattern_product.optionType',
+        'com_pattern_product_options.optionVisibility',
+
         'com_sewing_product.id',
         'com_sewing_product.titleRu',
         'com_sewing_product.modifierRu',
@@ -204,6 +211,8 @@ export class CompilationRepository extends Repository<CompilationEntity> {
         'com_sewing_product_options.vendorCode',
         'com_sewing_product.deleted',
         'com_sewing_product_like',
+        'com_sewing_product.optionType',
+        'com_sewing_product_options.optionVisibility',
 
         'com_post.id',
         'com_post.type',
