@@ -1,5 +1,5 @@
 import { MasterClassEntity } from './master-class.entity';
-import { EntityRepository, Repository } from 'typeorm';
+import { Brackets, EntityRepository, Repository } from 'typeorm';
 import { recommendations } from '../recommendation/recommendation.select';
 import {
   findAllMasterClassParamsDto,
@@ -105,13 +105,26 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
           'categories.categoryNameRu',
         ].concat(recommendations),
       )
-      .where('recommendations_sewing_product.deleted = false')
-      .where('recommendations_master_class.deleted = false')
-      .where('recommendations_pattern_product.deleted = false')
-      .where('recommendations_post.deleted = false')
-
       .where('master_class.id = :id', { id })
-      .andWhere('master_class.deleted = false');
+      .andWhere('master_class.deleted = false')
+      .andWhere(
+        new Brackets((qb) => {
+          qb.where('rec_sewing_product.deleted = false')
+            .orWhere('rec_master_class.deleted = false ')
+            .orWhere('rec_pattern_product.deleted = false ')
+            .orWhere('rec_post.deleted = false ');
+        }),
+      )
+      .andWhere(
+        new Brackets((qb) => {
+          qb.where('rec_sewing_product.optionType = 0')
+            .orWhere('rec_sewing_product_options.optionVisibility = true')
+            .orWhere('rec_pattern_product.optionType = 0')
+            .orWhere('rec_pattern_product_options.optionVisibility = true')
+            .orWhere('rec_master_class.deleted = false')
+            .orWhere('rec_post.deleted = false');
+        }),
+      );
 
     if (userId) {
       query

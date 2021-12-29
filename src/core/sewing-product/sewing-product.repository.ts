@@ -1,5 +1,5 @@
 import { SewingProductEntity } from './sewing-product.entity';
-import { EntityRepository, Repository } from 'typeorm';
+import { Brackets, EntityRepository, Repository } from 'typeorm';
 import { recommendations } from '../recommendation/recommendation.select';
 import {
   findAllSewingProductParamsDto,
@@ -53,8 +53,13 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
 
       .where('sewing_product.deleted = false')
       .andWhere('sewing_product.inEnglish = :lang', { lang: lang === 'en' })
+
       .andWhere(
-        'options.optionVisibility = true OR sewing_product.optionType = 0',
+        new Brackets((qb) => {
+          qb.where('sewing_product.optionType = 0').orWhere(
+            'options.optionVisibility = true',
+          );
+        }),
       );
 
     if (where) {
@@ -130,7 +135,11 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .where('sewing_product.deleted = false')
       .andWhere('sewing_product.inEnglish = :lang', { lang: lang === 'en' })
       .andWhere(
-        'options.optionVisibility = true OR sewing_product.optionType = 0',
+        new Brackets((qb) => {
+          qb.where('sewing_product.optionType = 0').orWhere(
+            'options.optionVisibility = true',
+          );
+        }),
       );
 
     if (where) {
@@ -268,17 +277,30 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .where('sewing_product.id = :id', { id })
       .andWhere('sewing_product.deleted = false')
       .andWhere(
-        'sewing_product.optionType = 0 OR options.optionVisibility = true',
+        new Brackets((qb) => {
+          qb.where('sewing_product.optionType = 0').orWhere(
+            'options.optionVisibility = true',
+          );
+        }),
+      )
+      .andWhere(
+        new Brackets((qb) => {
+          qb.where('rec_sewing_product.deleted = false')
+            .orWhere('rec_master_class.deleted = false ')
+            .orWhere('rec_pattern_product.deleted = false ')
+            .orWhere('rec_post.deleted = false ');
+        }),
+      )
+      .andWhere(
+        new Brackets((qb) => {
+          qb.where('rec_sewing_product.optionType = 0')
+            .orWhere('rec_sewing_product_options.optionVisibility = true')
+            .orWhere('rec_pattern_product.optionType = 0')
+            .orWhere('rec_pattern_product_options.optionVisibility = true')
+            .orWhere('rec_master_class.deleted = false')
+            .orWhere('rec_post.deleted = false');
+        }),
       );
-    //   .andWhere(
-    //     'rec_sewing_product.deleted = false OR rec_master_class.deleted = false OR rec_pattern_product.deleted = false OR rec_post.deleted = false',
-    //   )
-    //   .andWhere(
-    //     'rec_sewing_product.optionType = 0 OR rec_sewing_product_options.optionVisibility = true',
-    //   )
-    //   .andWhere(
-    //     'rec_pattern_product.optionType = 0 OR rec_pattern_product_options.optionVisibility = true',
-    //   );
 
     if (userId) {
       query

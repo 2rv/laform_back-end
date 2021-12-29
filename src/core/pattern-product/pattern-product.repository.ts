@@ -1,5 +1,5 @@
 import { PatternProductEntity } from './pattern-product.entity';
-import { EntityRepository, Repository } from 'typeorm';
+import { Brackets, EntityRepository, Repository } from 'typeorm';
 import { recommendations } from '../recommendation/recommendation.select';
 import {
   findAllPatternParamsDto,
@@ -13,7 +13,6 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
   ): Promise<[PatternProductEntity[], number]> {
     const { size, page, sort, by, where, category, lang, userId, type } =
       params;
-
     let query = await this.createQueryBuilder('pattern_product')
       .leftJoin('pattern_product.images', 'images')
       .leftJoin('pattern_product.categories', 'categories')
@@ -52,7 +51,11 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .where('pattern_product.deleted = false')
       .andWhere('pattern_product.inEnglish = :lang', { lang: lang === 'en' })
       .andWhere(
-        'options.optionVisibility = true OR pattern_product.optionType = 0',
+        new Brackets((qb) => {
+          qb.where('pattern_product.optionType = 0').orWhere(
+            'options.optionVisibility = true',
+          );
+        }),
       );
 
     if (where) {
@@ -134,7 +137,11 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .andWhere('pattern_product.inEnglish = :lang', { lang: lang === 'en' })
       .andWhere('like.userId = :userId', { userId })
       .andWhere(
-        'options.optionVisibility = true OR pattern_product.optionType = 0',
+        new Brackets((qb) => {
+          qb.where('pattern_product.optionType = 0').orWhere(
+            'options.optionVisibility = true',
+          );
+        }),
       );
 
     if (where) {
@@ -280,14 +287,30 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       .where('pattern_product.id = :id', { id })
       .andWhere('pattern_product.deleted = false')
       .andWhere(
-        'options.optionVisibility = true OR pattern_product.optionType = 0',
+        new Brackets((qb) => {
+          qb.where('pattern_product.optionType = 0').orWhere(
+            'options.optionVisibility = true',
+          );
+        }),
       );
-    //   .andWhere('rec_sewing_product_options.optionVisibility = true')
-    //   .andWhere('rec_pattern_product_options.optionVisibility = true')
-
     //   .andWhere(
-    //     'rec_sewing_product.deleted = false OR rec_master_class.deleted = false OR rec_pattern_product.deleted = false OR rec_post.deleted = false OR rec_sewing_product_options.optionVisibility = true',
+    //     new Brackets((qb) => {
+    //       qb.where('rec_sewing_product.deleted = false')
+    //         .orWhere('rec_master_class.deleted = false ')
+    //         .orWhere('rec_pattern_product.deleted = false ')
+    //         .orWhere('rec_post.deleted = false ');
+    //     }),
     //   )
+    //   .andWhere(
+    //     new Brackets((qb) => {
+    //       qb.where('rec_sewing_product.optionType = 0')
+    //         .orWhere('rec_sewing_product_options.optionVisibility = true')
+    //         .orWhere('rec_pattern_product.optionType = 0')
+    //         .orWhere('rec_pattern_product_options.optionVisibility = true')
+    //         .orWhere('rec_master_class.deleted = false')
+    //         .orWhere('rec_post.deleted = false');
+    //     }),
+    //   );
 
     if (userId) {
       query
