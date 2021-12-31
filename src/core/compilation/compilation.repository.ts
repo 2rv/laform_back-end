@@ -91,9 +91,9 @@ export class CompilationRepository extends Repository<CompilationEntity> {
         'com_post.vendorCode',
         'com_post_image',
       ])
-      .where(
-        'com_master_class.deleted = false OR com_sewing_product.deleted = false OR com_pattern_product.deleted = false',
-      )
+      //   .where(
+      //     'com_master_class.deleted = false OR com_sewing_product.deleted = false OR com_pattern_product.deleted = false',
+      //   )
       .getMany();
   }
 
@@ -223,9 +223,9 @@ export class CompilationRepository extends Repository<CompilationEntity> {
         'com_post_image',
         'com_post_like',
       ])
-      .where(
-        'com_master_class.deleted = false OR com_sewing_product.deleted = false OR com_pattern_product.deleted = false',
-      )
+      //   .where(
+      //     'com_master_class.deleted = false OR com_sewing_product.deleted = false OR com_pattern_product.deleted = false',
+      //   )
       .getMany();
   }
 }

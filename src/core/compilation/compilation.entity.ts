@@ -38,4 +38,11 @@ export class CompilationEntity {
     { cascade: true },
   )
   compilationProducts: CompilationProductEntity[];
+
+  @Column({
+    type: 'bool',
+    name: 'in_english',
+    default: false,
+  })
+  inEnglish?: boolean;
 }

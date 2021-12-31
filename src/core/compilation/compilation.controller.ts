@@ -7,6 +7,7 @@ import {
   ValidationPipe,
   Get,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AccountGuard } from '../user/guard/account.guard';
@@ -16,6 +17,8 @@ import { CompilationService } from './compilation.service';
 import { CompilationDto } from './dto/compilation.dto';
 import { UserEntity } from '../user/user.entity';
 import { GetAccount } from '../user/decorator/get-account.decorator';
+import { LangValidationPipe } from 'src/common/guards/lang.guard';
+import { LangType } from 'src/common/enum/lang.enum';
 
 @Controller('compilation')
 export class CompilationController {
@@ -29,14 +32,17 @@ export class CompilationController {
   }
 
   @Get('/get')
-  async getAll() {
-    return await this.compilationService.get();
+  async getAll(@Query(new LangValidationPipe()) lang: LangType) {
+    return await this.compilationService.get(lang);
   }
 
   @Get('/auth/get')
   @UseGuards(AuthGuard('jwt'), AccountGuard)
-  async getAllAuth(@GetAccount() user: UserEntity) {
-    return await this.compilationService.getAuth(user.id);
+  async getAllAuth(
+    @Query(new LangValidationPipe()) lang: LangType,
+    @GetAccount() user: UserEntity,
+  ) {
+    return await this.compilationService.getAuth(user.id, lang);
   }
 
   @Delete('/delete/:compilationId')
