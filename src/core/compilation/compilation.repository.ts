@@ -24,6 +24,7 @@ export class CompilationRepository extends Repository<CompilationEntity> {
         'compilation.id',
         'compilation.title',
         'compilation.path',
+        'compilation.inEnglish',
         'compilation_products.id',
 
         'com_master_class.id',
@@ -151,6 +152,7 @@ export class CompilationRepository extends Repository<CompilationEntity> {
         'compilation.id',
         'compilation.title',
         'compilation.path',
+        'compilation.inEnglish',
         'compilation_products.id',
 
         'com_master_class.id',
