@@ -19,7 +19,7 @@ export class SliderDto {
   @IsString()
   headingTextRu: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   headingTextEn: string;
 
