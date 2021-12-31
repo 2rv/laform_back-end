@@ -97,8 +97,6 @@ export class AuthService {
     body: UserUpdateEmailDto,
   ): Promise<LoginInfoDto> {
     if (!user.emailConfirmed) body.codeOldEmail = body.codeNewEmail;
-    console.log(body);
-
     let oldRawData: string = await this.cacheManager.get(body.codeOldEmail);
     let newRawData: string = await this.cacheManager.get(body.codeNewEmail);
     if (!oldRawData) {

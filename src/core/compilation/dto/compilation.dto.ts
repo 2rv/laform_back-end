@@ -1,5 +1,7 @@
 import {
   IsArray,
+  IsBoolean,
+  IsNotEmpty,
   IsOptional,
   IsString,
   IsUUID,
@@ -22,6 +24,10 @@ export class CompilationDto {
   @IsOptional()
   @IsString()
   path: string;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  inEnglish: boolean;
 
   @IsOptional()
   @IsArray()

@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { LangType } from 'src/common/enum/lang.enum';
 import { CompilationEntity } from './compilation.entity';
 import { CompilationRepository } from './compilation.repository';
 import { CompilationDto } from './dto/compilation.dto';
@@ -10,11 +11,11 @@ export class CompilationService {
   async create(body: CompilationDto[]) {
     return await this.compilationRepository.save(body);
   }
-  async get(): Promise<CompilationEntity[]> {
+  async get(lang: LangType): Promise<CompilationEntity[]> {
     return await this.compilationRepository.findAll();
   }
 
-  async getAuth(userId: number): Promise<CompilationEntity[]> {
+  async getAuth(userId: number, lang: LangType): Promise<CompilationEntity[]> {
     return await this.compilationRepository.findAllAuth(userId);
   }
   async delete(id: string) {
