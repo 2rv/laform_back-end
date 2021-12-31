@@ -11,12 +11,8 @@ export class CompilationService {
   async create(body: CompilationDto[]) {
     return await this.compilationRepository.save(body);
   }
-  async get(lang: LangType): Promise<CompilationEntity[]> {
-    return await this.compilationRepository.findAll();
-  }
-
-  async getAuth(userId: number, lang: LangType): Promise<CompilationEntity[]> {
-    return await this.compilationRepository.findAllAuth(userId);
+  async get(lang: LangType, userId?: number): Promise<CompilationEntity[]> {
+    return await this.compilationRepository.findAll(lang, userId);
   }
   async delete(id: string) {
     return await this.compilationRepository.delete(id);

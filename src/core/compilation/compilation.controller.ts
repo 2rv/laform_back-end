@@ -42,7 +42,7 @@ export class CompilationController {
     @Query(new LangValidationPipe()) lang: LangType,
     @GetAccount() user: UserEntity,
   ) {
-    return await this.compilationService.getAuth(user.id, lang);
+    return await this.compilationService.get(lang, user.id);
   }
 
   @Delete('/delete/:compilationId')
