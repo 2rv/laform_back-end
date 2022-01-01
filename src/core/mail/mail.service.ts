@@ -11,6 +11,7 @@ import { PURCHASE_STATUS_INFO } from '../purchase/enum/purchase.status';
 import { USER_ROLE } from '../user/enum/user-role.enum';
 import { generateAuthCode } from 'src/common/utils/generate-auth-code';
 import { SendCodeForChangeDto } from './dto/send-code-for-change.dto';
+import { MailFeedbackDto } from './dto/mail-feedback.dto';
 
 @Injectable()
 export class MailService {
@@ -224,7 +225,7 @@ export class MailService {
         console.log(e);
       });
   }
-  async sendFeedback(body: any) {
+  async sendFeedback(body: MailFeedbackDto) {
     const recipients = await this.userRepository.find();
     return recipients.map(async (recipient) => {
       if (recipient.role === USER_ROLE.ADMIN) {

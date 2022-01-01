@@ -12,6 +12,7 @@ import { Roles } from '../user/decorator/role.decorator';
 import { USER_ROLE } from '../user/enum/user-role.enum';
 import { AccountGuard } from '../user/guard/account.guard';
 import { UserEntity } from '../user/user.entity';
+import { MailFeedbackDto } from './dto/mail-feedback.dto';
 import { MailDto } from './dto/mail.dto';
 import { MailService } from './mail.service';
 
@@ -38,7 +39,9 @@ export class MailController {
   }
 
   @Post('/send-feedback')
-  async sendFeedback(@Body() body): Promise<any> {
+  async sendFeedback(
+    @Body(new ValidationPipe()) body: MailFeedbackDto,
+  ): Promise<any> {
     return await this.mailService.sendFeedback(body);
   }
 }
