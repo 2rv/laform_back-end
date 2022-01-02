@@ -282,25 +282,25 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
             'options.optionVisibility = true',
           );
         }),
-      )
-      .andWhere(
-        new Brackets((qb) => {
-          qb.where('rec_sewing_product.deleted = false')
-            .orWhere('rec_master_class.deleted = false ')
-            .orWhere('rec_pattern_product.deleted = false ')
-            .orWhere('rec_post.deleted = false ');
-        }),
-      )
-      .andWhere(
-        new Brackets((qb) => {
-          qb.where('rec_sewing_product.optionType = 0')
-            .orWhere('rec_sewing_product_options.optionVisibility = true')
-            .orWhere('rec_pattern_product.optionType = 0')
-            .orWhere('rec_pattern_product_options.optionVisibility = true')
-            .orWhere('rec_master_class.deleted = false')
-            .orWhere('rec_post.deleted = false');
-        }),
       );
+    //   .andWhere(
+    //     new Brackets((qb) => {
+    //       qb.where('rec_sewing_product.deleted = false')
+    //         .orWhere('rec_master_class.deleted = false ')
+    //         .orWhere('rec_pattern_product.deleted = false ')
+    //         .orWhere('rec_post.deleted = false ');
+    //     }),
+    //   )
+    //   .andWhere(
+    //     new Brackets((qb) => {
+    //       qb.where('rec_sewing_product.optionType = 0')
+    //         .orWhere('rec_sewing_product_options.optionVisibility = true')
+    //         .orWhere('rec_pattern_product.optionType = 0')
+    //         .orWhere('rec_pattern_product_options.optionVisibility = true')
+    //         .orWhere('rec_master_class.deleted = false')
+    //         .orWhere('rec_post.deleted = false');
+    //     }),
+    //   );
 
     if (userId) {
       query

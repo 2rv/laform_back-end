@@ -62,10 +62,12 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
       .skip((page - 1) * size || 0)
       .where('purchase.userId = :userId', {
         userId,
-      })
-      .where('purchase.orderStatus = :status', {
+      });
+    if (status) {
+      query.where('purchase.orderStatus = :status', {
         status,
       });
+    }
     if (orderNumber) {
       query.andWhere('purchase.orderNumber like :orderNumber', {
         orderNumber: `%${orderNumber}%`,
