@@ -187,8 +187,8 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
       .leftJoin('pattern_product.options', 'p_p_options')
       .leftJoin('pattern_product.images', 'p_p_images')
       .leftJoin('pattern_product.categories', 'p_p_categories')
-      .leftJoin('pattern_product.filesPdf', 'p_p_files_pdf')
-      .leftJoin('p_p_options.filesPdf', 'p_p_options_files_pdf')
+      //   .leftJoin('pattern_product.filesPdf', 'p_p_files_pdf')
+      //   .leftJoin('p_p_options.filesPdf', 'p_p_options_files_pdf')
 
       .leftJoin('purchase_products.sewingProductId', 'sewing_product')
       .leftJoin('sewing_product.options', 's_p_options')
@@ -196,7 +196,7 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
       .leftJoin('sewing_product.categories', 's_p_categories')
 
       .leftJoin('purchase_products.optionId', 'option')
-      .leftJoin('option.filesPdf', 'option_files_pdf')
+      //   .leftJoin('option.filesPdf', 'option_files_pdf')
 
       .select([
         'purchase.id',
@@ -229,7 +229,7 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
         'option.id',
         'option.vendorCode',
         'option.size',
-        'option_files_pdf',
+        // 'option_files_pdf',
         'option.colorRu',
         'option.colorEn',
         'option.count',
@@ -258,7 +258,7 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
         'pattern_product.discount',
         'pattern_product.count',
         'pattern_product.isCount',
-        'p_p_files_pdf',
+        // 'p_p_files_pdf',
         'p_p_images',
         'p_p_categories.id',
         'p_p_categories.categoryNameRu',
@@ -267,7 +267,7 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
         'p_p_options.id',
         'p_p_options.vendorCode',
         'p_p_options.size',
-        'p_p_options_files_pdf',
+        // 'p_p_options_files_pdf',
         'p_p_options.colorRu',
         'p_p_options.colorEn',
         'p_p_options.count',
