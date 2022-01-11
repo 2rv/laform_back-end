@@ -1,2 +1,8 @@
 DATABASE:
   URL: postgres://postgres:laformadmin@localhost:5432/laform
+
+CACHE:
+  HOST: 'localhost'
+  PORT: 6379
+  PASSWORD: '41d08d8b84190ca075f7189558595b5848891508'
+  TTL: 6000000
