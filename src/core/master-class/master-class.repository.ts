@@ -106,7 +106,10 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
         ].concat(recommendations),
       )
       .where('master_class.id = :id', { id })
-      .andWhere('master_class.deleted = false');
+      .andWhere('master_class.deleted = false')
+      .andWhere(
+        'rec_sewing_product_options.optionVisibility = true OR rec_pattern_product_options.optionVisibility = true',
+      );
     //   .andWhere(
     //     new Brackets((qb) => {
     //       qb.where('rec_sewing_product.deleted = false')

@@ -39,7 +39,30 @@ export class MasterClassService {
   async getOne(
     params: findOneMasterClassParamsDto,
   ): Promise<MasterClassEntity> {
-    return await this.masterClassRepository.findOneProduct(params);
+    const result = await this.masterClassRepository.findOneProduct(params);
+
+    let recommendationProducts = [];
+    if (result.recommendation) {
+      for (let r of result.recommendation.recommendationProducts) {
+        if (r.masterClassId == null && r.patternProductId == null) {
+          if (r.sewingProductId.deleted !== true) {
+            recommendationProducts.push(r);
+          }
+        }
+        if (r.sewingProductId == null && r.patternProductId == null) {
+          if (r.masterClassId.deleted !== true) {
+            recommendationProducts.push(r);
+          }
+        }
+        if (r.masterClassId == null && r.sewingProductId == null) {
+          if (r.patternProductId.deleted !== true) {
+            recommendationProducts.push(r);
+          }
+        }
+      }
+      result.recommendation.recommendationProducts = recommendationProducts;
+    }
+    return result;
   }
 
   async getLiked(
