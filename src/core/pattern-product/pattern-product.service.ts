@@ -47,8 +47,37 @@ export class PatternProductService {
     return await this.patternProductRepository.findAll(params);
   }
 
-  async getOne(params: findOnePatternParamsDto): Promise<PatternProductEntity> {
-    return await this.patternProductRepository.findOneProduct(params);
+  async getOne(params: findOnePatternParamsDto): Promise<any> {
+    const result = await this.patternProductRepository.findOneProduct(params);
+    let options = [];
+    let recommendationProducts = [];
+    for (let r of result.options) {
+      if (r.optionVisibility === true) {
+        options.push(r);
+      }
+    }
+    if (result.recommendation) {
+      for (let r of result.recommendation.recommendationProducts) {
+        if (r.masterClassId == null && r.patternProductId == null) {
+          if (r.sewingProductId.deleted !== true) {
+            recommendationProducts.push(r);
+          }
+        }
+        if (r.sewingProductId == null && r.patternProductId == null) {
+          if (r.masterClassId.deleted !== true) {
+            recommendationProducts.push(r);
+          }
+        }
+        if (r.masterClassId == null && r.sewingProductId == null) {
+          if (r.patternProductId.deleted !== true) {
+            recommendationProducts.push(r);
+          }
+        }
+      }
+      result.recommendation.recommendationProducts = recommendationProducts;
+    }
+    result.options = options;
+    return result;
   }
 
   async getLiked(

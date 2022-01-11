@@ -56,7 +56,37 @@ export class SewingProductService {
   async getOne(
     params: findOneSewingProductParamsDto,
   ): Promise<SewingProductEntity> {
-    return await this.sewingProductRepository.findOneProduct(params);
+    const result = await this.sewingProductRepository.findOneProduct(params);
+    let options = [];
+    let recommendationProducts = [];
+    for (let r of result.options) {
+      if (r.optionVisibility === true) {
+        options.push(r);
+      }
+    }
+    if (result.recommendation) {
+      for (let r of result.recommendation.recommendationProducts) {
+        if (r.masterClassId == null && r.patternProductId == null) {
+          if (r.sewingProductId.deleted !== true) {
+            recommendationProducts.push(r);
+          }
+        }
+        if (r.sewingProductId == null && r.patternProductId == null) {
+          if (r.masterClassId.deleted !== true) {
+            recommendationProducts.push(r);
+          }
+        }
+        if (r.masterClassId == null && r.sewingProductId == null) {
+          if (r.patternProductId.deleted !== true) {
+            recommendationProducts.push(r);
+          }
+        }
+      }
+      result.recommendation.recommendationProducts = recommendationProducts;
+    }
+    result.options = options;
+
+    return result;
   }
   async getOneForUpdate(id: string): Promise<SewingProductEntity> {
     return await this.sewingProductRepository.findOneForUpdate(id);

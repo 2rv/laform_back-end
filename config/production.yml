@@ -1,0 +1,2 @@
+DATABASE:
+  URL: postgres://postgres:laformadmin@localhost:5432/laform
