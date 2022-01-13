@@ -8,6 +8,7 @@ import { Cache } from 'cache-manager';
 import { UserEntity } from './user.entity';
 import { UserGetEmailDto } from './dto/user-get-email.dto';
 import { UserRepository } from './user.repository';
+import { usersFindParamsDto } from './dto/users-find-params.dto';
 
 @Injectable()
 export class UserService {
@@ -27,8 +28,16 @@ export class UserService {
     return await this.userRepository.getProfile(userId);
   }
 
-  async getAll(size: number, page: number): Promise<[UserEntity[], number]> {
-    return await this.userRepository.getAll(size, page);
+  async getAll(params: usersFindParamsDto): Promise<[UserEntity[], number]> {
+    if (params.sort === 'login') {
+      params.sort = 'user.login';
+    } else if (params.sort === 'date') {
+      params.sort = 'user.createDate';
+    } else {
+      params.sort = '';
+    }
+
+    return await this.userRepository.getAll(params);
   }
 
   async updateOne(id: number, body: any): Promise<any> {

@@ -30,8 +30,22 @@ export class UserController {
   @Get('get/')
   @UseGuards(AuthGuard(), AccountGuard)
   @Roles(USER_ROLE.ADMIN)
-  async getAll(@Query('size') size: number, @Query('page') page: number) {
-    return await this.userService.getAll(size, page);
+  async getAll(
+    @Query('size') size: number = 30,
+    @Query('page') page: number = 1,
+    @Query('by') by: 'DESC' | 'ASC' = 'DESC',
+    @Query('sort') sort: string,
+    @Query('where') where: string,
+    @Query('role') role: USER_ROLE,
+  ) {
+    return await this.userService.getAll({
+      size,
+      page,
+      by,
+      sort,
+      where,
+      role,
+    });
   }
 
   @Get('get/:userId')
