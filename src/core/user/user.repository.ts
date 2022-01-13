@@ -12,6 +12,7 @@ import { CreateAppleUseDto } from './dto/create-user-apple.dto';
 import { USER_ROLE } from './enum/user-role.enum';
 import { UserSignUpDto } from '../auth/dto/user-sign-up.dto';
 import { UserRecoveryChangeCredentialsDto } from '../user-recovery/dto/user-recovery-change-password.dto';
+import { usersFindParamsDto } from './dto/users-find-params.dto';
 
 @EntityRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {
@@ -111,8 +112,9 @@ export class UserRepository extends Repository<UserEntity> {
       .getOne();
   }
 
-  async getAll(size = 30, page = 1): Promise<[UserEntity[], number]> {
-    return await this.createQueryBuilder('user')
+  async getAll(params: usersFindParamsDto): Promise<[UserEntity[], number]> {
+    const { size, page, sort, by, where, role } = params;
+    const query = await this.createQueryBuilder('user')
       .select([
         'user.id',
         'user.login',
@@ -125,10 +127,25 @@ export class UserRepository extends Repository<UserEntity> {
         'user.facebookId',
         'user.createDate',
       ])
-      .orderBy('user.createDate', 'DESC')
+
+      .orderBy(sort, by)
       .take(size)
       .skip((page - 1) * size || 0)
-      .getManyAndCount();
+      .where('user.id is not null');
+
+    if (role) {
+      query.andWhere('user.role = :role', {
+        role: role,
+      });
+    }
+
+    if (where) {
+      query.andWhere('user.login ILIKE :where', {
+        where: `%${where}%`,
+      });
+    }
+
+    return await query.getManyAndCount();
   }
 
   async changePassword(

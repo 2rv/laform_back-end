@@ -19,6 +19,7 @@ import {
   CdekUpdateOrderDto,
 } from './dto/cdek-order';
 import { CdekCourierDto } from './dto/cdek.courier.dto';
+import { DadataService } from '../dadata/dadata.service';
 
 // тестовая среда имеет api.edu в url
 // если вдруг будут ошибки в запросах МБ это поможет 'Content-Type': 'application/json',
@@ -32,6 +33,8 @@ export const axiosTestCdek = axios.create({
 
 @Injectable()
 export class SdekService {
+  constructor(private dadataService: DadataService) {}
+
   async authInSdek(): Promise<string> {
     const result = await axiosCdek({
       method: 'POST',
@@ -44,19 +47,10 @@ export class SdekService {
     });
     return 'Bearer ' + result.data.access_token;
   }
+
   async getCityCodeByKladr(kladr_code: string) {
-    const resultCity = await axios.post(
-      `https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/delivery`,
-      {
-        query: kladr_code,
-      },
-      {
-        headers: {
-          Authorization: SdekConfig.dadataToken,
-        },
-      },
-    );
-    const suggestions = resultCity.data.suggestions;
+    const suggestions = await this.dadataService.getCityCodeByKladr(kladr_code);
+
     if (!suggestions.length) return [];
     const result = await axiosCdek({
       url: `deliverypoints`,
@@ -69,6 +63,7 @@ export class SdekService {
     });
     return result.data;
   }
+
   async getTariffList(body: CdekTariffListDto): Promise<TariffType[]> {
     if (!body.packages || !body.packages.length) {
       body.packages = [...Array(body.amount || 1).keys()].map(() => ({
@@ -136,11 +131,6 @@ export class SdekService {
     return result.data;
   }
 
-  // Должно быть на тестовой среде иначе капзда
-  // Если будут ошибки авторизации надо
-  // Добавить метод authInSdekTest
-  // Поставить туда TestSdekConfig он уже настроеный
-  // И использовать axiosTestCdek
   async createOrder(body: CdekCreateOrderDto): Promise<CdekOrderResponseDto> {
     const result: { data: CdekOrderResponseDto } = await axiosTestCdek({
       method: 'POST',
