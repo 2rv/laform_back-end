@@ -1,5 +1,5 @@
 DATABASE:
-  URL: postgres://postgres:laformadmin@localhost:5432/laform
+  URL: postgres://postgres:laformadmin@localhost:5432/laforme-db
 
 CACHE:
   HOST: 'localhost'
