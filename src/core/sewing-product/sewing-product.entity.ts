@@ -164,6 +164,20 @@ export class SewingProductEntity {
 
   @Column({
     type: 'varchar',
+    name: 'description_old',
+    nullable: true,
+  })
+  descriptionOld!: string;
+
+  @Column({
+    type: 'varchar',
+    name: 'material_old',
+    nullable: true,
+  })
+  materialOld!: string;
+
+  @Column({
+    type: 'varchar',
     name: 'modifier_ru',
     nullable: true,
   })

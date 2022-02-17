@@ -49,7 +49,7 @@ PAY_ANY_WAY:
   PAY_URL: 'https://payanyway.ru/assistant.htm?'
 
 CLIENT:
-  URL: 'https://laform-client.herokuapp.com'
+  URL: 'https://laforme-patterns.com'
 
 DADATA:
   TOKEN: 'Token 47277a98629b84336b47c3b23b49f7d67bce9f77'

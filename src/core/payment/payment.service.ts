@@ -109,8 +109,8 @@ export class PaymentService {
   }
   //http://localhost:4000/payment/redirect?MNT_ID=123&MNT_TRANSACTION_ID=0000000014&MNT_OPERATION_ID=123123
   async successLink(orderNumber: number): Promise<any> {
-    const success = 'https://laform-client.herokuapp.com/paid';
-    const fail = 'https://laform-client.herokuapp.com/not-paid';
+    const success = 'https://laforme-patterns.com/paid';
+    const fail = 'https://laforme-patterns.com/not-paid';
 
     const purchase = await this.purchaseRepository.findOne({
       where: {
@@ -150,7 +150,7 @@ export class PaymentService {
               cost: 300,
               amount: count,
               weight: count * SdekConfig.weight,
-              url: 'https://laform-client.herokuapp.com/',
+              url: 'https://laforme-patterns.com',
             };
             items.push(item);
           }
