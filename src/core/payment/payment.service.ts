@@ -68,11 +68,15 @@ export class PaymentService {
     const purchase = await this.purchaseRepository.findOne({
       where: {
         id: id,
-        userId: user,
-        orderStatus: PURCHASE_STATUS.CREATED,
+        userId: user.id,
       },
     });
-    if (!purchase) {
+
+    if (
+      !purchase &&
+      (purchase.orderStatus === PURCHASE_STATUS.CREATED ||
+        purchase.orderStatus === PURCHASE_STATUS.AWAITING_PAYMENT)
+    ) {
       throw new BadRequestException(PURCHASE_ERROR.PURCHASE_NOT_FOUND);
     }
 
