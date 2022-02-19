@@ -78,7 +78,7 @@ export class MailService {
       .sendMail({
         to: email,
         subject: 'Восстаноление пароля',
-        text: `Для смены пароля перейдите по ссылке https://laform-client.herokuapp.com/auth/change-password?code=${code}`,
+        text: `Для смены пароля перейдите по ссылке https://laforme-patterns.com/auth/change-password?code=${code}`,
         template: path.join(
           path.resolve(),
           'src/templates/recovery-account.pug',

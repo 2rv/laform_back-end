@@ -30,18 +30,18 @@ MAIL:
 FACEBOOK:
   CLIENT_ID: '201675022064842'
   CLIENT_SECRET: 'e1ace87ecee2d68da565f977d0db0eb6'
-  CALLBACK_URL: 'https://laform-api.herokuapp.com/auth/facebook/redirect'
+  CALLBACK_URL: 'https://laforme-patterns.com/auth/facebook/redirect'
 
 GOOGLE:
   CLIENT_ID: '857571824635-s9u3bhlc806ullpgiib8d626csnjh0de.apps.googleusercontent.com'
   CLIENT_SECRET: 'ENwlRXt3vnRohU8hFNbAcQjf'
-  CALLBACK_URL: 'https://laform-api.herokuapp.com/auth/google/redirect'
+  CALLBACK_URL: 'https://laforme-patterns.com/auth/google/redirect'
 
 APPLE:
   CLIENT_ID: 'laform-api.herokuapp'
   KEY_ID: 'NWKUX58DQR'
   TEAM_ID: '59862PVTZ2'
-  CALLBACK_URL: 'https://laform-api.herokuapp.com/auth/apple/redirect'
+  CALLBACK_URL: 'https://laforme-patterns.com/auth/apple/redirect'
 
 PAY_ANY_WAY:
   MNT_ID: '72511945'
@@ -49,7 +49,7 @@ PAY_ANY_WAY:
   PAY_URL: 'https://payanyway.ru/assistant.htm?'
 
 CLIENT:
-  URL: 'https://laform-client.herokuapp.com'
+  URL: 'https://laforme-patterns.com'
 
 DADATA:
   TOKEN: 'Token 47277a98629b84336b47c3b23b49f7d67bce9f77'

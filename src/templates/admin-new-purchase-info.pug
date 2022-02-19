@@ -6,7 +6,7 @@
 </head>
 <body>
 	<div style="background-color: #F0F0F0; border-radius: 10px; padding: 30px; width: 460px;">
-		<a href="https://laform-client.herokuapp.com" style="text-decoration: none;">
+		<a href="https://laforme-patterns.com" style="text-decoration: none;">
 		<img src="https://laforme.ru/wp-content/uploads/2020/06/LaForme_Patterns_-_Logo.png" height="50px">
 		<span style=" color:#2f2a2c; font-size:24px; font-weight:600;  vertical-align: 15px;">La`forme Patterns</span>
 		</a>
@@ -47,7 +47,7 @@
 			case product.type
 				when 0
 					<div>
-						<a style="color: #2F2A2C; text-decoration: none;" href="https://laform-client.herokuapp.com/purchases/master-class/#{product.id}">
+						<a style="color: #2F2A2C; text-decoration: none;" href="https://laforme-patterns.com/purchases/master-class/#{product.id}">
 							<img width="50px" src="#{product.masterClassId.images[0].fileUrl}" height="50px">
 							<span style="color: #2F2A2C; vertical-align: 15px;"><b>!{product.masterClassId.titleRu}</b></span>
 						</a>
@@ -58,7 +58,7 @@
 					</div>
 				when 1
 					<div>
-						<a style="color: #2F2A2C; text-decoration: none;" href="https://laform-client.herokuapp.com/purchases/pattern/#{product.id}">
+						<a style="color: #2F2A2C; text-decoration: none;" href="https://laforme-patterns.com/purchases/pattern/#{product.id}">
 							<img width="50px" src="#{product.patternProductId.images[0].fileUrl}" height="50px">
 							<span style="color: #2F2A2C; vertical-align: 15px;"><b>!{product.patternProductId.titleRu}</b></span>
 						</a>
@@ -69,7 +69,7 @@
 					</div>
 				when 2
 					<div>
-						<a style="color: #2F2A2C; text-decoration: none;" href="https://laform-client.herokuapp.com/purchases/pattern/#{product.id}">
+						<a style="color: #2F2A2C; text-decoration: none;" href="https://laforme-patterns.com/purchases/pattern/#{product.id}">
 							<img width="50px" src="!{product.patternProductId.images[0].fileUrl}" height="50px">
 							<span style="color: #2F2A2C; vertical-align: 15px;"><b>!{product.patternProductId.titleRu}</b></span>
 						</a>
@@ -82,7 +82,7 @@
 					</div>
 				when 3
 					<div>
-						<a style="color: #2F2A2C; text-decoration: none;" href="https://laform-client.herokuapp.com/purchases/sewing-good/#{product.id}">
+						<a style="color: #2F2A2C; text-decoration: none;" href="https://laforme-patterns.com/purchases/sewing-good/#{product.id}">
 							<img width="50px" src="!{product.sewingProductId.images[0].fileUrl}" height="50px">
 							<span style="color: #2F2A2C; vertical-align: 15px;"><b>!{product.sewingProductId.titleRu}</b></span>
 						</a>
