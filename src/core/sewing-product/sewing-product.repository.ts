@@ -134,6 +134,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
 
       .where('sewing_product.deleted = false')
       .andWhere('sewing_product.inEnglish = :lang', { lang: lang === 'en' })
+      .andWhere('like.userId = :userId', { userId })
       .andWhere(
         new Brackets((qb) => {
           qb.where('sewing_product.optionType = 0').orWhere(
@@ -277,15 +278,15 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       .where('sewing_product.id = :id', { id })
       .andWhere('sewing_product.deleted = false')
       .andWhere(
-        'rec_sewing_product_options.optionVisibility = true OR rec_pattern_product_options.optionVisibility = true',
-      )
-      .andWhere(
         new Brackets((qb) => {
           qb.where('sewing_product.optionType = 0').orWhere(
             'options.optionVisibility = true',
           );
         }),
       );
+    // .andWhere(
+    //   'rec_sewing_product_options.optionVisibility = true OR rec_pattern_product_options.optionVisibility = true',
+    // )
     //   .andWhere(
     //     new Brackets((qb) => {
     //       qb.where('rec_sewing_product.deleted = false')

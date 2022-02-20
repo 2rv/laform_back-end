@@ -215,6 +215,7 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
         'purchase.sdekTariffCode',
         'purchase.sdekCityCode',
         'purchase.shippingPrice',
+        'purchase.deliveryType',
 
         'purchase.promoCodeDiscount',
 
