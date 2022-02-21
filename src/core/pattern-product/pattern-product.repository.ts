@@ -13,7 +13,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
   ): Promise<[PatternProductEntity[], number]> {
     const { size, page, sort, by, where, category, lang, userId, type } =
       params;
-    let query = await this.createQueryBuilder('pattern_product')
+
+    const query = await this.createQueryBuilder('pattern_product')
       .leftJoin('pattern_product.images', 'images')
       .leftJoin('pattern_product.categories', 'categories')
       .leftJoin('pattern_product.options', 'options')
