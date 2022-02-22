@@ -287,12 +287,9 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       )
       .where('pattern_product.id = :id', { id })
       .andWhere('pattern_product.deleted = false')
-<<<<<<< HEAD
       // .andWhere(
       //   'rec_sewing_product_options.optionVisibility = true OR rec_pattern_product_options.optionVisibility = true',
       // )
-=======
->>>>>>> 27809fec5895f3a2e4a12773a06794f2bebb6942
       .andWhere(
         new Brackets((qb) => {
           qb.where('pattern_product.optionType = 0').orWhere(

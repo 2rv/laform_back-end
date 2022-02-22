@@ -277,12 +277,9 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
       )
       .where('sewing_product.id = :id', { id })
       .andWhere('sewing_product.deleted = false')
-<<<<<<< HEAD
       // .andWhere(
       //   'rec_sewing_product_options.optionVisibility = true OR rec_pattern_product_options.optionVisibility = true',
       // )
-=======
->>>>>>> 27809fec5895f3a2e4a12773a06794f2bebb6942
       .andWhere(
         new Brackets((qb) => {
           qb.where('sewing_product.optionType = 0').orWhere(
