@@ -13,7 +13,8 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
   ): Promise<[PatternProductEntity[], number]> {
     const { size, page, sort, by, where, category, lang, userId, type } =
       params;
-    let query = await this.createQueryBuilder('pattern_product')
+
+    const query = await this.createQueryBuilder('pattern_product')
       .leftJoin('pattern_product.images', 'images')
       .leftJoin('pattern_product.categories', 'categories')
       .leftJoin('pattern_product.options', 'options')
@@ -286,9 +287,12 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
       )
       .where('pattern_product.id = :id', { id })
       .andWhere('pattern_product.deleted = false')
+<<<<<<< HEAD
       // .andWhere(
       //   'rec_sewing_product_options.optionVisibility = true OR rec_pattern_product_options.optionVisibility = true',
       // )
+=======
+>>>>>>> 27809fec5895f3a2e4a12773a06794f2bebb6942
       .andWhere(
         new Brackets((qb) => {
           qb.where('pattern_product.optionType = 0').orWhere(
@@ -296,6 +300,11 @@ export class PatternProductRepository extends Repository<PatternProductEntity> {
           );
         }),
       );
+    // из за этого выдаётся кривой товар
+    // .andWhere(
+    //   'rec_sewing_product_options.optionVisibility = true OR rec_pattern_product_options.optionVisibility = true',
+    // )
+    // -------------------------
     //   .andWhere(
     //     new Brackets((qb) => {
     //       qb.where('rec_sewing_product.deleted = false')

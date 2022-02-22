@@ -93,6 +93,7 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
       .leftJoin('rec_pattern_product.options', 'rec_pattern_product_options')
       .leftJoin('rec_sewing_product.options', 'rec_sewing_product_options')
 
+<<<<<<< HEAD
       .select([
         'master_class.id',
         'master_class.type',
@@ -113,6 +114,30 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
       .andWhere('master_class.deleted = false');
     // .andWhere(
     //   'rec_sewing_product_options.optionVisibility = true OR rec_pattern_product_options.optionVisibility = true OR rec_sewing_product_options.optionVisibility = null OR rec_pattern_product_options.optionVisibility = null',
+=======
+      .select(
+        [
+          'master_class.id',
+          'master_class.type',
+          'master_class.vendorCode',
+          'master_class.createdDate',
+          'master_class.titleRu',
+          'master_class.modifierRu',
+          'master_class.descriptionRu',
+          'master_class.materialRu',
+          'master_class.discount',
+          'master_class.price',
+          'master_class.deleted',
+          'images',
+          'categories.id',
+          'categories.categoryNameRu',
+        ].concat(recommendations),
+      )
+      .where('master_class.id = :id', { id })
+      .andWhere('master_class.deleted = false');
+    // .andWhere(
+    //   'rec_sewing_product_options.optionVisibility = true OR rec_pattern_product_options.optionVisibility = true',
+>>>>>>> 27809fec5895f3a2e4a12773a06794f2bebb6942
     // );
     //   .andWhere(
     //     new Brackets((qb) => {

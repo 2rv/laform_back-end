@@ -17,7 +17,7 @@ import { FileDto } from 'src/core/file-upload/dto/file-dto';
 import { CreateRecommendationDto } from 'src/core/recommendation/dto/create-recommendation.dto';
 
 export class MasterClassDto {
-  @IsNotEmpty()
+  @IsOptional()
   @IsUUID()
   id: string;
 

@@ -59,7 +59,7 @@ export class PatternProductController {
     @Query('size') size: number = 30,
     @Query('page') page: number = 1,
     @Query('by') by: 'DESC' | 'ASC' = 'DESC',
-    @Query('sort') sort: string,
+    @Query('sort') sort: string = 'date',
     @Query('where') where: string,
     @Query('type') type: 'printed' | 'electronic' | '',
     @Query('category') category: string,
