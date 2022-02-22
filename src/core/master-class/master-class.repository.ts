@@ -74,10 +74,16 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
       .leftJoin('master_class.recommendation', 'recommendation')
       .leftJoin('recommendation.recommendationProducts', 'recommendations')
 
-      .leftJoin('recommendations.masterClassId', 'rec_master_class')
-      .leftJoin('recommendations.postId', 'rec_post')
-      .leftJoin('recommendations.patternProductId', 'rec_pattern_product')
-      .leftJoin('recommendations.sewingProductId', 'rec_sewing_product')
+      .leftJoinAndSelect('recommendations.masterClassId', 'rec_master_class')
+      .leftJoinAndSelect('recommendations.postId', 'rec_post')
+      .leftJoinAndSelect(
+        'recommendations.patternProductId',
+        'rec_pattern_product',
+      )
+      .leftJoinAndSelect(
+        'recommendations.sewingProductId',
+        'rec_sewing_product',
+      )
 
       .leftJoin('rec_master_class.images', 'rec_master_class_images')
       .leftJoin('rec_pattern_product.images', 'rec_pattern_product_images')
@@ -87,29 +93,27 @@ export class MasterClassRepository extends Repository<MasterClassEntity> {
       .leftJoin('rec_pattern_product.options', 'rec_pattern_product_options')
       .leftJoin('rec_sewing_product.options', 'rec_sewing_product_options')
 
-      .select(
-        [
-          'master_class.id',
-          'master_class.type',
-          'master_class.vendorCode',
-          'master_class.createdDate',
-          'master_class.titleRu',
-          'master_class.modifierRu',
-          'master_class.descriptionRu',
-          'master_class.materialRu',
-          'master_class.discount',
-          'master_class.price',
-          'master_class.deleted',
-          'images',
-          'categories.id',
-          'categories.categoryNameRu',
-        ].concat(recommendations),
-      )
-      .where('master_class.id = :id', { id })
-      .andWhere('master_class.deleted = false')
-      .andWhere(
-        'rec_sewing_product_options.optionVisibility = true OR rec_pattern_product_options.optionVisibility = true',
-      );
+      .select([
+        'master_class.id',
+        'master_class.type',
+        'master_class.vendorCode',
+        'master_class.createdDate',
+        'master_class.titleRu',
+        'master_class.modifierRu',
+        'master_class.descriptionRu',
+        'master_class.materialRu',
+        'master_class.discount',
+        'master_class.price',
+        'master_class.deleted',
+        'images',
+        'categories.id',
+        'categories.categoryNameRu',
+      ])
+      .andWhere('master_class.id = :id', { id })
+      .andWhere('master_class.deleted = false');
+    // .andWhere(
+    //   'rec_sewing_product_options.optionVisibility = true OR rec_pattern_product_options.optionVisibility = true OR rec_sewing_product_options.optionVisibility = null OR rec_pattern_product_options.optionVisibility = null',
+    // );
     //   .andWhere(
     //     new Brackets((qb) => {
     //       qb.where('rec_sewing_product.deleted = false')
