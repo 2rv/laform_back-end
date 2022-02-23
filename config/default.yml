@@ -33,8 +33,8 @@ FACEBOOK:
   CALLBACK_URL: 'https://api.laforme-patterns.com/auth/facebook/redirect'
 
 GOOGLE:
-  CLIENT_ID: '857571824635-s9u3bhlc806ullpgiib8d626csnjh0de.apps.googleusercontent.com'
-  CLIENT_SECRET: 'ENwlRXt3vnRohU8hFNbAcQjf'
+  CLIENT_ID: '429043702220-cckjemprc0a0bs06vsdfvo6b5mk0rcke.apps.googleusercontent.com'
+  CLIENT_SECRET: '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'
   CALLBACK_URL: 'https://api.laforme-patterns.com/auth/google/redirect'
 
 APPLE:
