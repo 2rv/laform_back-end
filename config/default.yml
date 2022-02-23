@@ -28,8 +28,8 @@ MAIL:
   HOST: 'smtp.gmail.com'
 
 FACEBOOK:
-  CLIENT_ID: '201675022064842'
-  CLIENT_SECRET: 'e1ace87ecee2d68da565f977d0db0eb6'
+  CLIENT_ID: '641551410292127'
+  CLIENT_SECRET: 'e8d1eea418ed3b2c1907d500e11679dc'
   CALLBACK_URL: 'https://laforme-patterns.com/auth/facebook/redirect'
 
 GOOGLE:
