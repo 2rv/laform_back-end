@@ -104,6 +104,7 @@ export class AuthController {
 
   @Get('/google/redirect')
   @UseGuards(AuthGuard('google'))
+  @UseFilters(ViewAuthFilter)
   async googleAuthRedirect(@Req() req, @Res() res) {
     const token = await this.authService.signUpWithGoogle(req.user);
     return res.redirect(
@@ -116,6 +117,7 @@ export class AuthController {
 
   @Post('/apple/redirect')
   @UseGuards(AuthGuard('apple'))
+  @UseFilters(ViewAuthFilter)
   async appleAuthRedirect(@Req() req, @Res() res) {
     console.log(req.user.idToken);
     const token = await this.authService.signUpWithApple(req.user);
