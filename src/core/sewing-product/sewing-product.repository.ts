@@ -394,6 +394,7 @@ export class SewingProductRepository extends Repository<SewingProductEntity> {
           'sewing_product.length',
           'sewing_product.isLength',
           'sewing_product.vendorCode',
+          'sewing_product.inEnglish',
           'images',
           'categories',
           'options.id',

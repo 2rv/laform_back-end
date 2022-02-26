@@ -219,7 +219,7 @@ export class AuthService {
     const findUserByAppleId: UserEntity = await this.userRepository.findOne({
       appleId: body.idToken,
     });
-    console.log(body)
+
     if (findUserByAppleId) {
       accessToken = await this.createJwt(findUserByAppleId);
     } else {
