@@ -370,7 +370,6 @@ export class PatternProductService {
 //           optionFilePdf: y.id,
 //         });
 //       }
-//       //console.log(s);
 //     }
 //     // }
 //     //   for (let image of s.images) {

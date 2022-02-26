@@ -1,4 +1,3 @@
-import { CategoryDto } from './dto/category.dto';
 import {
   Body,
   Controller,
@@ -17,6 +16,10 @@ import { AccountGuard } from '../user/guard/account.guard';
 import { Roles } from '../user/decorator/role.decorator';
 import { USER_ROLE } from '../user/enum/user-role.enum';
 import { CategoryEntity } from './category.entity';
+import { CreateCategoryDto } from './dto/create-category.dto';
+import { LangType } from 'src/common/enum/lang.enum';
+import { LangValidationPipe } from 'src/common/guards/lang.guard';
+import { ProductTypeEnum } from 'src/common/enum/type.enum';
 
 @Controller('category')
 export class CategoryController {
@@ -26,25 +29,26 @@ export class CategoryController {
   @Roles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'), AccountGuard)
   async save(
-    @Body(new ValidationPipe()) body: CategoryDto,
+    @Query(new LangValidationPipe()) lang: LangType,
+    @Body(new ValidationPipe()) body: CreateCategoryDto,
   ): Promise<CategoryEntity> {
-    return await this.categoryService.create(body);
+    return await this.categoryService.create(body, lang);
+  }
+
+  @Get('get/:type')
+  async getAll(
+    @Query(new LangValidationPipe()) lang: LangType,
+    @Param('type') type: ProductTypeEnum,
+  ): Promise<CategoryEntity[]> {
+    return await this.categoryService.getAll(type, lang);
   }
 
   @Get('get/:id')
   async getOne(
-    @Query('lang') query: string,
+    @Query(new LangValidationPipe()) lang: LangType,
     @Param('id') id: string,
   ): Promise<CategoryEntity> {
-    return await this.categoryService.getOne(id, query);
-  }
-
-  @Get('get/')
-  async getAll(
-    @Query('lang') query: string,
-    @Query('type') type: string,
-  ): Promise<CategoryEntity[]> {
-    return await this.categoryService.getAll(query, type);
+    return await this.categoryService.getOne(id, lang);
   }
 
   @Patch('update/:id')

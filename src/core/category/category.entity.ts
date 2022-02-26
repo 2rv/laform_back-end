@@ -1,13 +1,15 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { ProductTypeEnum } from 'src/common/enum/type.enum';
+import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
 
 @Entity({ name: 'category' })
-export class CategoryEntity {
+export class CategoryEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({
     type: 'varchar',
     name: 'category_name_ru',
+    nullable: true,
   })
   categoryNameRu!: string;
 
@@ -19,8 +21,9 @@ export class CategoryEntity {
   categoryNameEn!: string;
 
   @Column({
-    type: 'varchar',
-    name: 'type',
+    type: 'enum',
+    enum: ProductTypeEnum,
+    nullable: false,
   })
-  type!: '0' | '1' | '2' | '3' | '4';
+  type: ProductTypeEnum;
 }

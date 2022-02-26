@@ -1,39 +1,47 @@
 import { CategoryRepository } from './category.repository';
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { CategoryDto } from './dto/category.dto';
+import { CreateCategoryDto } from './dto/create-category.dto';
 import { CategoryEntity } from './category.entity';
 import { CATEGORY_ERROR } from './enum/category.enum';
+import { LangType } from 'src/common/enum/lang.enum';
+import { ProductTypeEnum } from 'src/common/enum/type.enum';
 
 @Injectable()
 export class CategoryService {
   constructor(private categoryRepository: CategoryRepository) {}
 
-  async create(body: CategoryDto): Promise<CategoryEntity> {
+  async create(
+    body: CreateCategoryDto,
+    lang: LangType,
+  ): Promise<CategoryEntity> {
+    console.log(body, lang);
+
+    if (body.type === 1 || body.type === 2) body.type === 2;
+
     const result = await this.categoryRepository.findOne({
-      categoryNameRu: body.categoryNameRu,
+      categoryNameRu: lang === 'ru' ? body.categoryName : undefined,
+      categoryNameEn: lang === 'en' ? body.categoryName : undefined,
       type: body.type,
     });
 
     if (result) {
       throw new BadRequestException(CATEGORY_ERROR.CATEGORY_ALREADY_EXISTS);
     } else {
-      return await this.categoryRepository.save(body);
+      return await this.categoryRepository.createCategory(body, lang);
     }
   }
 
-  async createMany(categories: CategoryDto[]): Promise<CategoryEntity> {
-    const result = await this.categoryRepository.insert(categories);
-    return result.raw;
+  async getAll(
+    type: ProductTypeEnum,
+    lang: LangType,
+  ): Promise<CategoryEntity[]> {
+    if (+type === 1 || +type === 2) type = 2;
+
+    return await this.categoryRepository.findAll(type, lang);
   }
 
-  async getOne(id: string, query: string): Promise<CategoryEntity> {
-    if (query === 'ru') return await this.categoryRepository.findOneRu(id);
-    if (query === 'en') return await this.categoryRepository.findOneEn(id);
-  }
-
-  async getAll(query: string, type: string): Promise<CategoryEntity[]> {
-    if (query === 'ru') return await this.categoryRepository.findAllRu(type);
-    if (query === 'en') return await this.categoryRepository.findAllEn(type);
+  async getOne(id: string, lang: LangType): Promise<CategoryEntity> {
+    return await this.categoryRepository.findOneCategory(id, lang);
   }
 
   async update(id: string, body) {
