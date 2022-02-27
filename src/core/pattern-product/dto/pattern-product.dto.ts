@@ -67,9 +67,8 @@ export class PatternProductDto {
   @IsArray()
   categories: CategoryDto[];
 
-  @ArrayNotEmpty()
+  @IsOptional()
   @IsArray()
-  @ArrayMinSize(1)
   @ArrayMaxSize(6)
   images: FileDto[];
 
