@@ -22,14 +22,14 @@ export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
     profile: Profile,
     done: VerifyCallback,
   ): Promise<any> {
-    const { name, emails } = profile;
-    const user = {
-      email: emails,
-      firstName: name.givenName,
-      lastName: name.familyName,
-      accessToken,
-      id: profile.id,
-    };
-    done(null, user);
+    // const { name, emails } = profile;
+    // const user = {
+    //   email: emails,
+    //   firstName: name.givenName,
+    //   lastName: name.familyName,
+    //   accessToken,
+    //   id: profile.id,
+    // };
+    done(null, profile);
   }
 }
