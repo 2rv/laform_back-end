@@ -23,9 +23,8 @@ export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
     done: VerifyCallback,
   ): Promise<any> {
     const { name, emails } = profile;
-    console.log(profile);
     const user = {
-      email: emails[0].value,
+      emails,
       firstName: name.givenName,
       lastName: name.familyName,
       accessToken,

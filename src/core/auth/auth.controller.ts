@@ -92,10 +92,11 @@ export class AuthController {
   @UseGuards(AuthGuard('facebook'))
   @UseFilters(ViewAuthFilter)
   async facebookLoginRedirect(@Req() req, @Res() res) {
-    const token = await this.authService.signUpWithFacebook(req.user);
-    return res.redirect(
-      `${ClientConfig.url}/auth/social-access?data=${token.accessToken}`,
-    );
+    console.log(req.user);
+    // const token = await this.authService.signUpWithFacebook(req.user);
+    // return res.redirect(
+    //   `${ClientConfig.url}/auth/social-access?data=${token.accessToken}`,
+    // );
   }
 
   @Get('/google')
