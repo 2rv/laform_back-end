@@ -52,9 +52,8 @@ export class SewingProductDto {
   @IsArray()
   options: ProductOptionDto[];
 
-  @ArrayNotEmpty()
+  @IsOptional()
   @IsArray()
-  @ArrayMinSize(1)
   @ArrayMaxSize(6)
   images: FileDto[];
 

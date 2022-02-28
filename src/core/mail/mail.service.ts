@@ -236,6 +236,7 @@ export class MailService {
             template: path.join(path.resolve(), 'src/templates/feedback.pug'),
             context: {
               description: body.description,
+              email: body.email,
             },
           })
           .catch((e) => console.log(e));

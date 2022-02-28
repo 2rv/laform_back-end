@@ -119,7 +119,6 @@ export class AuthController {
   @UseGuards(AuthGuard('apple'))
   @UseFilters(ViewAuthFilter)
   async appleAuthRedirect(@Req() req, @Res() res) {
-    console.log(req.user.idToken);
     const token = await this.authService.signUpWithApple(req.user);
     return res.redirect(
       `${ClientConfig.url}/auth/social-access?data=${token.accessToken}`,

@@ -69,6 +69,14 @@ export class PurchaseDto {
 
   @IsOptional()
   @IsString()
+  sdekPointAddress: string;
+
+  @IsOptional()
+  @IsString()
+  sdekTariffName: string;
+
+  @IsOptional()
+  @IsString()
   address: string;
 
   @IsOptional()

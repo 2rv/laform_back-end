@@ -97,9 +97,8 @@ export class MasterClassDto {
   @IsArray()
   categories: CategoryDto[];
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsArray()
-  @ArrayMinSize(1)
   @ArrayMaxSize(6)
   images: FileDto[];
 

@@ -1,11 +1,20 @@
-import { IsString, IsOptional, IsNotEmpty, IsUUID } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsUUID,
+  IsNumber,
+  Min,
+  Max,
+  IsEnum,
+} from 'class-validator';
+import { ProductTypeEnum } from 'src/common/enum/type.enum';
 
 export class CategoryDto {
   @IsOptional()
   @IsUUID('all')
   id: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   categoryNameRu: string;
 
@@ -14,6 +23,6 @@ export class CategoryDto {
   categoryNameEn: string;
 
   @IsOptional()
-  @IsString()
-  type!: '0' | '1' | '2' | '3' | '4';
+  @IsEnum(ProductTypeEnum)
+  type!: ProductTypeEnum;
 }

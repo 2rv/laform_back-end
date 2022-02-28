@@ -9,12 +9,6 @@ JWT:
   EXPIRES_IN: '99999h'
   SECRET: 'FKdksk12l3ldlsfdlLlsdll123l05kgjgk04jdkgn6kk2d0fkgsdk32ldovyjkxg'
 
-CACHE:
-  HOST: 'ec2-44-194-122-143.compute-1.amazonaws.com'
-  PORT: 27889
-  PASSWORD: 'pdeb811685305cf8c1bb28d6541d08d8b84190ca075f7189558595b5848891508'
-  TTL: 6000000
-
 AWS:
   SECRET_ACCESS_KEY: '24Ev6ozqxt5riFzlnZmZEyWjQ2lh9jRyeLwMixWr'
   ACCESS_KEY_ID: 'AKIAY5PKV7HJOECSKA6G'
@@ -23,8 +17,8 @@ AWS:
   ACL: 'public-read'
 
 MAIL:
-  EMAIL: 'laformecompany@gmail.com'
-  PASSWORD: 'laformecompany12'
+  EMAIL: 'pasha1nova@gmail.com'
+  PASSWORD: 'tibwszywjgxvmmci'
   HOST: 'smtp.gmail.com'
 
 FACEBOOK:

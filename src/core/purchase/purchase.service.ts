@@ -1,6 +1,7 @@
 import {
   Injectable,
   BadRequestException,
+  InternalServerErrorException,
   Inject,
   CACHE_MANAGER,
   forwardRef,
@@ -409,7 +410,7 @@ export class PurchaseService {
 
       return await this.paymentService.getPayAnyWayLink(payment, userId);
     }
-    return result;
+    throw new InternalServerErrorException('Заказ не был создан');
   }
 
   async saveForNewUser(body) {
