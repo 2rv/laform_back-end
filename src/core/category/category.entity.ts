@@ -23,7 +23,7 @@ export class CategoryEntity extends BaseEntity {
   @Column({
     type: 'enum',
     enum: ProductTypeEnum,
-    nullable: false,
+    nullable: true,
   })
   type: ProductTypeEnum;
 }
