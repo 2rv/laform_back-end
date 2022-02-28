@@ -11,7 +11,7 @@ export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
       clientID: FaceBookConfig.clientID,
       clientSecret: FaceBookConfig.clientSecret,
       callbackURL: FaceBookConfig.callbackURL,
-      scope: 'email',
+      scope: ['email', 'profile'],
       profileFields: ['emails', 'name'],
     });
   }
