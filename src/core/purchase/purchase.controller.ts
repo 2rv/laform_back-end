@@ -47,19 +47,7 @@ export class PurchaseController {
   async saveForNotAuthUser(
     @Body(new ValidationPipe()) body: CreatePurchaseDto,
   ) {
-    const verified = await this.purchaseService.verifyUserByCodeAndEmail(
-      body.purchase,
-    );
-
-    if (verified) {
-      return await this.purchaseService.save(
-        body,
-        undefined,
-        body.purchase.email,
-      );
-    } else {
-      return verified;
-    }
+    return await this.purchaseService.saveForNewUser(body);
   }
 
   @Get('get/:purchaseId')

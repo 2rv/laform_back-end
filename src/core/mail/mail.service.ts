@@ -242,4 +242,23 @@ export class MailService {
       }
     });
   }
+
+  async sendUserInfo(email: string, password: string, login: string) {
+    return await this.mailerService
+      .sendMail({
+        to: email,
+        subject: 'La`forme Patterns, информация об аккаунте',
+        template: path.join(
+          path.resolve(),
+          'src/templates/data-new-created-user-after-purchase',
+        ),
+        context: {
+          login: login,
+          password: password,
+        },
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
 }

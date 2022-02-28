@@ -31,7 +31,9 @@ import { Currency } from '../payment/enum/payment.enum';
 import { SdekService } from '../sdek/sdek.service';
 import { PurchaseProductRepository } from '../purchase-product/purchase-product.repository';
 import { DELIVERY_TYPE, PURCHASE_STATUS } from './enum/purchase.status';
-
+import { UserRepository } from '../user/user.repository';
+import * as shortid from 'shortid';
+import { UserEntity } from '../user/user.entity';
 interface ProductParamsInfoType {
   title?: string;
   discount: number;
@@ -66,6 +68,7 @@ export class PurchaseService {
     @Inject(forwardRef(() => PaymentService))
     private paymentService: PaymentService,
     private sdekService: SdekService,
+    private userRepository: UserRepository,
   ) {}
 
   getPrice(props: getPriceProps): number {
@@ -407,6 +410,28 @@ export class PurchaseService {
       return await this.paymentService.getPayAnyWayLink(payment, userId);
     }
     return result;
+  }
+
+  async saveForNewUser(body) {
+    const user = await this.userRepository.findOne({
+      email: body.purchase.email,
+    });
+
+    if (!user) {
+      const generatePassword = shortid.generate();
+      const user = await this.userRepository.save({
+        email: body.purchase.email,
+        login: body.purchase.email.split('@')[0],
+        password: await UserEntity.hashPassword(generatePassword),
+        emailConfirmed: true,
+      });
+      await this.mailService.sendUserInfo(
+        user.email,
+        generatePassword,
+        user.login,
+      );
+      return this.save(body, user.id, user.email);
+    }
   }
   async sendPurchaseInfo(purchaseId) {
     const purchase = await this.purchaseRepository.getAllForEmail(purchaseId);
