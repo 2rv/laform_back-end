@@ -12,7 +12,7 @@ export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
       clientSecret: FaceBookConfig.clientSecret,
       callbackURL: FaceBookConfig.callbackURL,
       scope: 'email',
-      profileFields: ['email', 'name'],
+      profileFields: ['emails', 'name'],
     });
   }
 
@@ -22,9 +22,9 @@ export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
     profile: Profile,
     done: VerifyCallback,
   ): Promise<any> {
-    const { name, email } = profile;
+    const { name, emails } = profile;
     const user = {
-      email,
+      email: emails[0].value,
       firstName: name.givenName,
       lastName: name.familyName,
       accessToken,
