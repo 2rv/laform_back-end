@@ -42,8 +42,8 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
   }
 
   async getAllForUser(
-    size: number = 30,
-    page: number = 1,
+    size: number,
+    page: number,
     from: Date,
     to: Date,
     status: PURCHASE_STATUS,
@@ -58,7 +58,7 @@ export class PurchaseRepository extends Repository<PurchaseEntity> {
         'purchase.purchaseProducts',
       )
       .orderBy('purchase.orderNumber', 'DESC')
-      .take(size)
+      .take(size || 10)
       .skip((page - 1) * size || 0)
       .where('purchase.userId = :userId', {
         userId,
